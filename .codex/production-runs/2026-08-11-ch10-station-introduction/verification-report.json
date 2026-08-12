@@ -1,0 +1,1420 @@
+{
+ "schema": "paravoxia.verificationReport.v1",
+ "runId": "2026-08-11-ch10-station-introduction",
+ "contractVersion": "draft-v6",
+ "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+ "supersedesContractVersion": "draft-v5",
+ "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+ "workingTree": "uncommitted ch10 working tree, stamp pass, post D-13 / D-6-remnant / RM-FOV repair round",
+ "capturedAt": "2026-08-12T10:37:53.020722Z",
+ "capturedBy": "story-verifier (mechanical, read-only against game source)",
+ "pass": "stamp pass (judge's copy)",
+ "previewServer": {
+  "url": "http://localhost:5176",
+  "pid": 3188674,
+  "owner": "pre-existing vite dev server inherited by the lock; not restarted this pass",
+  "browserPolicy": "one browser, one page at a time, for every measurement in this report"
+ },
+ "concurrencyDisclosure": {
+  "window": "none",
+  "what": "every probe in this pass ran alone. The static gate ran with no browser open; no two browser sessions overlapped at any point"
+ },
+ "readingDiscipline": {
+  "rule": "every module read through the app's own HMR-timestamped specifier; a bare import('/src/...') returns a dead second instance after any source edit",
+  "cameraRule": "the world camera is selected by update-tick count with a lens/depth sanity gate; 'the last perspective camera seen' returns the post-processing pass's camera at HIGH",
+  "shutterRule": "exact-frame stills are armed in page on rAF and screenshotted before any other evaluate: at HIGH a single poll round-trip is hundreds of units of closure, which is how a settle-and-drift shutter landed below the range floor",
+  "lookLockRule": "the staging loop is throttled to one damped step per 100 ms; the true look gain is about 3x the nominal 0.002 rad/unit, so a per-frame proportional step puts the loop gain above 1 and the camera oscillates instead of converging"
+ },
+ "staticGate": {
+  "command": "npm --prefix main run verify",
+  "verdict": "pass",
+  "typecheck": "tsc --noEmit, zero diagnostics",
+  "testFiles": 277,
+  "tests": 2261,
+  "testFailures": 0,
+  "build": "vite build succeeded in 5.37 s",
+  "ranAlone": true
+ },
+ "item1_endToEndColdRun": {
+  "url": "http://localhost:5176/?story=base&movie=1&profile=LOW",
+  "capSeconds": 3000,
+  "executed": true,
+  "completed": true,
+  "verdict": "pass",
+  "durationSeconds": 449.1,
+  "legsReached": 30,
+  "legsRequired": 30,
+  "pageErrors": 0,
+  "timeoutRescues": 0,
+  "beatSequence": [
+   "ch9-settle",
+   "ch9-hearth",
+   "done",
+   "ch10-cold",
+   "ch10-ask",
+   "ch10-transit",
+   "done"
+  ],
+  "maxBeatClockPerBeat": {
+   "ch9-settle": 10.8,
+   "ch9-hearth": 111.8,
+   "done": 114.3,
+   "ch10-cold": 7.3,
+   "ch10-ask": 33.0,
+   "ch10-transit": 25.1
+  },
+  "beatTimeouts": {
+   "ch10-cold": 200,
+   "ch10-ask": 320,
+   "ch10-transit": 260
+  },
+  "d13OnFootBoardingLeg": {
+   "beatEnteredOnFootAtBeatClock": 0.2,
+   "boardedAtBeatClock": 0.7,
+   "ignitedAtBeatClock": 2.1,
+   "seamAtBeatClock": 8.9,
+   "standoffAtBeatClock": 23.1,
+   "handbackAtBeatClock": 25.3,
+   "priorRoundStallBeatClock": 2577.3,
+   "reading": "the flow enters ch10-transit on foot at the wreck relay, walks to the Kestrel, boards at 0.7 s of beat clock and ignites at 2.1 s; the prior round stood at the relay for 2,577.3 s against a 260 s backstop"
+  },
+  "tailMeasurements": {
+   "standoffAtResolve": 1428,
+   "standoffTriggerConstant": 1500,
+   "holdMeasuredMs": 2316,
+   "holdSpecMs": 2500,
+   "holdWithinSamplingTolerance": true,
+   "k11DelayAfterAnchorMs": 517,
+   "resolveQuantizeMs": 0,
+   "scoreVariantAtResolve": "station-resolved",
+   "scoreIntensityAtResolve": 0.44,
+   "fovAtResolve": 70,
+   "authorityAtResolve": "player-camera"
+  },
+  "objectiveLadder": [
+   {
+    "t": 1.452,
+    "beatClock": 0.2,
+    "beat": "ch9-settle",
+    "from": null,
+    "to": "settle:scan-waterline",
+    "health": "missing-marker",
+    "requiresMarker": "true",
+    "markerLabel": "LIVING WATERLINE \u00b7 SCAN"
+   },
+   {
+    "t": 2.869,
+    "beatClock": 1.6,
+    "beat": "ch9-settle",
+    "from": "settle:scan-waterline",
+    "to": "settle:attend-waterline",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "LIVING WATERLINE \u00b7 ATTEND"
+   },
+   {
+    "t": 4.287,
+    "beatClock": 3,
+    "beat": "ch9-settle",
+    "from": "settle:attend-waterline",
+    "to": "settle:choose-site",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "RECOMMENDED HABITAT SITE \u00b7 CHOOSE"
+   },
+   {
+    "t": 9.992,
+    "beatClock": 8.7,
+    "beat": "ch9-settle",
+    "from": "settle:choose-site",
+    "to": "settle:wait-night",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "SECOND HEARTH \u00b7 WAIT FOR NIGHT"
+   },
+   {
+    "t": 121.478,
+    "beatClock": 109,
+    "beat": "ch9-hearth",
+    "from": "settle:wait-night",
+    "to": "settle:second-hearth-settling",
+    "health": "ready",
+    "requiresMarker": "false",
+    "markerLabel": "SECOND HEARTH \u00b7 SETTLING"
+   },
+   {
+    "t": 127.255,
+    "beatClock": 114.3,
+    "beat": "done",
+    "from": "settle:second-hearth-settling",
+    "to": null,
+    "health": null,
+    "requiresMarker": null,
+    "markerLabel": null
+   },
+   {
+    "t": 361.504,
+    "beatClock": 0.2,
+    "beat": "ch10-cold",
+    "from": null,
+    "to": "station:fault-read",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT"
+   },
+   {
+    "t": 362.92,
+    "beatClock": 1.6,
+    "beat": "ch10-cold",
+    "from": "station:fault-read",
+    "to": "station:fabrication-attempt",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT"
+   },
+   {
+    "t": 370.062,
+    "beatClock": 0.2,
+    "beat": "ch10-ask",
+    "from": "station:fabrication-attempt",
+    "to": "station:return:crossing",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "ORIGIN WORLD \u00b7 COURSE"
+   },
+   {
+    "t": 384.407,
+    "beatClock": 14.3,
+    "beat": "ch10-ask",
+    "from": "station:return:crossing",
+    "to": "station:return:landfall",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "WRECK SITE \u00b7 LAND"
+   },
+   {
+    "t": 391.093,
+    "beatClock": 20.9,
+    "beat": "ch10-ask",
+    "from": "station:return:landfall",
+    "to": "station:relay-query",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "WRECK RELAY \u00b7 REQUEST A SOURCE"
+   },
+   {
+    "t": 401.761,
+    "beatClock": 31.5,
+    "beat": "ch10-ask",
+    "from": "station:relay-query",
+    "to": "station:bearing-claim",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING"
+   },
+   {
+    "t": 403.575,
+    "beatClock": 0.2,
+    "beat": "ch10-transit",
+    "from": "station:bearing-claim",
+    "to": "station:transit:ignite",
+    "health": "ready",
+    "requiresMarker": "false",
+    "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE"
+   },
+   {
+    "t": 405.476,
+    "beatClock": 2.1,
+    "beat": "ch10-transit",
+    "from": "station:transit:ignite",
+    "to": "station:transit:hold",
+    "health": "ready",
+    "requiresMarker": "true",
+    "markerLabel": "ISSUED BEARING \u00b7 HOLD"
+   },
+   {
+    "t": 412.274,
+    "beatClock": 8.9,
+    "beat": "ch10-transit",
+    "from": "station:transit:hold",
+    "to": "station:transit:resolve",
+    "health": "ready",
+    "requiresMarker": "false",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING"
+   },
+   {
+    "t": 428.817,
+    "beatClock": 25.3,
+    "beat": "done",
+    "from": "station:transit:resolve",
+    "to": null,
+    "health": null,
+    "requiresMarker": null,
+    "markerLabel": null
+   }
+  ],
+  "teleportNudges": {
+   "total": 1,
+   "where": "ch10-cold at beat clock 5.9 s",
+   "classification": "the autopilot's stuck-movement nudge, not a timeout rescue: no beat clock reached its backstop and no beat was force-advanced"
+  },
+  "evidence": "evidence/verification/ch10-final-full.json"
+ },
+ "item2_markerInvariant": {
+  "verdict": "pass",
+  "method": "MutationObserver installed before the HUD mounts plus a per-frame rAF backstop, watching both objective surfaces (the guidance HUD, which does not exist while a rung is deferred, and the feed aside, which carries the idle branch); every attribute write is a record, so the publication instant itself is measured rather than sampled",
+  "totalRecords": 42886,
+  "pathsClean": 4,
+  "pathCount": 4,
+  "totalMissingMarkerViolations": 0,
+  "healthStatesObservedAcrossAllPaths": [
+   "ready"
+  ],
+  "mandatoryRungsCovered": [
+   "station:bearing-claim",
+   "station:fabrication-attempt",
+   "station:fault-read",
+   "station:relay-query",
+   "station:return:crossing",
+   "station:return:landfall",
+   "station:return:reboard",
+   "station:transit:hold"
+  ],
+  "byPath": {
+   "deep-link-ch10-cold": {
+    "url": "?story=ch10-cold&movie=1&profile=LOW",
+    "beatsSeen": [
+     "ch10-cold",
+     "ch10-ask"
+    ],
+    "records": 3764,
+    "mandatoryRungs": [
+     "station:fault-read",
+     "station:fabrication-attempt",
+     "station:return:reboard",
+     "station:return:crossing"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolations": 0,
+    "worstViolationDwellMs": 0,
+    "reachedTerminal": true,
+    "observerErrors": [],
+    "pageErrors": 0
+   },
+   "deep-link-ch10-ask": {
+    "url": "?story=ch10-ask&movie=1&profile=LOW",
+    "beatsSeen": [
+     "ch10-ask",
+     "ch10-transit"
+    ],
+    "records": 12358,
+    "mandatoryRungs": [
+     "station:return:reboard",
+     "station:return:crossing",
+     "station:return:landfall",
+     "station:relay-query",
+     "station:bearing-claim",
+     "station:transit:hold"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolations": 0,
+    "worstViolationDwellMs": 0,
+    "reachedTerminal": true,
+    "observerErrors": [],
+    "pageErrors": 0
+   },
+   "deep-link-ch10-transit": {
+    "url": "?story=ch10-transit&movie=1&profile=LOW",
+    "beatsSeen": [
+     "ch10-transit",
+     "done"
+    ],
+    "records": 4580,
+    "mandatoryRungs": [
+     "station:transit:hold"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolations": 0,
+    "worstViolationDwellMs": 0,
+    "reachedTerminal": true,
+    "observerErrors": [],
+    "pageErrors": 0
+   },
+   "flow-ch10-cold-through-transit": {
+    "url": "?story=ch10-cold&movie=1&profile=LOW",
+    "beatsSeen": [
+     "ch10-cold",
+     "ch10-ask",
+     "ch10-transit",
+     "done"
+    ],
+    "records": 22184,
+    "mandatoryRungs": [
+     "station:fault-read",
+     "station:fabrication-attempt",
+     "station:return:reboard",
+     "station:return:crossing",
+     "station:return:landfall",
+     "station:relay-query",
+     "station:bearing-claim",
+     "station:transit:hold"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolations": 0,
+    "worstViolationDwellMs": 0,
+    "reachedTerminal": true,
+    "observerErrors": [],
+    "pageErrors": 0
+   }
+  },
+  "deferredPublicationEvidence": {
+   "deep-link-ch10-ask": {
+    "beat": "ch10-ask",
+    "hudAbsentMs": 2868.0,
+    "thenPublished": "station:return:reboard",
+    "atHealth": "ready",
+    "priorRoundBehaviour": "station:return:reboard held missing-marker for 3,400.8 ms",
+    "reading": "the deferred rung is not published at all while its handle is unresolved: no card exists on either surface, which is the authored idle reading, and the rung appears already ready"
+   },
+   "authoredSemantics": "marker-requiring ch10 rungs defer publication until their marker target resolves; an unfindable rung is therefore never observable at missing-marker, and reads idle (no card) instead"
+  },
+  "evidence": "evidence/verification/ch10-stamp-marker.json"
+ },
+ "item3_reducedMotionFovParity": {
+  "verdict": "pass",
+  "spec": "appliedFovDeg 70 at the transit anchors on all four registry variant profiles",
+  "byVariant": {
+   "desktop-high": {
+    "profile": "HIGH",
+    "viewport": "1280x720",
+    "reducedMotion": false,
+    "isMobile": false,
+    "appliedFovDegByAnchor": {
+     "anc.ch10.transit-ignite": 70,
+     "anc.ch10.seam-of-light": 70,
+     "anc.ch10.station-resolved": 70,
+     "anc.ch10.threshold-handback": null
+    },
+    "anchorsCaptured": 4,
+    "missingAnchors": [],
+    "seamStrictlyBeforeResolved": true,
+    "resetAtHandback": "completion",
+    "objectiveAtHandback": null,
+    "pageErrors": 0
+   },
+   "desktop-medium-reduced-motion": {
+    "profile": "MEDIUM",
+    "viewport": "1280x720",
+    "reducedMotion": true,
+    "isMobile": false,
+    "appliedFovDegByAnchor": {
+     "anc.ch10.transit-ignite": 70,
+     "anc.ch10.seam-of-light": 70,
+     "anc.ch10.station-resolved": 70,
+     "anc.ch10.threshold-handback": null
+    },
+    "anchorsCaptured": 4,
+    "missingAnchors": [],
+    "seamStrictlyBeforeResolved": true,
+    "resetAtHandback": "completion",
+    "objectiveAtHandback": null,
+    "pageErrors": 0
+   },
+   "desktop-low": {
+    "profile": "LOW",
+    "viewport": "1280x720",
+    "reducedMotion": false,
+    "isMobile": false,
+    "appliedFovDegByAnchor": {
+     "anc.ch10.transit-ignite": 70,
+     "anc.ch10.seam-of-light": 70,
+     "anc.ch10.station-resolved": 70,
+     "anc.ch10.threshold-handback": null
+    },
+    "anchorsCaptured": 4,
+    "missingAnchors": [],
+    "seamStrictlyBeforeResolved": true,
+    "resetAtHandback": "completion",
+    "objectiveAtHandback": null,
+    "pageErrors": 0
+   },
+   "mobile-potato": {
+    "profile": "POTATO",
+    "viewport": "390x844",
+    "reducedMotion": false,
+    "isMobile": true,
+    "appliedFovDegByAnchor": {
+     "anc.ch10.transit-ignite": 70,
+     "anc.ch10.seam-of-light": 70,
+     "anc.ch10.station-resolved": 70,
+     "anc.ch10.threshold-handback": null
+    },
+    "anchorsCaptured": 4,
+    "missingAnchors": [],
+    "seamStrictlyBeforeResolved": true,
+    "resetAtHandback": "completion",
+    "objectiveAtHandback": null,
+    "pageErrors": 0
+   }
+  },
+  "fovAtFovCarryingAnchors": {
+   "anc.ch10.transit-ignite": 70,
+   "anc.ch10.seam-of-light": 70,
+   "anc.ch10.station-resolved": 70
+  },
+  "fovAtHandback": "null on all four profiles: the signed shot releases at the hand-back with reset reason 'completion', so no FOV is asserted; the live camera holds 70.0002 (measured at the cut-line shutter)",
+  "reducedMotionReading": "MEDIUM with reduced motion reports 70, not the neutral sandbox FOV: reduced motion now holds the shot's end value instead of easing to it, so the station is framed identically on every profile",
+  "evidence": "evidence/verification/ch10-closing-variant-transit.json"
+ },
+ "item4_heroStills": {
+  "still-station-resolved": {
+   "verdict": "pass with residual",
+   "file": "evidence/capture/still-station-resolved.png",
+   "criterion": "draft-v6 cut line",
+   "method": "flown at LOW; HIGH raised at anc.ch10.seam-of-light so the pipeline is warm; shutter armed in-page on rAF at the first frame after threshold-handback with K11 painted and the work order cleared; screenshot taken before any other evaluate",
+   "tier": "HIGH",
+   "secondsHighWarmBeforeShutter": 17.4,
+   "armedAtRange": 1098,
+   "shutterRange": 1084,
+   "rangeSpec": [
+    1000,
+    1300
+   ],
+   "rangeInSpec": true,
+   "framesBetweenArmAndShutter": 11,
+   "rangeDriftBetweenArmAndShutter": 14,
+   "standoffTriggerConstant": 1500,
+   "cameraFovAtShutter": 70.00019422055504,
+   "fovSpec": 70,
+   "k11Painted": true,
+   "workOrderCleared": true,
+   "handbackReached": true,
+   "galaxyInFrame": false,
+   "companionBodyMeshesInFrame": 0,
+   "st0InFrame": false,
+   "spineWidthMeasured": {
+    "method": "pixel extent of the hull against the aperture, luma > 20 with four-row vertical contiguity, endpoints x=415 and x=775 of 1280",
+    "horizontalExtentPct": 28.1,
+    "onScreenSpineLengthPct": 31.8,
+    "specPct": [
+     38,
+     47
+    ],
+    "inSpec": false,
+    "geometricCeiling": "at FOV 70 and 16:9 an 830-unit spine subtends at most 30.8% of frame width at range 1,084 and at most 33.3% at the 1,000 floor, so the range term (1,000-1,300) and the spine term (38-47%) are not simultaneously satisfiable without a lens or range change"
+   },
+   "residuals": [
+    "spine reads 31.8% of frame width against a 38-47% term; the two terms are geometrically incompatible at FOV 70 in the declared range band",
+    "a lit spherical body renders at approximately (905, 390), luma up to 247.9, against the 'no galaxy, planet or home fire in frame' term. No companion-body mesh is in frustum (companionCount 1, planetsInFrame 0), so the body is drawn by the sky layer, not by SystemCompanionBodies"
+   ],
+   "evidence": "evidence/verification/ch10-stamp-cutline.json"
+  },
+  "still-st0-sighting": {
+   "verdict": "pass with residual",
+   "file": "evidence/capture/still-st0-sighting.png",
+   "criterion": "draft-v5 operational staging, yaw locked through the HIGH warm",
+   "method": "in-page rAF closed loop on the shipped mouse-look handler, throttled to one damped step per 100 ms and still running at the shutter; a per-frame loop diverges because the true look gain is about 3x the nominal 0.002 rad/unit (measured: 4,690 steps oscillating between dAz 103 deg and 72 deg)",
+   "tier": "HIGH",
+   "secondsHighWarmBeforeShutter": 33.8,
+   "shutterOnCrossingMaximum": true,
+   "peakAltitudeTrackedDeg": 16.321,
+   "altitudeAtShutterDeg": 16.021,
+   "cameraFov": 75,
+   "bearingAzimuthDeg": 42.622,
+   "yawOffsetAppliedDeg": 10,
+   "lockTargetAzDeg": 52.622,
+   "yawErrorAtShutterDeg": -0.293,
+   "yawErrorWithinTwoDeg": true,
+   "priorRoundYawErrorDeg": 4.637,
+   "pitchTargetDeg": 1.321,
+   "pitchErrorDeg": 0.283,
+   "st0Ndc": [
+    -0.1879,
+    0.4277
+   ],
+   "upperThirdErrorFrameHeightPct": 4.72,
+   "upperThirdSpecPct": 5,
+   "st0Visible": true,
+   "st0Opacity": 1,
+   "isNight": true,
+   "daylight": 0,
+   "renderedDotCheck": {
+    "expectedPixel": [
+     519,
+     206
+    ],
+    "measuredLocalMaxLuma": 130.7,
+    "surroundingSkyMaxLuma": 63.6,
+    "verdict": "ST-0 renders as a single amber point, above the star field, not a disc"
+   },
+   "moonExclusion": {
+    "companionBodiesInFrustum": 1,
+    "companionAltitudeDeg": -6.137,
+    "companionExpectedPixel": [
+     139,
+     347
+    ],
+    "pixelRgbAtThatPoint": [
+     133,
+     164,
+     121
+    ],
+    "reading": "the one companion body sits 6.1 deg BELOW the local horizon and its screen position lands on terrain pixels, so it is occluded and not visible in the frame; the in-frustum flag is a frustum test, not a visibility test",
+    "verdict": "satisfied as rendered"
+   },
+   "residuals": [
+    "a sky-drawn celestial disc sits near the top of the frame at roughly +35 deg altitude, luma up to 207.2, brighter than ST-0's 130.7. It is not a companion-body mesh and not ST-0",
+    "the camera stands at the Kestrel rather than outdoors at the hearth, so terrain occupies about the bottom third of frame against a bottom-20% term"
+   ],
+   "evidence": "evidence/verification/ch10-stamp-st0.json"
+  }
+ },
+ "item5_transitStripRegeneration": {
+  "verdict": "pass",
+  "reason": "the three transit strips were captured 2026-08-11 21:22-21:24, before the flight repairs, and showed a grounded cockpit under filenames naming airborne states; all three are recaptured from post-fix flights",
+  "method": "event-triggered off anchor history and flight facts with a rolling previous frame, so every -before frame is the last frame that existed before the predicate flipped; every frame records phase, control mode, speed and station range, so a grounded frame can no longer be filed under an airborne label",
+  "strips": {
+   "strip-transit-a": {
+    "frameCount": 8,
+    "allTriggersHit": true,
+    "reducedMotion": false,
+    "tier": "LOW",
+    "pageErrors": 0,
+    "frames": [
+     {
+      "file": "evidence/capture/strip-transit-a/00_transit-ignite-before_ch10-transit.png",
+      "label": "transit-ignite-before",
+      "beat": "ch10-transit",
+      "phase": "surface",
+      "controlMode": "flight",
+      "stationDistance": 6637,
+      "objectiveId": "station:transit:ignite",
+      "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-a/01_transit-ignite-at_ch10-transit.png",
+      "label": "transit-ignite-at",
+      "beat": "ch10-transit",
+      "phase": "descent",
+      "controlMode": "flight",
+      "stationDistance": 6630,
+      "objectiveId": "station:transit:hold",
+      "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-a/02_transit-ignite-after_ch10-transit.png",
+      "label": "transit-ignite-after",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 6187,
+      "objectiveId": "station:transit:hold",
+      "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-a/03_T2-hold-marker_ch10-transit.png",
+      "label": "T2-hold-marker",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 6140,
+      "objectiveId": "station:transit:hold",
+      "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-a/04_seam-before_ch10-transit.png",
+      "label": "seam-before",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 5260,
+      "objectiveId": "station:transit:hold",
+      "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-a/05_seam-at_ch10-transit.png",
+      "label": "seam-at",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 5153,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-a/06_seam-after_ch10-transit.png",
+      "label": "seam-after",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 4284,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-a/07_galaxy-absence-check_ch10-transit.png",
+      "label": "galaxy-absence-check",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 3155,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": null
+     }
+    ]
+   },
+   "strip-transit-b": {
+    "frameCount": 8,
+    "allTriggersHit": true,
+    "reducedMotion": false,
+    "tier": "LOW",
+    "pageErrors": 0,
+    "frames": [
+     {
+      "file": "evidence/capture/strip-transit-b/00_station-resolved-before_ch10-transit.png",
+      "label": "station-resolved-before",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1526,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png",
+      "label": "station-resolved-at",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1426,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": "(both f"
+     },
+     {
+      "file": "evidence/capture/strip-transit-b/02_hold-mid_ch10-transit.png",
+      "label": "hold-mid",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1188,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": "(both fires behind you now. ahead, a light some"
+     },
+     {
+      "file": "evidence/capture/strip-transit-b/03_hold-release_done.png",
+      "label": "hold-release",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1073,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     },
+     {
+      "file": "evidence/capture/strip-transit-b/04_K11-painted_done.png",
+      "label": "K11-painted",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1065,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     },
+     {
+      "file": "evidence/capture/strip-transit-b/05_work-order-cleared_done.png",
+      "label": "work-order-cleared",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1060,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     },
+     {
+      "file": "evidence/capture/strip-transit-b/06_threshold-handback_done.png",
+      "label": "threshold-handback",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1055,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     },
+     {
+      "file": "evidence/capture/strip-transit-b/07_threshold-handback-after_done.png",
+      "label": "threshold-handback-after",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 971,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     }
+    ]
+   },
+   "strip-rm-transit": {
+    "frameCount": 8,
+    "allTriggersHit": true,
+    "reducedMotion": true,
+    "tier": "LOW",
+    "pageErrors": 0,
+    "frames": [
+     {
+      "file": "evidence/capture/strip-rm-transit/00_seam-before_ch10-transit.png",
+      "label": "seam-before",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 5285,
+      "objectiveId": "station:transit:hold",
+      "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-rm-transit/01_seam-at_ch10-transit.png",
+      "label": "seam-at",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 5176,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-rm-transit/02_seam-after_ch10-transit.png",
+      "label": "seam-after",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 4297,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": null
+     },
+     {
+      "file": "evidence/capture/strip-rm-transit/03_station-resolved_ch10-transit.png",
+      "label": "station-resolved",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1475,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": "("
+     },
+     {
+      "file": "evidence/capture/strip-rm-transit/04_hold-mid_ch10-transit.png",
+      "label": "hold-mid",
+      "beat": "ch10-transit",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1209,
+      "objectiveId": "station:transit:resolve",
+      "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+      "caption": "(both fires behind you now. ahead, a light"
+     },
+     {
+      "file": "evidence/capture/strip-rm-transit/05_hold-release_done.png",
+      "label": "hold-release",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1074,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     },
+     {
+      "file": "evidence/capture/strip-rm-transit/06_threshold-handback_done.png",
+      "label": "threshold-handback",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 1067,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     },
+     {
+      "file": "evidence/capture/strip-rm-transit/07_threshold-handback-after_done.png",
+      "label": "threshold-handback-after",
+      "beat": "done",
+      "phase": "deep_space",
+      "controlMode": "flight",
+      "stationDistance": 976,
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)"
+     }
+    ]
+   }
+  },
+  "registryPurge": "all 24 stale frame hashes are gone from evidence-registry.json: the registry is rebuilt from the files on disk and every entry re-hashed",
+  "evidence": [
+   "evidence/verification/ch10-stamp-strips.json",
+   "evidence/verification/ch10-stamp-strips-strip-transit-a.json"
+  ]
+ },
+ "acceptanceCriteria": [
+  {
+   "id": "AC-evidence-budget",
+   "verdict": "pass",
+   "measured": {
+    "lowFrames": 64,
+    "lowStripCap": 64,
+    "stripFrameCounts": {
+     "strip-ask-a": 8,
+     "strip-ask-b": 8,
+     "strip-cold-a": 8,
+     "strip-cold-b": 8,
+     "strip-rm-transit": 8,
+     "strip-st0-crossing": 8,
+     "strip-transit-a": 8,
+     "strip-transit-b": 8
+    },
+    "highStills": 3,
+    "highStillCap": 3,
+    "highStillFiles": [
+     "still-seam-of-light.png",
+     "still-st0-sighting.png",
+     "still-station-resolved.png"
+    ],
+    "webmOrMovieRenders": 0,
+    "movieLaneColdRunsAtLowThisPass": 10,
+    "movieLaneColdRunsRequired": 3,
+    "timeoutRescuesAcrossAllRuns": 0,
+    "movieLaneProof": "autopilot state traces at LOW only: one end-to-end cold run, four marker-invariant cold paths, three strip flights, and two of the four variant profiles; zero movie renders of any kind"
+   }
+  },
+  {
+   "id": "AC-state-traces-four-profiles",
+   "verdict": "pass",
+   "measured": {
+    "profiles": [
+     "desktop HIGH",
+     "desktop MEDIUM + reduced motion",
+     "desktop LOW",
+     "mobile POTATO"
+    ],
+    "transitAnchorsPerProfile": 4,
+    "missingAnchorsAnyProfile": 0,
+    "seamStrictlyBeforeResolvedEveryProfile": true,
+    "appliedFovAtAnchorsEveryProfile": 70,
+    "resetAtHandbackEveryProfile": "completion",
+    "objectiveAtHandbackEveryProfile": null,
+    "pageErrorsAcrossProfiles": 0,
+    "sampleRateHz": 2,
+    "byVariant": {
+     "desktop-high": {
+      "profile": "HIGH",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "isMobile": false,
+      "appliedFovDegByAnchor": {
+       "anc.ch10.transit-ignite": 70,
+       "anc.ch10.seam-of-light": 70,
+       "anc.ch10.station-resolved": 70,
+       "anc.ch10.threshold-handback": null
+      },
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true,
+      "resetAtHandback": "completion",
+      "objectiveAtHandback": null,
+      "pageErrors": 0
+     },
+     "desktop-medium-reduced-motion": {
+      "profile": "MEDIUM",
+      "viewport": "1280x720",
+      "reducedMotion": true,
+      "isMobile": false,
+      "appliedFovDegByAnchor": {
+       "anc.ch10.transit-ignite": 70,
+       "anc.ch10.seam-of-light": 70,
+       "anc.ch10.station-resolved": 70,
+       "anc.ch10.threshold-handback": null
+      },
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true,
+      "resetAtHandback": "completion",
+      "objectiveAtHandback": null,
+      "pageErrors": 0
+     },
+     "desktop-low": {
+      "profile": "LOW",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "isMobile": false,
+      "appliedFovDegByAnchor": {
+       "anc.ch10.transit-ignite": 70,
+       "anc.ch10.seam-of-light": 70,
+       "anc.ch10.station-resolved": 70,
+       "anc.ch10.threshold-handback": null
+      },
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true,
+      "resetAtHandback": "completion",
+      "objectiveAtHandback": null,
+      "pageErrors": 0
+     },
+     "mobile-potato": {
+      "profile": "POTATO",
+      "viewport": "390x844",
+      "reducedMotion": false,
+      "isMobile": true,
+      "appliedFovDegByAnchor": {
+       "anc.ch10.transit-ignite": 70,
+       "anc.ch10.seam-of-light": 70,
+       "anc.ch10.station-resolved": 70,
+       "anc.ch10.threshold-handback": null
+      },
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true,
+      "resetAtHandback": "completion",
+      "objectiveAtHandback": null,
+      "pageErrors": 0
+     }
+    }
+   },
+   "carried": "the ST-0 predicate / draw-count probe and the FPS sample versus the 2026-08-10 baseline are carried unchanged from the earlier round (evidence/verification/ch10-drawcall-fps.json); they were not re-measured this pass because nothing in the three repairs touches free-play rendering"
+  },
+  {
+   "id": "AC-audio-seven-deliverables",
+   "verdict": "carried-forward",
+   "measured": {
+    "deliverablesOnDisk": 7,
+    "paths": [
+     "evidence/score/ab_cold-entry_A-hearth-close.wav",
+     "evidence/score/ab_cold-entry_B-ch10-cold.wav",
+     "evidence/score/ab_cold-entry_measure.json",
+     "evidence/score/relay-answer_metric.wav",
+     "evidence/score/relay-answer_onsets.json",
+     "evidence/score/carrier-legality.json",
+     "evidence/score/transit_seam-ebb_combined.wav",
+     "evidence/score/station-resolved_combined.wav",
+     "evidence/score/resolved_vs_a4_rms.json",
+     "evidence/score/regression_ch1-ch9_moods.json",
+     "evidence/score/handback_release.wav"
+    ],
+    "allFfprobed": true,
+    "realtimeSoak": "none"
+   },
+   "deviation": "not re-rendered this pass; measurements stand from the draft-v3 report",
+   "residual": "the audio deliverables have not been re-measured against draft-v6. The three repairs proven this pass touch autopilot, guidance publication and the lens rail only; no score path is in the diff"
+  },
+  {
+   "id": "AC-lifecycle-fix-ch9-wait-night",
+   "verdict": "pass",
+   "measured": {
+    "settleWaitNightEnters": 1,
+    "oneCuePerActivation": true,
+    "enteredAtSeconds": 9.99,
+    "heldUntilSeconds": 121.48,
+    "source": "the stamp pass end-to-end cold run"
+   }
+  },
+  {
+   "id": "AC-lifecycle-invariant",
+   "verdict": "pass",
+   "measured": {
+    "method": "mutation-level, four entry paths, both objective surfaces",
+    "records": 42886,
+    "mandatoryRungsCovered": [
+     "station:bearing-claim",
+     "station:fabrication-attempt",
+     "station:fault-read",
+     "station:relay-query",
+     "station:return:crossing",
+     "station:return:landfall",
+     "station:return:reboard",
+     "station:transit:hold"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "mandatoryRungsObservableAtMissingMarker": 0,
+    "priorRoundViolations": [
+     {
+      "objectiveId": "station:return:reboard",
+      "path": "deep-link-ch10-ask",
+      "dwellMs": 3400.8
+     },
+     {
+      "objectiveId": "station:return:landfall",
+      "path": "deep-link-ch10-ask",
+      "dwellMs": 264.6
+     },
+     {
+      "objectiveId": "station:return:landfall",
+      "path": "flow-ch10-cold-to-ask",
+      "dwellMs": 273.6
+     }
+    ],
+    "oneEnterPerActivation": true,
+    "noObjectiveSpansABeatBoundary": true,
+    "beatChangeClearsGuidance": true,
+    "cutLineFrameCarriesK11WithWorkOrderCleared": true,
+    "authoredSemantics": "marker-requiring ch10 rungs defer publication until their marker target resolves; an unfindable rung is therefore never observable at missing-marker, and reads idle (no card) instead"
+   },
+   "residual": "shipped ch9 is unchanged and out of this run's scope: settle:scan-waterline still publishes at missing-marker for one sample at the start of ch9-settle. The deferral is scoped to ch10 by construction, so ch1-ch9 keep their shipped publication behaviour byte for byte"
+  },
+  {
+   "id": "AC-non-marker-rung-T1",
+   "verdict": "pass",
+   "measured": {
+    "id": "station:transit:ignite",
+    "requiresMarker": "false",
+    "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+    "workOrder": "BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+    "entersAt": "anc.ch10.bearing-claimed",
+    "enterEmissionsPerActivation": 1,
+    "markerPublished": false,
+    "replacedInPlaceBy": "station:transit:hold",
+    "staleCardAtBeatExit": false,
+    "confirmedOnPaths": [
+     "deep-link-ch10-ask",
+     "deep-link-ch10-transit",
+     "flow-ch10-cold-through-transit",
+     "end-to-end cold run"
+    ],
+    "frameEvidence": "evidence/capture/strip-transit-a/00_transit-ignite-before_ch10-transit.png"
+   }
+  },
+  {
+   "id": "AC-non-marker-rung-T3",
+   "verdict": "pass",
+   "measured": {
+    "id": "station:transit:resolve",
+    "requiresMarker": "false",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "workOrder": "THE SOURCE IS RESOLVING. | HOLD.",
+    "entersAt": "anc.ch10.seam-of-light",
+    "enterEmissionsPerActivation": 1,
+    "markerPublished": false,
+    "clearsToNothing": true,
+    "objectiveAtHandback": null,
+    "resetReasonAtHandback": "completion",
+    "confirmedOnProfiles": [
+     "HIGH",
+     "MEDIUM+reduced-motion",
+     "LOW",
+     "POTATO"
+    ],
+    "frameEvidence": "evidence/capture/strip-transit-b/05_work-order-cleared_done.png"
+   }
+  },
+  {
+   "id": "AC-fallback-ledger",
+   "verdict": "pass",
+   "measured": {
+    "endToEndHonestCompletion": true,
+    "endToEndDurationSeconds": 449.1,
+    "endToEndCapSeconds": 3000,
+    "transitHandbackBeatClock": 25.3,
+    "transitTimeout": 260,
+    "askClaimBeatClockThisPass": 31.5,
+    "askTimeout": 320,
+    "askColdRunsCarried": "3 of 3 (31.8, 45.3, 27.0 s of beat clock)",
+    "timeoutRescues": 0,
+    "beatsForceAdvanced": 0,
+    "teleportNudges": {
+     "total": 1,
+     "where": "ch10-cold at beat clock 5.9 s",
+     "classification": "the autopilot's stuck-movement nudge, not a timeout rescue: no beat clock reached its backstop and no beat was force-advanced"
+    },
+    "priorRoundStall": "ch10-transit stood at 2,577.3 s of beat clock against a 260 s backstop with zero rescues fired: the backstop was declared but did not fire. The beat now completes at 25.3 s"
+   }
+  },
+  {
+   "id": "AC-st0-evidence",
+   "verdict": "partial",
+   "measured": {
+    "phaseTelemetryTrace": {
+     "source": "evidence/verification/ch10-stamp-st0-periods.json (420 s window)",
+     "traceSamples": 834,
+     "peakIntervalsSeconds": [
+      89.74,
+      90.21,
+      89.7,
+      90.16
+     ],
+     "periodSpecSeconds": 90,
+     "consecutivePeriodsProven": 4,
+     "consecutivePeriodsRequired": 3,
+     "peakAltitudeDeg": 16.321,
+     "bearingAzimuthDeg": 42.474,
+     "verdict": "pass"
+    },
+    "crossingStrip": {
+     "path": "evidence/capture/strip-st0-crossing/",
+     "frames": 8,
+     "verdict": "pass, carried unchanged: pre-rise, rise, three arc frames including the true-bearing crossing, set, post-set, next-rise"
+    },
+    "egressFrustumRule": "carried unchanged from the earlier round",
+    "heroStill": {
+     "verdict": "pass with residual",
+     "file": "evidence/capture/still-st0-sighting.png",
+     "criterion": "draft-v5 operational staging, yaw locked through the HIGH warm",
+     "method": "in-page rAF closed loop on the shipped mouse-look handler, throttled to one damped step per 100 ms and still running at the shutter; a per-frame loop diverges because the true look gain is about 3x the nominal 0.002 rad/unit (measured: 4,690 steps oscillating between dAz 103 deg and 72 deg)",
+     "tier": "HIGH",
+     "secondsHighWarmBeforeShutter": 33.8,
+     "shutterOnCrossingMaximum": true,
+     "peakAltitudeTrackedDeg": 16.321,
+     "altitudeAtShutterDeg": 16.021,
+     "cameraFov": 75,
+     "bearingAzimuthDeg": 42.622,
+     "yawOffsetAppliedDeg": 10,
+     "lockTargetAzDeg": 52.622,
+     "yawErrorAtShutterDeg": -0.293,
+     "yawErrorWithinTwoDeg": true,
+     "priorRoundYawErrorDeg": 4.637,
+     "pitchTargetDeg": 1.321,
+     "pitchErrorDeg": 0.283,
+     "st0Ndc": [
+      -0.1879,
+      0.4277
+     ],
+     "upperThirdErrorFrameHeightPct": 4.72,
+     "upperThirdSpecPct": 5,
+     "st0Visible": true,
+     "st0Opacity": 1,
+     "isNight": true,
+     "daylight": 0,
+     "renderedDotCheck": {
+      "expectedPixel": [
+       519,
+       206
+      ],
+      "measuredLocalMaxLuma": 130.7,
+      "surroundingSkyMaxLuma": 63.6,
+      "verdict": "ST-0 renders as a single amber point, above the star field, not a disc"
+     },
+     "moonExclusion": {
+      "companionBodiesInFrustum": 1,
+      "companionAltitudeDeg": -6.137,
+      "companionExpectedPixel": [
+       139,
+       347
+      ],
+      "pixelRgbAtThatPoint": [
+       133,
+       164,
+       121
+      ],
+      "reading": "the one companion body sits 6.1 deg BELOW the local horizon and its screen position lands on terrain pixels, so it is occluded and not visible in the frame; the in-frustum flag is a frustum test, not a visibility test",
+      "verdict": "satisfied as rendered"
+     },
+     "residuals": [
+      "a sky-drawn celestial disc sits near the top of the frame at roughly +35 deg altitude, luma up to 207.2, brighter than ST-0's 130.7. It is not a companion-body mesh and not ST-0",
+      "the camera stands at the Kestrel rather than outdoors at the hearth, so terrain occupies about the bottom third of frame against a bottom-20% term"
+     ],
+     "evidence": "evidence/verification/ch10-stamp-st0.json"
+    }
+   },
+   "deviation": "the still now meets the yaw, pitch, FOV, upper-third, peak-timing and night terms; two composition terms remain unmet (a sky-drawn celestial disc brighter than ST-0 is in frame, and terrain occupies about the bottom third rather than the bottom 20%)",
+   "residual": "both remaining terms are structural at this staging: the camera stands where the beat puts the player and the sky body is where the seed puts it. Closing either needs an authored camera move, which the criterion forbids, or a contract amendment"
+  },
+  {
+   "id": "AC-galaxy-firewall",
+   "verdict": "pass",
+   "measured": {
+    "seamMinBlend": 0.9,
+    "galaxyRevealStartBlend": 0.78,
+    "seamStrictlyAboveGalaxy": true,
+    "galaxyInApertureAtSeamHighStill": false,
+    "galaxyInApertureAtCutLineHighStill": false,
+    "galaxyObjectsInFrustumAtCutLine": 0
+   },
+   "residual": "the cut-line still's own separate term, 'no galaxy, planet or home fire in frame', still fails on the planet clause: a lit spherical body renders at approximately (905, 390). No GalaxyImpostor is in the aperture, which is what this criterion pins"
+  },
+  {
+   "id": "AC-exit-seam-proof",
+   "verdict": "pass",
+   "measured": {
+    "reachedInside1400": true,
+    "distanceAtCutLineShutter": 1084,
+    "corridorRange": 1400,
+    "canDockPublishedAtCutLine": false,
+    "dockingAuthorized": false,
+    "advisoryCopyAtCutLine": "none",
+    "objectiveAtCutLine": null,
+    "keyFProbe": {
+     "presses": 2,
+     "committed": false,
+     "navigated": false,
+     "source": "carried unchanged from ch10-transit-captures.json"
+    },
+    "sandboxPathByteIdentical": "carried unchanged from ch10-transit-captures.json"
+   }
+  },
+  {
+   "id": "AC-telemetry-pin",
+   "verdict": "fail",
+   "measured": {
+    "stationTargetAtBearingClaimAnchor": null,
+    "bearingClaimAnchorAtSeconds": 401.76,
+    "stationTargetFirstSeenAtSeconds": 403.57,
+    "stationTargetFirstSeenAt": "the ch10-transit beat flip",
+    "delaySeconds": 1.81,
+    "targetWorldId": "-1,-1:a0",
+    "targetKind": "space_station",
+    "activePlanetIdThroughout": "-1,-1",
+    "activePlanetClaimDisturbed": false,
+    "b9335b9PinGreen": true,
+    "producer": "storyBoundaryTelemetry.ts adds state:space-station/targeted from runtime.world.spaceStationTargetId, which is the systemFlight target traced above, so the telemetry ref follows the same 1.81 s delay",
+    "shippedCopyCuesMoodsUntouched": "carried: regression_ch1-ch9_moods.json, additive-only diff",
+    "source": "the stamp pass end-to-end cold run"
+   },
+   "deviation": "no station target is published AT the claim; it appears 1.81 s later at the ch10-transit flip, so state:space-station/targeted never coincides with the claim. Re-measured this pass and unchanged (1.3 s in the prior round); this criterion was not in the repair round's scope"
+  },
+  {
+   "id": "AC-performance",
+   "verdict": "pass",
+   "measured": {
+    "st0DrawCallDelta": 1,
+    "newShaderPrograms": 0,
+    "peakBrowserRssMb": 2003,
+    "source": "carried unchanged from ch10-drawcall-fps.json",
+    "transitAddsNothing": true
+   },
+   "carried": "FPS non-regression versus the 2026-08-10 fps-baseline is carried; nothing in this pass's three repairs touches free-play rendering"
+  },
+  {
+   "id": "AC-copy",
+   "verdict": "pass",
+   "measured": {
+    "kLinesVerbatim": 11,
+    "k11PaintedAtCutLine": true,
+    "k11Text": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "k11FrameEvidence": [
+     "evidence/capture/still-station-resolved.png",
+     "evidence/capture/strip-transit-b/04_K11-painted_done.png"
+    ],
+    "t1WorkOrderVerbatimInFrame": "BRING THE KESTREL ONLINE. / HOLD [SPACE] TO IGNITE AND LIFT.",
+    "t3WorkOrderVerbatimInFrame": "THE SOURCE IS RESOLVING. / HOLD.",
+    "stationLinesThisRun": 0,
+    "st0Copy": "none in any register"
+   }
+  }
+ ],
+ "criteriaTally": {
+  "pass": 11,
+  "carried-forward": 1,
+  "partial": 1,
+  "fail": 1
+ },
+ "openDefects": [
+  {
+   "id": "D-13",
+   "severity": "high",
+   "status": "closed",
+   "statement": "ch10-transit entered from the flow left the pilot on foot at the wreck relay. Closed: the autopilot branch now walks to the Kestrel and boards before flying. Proven in the end-to-end cold run: on foot at beat clock 0.2 s, boarded at 0.7 s, ignited at 2.1 s, hand-back at 25.3 s against a 260 s backstop, zero rescues, zero page errors",
+   "evidence": "evidence/verification/ch10-final-full.json"
+  },
+  {
+   "id": "D-6",
+   "severity": "high",
+   "status": "closed",
+   "statement": "marker-requiring rungs published before their handles resolved. Closed: ch10 rungs defer publication until their marker target resolves. Proven at mutation resolution across four entry paths and 42,886 records: zero observations of a mandatory rung at missing-marker, and the only health state ever observed on a published ch10 rung is 'ready'",
+   "evidence": "evidence/verification/ch10-stamp-marker.json"
+  },
+  {
+   "id": "D-14",
+   "severity": "medium",
+   "status": "closed",
+   "statement": "reduced motion held the neutral sandbox FOV at the ch10 transit anchors, framing the station differently from every other profile. Closed: all four registry profiles report appliedFovDeg 70 at transit-ignite, seam-of-light and station-resolved",
+   "evidence": "evidence/verification/ch10-closing-variant-transit.json"
+  },
+  {
+   "id": "D-12",
+   "severity": "closed-on-frequency",
+   "status": "residual: sample only on this headless box",
+   "statement": "origin-side descent aims at the derivable wreck site. Post-fix: 7 of 7 completions (engineer 4, verifier 3), landfall leg 5.1-7.8 s; this pass's end-to-end run makes it 8 of 8 with the landfall leg at 6.7 s. Pre-fix: 2 of 4 hung, worst 89.4 s",
+   "residual": "no post-fix run has been observed off this headless SwiftShader box, so the frequency argument rests on one machine's timing",
+   "evidence": "evidence/verification/ch10-final-full.json"
+  },
+  {
+   "id": "D-3",
+   "severity": "evidence-gap",
+   "status": "partially-closed",
+   "statement": "both hero stills are re-staged at their named moments. still-station-resolved now shoots on the first frame after the hand-back at range 1,084 (spec 1,000-1,300) with K11 painted, the work order cleared and no galaxy in the aperture; still-st0-sighting now holds yaw to 0.293 deg (spec +-2) at the crossing peak. Two composition terms on each still remain unmet",
+   "residual": "cut line: spine reads 31.8% of frame width against a 38-47% term (the range and spine terms are geometrically incompatible at FOV 70), and a lit spherical body is in frame. ST-0: a brighter sky-drawn disc is in frame and terrain occupies about the bottom third",
+   "evidence": [
+    "evidence/verification/ch10-stamp-cutline.json",
+    "evidence/verification/ch10-stamp-st0.json"
+   ]
+  },
+  {
+   "id": "D-15",
+   "severity": "medium",
+   "status": "open",
+   "statement": "state:space-station/targeted does not coincide with the bearing claim. Measured this pass: the target is null at the claim anchor (t=401.76) and first appears at the ch10-transit beat flip (t=403.57), a 1.81 s delay. The active-planet claim is undisturbed throughout, so the b9335b9 pin stays green",
+   "evidence": "evidence/verification/ch10-final-full.json"
+  },
+  {
+   "id": "D-4",
+   "severity": "closed"
+  },
+  {
+   "id": "D-5",
+   "severity": "closed"
+  },
+  {
+   "id": "D-9",
+   "severity": "closed"
+  },
+  {
+   "id": "D-10",
+   "severity": "closed"
+  },
+  {
+   "id": "D-11",
+   "severity": "closed"
+  }
+ ],
+ "frameDefectScan": {
+  "scanned": 75,
+  "defective": [],
+  "scope": "64 LOW strip frames, 3 HIGH stills and 8 Stage-1 baseline frames scanned for blank/black, flat no-contrast and no-variation defects",
+  "framesReadByEye": [
+   "strip-transit-a/00_transit-ignite-before_ch10-transit.png",
+   "strip-transit-a/02_transit-ignite-after_ch10-transit.png",
+   "strip-transit-a/05_seam-at_ch10-transit.png",
+   "strip-transit-b/01_station-resolved-at_ch10-transit.png",
+   "strip-transit-b/05_work-order-cleared_done.png",
+   "strip-rm-transit/03_station-resolved_ch10-transit.png",
+   "still-station-resolved.png",
+   "still-st0-sighting.png"
+  ]
+ },
+ "overallStatus": "pass-with-residuals",
+ "overallReading": "The three repairs this pass was asked to re-prove all hold. The whole-game movie lane completes: ch9-settle to the hand-back in 449.1 s of wall clock against a 3,000 s cap, 30 of 30 legs, zero page errors, zero timeout rescues, and no beat within reach of its backstop (worst is ch10-ask at 33.0 s of 320). The transit is entered on foot at 0.2 s of beat clock, boarded at 0.7 s and ignited at 2.1 s, where the prior round stood at the relay for 2,577.3 s. The marker invariant is clean at mutation resolution: 42,886 records across four entry paths and eight mandatory rungs, zero observations at missing-marker, and 'ready' is the only health state a published ch10 rung ever carries; a deferred rung is simply not published, which is visible as a 2,868 ms window on the ch10-ask deep link where the prior round held missing-marker for 3,400.8 ms. All four registry profiles report appliedFovDeg 70 at the transit anchors, reduced motion included. Both hero stills are re-staged at their named moments and both improve: the cut line now fires on the first frame after the hand-back at range 1,084 inside the 1,000-1,300 band with FOV 70, K11 painted and the work order cleared, and the ST-0 sighting holds yaw to 0.293 deg against a +-2 deg term where it was 4.637 deg. The three stale transit strips are replaced by post-fix flights and their hashes purged. Eleven of fourteen acceptance criteria pass, one is carried forward unmeasured (audio), one is partial (ST-0 composition) and one fails (the telemetry pin, re-measured unchanged at 1.81 s after the claim and never in this repair round's scope). Two composition terms on each hero still remain unmet and one of them, the cut line's spine width, is geometrically incompatible with its own range term at FOV 70. Zero frame-level defects across 75 PNGs. Evidence budget held exactly: 64 LOW frames, 3 HIGH stills, zero movie renders."
+}

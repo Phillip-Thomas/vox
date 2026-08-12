@@ -1,0 +1,101 @@
+{
+  "capturedAt": "2026-08-11T21:35:30.221Z",
+  "url": "http://localhost:5176/?story=ch9-hearth&profile=LOW",
+  "viewport": "1280x720",
+  "qualityTierRequested": "LOW",
+  "shots": [
+    {
+      "file": "evidence/baseline/sky_161s_ch9-hearth_outdoor-sky-mid.png",
+      "label": "outdoor-sky-mid",
+      "t": 161,
+      "state": {
+        "beat": "ch9-hearth",
+        "objectiveId": "settle:attend-waterline",
+        "markerLabel": "LIVING WATERLINE · ATTEND",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+        "playerPosition": [
+          10.5,
+          50.78897476196289,
+          -20.374876022338867
+        ],
+        "thermalStatus": null,
+        "dayPhase": 0.6611062499999523,
+        "qualityProfile": "LOW",
+        "realityStage": "alive",
+        "inputPolicy": {
+          "lookMode": "free",
+          "targetFov": 75,
+          "targetDpr": null
+        }
+      }
+    },
+    {
+      "file": "evidence/baseline/sky_163s_ch9-hearth_outdoor-sky-zenith.png",
+      "label": "outdoor-sky-zenith",
+      "t": 163,
+      "state": {
+        "beat": "ch9-hearth",
+        "objectiveId": "settle:attend-waterline",
+        "markerLabel": "LIVING WATERLINE · ATTEND",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+        "playerPosition": [
+          10.5,
+          50.78897476196289,
+          -20.374876022338867
+        ],
+        "thermalStatus": null,
+        "dayPhase": 0.6686041666666178,
+        "qualityProfile": "LOW",
+        "realityStage": "alive",
+        "inputPolicy": {
+          "lookMode": "free",
+          "targetFov": 75,
+          "targetDpr": null
+        }
+      }
+    }
+  ],
+  "pageErrors": [],
+  "stateAtEntry": {
+    "beat": "ch9-hearth",
+    "objectiveId": "settle:attend-waterline",
+    "markerLabel": "LIVING WATERLINE · ATTEND",
+    "health": "ready",
+    "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+    "playerPosition": [
+      10.5,
+      50.78897476196289,
+      -8
+    ],
+    "thermalStatus": null,
+    "dayPhase": 0.07508791666626946,
+    "qualityProfile": "LOW",
+    "realityStage": "alive",
+    "inputPolicy": {
+      "lookMode": "free",
+      "targetFov": 75,
+      "targetDpr": null
+    }
+  },
+  "nightWait": {
+    "seconds": 135,
+    "dayPhase": 0.6381879166662259
+  },
+  "pointerLock": "CANVAS",
+  "movementReceipt": {
+    "before": [
+      10.5,
+      50.78897476196289,
+      -8
+    ],
+    "after": [
+      10.5,
+      50.78945541381836,
+      -20.374876022338867
+    ],
+    "moved": true
+  },
+  "durationSeconds": 163
+}

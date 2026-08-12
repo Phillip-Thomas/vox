@@ -6,6 +6,20 @@
     "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
     "status": "frozen"
   },
+  "sources": [
+    {
+      "sceneId": "distance-between-fires",
+      "contractVersion": "intent-v1",
+      "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e",
+      "status": "frozen"
+    },
+    {
+      "sceneId": "ch10-station-introduction",
+      "contractVersion": "draft-v6",
+      "sha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+      "status": "frozen"
+    }
+  ],
   "beats": [
     "ch4-audit",
     "ch4-comply",
@@ -19,7 +33,10 @@
     "ch8-crossing",
     "ch8-landfall",
     "ch9-settle",
-    "ch9-hearth"
+    "ch9-hearth",
+    "ch10-cold",
+    "ch10-ask",
+    "ch10-transit"
   ],
   "anchors": [
     {
@@ -944,6 +961,147 @@
       ],
       "shotRefs": [
         "cin.hearth.04-the-line-remains-open"
+      ]
+    },
+    {
+      "id": "anc.ch10.cold-noticed",
+      "beat": "ch10-cold",
+      "order": 0,
+      "event": "Story re-activates at the second hearth at night; the fault is noticed, not announced.",
+      "source": "story-event",
+      "storyEventRef": "ev.ch10.cold-noticed",
+      "scoreCueRefs": [
+        "sc.ch10.cold-step"
+      ],
+      "shotRefs": [
+        "cin.cold.01-hum-drop"
+      ]
+    },
+    {
+      "id": "anc.ch10.fault-read",
+      "beat": "ch10-cold",
+      "order": 1,
+      "event": "The core's fault record is shown: one bonded cell, degrading, an issued component whose fabrication is not authorized.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.fault-read",
+      "scoreCueRefs": [
+        "sc.ch10.fault-ledger"
+      ],
+      "shotRefs": [
+        "cin.cold.02-fault-read"
+      ]
+    },
+    {
+      "id": "anc.ch10.fabrication-refused",
+      "beat": "ch10-cold",
+      "order": 2,
+      "event": "The Kestrel Fabricator refuses: pattern not held, source not held locally. The beat advances into ch10-ask.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.fabrication-refused",
+      "scoreCueRefs": [
+        "sc.ch10.refusal-subtraction"
+      ],
+      "shotRefs": [
+        "cin.cold.03-refusal",
+        "cin.ask.01-reboard"
+      ]
+    },
+    {
+      "id": "anc.ch10.relay-ask",
+      "beat": "ch10-ask",
+      "order": 3,
+      "event": "The source request is committed at the wreck relay after the return crossing and landfall.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.relay-ask",
+      "scoreCueRefs": [
+        "sc.ch10.crossing-back"
+      ],
+      "shotRefs": [
+        "cin.ask.04-request"
+      ]
+    },
+    {
+      "id": "anc.ch10.relay-answer",
+      "beat": "ch10-ask",
+      "order": 4,
+      "event": "The instant reply. Nested inside the ask's own phrase — the relationship IS the meaning.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.relay-answer",
+      "scoreCueRefs": [
+        "sc.ch10.relay-answer"
+      ],
+      "shotRefs": [
+        "cin.ask.05-claim"
+      ]
+    },
+    {
+      "id": "anc.ch10.bearing-claimed",
+      "beat": "ch10-ask",
+      "order": 5,
+      "event": "The player claims the bearing. The rite: the story waits indefinitely and claiming is the commitment.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.bearing-claimed",
+      "scoreCueRefs": [
+        "sc.ch10.bearing-claimed"
+      ],
+      "shotRefs": [
+        "cin.ask.05-claim"
+      ]
+    },
+    {
+      "id": "anc.ch10.transit-ignite",
+      "beat": "ch10-transit",
+      "order": 6,
+      "event": "Launch on the claimed bearing in ch8 grammar; the flight phase leaves the surface.",
+      "source": "player-action",
+      "storyEventRef": "ev.ch10.transit-ignite",
+      "scoreCueRefs": [
+        "sc.ch10.transit-hold"
+      ],
+      "shotRefs": [
+        "cin.transit.01-ignite"
+      ]
+    },
+    {
+      "id": "anc.ch10.seam-of-light",
+      "beat": "ch10-transit",
+      "order": 7,
+      "event": "The edge-on reveal: a line with no body. A veil-clearing, not a crescendo.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.seam-of-light",
+      "scoreCueRefs": [
+        "sc.ch10.seam-ebb"
+      ],
+      "shotRefs": [
+        "cin.transit.03-seam"
+      ]
+    },
+    {
+      "id": "anc.ch10.station-resolved",
+      "beat": "ch10-transit",
+      "order": 8,
+      "event": "The yaw: the line becomes a place; standoff reached. The run's cut line is this frame.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.station-resolved",
+      "scoreCueRefs": [
+        "sc.ch10.station-resolved"
+      ],
+      "shotRefs": [
+        "cin.transit.04-resolve"
+      ]
+    },
+    {
+      "id": "anc.ch10.threshold-handback",
+      "beat": "ch10-transit",
+      "order": 9,
+      "event": "Free play resumes in space, station visible, bearing held; the ch9 close is preserved with a third light added to its geometry.",
+      "source": "runtime-event",
+      "storyEventRef": "ev.ch10.threshold-handback",
+      "scoreCueRefs": [
+        "sc.ch10.threshold-release"
+      ],
+      "shotRefs": [
+        "cin.transit.05-threshold-handback"
       ]
     }
   ],
@@ -4185,6 +4343,533 @@
         "handBackAnchorRef": "anc.hearth.freeplay-handback"
       },
       "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.cold.01-hum-drop",
+      "beat": "ch10-cold",
+      "startAnchorRef": "anc.ch10.cold-noticed",
+      "endAnchorRef": "anc.ch10.fault-read",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: no authored lens motion exists anywhere in this run",
+        "focusTarget": "player-chosen; the core when the player chooses it"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no new post effect may be introduced anywhere in ch10",
+          "no frost and no cold blue-shift: the copy's cold is a fact in a record, not a weather effect"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.fault-read"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.cold.02-fault-read",
+      "beat": "ch10-cold",
+      "startAnchorRef": "anc.ch10.fault-read",
+      "endAnchorRef": "anc.ch10.fabrication-refused",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: no authored lens motion",
+        "focusTarget": "the core readout, at the player's own distance"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no effect may mark the readout; the institution is audible, not visible"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.fabrication-refused"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.cold.03-refusal",
+      "beat": "ch10-cold",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.fabrication-refused",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none",
+        "focusTarget": "the fabricator craft surface"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no effect may distinguish the refusal from a success"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.fabrication-refused"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.01-reboard",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.relay-ask",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "state-derived: the shipped vehicle grammar changes the FOV; no authored move exists",
+        "focusTarget": "the hatch, then the controls"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only; nothing is added"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-ask"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.02-crossing-back",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.relay-ask",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: vehicle-state FOV 70 throughout, no authored lens motion",
+        "focusTarget": "the first world"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only",
+          "no galaxy composition in any transit or crossing frame — that image belongs to A5"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-ask"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.03-landfall",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.fabrication-refused",
+      "endAnchorRef": "anc.ch10.relay-ask",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "state-derived by the shipped vehicle-to-on-foot transition; no authored move",
+        "focusTarget": "the wreck site, then the relay"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only",
+          "no W-7744 pursuit imagery and nothing that follows"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-ask"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.04-request",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.relay-ask",
+      "endAnchorRef": "anc.ch10.relay-answer",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none: refusing a lens move here is the point",
+        "focusTarget": "the relay ember"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no letterbox anywhere in ch10",
+          "no effect, flash, or chrome change may acknowledge the answer"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.relay-answer"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.ask.05-claim",
+      "beat": "ch10-ask",
+      "startAnchorRef": "anc.ch10.relay-answer",
+      "endAnchorRef": "anc.ch10.bearing-claimed",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "durationMs": 0,
+        "easing": "none",
+        "focusTarget": "the claim prompt, at the player's own distance"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no effect may mark the claim; commitment sounds as room being made, and looks like nothing at all"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.bearing-claimed"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.01-ignite",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.transit-ignite",
+      "endAnchorRef": "anc.ch10.transit-ignite",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: vehicle-state FOV 70, no authored lens motion anywhere in the run",
+        "focusTarget": "the flight controls, then the bearing"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only; no riser, no warp grammar, no BUILD"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.transit-ignite"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.02-hold",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.transit-ignite",
+      "endAnchorRef": "anc.ch10.seam-of-light",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none",
+        "focusTarget": "the committed station target"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped ch8 stack only",
+          "no galaxy composition; GalaxyImpostors must not sit in the canopy aperture in composed evidence frames"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.seam-of-light"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.03-seam",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.seam-of-light",
+      "endAnchorRef": "anc.ch10.station-resolved",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: the reveal is a veil-clearing, not a lens event",
+        "focusTarget": "the amber line"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "shipped bloom at HIGH pushes far emissives past white; acceptable and used only in the hero still",
+          "no galaxy in the aperture in the two transit HIGH stills; if the sky layout puts it there, the still is taken at a probe-selected yaw within the player's free-look envelope, never via an authored camera move"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.station-resolved"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.04-resolve",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.station-resolved",
+      "endAnchorRef": "anc.ch10.station-resolved",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none: no lens move. The widening-lens idea from the July appendix is withdrawn because it belonged to docking, which is not this run.",
+        "focusTarget": "the station spine"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "no new effect at the resolve; no dock flood heroics",
+          "no letterbox; letterbox is declined for the whole run"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "blended",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.threshold-handback"
+      },
+      "resetRef": "reset-camera"
+    },
+    {
+      "id": "cin.transit.05-threshold-handback",
+      "beat": "ch10-transit",
+      "startAnchorRef": "anc.ch10.threshold-handback",
+      "endAnchorRef": "anc.ch10.threshold-handback",
+      "cameraAuthority": "player-camera",
+      "lens": {
+        "startFovDeg": 70,
+        "endFovDeg": 70,
+        "durationMs": 0,
+        "easing": "none; on-foot return resolves to 75 by shipped state",
+        "focusTarget": "player-chosen"
+      },
+      "transition": {
+        "type": "continuous",
+        "declaredCut": false,
+        "durationMs": 0
+      },
+      "effects": {
+        "realityStage": "alive",
+        "effectCeiling": [
+          "nothing is added after the cut line; the station is never re-dressed"
+        ],
+        "grade": {
+          "presetRef": null,
+          "resetRef": "reset-grade"
+        },
+        "lighting": {
+          "resetRef": "reset-lighting"
+        },
+        "postEffects": []
+      },
+      "agency": {
+        "movement": "player",
+        "look": "player",
+        "interaction": "player",
+        "handBackAnchorRef": "anc.ch10.threshold-handback"
+      },
+      "resetRef": "reset-camera"
     }
   ],
   "scoreCues": [
@@ -4304,6 +4989,96 @@
       "offsetMs": 0,
       "mixIntent": "Interior, rest, and living-world sound lead over low counterpoint.",
       "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.cold-step",
+      "type": "music",
+      "anchorRef": "anc.ch10.cold-noticed",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Interior and ecology SFX lead; score under. Entry sits at or below the parked 0.28 so the bed-to-mood handover moves only through the shipped mood-boundary slews. Intensity 0.24.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.fault-ledger",
+      "type": "music",
+      "anchorRef": "anc.ch10.fault-read",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Caption and SFX lead; the square fifth sits under the triangle rather than over it. Intensity 0.30.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.refusal-subtraction",
+      "type": "silence",
+      "anchorRef": "anc.ch10.fabrication-refused",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Silence is the content. The beat exits quiet. Intensity 0.22.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.crossing-back",
+      "type": "music",
+      "anchorRef": "anc.ch10.relay-ask",
+      "relation": "until",
+      "offsetMs": 0,
+      "mixIntent": "Flight SFX lead as shipped ch8. Intensity 0.34 at relay-ask.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.relay-answer",
+      "type": "music",
+      "anchorRef": "anc.ch10.relay-answer",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "No sting, no hit; placement only. Intensity 0.36.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.bearing-claimed",
+      "type": "music",
+      "anchorRef": "anc.ch10.bearing-claimed",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Caption and work-order clear lead. Intensity 0.38.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.transit-hold",
+      "type": "music",
+      "anchorRef": "anc.ch10.transit-ignite",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Engine SFX lead as ch8. Intensity 0.42.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.seam-ebb",
+      "type": "music",
+      "anchorRef": "anc.ch10.seam-of-light",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Image leads; score is floor. Intensity 0.36.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.station-resolved",
+      "type": "music",
+      "anchorRef": "anc.ch10.station-resolved",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "Closing caption leads. Intensity 0.44, the run maximum, smaller than A4 by construction and verified against an a4-exhale reference render.",
+      "resetRef": "reset-score"
+    },
+    {
+      "id": "sc.ch10.threshold-release",
+      "type": "transition",
+      "anchorRef": "anc.ch10.threshold-handback",
+      "relation": "at",
+      "offsetMs": 0,
+      "mixIntent": "The bed resumes with no click; intensity parks at a named constant. Maximum inter-sample step stays under the click threshold.",
+      "resetRef": "reset-score"
     }
   ],
   "reset": {
@@ -4396,6 +5171,66 @@
         "triggers": [
           "deep-link",
           "replay",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-guidance",
+        "domain": "guidance",
+        "resetValue": "idle: no active objective, no marker, no work order, marker health idle",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-st0",
+        "domain": "effect",
+        "resetValue": "no reset: ST-0 is world state, not cutscene state, and never clears",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-seam-latch",
+        "domain": "story",
+        "resetValue": "unset outside ch10-transit; latched once within a transit activation and never un-fired inside the beat",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
+          "quit",
+          "focus-loss",
+          "completion",
+          "sandbox"
+        ]
+      },
+      {
+        "id": "reset-docking-gate",
+        "domain": "agency",
+        "resetValue": "story:station-docking-authorized is defined this run and set nowhere; story:ch10-bearing-claimed is unset until the rite is performed and durable thereafter",
+        "triggers": [
+          "beat-exit",
+          "deep-link",
+          "replay",
+          "pause",
           "quit",
           "focus-loss",
           "completion",

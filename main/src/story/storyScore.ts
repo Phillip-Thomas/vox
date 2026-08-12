@@ -124,6 +124,194 @@ export type Chapter7BoardingScoreVariant =
   | 'vehicle-owner'
   | 'cockpit';
 
+export type Chapter10ScoreVariant =
+  | 'cold-settled'
+  | 'fault-ledger'
+  | 'refused'
+  | 'crossing-back'
+  | 'relay-ask'
+  | 'relay-answer'
+  | 'bearing-claimed'
+  | 'transit-hold'
+  | 'seam-ebb'
+  | 'station-resolved';
+
+/**
+ * Chapter 10. Additive only: the frozen MOODS schema above is untouched, and
+ * every entry here is authored relative to the beats' published tonics exactly
+ * as the ch8/ch9 moods are. NO STATION KEY EXISTS THIS RUN — the station is
+ * deliberately the first destination the score refuses a tonal home, and its
+ * only pitch presence is the carrier (the 17, a suspended-fourth/eleventh
+ * colour of both home keys and a chord tone of neither).
+ *
+ * The chapter's foreignness is three reuses and no inventions: the square wave
+ * (institution since ch1), the carrier pitch, and machine time — REGULATION
+ * figures carry uniform velocity, zero drop probability and fixed articulation
+ * against the world's seeded velocity/drop/phrase variation. (The engine has no
+ * timing humanize; "dead on the grid" was never the distinguisher it claimed.)
+ */
+const CH10_MOODS: Readonly<Record<Chapter10ScoreVariant, ScoreMood>> = {
+  // ch9-hearth's DNA with the melody cut and the FLOOR DROPPED A WHOLE STEP:
+  // the same home over the wrong floor. A whole step, not a semitone — the
+  // semitone is the shipped dread interval and this chapter has no antagonist.
+  'cold-settled': mood({
+    chord: [-2, 4, 7, 10, 14],
+    progression: [[-2, 4, 7, 10], [-2, 7, 12]],
+    melody: { scale: [0, 2, 4, 7, 9, 10, 12, 14], density: 0.12 },
+    pattern: [0, null, null, null, 7, null, null, null],
+    tempo: 56, wave: 'triangle', pad: 0.17, sub: 0.08, ost: 0.024, riser: 0.05,
+    baseline: 0.24, octave: 12
+  }),
+  // One quantized square fifth under the triangle for the caption's breath.
+  'fault-ledger': mood({
+    chord: [-2, 4, 7, 10, 14],
+    progression: [[-2, 4, 7, 10], [-2, 7, 12]],
+    melody: { scale: [0, 7, 12], density: 0.1 },
+    pattern: [0, null, null, null, 7, null, null, null],
+    tempo: 56, wave: 'square', pad: 0.15, sub: 0.09, ost: 0.03, riser: 0.05,
+    baseline: 0.3, octave: 24
+  }),
+  // PATTERN NOT HELD, realized as the pattern literally not held: the melody
+  // voice does not return for the remainder of ch10-cold, and the beat exits
+  // quiet. Refusal as subtraction, under the ch4-comply law.
+  refused: mood({
+    chord: [-2, 7, 12],
+    pattern: [0, null, null, null, null, null, null, null],
+    tempo: 56, wave: 'triangle', pad: 0.13, sub: 0.08, ost: 0.012, riser: 0.03,
+    baseline: 0.22, octave: 12
+  }),
+  // ch8-crossing DNA at 68, mirrored memory, colder, and the dropped step still
+  // riding in the sub the whole way: the reason for the trip travels with her.
+  'crossing-back': mood({
+    chord: [-2, 3, 7, 9, 14],
+    progression: [[-2, 4, 7, 10], [0, 3, 7, 9], [5, 9, 12, 16]],
+    melody: { scale: [0, 2, 3, 5, 7, 9, 10, 12, 14], density: 0.2 },
+    pattern: [0, null, 7, null, 9, null, 14, null],
+    tempo: 68, wave: 'sawtooth', pad: 0.17, sub: 0.12, ost: 0.03, riser: 0.08,
+    baseline: 0.34, octave: 12
+  }),
+  // THE QUESTION, and it must have a body. Two bars of quantized square fifth
+  // on the REGULATION cell, machine-punctual under the world's own pad: the ask
+  // is a sounding phrase, not a caption with a timbre change behind it. Without
+  // this the answer had nothing to interrupt, and "the answer came back before
+  // the asking finished" could only bind to text that had visibly finished.
+  'relay-ask': mood({
+    chord: [-2, 3, 7, 9, 14],
+    progression: [[0, 7], [0, 7, 12]],
+    melody: { scale: [0, 7, 12], density: 0.12 },
+    pattern: [0, null, 7, null, 0, null, 7, null],
+    tempo: 68, wave: 'square', pad: 0.15, sub: 0.12, ost: 0.03, riser: 0.06,
+    baseline: 0.34, octave: 24
+  }),
+  // The pillar spend. Same level, same timbre family, same register, zero
+  // dynamic accent — the answer is a VOICE ARRIVING inside the question, not a
+  // replacement for it: the [0, 7] cell keeps sounding straight through the
+  // variant boundary and the final tone hangs and becomes the carrier.
+  'relay-answer': mood({
+    chord: [-2, 3, 7, 9, 17],
+    progression: [[0, 7], [0, 7, 17]],
+    melody: { scale: [0, 7, 12, 17], density: 0.14 },
+    pattern: [0, null, 7, null, 17, null, null, null],
+    tempo: 68, wave: 'square', pad: 0.15, sub: 0.12, ost: 0.03, riser: 0.06,
+    baseline: 0.36, octave: 24
+  }),
+  // The pad re-voices AROUND the carrier: commitment sounds as the music making
+  // room, never as impact. Nothing anticipates the claim, because the story
+  // waits at it indefinitely and a build would convert the rite into a timer.
+  'bearing-claimed': mood({
+    chord: [0, 5, 9, 17],
+    progression: [[0, 5, 9, 17], [0, 7, 9, 17]],
+    melody: { scale: [0, 2, 5, 7, 9, 12, 17], density: 0.16 },
+    pattern: [0, null, null, 9, null, null, 17, null],
+    tempo: 68, wave: 'triangle', pad: 0.18, sub: 0.11, ost: 0.028, riser: 0.06,
+    baseline: 0.38, octave: 12
+  }),
+  // ch8 flight DNA with the carrier held. No destination modulation exists,
+  // because the station has no key; as the thing gets bigger, the texture thins.
+  'transit-hold': mood({
+    chord: [0, 5, 9, 17],
+    progression: [[0, 5, 9, 17], [2, 7, 9, 17]],
+    melody: { scale: [0, 2, 5, 7, 9, 12, 17], density: 0.22 },
+    pattern: [0, null, 9, null, 17, null, 9, null],
+    tempo: 68, wave: 'sawtooth', pad: 0.16, sub: 0.13, ost: 0.05, riser: 0.04,
+    baseline: 0.42, octave: 12
+  }),
+  // A line with no body is music with no pulse: percussion and ostinato ebb to
+  // zero, leaving pad, sub and carrier. Acknowledgment by subtraction.
+  'seam-ebb': mood({
+    chord: [0, 9, 17],
+    pattern: [0, null, null, null, null, null, null, null],
+    tempo: 68, wave: 'sawtooth', pad: 0.18, sub: 0.13, ost: 0, riser: 0.04,
+    baseline: 0.36, octave: 12
+  }),
+  // A second voice doubles the carrier at the octave over ONE quotation of the
+  // hearth's closing cell: both fires in the voicing, a third light above. No
+  // mediant, no braam, no lead entrance — awe says vast, and this is a source.
+  'station-resolved': mood({
+    chord: [0, 7, 12, 17, 29],
+    progression: [[0, 7, 12], [0, 9, 17, 29]],
+    melody: { scale: [0, 7, 12, 17], density: 0.1 },
+    pattern: [0, null, null, null, 17, null, null, null],
+    // The destination may not out-measure the awakening: pad and sub sit
+    // strictly under a4-exhale's (0.18 / 0.10) on the steady window, the riser
+    // stays on the beat's flat rail, and the ostinato the seam ebbed away does
+    // NOT return — the resolve's octave double is pad-voiced and needs no pulse.
+    tempo: 68, wave: 'triangle', pad: 0.17, sub: 0.10, ost: 0, riser: 0.04,
+    baseline: 0.44, octave: 12
+  })
+};
+
+/**
+ * The carrier tone, as a scale degree: a suspended-fourth/eleventh colour of
+ * both home keys and a chord tone of NEITHER. Pitch-class 5 is scale-legal in
+ * both home modes (Mixolydian and Dorian each carry the fourth) and is voiced
+ * in neither home chord — which the ninth it replaced was not, being a member
+ * of ch9-hearth AND ch8-crossing and therefore not new information at birth. A
+ * sus-4 hanging against the relay's own fifth is an unresolved question colour:
+ * an address without an invitation.
+ *
+ * It is born at the relay answer as that figure's unreleased final tone and is
+ * present in every variant from there to the resolve, where a second voice
+ * doubles it at the octave (degree 29). Because variant selection is a pure
+ * resolver over durable milestones, a mid-transit reload re-establishes the
+ * same voicing through the same mood boundary.
+ */
+export const CH10_CARRIER_DEGREE = 17;
+/** The octave double at the resolve — the pitch confirmed as sounding elsewhere. */
+export const CH10_CARRIER_OCTAVE_DEGREE = CH10_CARRIER_DEGREE + 12;
+
+/**
+ * Post-answer variants carry the carrier by construction; `carrierAlive` lets a
+ * caller state that fact explicitly rather than inferring it from the voicing.
+ * A variant that is not supposed to hold the carrier yet cannot be selected
+ * before the answer, so this never has to subtract one.
+ */
+export function getChapter10ScoreMood(
+  variant: Chapter10ScoreVariant,
+  carrierAlive = false
+): ScoreMood {
+  const base = cloneMood(CH10_MOODS[variant]);
+  if (carrierAlive || variant !== 'station-resolved') return base;
+  // The octave double is the carrier's own confirmation and may never sound
+  // without it. Filtering `chord` ALONE did not achieve that, and the control
+  // render proved it: this mood publishes a `progression`, the engine plays
+  // `progression[chordIndex]` on every bar boundary and falls back to `chord`
+  // only when there is no progression — so degree 29 kept sounding out of
+  // [0, 9, 17, 29] in BOTH carrier states and the "illegal" control was
+  // sample-identical to the real resolve. (The pad also voices only
+  // SCORE_PAD_VOICE_COUNT tones, so the trailing 29 of the five-tone static
+  // chord was never voiced anyway — the filter was removing a degree nothing
+  // played.) Both surfaces are filtered here, because the audible one is the
+  // progression.
+  const withoutOctaveDouble = (degrees: readonly number[]): number[] =>
+    degrees.filter(degree => degree !== CH10_CARRIER_OCTAVE_DEGREE);
+  return {
+    ...base,
+    chord: withoutOctaveDouble(base.chord),
+    progression: base.progression?.map(withoutOctaveDouble)
+  };
+}
+
 /**
  * Composite steady states: every later reconstruction variant retains the
  * previously earned pad/sub/ostinato relationship. Changing variant starts a

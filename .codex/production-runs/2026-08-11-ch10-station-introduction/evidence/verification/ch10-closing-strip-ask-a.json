@@ -1,0 +1,258 @@
+{
+  "capturedAt": "2026-08-12T08:02:50.905Z",
+  "base": "http://localhost:5176",
+  "mode": "strip-ask-a",
+  "settleAttempts": [
+    {
+      "settleMs": 0,
+      "objectiveId": "station:return:reboard",
+      "controlMode": "fps",
+      "preBoard": true
+    }
+  ],
+  "frames": [
+    {
+      "file": "00_reboard-before_ch10-ask.png",
+      "label": "reboard-before",
+      "beat": "ch10-ask",
+      "t": 0,
+      "objectiveId": "station:return:reboard",
+      "markerLabel": "KESTREL HATCH · REBOARD",
+      "health": "missing-marker",
+      "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+      "flight": {
+        "phase": "surface",
+        "controlMode": "fps"
+      },
+      "system": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "surface",
+        "targetWorldId": null,
+        "targetKind": null,
+        "pos": [
+          2188,
+          -58,
+          -1643
+        ],
+        "speed": 0
+      },
+      "relayHandle": null,
+      "shipToRelay": null,
+      "av": null
+    },
+    {
+      "file": "01_reboard-at_ch10-ask.png",
+      "label": "reboard-at",
+      "beat": "ch10-ask",
+      "t": 0.01,
+      "objectiveId": "station:return:crossing",
+      "markerLabel": "ORIGIN WORLD · COURSE",
+      "health": "ready",
+      "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+      "flight": {
+        "phase": "surface",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "surface",
+        "targetWorldId": null,
+        "targetKind": null,
+        "pos": [
+          2188,
+          -56,
+          -1643
+        ],
+        "speed": 0
+      },
+      "relayHandle": null,
+      "shipToRelay": null,
+      "av": null
+    },
+    {
+      "file": "02_reboard-after_ch10-ask.png",
+      "label": "reboard-after",
+      "beat": "ch10-ask",
+      "t": 1.34,
+      "objectiveId": "station:return:crossing",
+      "markerLabel": "ORIGIN WORLD · COURSE",
+      "health": "ready",
+      "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+      "flight": {
+        "phase": "descent",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "atmosphere",
+        "targetWorldId": null,
+        "targetKind": null,
+        "pos": [
+          2187,
+          -24,
+          -1643
+        ],
+        "speed": 13.71
+      },
+      "relayHandle": null,
+      "shipToRelay": null,
+      "av": null
+    },
+    {
+      "file": "03_sibling-acquire-before_ch10-ask.png",
+      "label": "sibling-acquire-before",
+      "beat": "ch10-ask",
+      "t": 3.85,
+      "objectiveId": "station:return:crossing",
+      "markerLabel": "ORIGIN WORLD · COURSE",
+      "health": "ready",
+      "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+      "flight": {
+        "phase": "deep_space",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "local_space",
+        "targetWorldId": null,
+        "targetKind": null,
+        "pos": [
+          1878,
+          -22,
+          -1481
+        ],
+        "speed": 256
+      },
+      "relayHandle": null,
+      "shipToRelay": null,
+      "av": null
+    },
+    {
+      "file": "04_sibling-acquire-at_ch10-ask.png",
+      "label": "sibling-acquire-at",
+      "beat": "ch10-ask",
+      "t": 4.29,
+      "objectiveId": "station:return:crossing",
+      "markerLabel": "ORIGIN WORLD · COURSE",
+      "health": "ready",
+      "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+      "flight": {
+        "phase": "deep_space",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "local_space",
+        "targetWorldId": "-1,-1",
+        "targetKind": "system_body",
+        "pos": [
+          1782,
+          -21,
+          -1417
+        ],
+        "speed": 279.2
+      },
+      "relayHandle": null,
+      "shipToRelay": null,
+      "av": null
+    },
+    {
+      "file": "05_sibling-acquire-after_ch10-ask.png",
+      "label": "sibling-acquire-after",
+      "beat": "ch10-ask",
+      "t": 5.96,
+      "objectiveId": "station:return:crossing",
+      "markerLabel": "ORIGIN WORLD · COURSE",
+      "health": "ready",
+      "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+      "flight": {
+        "phase": "deep_space",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "local_space",
+        "targetWorldId": "-1,-1",
+        "targetKind": "system_body",
+        "pos": [
+          1375,
+          -17,
+          -1121
+        ],
+        "speed": 248.79
+      },
+      "relayHandle": null,
+      "shipToRelay": null,
+      "av": null
+    },
+    {
+      "file": "06_landfall-before_ch10-ask.png",
+      "label": "landfall-before",
+      "beat": "ch10-ask",
+      "t": 19.07,
+      "objectiveId": "station:return:landfall",
+      "markerLabel": "WRECK SITE · LAND",
+      "health": "ready",
+      "hudText": "CURRENT OBJECTIVE | WRECK SITE · LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+      "flight": {
+        "phase": "descent",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1",
+        "locationMode": "atmosphere",
+        "targetWorldId": null,
+        "targetKind": null,
+        "pos": [
+          54,
+          32,
+          -42
+        ],
+        "speed": 0
+      },
+      "relayHandle": [
+        -2,
+        51,
+        -2
+      ],
+      "shipToRelay": 71,
+      "av": null
+    },
+    {
+      "file": "07_landfall-at_ch10-ask.png",
+      "label": "landfall-at",
+      "beat": "ch10-ask",
+      "t": 19.75,
+      "objectiveId": "station:relay-query",
+      "markerLabel": "WRECK RELAY · REQUEST A SOURCE",
+      "health": "ready",
+      "hudText": "CURRENT OBJECTIVE | WRECK RELAY · REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL.",
+      "flight": {
+        "phase": "surface",
+        "controlMode": "fps"
+      },
+      "system": {
+        "activePlanetId": "-1,-1",
+        "locationMode": "surface",
+        "targetWorldId": null,
+        "targetKind": null,
+        "pos": [
+          54,
+          32,
+          -42
+        ],
+        "speed": 0
+      },
+      "relayHandle": [
+        -2,
+        51,
+        -2
+      ],
+      "shipToRelay": 71,
+      "av": null
+    }
+  ],
+  "pageErrors": [],
+  "frameCount": 8,
+  "completedTriggers": 3
+}

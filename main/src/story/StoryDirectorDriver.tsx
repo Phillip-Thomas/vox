@@ -7,7 +7,7 @@ import {
   storyFreeMarkerTarget,
   type StoryMarkerTarget
 } from './storyDirector.ts';
-import { advanceToBeat, getStoryStateSnapshot } from './storyState.ts';
+import { advanceToBeat, getStoryStateSnapshot, type StoryBeat } from './storyState.ts';
 import { getStoryInputPolicy } from './storyInputPolicy.ts';
 import { autopilotTick, isMovieMode } from './autopilot.ts';
 import { setScoreIntensity } from './storyScore.ts';
@@ -37,6 +37,10 @@ import {
   resetAuthoredForegroundClock
 } from './authoredFrameTime.ts';
 import { publishStoryBoundaryTelemetry } from './storyBoundaryTelemetry.ts';
+import {
+  getChapter10MarkerTarget,
+  tickChapter10FreePlayEntry
+} from './emergentStoryDirector.ts';
 
 /**
  * In-Canvas tick for the story director. Lives INSIDE the R3F frame loop (and
@@ -107,6 +111,17 @@ function surveyMarkerTarget(beat: string | null): StoryMarkerTarget | null {
     });
     return nearest ? { position: nearest, label: 'SUPPLY POD' } : null;
   }
+  // Chapter 10 resolves its own targets: they are the only ones that must be
+  // present on the frame a mandatory objective enters even when the world
+  // arrived a moment ago, which is what a deep link into finished free play is.
+  const chapter10 = getChapter10MarkerTarget(beat as StoryBeat | null);
+  if (chapter10) return chapter10;
+  // CUT, NOT QUEUE. Chapter 10 owns its marker band outright: when its own rung
+  // wants no marker — the ignite prompt, the resolve card whose whole point is a
+  // frame with no annotation on it — the band goes EMPTY rather than inheriting
+  // the free-play chevron underneath, which is how `KESTREL HATCH · REBOARD`
+  // survived the beat change into ch10-transit and stood over the cut line.
+  if (typeof beat === 'string' && beat.startsWith('ch10')) return null;
   // Post-feed beats (the first day alive / ch4): the director owns the target.
   return storyFreeMarkerTarget();
 }
@@ -155,6 +170,13 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
     if (!authoredSequence) resetAuthoredForegroundClock(authoredClock.current);
 
     if (!story.active || paused) {
+      // Chapter 10's entry mechanism. Free play is the ONE frame the story
+      // director never sees, and chapter 10 is the one chapter that opens from
+      // inside it: the fault is noticed, not announced, so the watch has to run
+      // exactly where the player is and the story is not. It accumulates the
+      // grace and re-activates only with the player home, at night, at the
+      // hearth; every other frame it does nothing at all.
+      if (!paused) tickChapter10FreePlayEntry(inputDt);
       publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
       return;
     }

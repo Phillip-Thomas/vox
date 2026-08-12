@@ -1,0 +1,5129 @@
+{
+  "capturedAt": "2026-08-12T11:08:34.333Z",
+  "base": "http://localhost:5176",
+  "defect": "D-A1: ch10 flight LOW strips appear to render at a different effective lens than the HIGH hero stills",
+  "method": "four cold runs of ?story=ch10-transit&movie=1&profile=LOW; each flies at LOW to the same gate (spaceFlight.phase==deep_space + DWELL_MS), shoots a pre-raise reference, raises to its target profile via setQualityProfile(persist:false), settles, samples and shoots",
+  "gate": {
+    "condition": "spaceFlight.phase === 'deep_space'",
+    "dwellMs": 12000,
+    "highSettleMs": 45000,
+    "otherSettleMs": 9000
+  },
+  "runs": [
+    {
+      "id": "low",
+      "requestedProfile": "LOW",
+      "appliedProfile": "LOW",
+      "reducedMotion": false,
+      "deviceScaleFactor": 1,
+      "gateHitAtSeconds": 0.002,
+      "gateStateAtBreak": {
+        "phase": "deep_space",
+        "controlMode": "flight",
+        "beat": "ch10-transit"
+      },
+      "doneAtSeconds": 8.435,
+      "midFile": "evidence/capture/lens-divergence/low_mid_LOW.png",
+      "preRaiseFile": "evidence/capture/lens-divergence/low_preraise_LOW.png",
+      "file": "evidence/capture/lens-divergence/low_LOW.png",
+      "midSample": {
+        "t": 1786532934805,
+        "beat": "ch10-transit",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 0.9999477283179673,
+          "boost": 0.9999962649921968,
+          "speed": 238.1079040600563,
+          "speedRatio": 0.7440872001876759,
+          "acceleration": 1,
+          "forwardSpeed": 238.1079022301932,
+          "motion": 0.9997570550777467,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 78.99845428290823
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+        "cockpitReadoutPresent": false,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 481,
+          "worldPasses": 481,
+          "canvasKeys": [
+            "1280x720"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 481,
+              "cameraUuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+              "fov": 78.99845428290823
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 78.99845428290823,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -3524.521,
+            -554.833,
+            -608.07
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.8243137310066171
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 78.99845428290823,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -3524.52,
+              -554.83,
+              -608.07
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3524.521,
+              -554.833,
+              -608.07
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3602.46,
+                -576.52,
+                -634.4
+              ],
+              "max": [
+                -3524.06,
+                -547.25,
+                -594.32
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3524.521,
+              -554.834,
+              -608.07
+            ],
+            "distanceFromRenderCamera": 0.001,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3529.95,
+                -558.28,
+                -615.84
+              ],
+              "max": [
+                -3524.06,
+                -552.34,
+                -601.19
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.17723,
+              1.17723,
+              1
+            ],
+            "worldScale": [
+              1.17723,
+              1.17723,
+              1
+            ],
+            "worldPosition": [
+              -3524.521,
+              -554.834,
+              -608.07
+            ],
+            "distanceFromRenderCamera": 0.001,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3529.95,
+                -558.28,
+                -615.84
+              ],
+              "max": [
+                -3524.06,
+                -552.34,
+                -601.19
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.17723,
+              1.17723,
+              1
+            ],
+            "worldScale": [
+              1.17723,
+              1.17723,
+              1
+            ],
+            "worldPosition": [
+              -3524.521,
+              -554.834,
+              -608.07
+            ],
+            "distanceFromRenderCamera": 0.001,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3527,
+                -556.64,
+                -609.61
+              ],
+              "max": [
+                -3526.41,
+                -555.65,
+                -607.08
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1.17723,
+            1.17723,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              89.1,
+              669,
+              0.4899
+            ],
+            [
+              1190.8,
+              669,
+              0.4899
+            ],
+            [
+              1190.8,
+              46,
+              0.4899
+            ],
+            [
+              89.1,
+              46,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.7,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "preRaiseSample": {
+        "t": 1786532955370,
+        "beat": "done",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 2.776142900369861e-45,
+          "boost": 2.7761429003727228e-45,
+          "speed": 0.17174646584887032,
+          "speedRatio": 0.0005367077057777198,
+          "acceleration": 0,
+          "forwardSpeed": 0.17174646583302566,
+          "motion": 0.00016881178602874933,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 70.00000000000006
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": null,
+        "cockpitReadoutPresent": true,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 140,
+            "attrHeight": 140,
+            "clientWidth": 140,
+            "clientHeight": 140,
+            "cssWidth": "140px",
+            "cssHeight": "140px",
+            "rect": [
+              1101,
+              99,
+              140,
+              140
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 2434,
+          "worldPasses": 2434,
+          "canvasKeys": [
+            "1280x720",
+            "140x140"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 1710,
+              "cameraUuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+              "fov": 70.00017166679612
+            },
+            "140x140": {
+              "passes": 724,
+              "cameraUuid": "3c2159e2-8889-42f9-bceb-3b6de1111c66",
+              "fov": 36
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 70.00017166679612,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -5626.052,
+            -957.427,
+            -985.275
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.7002097707797397
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 70.00017166679612,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -5626.05,
+              -957.43,
+              -985.27
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.052,
+              -957.427,
+              -985.275
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5703.99,
+                -979.11,
+                -1011.61
+              ],
+              "max": [
+                -5625.85,
+                -949.84,
+                -971.53
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.052,
+              -957.427,
+              -985.275
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5631.22,
+                -960.47,
+                -991.97
+              ],
+              "max": [
+                -5625.85,
+                -955.34,
+                -979.47
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.052,
+              -957.427,
+              -985.275
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5631.22,
+                -960.47,
+                -991.97
+              ],
+              "max": [
+                -5625.85,
+                -955.34,
+                -979.47
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.052,
+              -957.427,
+              -985.275
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5628.46,
+                -959.01,
+                -986.65
+              ],
+              "max": [
+                -5628.01,
+                -958.16,
+                -984.46
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1,
+            1,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              89.1,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              45.9,
+              0.4899
+            ],
+            [
+              89.1,
+              45.9,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.8,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "sample": {
+        "t": 1786532964510,
+        "beat": "done",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 5.92241984452828e-73,
+          "boost": 5.922419844534373e-73,
+          "speed": 0.0016428514869138546,
+          "speedRatio": 5.133910896605795e-06,
+          "acceleration": 0,
+          "forwardSpeed": 0.0016428514867622918,
+          "motion": 1.6147408487629426e-06,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 70.00000000000004
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": null,
+        "cockpitReadoutPresent": true,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 140,
+            "attrHeight": 140,
+            "clientWidth": 140,
+            "clientHeight": 140,
+            "cssWidth": "140px",
+            "cssHeight": "140px",
+            "rect": [
+              1101,
+              99,
+              140,
+              140
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 3530,
+          "worldPasses": 3530,
+          "canvasKeys": [
+            "1280x720",
+            "140x140"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 2258,
+              "cameraUuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+              "fov": 70.00017166679612
+            },
+            "140x140": {
+              "passes": 1272,
+              "cameraUuid": "3c2159e2-8889-42f9-bceb-3b6de1111c66",
+              "fov": 36
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 70.00017166679612,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -5626.372,
+            -957.488,
+            -985.332
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.7002097707797397
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "b4c70c37-6e9c-41b3-a82f-0a400ee42684",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 70.00017166679612,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -5626.37,
+              -957.49,
+              -985.33
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.372,
+              -957.488,
+              -985.332
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5704.31,
+                -979.17,
+                -1011.67
+              ],
+              "max": [
+                -5626.17,
+                -949.9,
+                -971.59
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.372,
+              -957.488,
+              -985.332
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5631.54,
+                -960.53,
+                -992.03
+              ],
+              "max": [
+                -5626.17,
+                -955.4,
+                -979.52
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.372,
+              -957.488,
+              -985.332
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5631.54,
+                -960.53,
+                -992.03
+              ],
+              "max": [
+                -5626.17,
+                -955.4,
+                -979.52
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5626.372,
+              -957.488,
+              -985.332
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5628.8,
+                -959.07,
+                -986.71
+              ],
+              "max": [
+                -5628.33,
+                -958.23,
+                -984.51
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1,
+            1,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              89.1,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              45.9,
+              0.4899
+            ],
+            [
+              89.1,
+              45.9,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.8,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "wallSeconds": 50.3,
+      "pageErrors": []
+    },
+    {
+      "id": "medium-rm",
+      "requestedProfile": "MEDIUM",
+      "appliedProfile": "MEDIUM",
+      "reducedMotion": true,
+      "deviceScaleFactor": 1,
+      "gateHitAtSeconds": 0.001,
+      "gateStateAtBreak": {
+        "phase": "deep_space",
+        "controlMode": "flight",
+        "beat": "ch10-transit"
+      },
+      "doneAtSeconds": 10.541,
+      "midFile": "evidence/capture/lens-divergence/medium-rm_mid_LOW.png",
+      "preRaiseFile": "evidence/capture/lens-divergence/medium-rm_preraise_LOW.png",
+      "file": "evidence/capture/lens-divergence/medium-rm_MEDIUM.png",
+      "midSample": {
+        "t": 1786532986058,
+        "beat": "ch10-transit",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 0.9999999999999998,
+          "boost": 0.9999999999999998,
+          "speed": 320,
+          "speedRatio": 1,
+          "acceleration": 1,
+          "forwardSpeed": 319.9999925980402,
+          "motion": 0,
+          "approachLimited": false,
+          "reducedMotion": true,
+          "fov": 71.99999999999997
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+        "cockpitReadoutPresent": false,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 482,
+          "worldPasses": 482,
+          "canvasKeys": [
+            "1280x720"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 482,
+              "cameraUuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+              "fov": 71.99999999999997
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 71.99999999999997,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -3086.716,
+            -471.02,
+            -529.543
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.7265425280053606
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 71.99999999999997,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -3086.72,
+              -471.02,
+              -529.54
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3086.716,
+              -471.02,
+              -529.543
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3160.04,
+                -491.82,
+                -555.05
+              ],
+              "max": [
+                -3086.46,
+                -463.88,
+                -516.22
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3086.716,
+              -471.02,
+              -529.543
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3091.94,
+                -474.15,
+                -536.47
+              ],
+              "max": [
+                -3086.46,
+                -468.85,
+                -523.51
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.03761,
+              1.03761,
+              1
+            ],
+            "worldScale": [
+              1.03761,
+              1.03761,
+              1
+            ],
+            "worldPosition": [
+              -3086.716,
+              -471.02,
+              -529.543
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3091.94,
+                -474.15,
+                -536.47
+              ],
+              "max": [
+                -3086.46,
+                -468.85,
+                -523.51
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.03761,
+              1.03761,
+              1
+            ],
+            "worldScale": [
+              1.03761,
+              1.03761,
+              1
+            ],
+            "worldPosition": [
+              -3086.716,
+              -471.02,
+              -529.543
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3089.19,
+                -472.66,
+                -530.95
+              ],
+              "max": [
+                -3088.66,
+                -471.7,
+                -528.71
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1.03761,
+            1.03761,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              89.1,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              45.9,
+              0.4899
+            ],
+            [
+              89.1,
+              45.9,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.8,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "preRaiseSample": {
+        "t": 1786533008745,
+        "beat": "done",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 5.25798362004723e-46,
+          "boost": 5.257983620050138e-46,
+          "speed": 0.1528906440142697,
+          "speedRatio": 0.0004777832625445928,
+          "acceleration": 0,
+          "forwardSpeed": 0.15289064400027513,
+          "motion": 0,
+          "approachLimited": false,
+          "reducedMotion": true,
+          "fov": 70.00000000000004
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": null,
+        "cockpitReadoutPresent": true,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 140,
+            "attrHeight": 140,
+            "clientWidth": 140,
+            "clientHeight": 140,
+            "cssWidth": "140px",
+            "cssHeight": "140px",
+            "rect": [
+              1101,
+              99,
+              140,
+              140
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 2579,
+          "worldPasses": 2579,
+          "canvasKeys": [
+            "1280x720",
+            "140x140"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 1840,
+              "cameraUuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+              "fov": 70.00029374348571
+            },
+            "140x140": {
+              "passes": 739,
+              "cameraUuid": "1f44fc73-fba4-43f4-806c-f260b32c4dc6",
+              "fov": 36
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 70.00029374348571,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -5632.463,
+            -958.653,
+            -986.423
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.7002113584207621
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 70.00029374348571,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -5632.46,
+              -958.65,
+              -986.42
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.463,
+              -958.653,
+              -986.423
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5705.79,
+                -979.45,
+                -1011.93
+              ],
+              "max": [
+                -5632.26,
+                -951.52,
+                -973.1
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.463,
+              -958.653,
+              -986.423
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5637.63,
+                -961.69,
+                -993.12
+              ],
+              "max": [
+                -5632.26,
+                -956.57,
+                -980.61
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.463,
+              -958.653,
+              -986.423
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5637.63,
+                -961.69,
+                -993.12
+              ],
+              "max": [
+                -5632.26,
+                -956.57,
+                -980.61
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.463,
+              -958.653,
+              -986.423
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5634.86,
+                -960.23,
+                -987.8
+              ],
+              "max": [
+                -5634.42,
+                -959.4,
+                -985.6
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1,
+            1,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              89.1,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              45.9,
+              0.4899
+            ],
+            [
+              89.1,
+              45.9,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.8,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "sample": {
+        "t": 1786533017903,
+        "beat": "done",
+        "qualityProfile": "MEDIUM",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 2.0776969463119433e-72,
+          "boost": 2.077696946313094e-72,
+          "speed": 0.0018096822853038146,
+          "speedRatio": 5.655257141574421e-06,
+          "acceleration": 0,
+          "forwardSpeed": 0.0018096822851381687,
+          "motion": 0,
+          "approachLimited": false,
+          "reducedMotion": true,
+          "fov": 70.00000000000003
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": null,
+        "cockpitReadoutPresent": true,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 140,
+            "attrHeight": 140,
+            "clientWidth": 140,
+            "clientHeight": 140,
+            "cssWidth": "140px",
+            "cssHeight": "140px",
+            "rect": [
+              1101,
+              99,
+              140,
+              140
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 3627,
+          "worldPasses": 3627,
+          "canvasKeys": [
+            "1280x720",
+            "140x140"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 2367,
+              "cameraUuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+              "fov": 70.00029374348571
+            },
+            "140x140": {
+              "passes": 1260,
+              "cameraUuid": "1f44fc73-fba4-43f4-806c-f260b32c4dc6",
+              "fov": 36
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 70.00029374348571,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -5632.747,
+            -958.707,
+            -986.474
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.7002113584207621
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "fa114672-4f69-4d03-947a-0c9731dc2bac",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 70.00029374348571,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -5632.75,
+              -958.71,
+              -986.47
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.747,
+              -958.707,
+              -986.474
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5706.07,
+                -979.51,
+                -1011.98
+              ],
+              "max": [
+                -5632.55,
+                -951.57,
+                -973.15
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.747,
+              -958.707,
+              -986.474
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5637.91,
+                -961.75,
+                -993.17
+              ],
+              "max": [
+                -5632.55,
+                -956.62,
+                -980.67
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.747,
+              -958.707,
+              -986.474
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5637.91,
+                -961.75,
+                -993.17
+              ],
+              "max": [
+                -5632.55,
+                -956.62,
+                -980.67
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5632.747,
+              -958.707,
+              -986.474
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5635.19,
+                -960.29,
+                -987.85
+              ],
+              "max": [
+                -5634.7,
+                -959.48,
+                -985.66
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1,
+            1,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              89.1,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              45.9,
+              0.4899
+            ],
+            [
+              89.1,
+              45.9,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.8,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "wallSeconds": 53.4,
+      "pageErrors": []
+    },
+    {
+      "id": "high",
+      "requestedProfile": "HIGH",
+      "appliedProfile": "HIGH",
+      "reducedMotion": false,
+      "deviceScaleFactor": 1,
+      "gateHitAtSeconds": 0.002,
+      "gateStateAtBreak": {
+        "phase": "deep_space",
+        "controlMode": "flight",
+        "beat": "ch10-transit"
+      },
+      "doneAtSeconds": 8.433,
+      "midFile": "evidence/capture/lens-divergence/high_mid_LOW.png",
+      "preRaiseFile": "evidence/capture/lens-divergence/high_preraise_LOW.png",
+      "file": "evidence/capture/lens-divergence/high_HIGH.png",
+      "midSample": {
+        "t": 1786533038493,
+        "beat": "ch10-transit",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 0.9999989026975343,
+          "boost": 0.9999999678532216,
+          "speed": 257.2625877513479,
+          "speedRatio": 0.8039455867229621,
+          "acceleration": 1,
+          "forwardSpeed": 257.262586562101,
+          "motion": 0.9999931242805823,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 78.99996595959159
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+        "cockpitReadoutPresent": false,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 481,
+          "worldPasses": 481,
+          "canvasKeys": [
+            "1280x720"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 481,
+              "cameraUuid": "7f136d6b-e8d8-4b2a-a1e0-f10f54651a5b",
+              "fov": 78.99997241719318
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "7f136d6b-e8d8-4b2a-a1e0-f10f54651a5b",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 78.99997241719318,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -3633.891,
+            -575.794,
+            -627.71
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.824335981545524
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "7f136d6b-e8d8-4b2a-a1e0-f10f54651a5b",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 78.99997241719318,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -3633.89,
+              -575.79,
+              -627.71
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3633.891,
+              -575.794,
+              -627.71
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3711.27,
+                -597.37,
+                -653.94
+              ],
+              "max": [
+                -3633.43,
+                -568.26,
+                -614.02
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3633.891,
+              -575.798,
+              -627.707
+            ],
+            "distanceFromRenderCamera": 0.004,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3639.32,
+                -579.25,
+                -635.48
+              ],
+              "max": [
+                -3633.43,
+                -573.3,
+                -620.83
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldPosition": [
+              -3633.891,
+              -575.798,
+              -627.707
+            ],
+            "distanceFromRenderCamera": 0.004,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3639.32,
+                -579.25,
+                -635.48
+              ],
+              "max": [
+                -3633.43,
+                -573.3,
+                -620.83
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldPosition": [
+              -3633.891,
+              -575.798,
+              -627.707
+            ],
+            "distanceFromRenderCamera": 0.004,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3636.37,
+                -577.6,
+                -629.25
+              ],
+              "max": [
+                -3635.78,
+                -576.51,
+                -626.71
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1.17727,
+            1.17727,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              88.9,
+              669.3,
+              0.4899
+            ],
+            [
+              1190.6,
+              669.3,
+              0.4899
+            ],
+            [
+              1190.6,
+              46.3,
+              0.4899
+            ],
+            [
+              88.9,
+              46.3,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.7,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "preRaiseSample": {
+        "t": 1786533059068,
+        "beat": "done",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 9.274475361122592e-47,
+          "boost": 9.274475361166062e-47,
+          "speed": 0.132173956813755,
+          "speedRatio": 0.00041304361504298435,
+          "acceleration": 0,
+          "forwardSpeed": 0.13217395680147093,
+          "motion": 0.00012991602770692768,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 70.00000000000006
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": null,
+        "cockpitReadoutPresent": true,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 140,
+            "attrHeight": 140,
+            "clientWidth": 140,
+            "clientHeight": 140,
+            "cssWidth": "140px",
+            "cssHeight": "140px",
+            "rect": [
+              1101,
+              99,
+              140,
+              140
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 2471,
+          "worldPasses": 2471,
+          "canvasKeys": [
+            "1280x720",
+            "140x140"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 1715,
+              "cameraUuid": "7f136d6b-e8d8-4b2a-a1e0-f10f54651a5b",
+              "fov": 70.00019241335634
+            },
+            "140x140": {
+              "passes": 756,
+              "cameraUuid": "6c21a74f-c875-4795-9060-b970a3541129",
+              "fov": 36
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "7f136d6b-e8d8-4b2a-a1e0-f10f54651a5b",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 70.00019241335634,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -5616.974,
+            -955.694,
+            -983.651
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.7002100405943111
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "7f136d6b-e8d8-4b2a-a1e0-f10f54651a5b",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 70.00019241335634,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -5616.97,
+              -955.69,
+              -983.65
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5616.974,
+              -955.694,
+              -983.651
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5694.35,
+                -977.27,
+                -1009.89
+              ],
+              "max": [
+                -5616.78,
+                -948.16,
+                -969.96
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5616.974,
+              -955.694,
+              -983.651
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5622.14,
+                -958.73,
+                -990.35
+              ],
+              "max": [
+                -5616.78,
+                -953.61,
+                -977.84
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5616.974,
+              -955.694,
+              -983.651
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5622.14,
+                -958.73,
+                -990.35
+              ],
+              "max": [
+                -5616.78,
+                -953.61,
+                -977.84
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -5616.974,
+              -955.694,
+              -983.651
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -5619.42,
+                -957.28,
+                -985.02
+              ],
+              "max": [
+                -5618.93,
+                -956.49,
+                -982.83
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1,
+            1,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              89.1,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              668.9,
+              0.4899
+            ],
+            [
+              1190.9,
+              45.9,
+              0.4899
+            ],
+            [
+              89.1,
+              45.9,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.8,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "sample": {
+        "t": 1786533104966,
+        "beat": "ch10-transit",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": false,
+          "phase": "surface",
+          "throttle": 0,
+          "boost": 0,
+          "speed": 0,
+          "speedRatio": 0,
+          "acceleration": 0,
+          "forwardSpeed": 0,
+          "motion": 0,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 70
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "cockpitReadoutPresent": false,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 0,
+          "worldPasses": 0,
+          "canvasKeys": null,
+          "mainCanvasKey": null,
+          "perCanvas": null
+        }
+      },
+      "wallSeconds": 88.3,
+      "pageErrors": []
+    },
+    {
+      "id": "potato",
+      "requestedProfile": "POTATO",
+      "appliedProfile": "POTATO",
+      "reducedMotion": false,
+      "deviceScaleFactor": 1,
+      "gateHitAtSeconds": 0.002,
+      "gateStateAtBreak": {
+        "phase": "deep_space",
+        "controlMode": "flight",
+        "beat": "ch10-transit"
+      },
+      "doneAtSeconds": 49.906,
+      "midFile": "evidence/capture/lens-divergence/potato_mid_LOW.png",
+      "preRaiseFile": "evidence/capture/lens-divergence/potato_preraise_LOW.png",
+      "file": "evidence/capture/lens-divergence/potato_POTATO.png",
+      "midSample": {
+        "t": 1786533126738,
+        "beat": "ch10-transit",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 0.9999995478518192,
+          "boost": 0.9999999892048375,
+          "speed": 261.3168573360817,
+          "speedRatio": 0.8166151791752553,
+          "acceleration": 1,
+          "forwardSpeed": 261.31685612999183,
+          "motion": 0.9999969746128423,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 78.99998589287041
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+        "cockpitReadoutPresent": false,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 481,
+          "worldPasses": 481,
+          "canvasKeys": [
+            "1280x720"
+          ],
+          "mainCanvasKey": "1280x720",
+          "perCanvas": {
+            "1280x720": {
+              "passes": 481,
+              "cameraUuid": "1284e89a-342a-41bd-b2ac-5ca9da50d52e",
+              "fov": 78.99998860192044
+            }
+          }
+        },
+        "renderer": {
+          "glGetSize": [
+            1280,
+            720
+          ],
+          "glPixelRatio": 1,
+          "drawingBufferSize": [
+            1280,
+            720
+          ],
+          "domElementWidth": 1280,
+          "domElementHeight": 720,
+          "currentViewport": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "renderTargetActive": false
+        },
+        "camera": {
+          "uuid": "1284e89a-342a-41bd-b2ac-5ca9da50d52e",
+          "name": null,
+          "type": "PerspectiveCamera",
+          "fov": 78.99998860192044,
+          "aspect": 1.7777777777777777,
+          "near": 1,
+          "far": 20000,
+          "zoom": 1,
+          "filmGauge": 35,
+          "worldPosition": [
+            -3622.696,
+            -573.636,
+            -625.688
+          ],
+          "forward": [
+            -0.9672,
+            -0.1853,
+            -0.1736
+          ],
+          "parentChain": [
+            "Scene"
+          ],
+          "childNames": [
+            "ship-cockpit"
+          ],
+          "projectionHalfHeightTan": 0.8243362187596373
+        },
+        "scenePerspectiveCameras": [
+          {
+            "uuid": "1284e89a-342a-41bd-b2ac-5ca9da50d52e",
+            "name": null,
+            "type": "PerspectiveCamera",
+            "fov": 78.99998860192044,
+            "visible": true,
+            "isRenderCamera": true,
+            "worldPosition": [
+              -3622.7,
+              -573.64,
+              -625.69
+            ],
+            "childNames": [
+              "ship-cockpit"
+            ]
+          }
+        ],
+        "renderCameraInScene": true,
+        "cockpit": {
+          "root": {
+            "name": "ship-cockpit",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3622.696,
+              -573.636,
+              -625.688
+            ],
+            "distanceFromRenderCamera": 0,
+            "parentChain": [
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3698.74,
+                -594.96,
+                -651.68
+              ],
+              "max": [
+                -3622.24,
+                -566.2,
+                -612.08
+              ]
+            }
+          },
+          "rig": {
+            "name": "ship-cockpit-rig",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1,
+              1,
+              1
+            ],
+            "worldScale": [
+              1,
+              1,
+              1
+            ],
+            "worldPosition": [
+              -3622.697,
+              -573.635,
+              -625.685
+            ],
+            "distanceFromRenderCamera": 0.004,
+            "parentChain": [
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3628.13,
+                -577.09,
+                -633.46
+              ],
+              "max": [
+                -3622.24,
+                -571.14,
+                -618.81
+              ]
+            }
+          },
+          "shell": {
+            "name": "ship-cockpit-pressure-shell",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldPosition": [
+              -3622.697,
+              -573.635,
+              -625.685
+            ],
+            "distanceFromRenderCamera": 0.004,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3628.13,
+                -577.09,
+                -633.46
+              ],
+              "max": [
+                -3622.24,
+                -571.14,
+                -618.81
+              ]
+            }
+          },
+          "instruments": {
+            "name": "ship-cockpit-instruments",
+            "type": "Group",
+            "visible": true,
+            "localScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldScale": [
+              1.17727,
+              1.17727,
+              1
+            ],
+            "worldPosition": [
+              -3622.697,
+              -573.635,
+              -625.685
+            ],
+            "distanceFromRenderCamera": 0.004,
+            "parentChain": [
+              "ship-cockpit-rig",
+              "ship-cockpit",
+              "PerspectiveCamera",
+              "Scene"
+            ],
+            "worldBox": {
+              "min": [
+                -3625.18,
+                -575.44,
+                -627.22
+              ],
+              "max": [
+                -3624.59,
+                -574.35,
+                -624.69
+              ]
+            }
+          }
+        },
+        "cockpitInRenderedScene": true,
+        "canopyProjection": {
+          "meshName": "Mesh",
+          "planeParams": [
+            8.4,
+            4.75
+          ],
+          "worldScale": [
+            1.17727,
+            1.17727,
+            1
+          ],
+          "distanceFromCamera": 3.92,
+          "cornersPx": [
+            [
+              88.8,
+              668.7,
+              0.4899
+            ],
+            [
+              1190.5,
+              668.7,
+              0.4899
+            ],
+            [
+              1190.5,
+              45.7,
+              0.4899
+            ],
+            [
+              88.8,
+              45.7,
+              0.4899
+            ]
+          ],
+          "widthPx": 1101.7,
+          "heightPx": 623,
+          "screenSizeUsed": [
+            1280,
+            720
+          ]
+        }
+      },
+      "preRaiseSample": {
+        "t": 1786533188788,
+        "beat": "done",
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 3.7854415442317074e-45,
+          "boost": 3.785441544239406e-45,
+          "speed": 0.17461356474825818,
+          "speedRatio": 0.0005456673898383068,
+          "acceleration": 0,
+          "forwardSpeed": 0.17461356473214326,
+          "motion": 0.000171632498397956,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 70.00000000000004
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": null,
+        "cockpitReadoutPresent": true,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 140,
+            "attrHeight": 140,
+            "clientWidth": 140,
+            "clientHeight": 140,
+            "cssWidth": "140px",
+            "cssHeight": "140px",
+            "rect": [
+              1101,
+              99,
+              140,
+              140
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 0,
+          "worldPasses": 0,
+          "canvasKeys": null,
+          "mainCanvasKey": null,
+          "perCanvas": null
+        }
+      },
+      "sample": {
+        "t": 1786533198045,
+        "beat": "done",
+        "qualityProfile": "POTATO",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null,
+          "renderScale": null,
+          "maxPixelRatio": null
+        },
+        "shipFlightFeedback": {
+          "active": true,
+          "phase": "deep_space",
+          "throttle": 9.89317525203981e-73,
+          "boost": 9.89317525205994e-73,
+          "speed": 0.001695204469619977,
+          "speedRatio": 5.297513967562428e-06,
+          "acceleration": 0,
+          "forwardSpeed": 0.0016952044694635285,
+          "motion": 1.6662277238653902e-06,
+          "approachLimited": false,
+          "reducedMotion": false,
+          "fov": 70.00000000000003
+        },
+        "SHIP_BASE_FOV": 70,
+        "spaceFlight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "storyPolicy": {
+          "targetFov": 75,
+          "targetDpr": null,
+          "feedBlend": 1
+        },
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "appliedFovDeg": null,
+          "history": []
+        },
+        "hudText": null,
+        "cockpitReadoutPresent": true,
+        "window": {
+          "devicePixelRatio": 1,
+          "innerWidth": 1280,
+          "innerHeight": 720
+        },
+        "canvases": [
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "1280px",
+            "cssHeight": "720px",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 1280,
+            "attrHeight": 720,
+            "clientWidth": 1280,
+            "clientHeight": 720,
+            "cssWidth": "100%",
+            "cssHeight": "100%",
+            "rect": [
+              0,
+              0,
+              1280,
+              720
+            ]
+          },
+          {
+            "attrWidth": 140,
+            "attrHeight": 140,
+            "clientWidth": 140,
+            "clientHeight": 140,
+            "cssWidth": "140px",
+            "cssHeight": "140px",
+            "rect": [
+              1101,
+              99,
+              140,
+              140
+            ]
+          }
+        ],
+        "renderPasses": {
+          "total": 0,
+          "worldPasses": 0,
+          "canvasKeys": null,
+          "mainCanvasKey": null,
+          "perCanvas": null
+        }
+      },
+      "wallSeconds": 91.9,
+      "pageErrors": [
+        "SyntaxError: The requested module '/src/story/storyScore.ts?t=1786533134339' does not provide an export named 'getChapter10ScoreMood'"
+      ]
+    }
+  ],
+  "analysis": {
+    "question": "D-A1 asserted the ch10 flight LOW strips render at a different effective lens than the HIGH hero stills (cockpit aperture ~705px HIGH vs ~300px LOW).",
+    "perProfileMeasurements": [
+      {
+        "run": "low",
+        "stage": "midSample",
+        "requestedProfile": "LOW",
+        "appliedProfile": "LOW",
+        "reducedMotion": false,
+        "beat": "ch10-transit",
+        "profileInForce": "LOW",
+        "camera_fov": 78.99845428290823,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 78.99845428290823,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.7,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/low_mid_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "low",
+        "stage": "preRaiseSample",
+        "requestedProfile": "LOW",
+        "appliedProfile": "LOW",
+        "reducedMotion": false,
+        "beat": "done",
+        "profileInForce": "LOW",
+        "camera_fov": 70.00017166679612,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 70.00000000000006,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            140,
+            140,
+            140,
+            140
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.8,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/low_preraise_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "low",
+        "stage": "sample",
+        "requestedProfile": "LOW",
+        "appliedProfile": "LOW",
+        "reducedMotion": false,
+        "beat": "done",
+        "profileInForce": "LOW",
+        "camera_fov": 70.00017166679612,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 70.00000000000004,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            140,
+            140,
+            140,
+            140
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.8,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/low_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "medium-rm",
+        "stage": "midSample",
+        "requestedProfile": "MEDIUM",
+        "appliedProfile": "MEDIUM",
+        "reducedMotion": true,
+        "beat": "ch10-transit",
+        "profileInForce": "LOW",
+        "camera_fov": 71.99999999999997,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 71.99999999999997,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.8,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/medium-rm_mid_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "medium-rm",
+        "stage": "preRaiseSample",
+        "requestedProfile": "MEDIUM",
+        "appliedProfile": "MEDIUM",
+        "reducedMotion": true,
+        "beat": "done",
+        "profileInForce": "LOW",
+        "camera_fov": 70.00029374348571,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 70.00000000000004,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            140,
+            140,
+            140,
+            140
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.8,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/medium-rm_preraise_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "medium-rm",
+        "stage": "sample",
+        "requestedProfile": "MEDIUM",
+        "appliedProfile": "MEDIUM",
+        "reducedMotion": true,
+        "beat": "done",
+        "profileInForce": "MEDIUM",
+        "camera_fov": 70.00029374348571,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 70.00000000000003,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            140,
+            140,
+            140,
+            140
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.8,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/medium-rm_MEDIUM.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "high",
+        "stage": "midSample",
+        "requestedProfile": "HIGH",
+        "appliedProfile": "HIGH",
+        "reducedMotion": false,
+        "beat": "ch10-transit",
+        "profileInForce": "LOW",
+        "camera_fov": 78.99997241719318,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 78.99996595959159,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.7,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/high_mid_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "high",
+        "stage": "preRaiseSample",
+        "requestedProfile": "HIGH",
+        "appliedProfile": "HIGH",
+        "reducedMotion": false,
+        "beat": "done",
+        "profileInForce": "LOW",
+        "camera_fov": 70.00019241335634,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 70.00000000000006,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            140,
+            140,
+            140,
+            140
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.8,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/high_preraise_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "high",
+        "stage": "sample",
+        "requestedProfile": "HIGH",
+        "appliedProfile": "HIGH",
+        "reducedMotion": false,
+        "beat": "ch10-transit",
+        "profileInForce": "LOW",
+        "camera_fov": null,
+        "camera_aspect": null,
+        "camera_near": null,
+        "camera_far": null,
+        "shipFlightFeedback_fov": 70,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": null,
+        "gl_getPixelRatio": null,
+        "renderer_domElement": [
+          null,
+          null
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ]
+        ],
+        "cockpit_present": false,
+        "cockpit_name": null,
+        "cockpit_worldScale": null,
+        "cockpit_distanceFromRenderCamera": null,
+        "cockpit_parentChain": null,
+        "perspectiveCameraCount": null,
+        "canopyProjection_widthPx": null,
+        "canopyProjection_heightPx": null,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": null,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/high_HIGH.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "potato",
+        "stage": "midSample",
+        "requestedProfile": "POTATO",
+        "appliedProfile": "POTATO",
+        "reducedMotion": false,
+        "beat": "ch10-transit",
+        "profileInForce": "LOW",
+        "camera_fov": 78.99998860192044,
+        "camera_aspect": 1.7777777777777777,
+        "camera_near": 1,
+        "camera_far": 20000,
+        "shipFlightFeedback_fov": 78.99998589287041,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": [
+          1280,
+          720
+        ],
+        "gl_getPixelRatio": 1,
+        "renderer_domElement": [
+          1280,
+          720
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ]
+        ],
+        "cockpit_present": true,
+        "cockpit_name": "ship-cockpit",
+        "cockpit_worldScale": [
+          1,
+          1,
+          1
+        ],
+        "cockpit_distanceFromRenderCamera": 0,
+        "cockpit_parentChain": [
+          "PerspectiveCamera",
+          "Scene"
+        ],
+        "perspectiveCameraCount": 1,
+        "canopyProjection_widthPx": 1101.7,
+        "canopyProjection_heightPx": 623,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": 3.92,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/potato_mid_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "potato",
+        "stage": "preRaiseSample",
+        "requestedProfile": "POTATO",
+        "appliedProfile": "POTATO",
+        "reducedMotion": false,
+        "beat": "done",
+        "profileInForce": "LOW",
+        "camera_fov": null,
+        "camera_aspect": null,
+        "camera_near": null,
+        "camera_far": null,
+        "shipFlightFeedback_fov": 70.00000000000004,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": null,
+        "gl_getPixelRatio": null,
+        "renderer_domElement": [
+          null,
+          null
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            140,
+            140,
+            140,
+            140
+          ]
+        ],
+        "cockpit_present": false,
+        "cockpit_name": null,
+        "cockpit_worldScale": null,
+        "cockpit_distanceFromRenderCamera": null,
+        "cockpit_parentChain": null,
+        "perspectiveCameraCount": null,
+        "canopyProjection_widthPx": null,
+        "canopyProjection_heightPx": null,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": null,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/potato_preraise_LOW.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      },
+      {
+        "run": "potato",
+        "stage": "sample",
+        "requestedProfile": "POTATO",
+        "appliedProfile": "POTATO",
+        "reducedMotion": false,
+        "beat": "done",
+        "profileInForce": "POTATO",
+        "camera_fov": null,
+        "camera_aspect": null,
+        "camera_near": null,
+        "camera_far": null,
+        "shipFlightFeedback_fov": 70.00000000000003,
+        "storyInputPolicy_targetFov": 75,
+        "gl_getSize": null,
+        "gl_getPixelRatio": null,
+        "renderer_domElement": [
+          null,
+          null
+        ],
+        "window_devicePixelRatio": 1,
+        "window_inner": [
+          1280,
+          720
+        ],
+        "canvases_attr_vs_client": [
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            1280,
+            720,
+            1280,
+            720
+          ],
+          [
+            140,
+            140,
+            140,
+            140
+          ]
+        ],
+        "cockpit_present": false,
+        "cockpit_name": null,
+        "cockpit_worldScale": null,
+        "cockpit_distanceFromRenderCamera": null,
+        "cockpit_parentChain": null,
+        "perspectiveCameraCount": null,
+        "canopyProjection_widthPx": null,
+        "canopyProjection_heightPx": null,
+        "canopyProjection_centerPx": null,
+        "canopy_distanceFromCamera": null,
+        "pixel": {
+          "file": "evidence/capture/lens-divergence/potato_POTATO.png",
+          "hullBBox": [
+            0,
+            0,
+            1280,
+            720
+          ],
+          "cockpitSilhouetteFillsFrame": true
+        }
+      }
+    ],
+    "finding_lensIsIdentical": "camera.fov, camera.aspect, camera.near, camera.far, gl.getSize, gl.getPixelRatio, renderer.domElement dims, window.devicePixelRatio, window.inner*, and every canvas attr/client pair are IDENTICAL across LOW, MEDIUM(+reduced motion), HIGH and POTATO at matched story moments. The geometric canopy-plane projection is 1101.7-1102.4 px wide in every profile sample. Quality profile is exonerated.",
+    "pixelMetric": "cockpitSilhouetteFillsFrame: the cockpit hull silhouette (blurred luminance > 0.030, largest 4-connected component) either fills the 1280x720 frame edge to edge (correct) or renders as an island with space visible around it (defect).",
+    "freshCaptureFrames": [
+      {
+        "file": "evidence/capture/lens-divergence/low_mid_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/low_preraise_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/low_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/medium-rm_mid_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/medium-rm_preraise_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/medium-rm_MEDIUM.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/high_mid_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/high_preraise_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/high_HIGH.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/potato_mid_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/potato_preraise_LOW.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/lens-divergence/potato_POTATO.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      }
+    ],
+    "shippedCh10TransitStripFrames": [
+      {
+        "file": "evidence/capture/strip-transit-a/00_transit-ignite-before_ch10-transit.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/01_transit-ignite-at_ch10-transit.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/02_transit-ignite-after_ch10-transit.png",
+        "hullBBox": [
+          168,
+          0,
+          1112,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/03_T2-hold-marker_ch10-transit.png",
+        "hullBBox": [
+          176,
+          0,
+          1104,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/04_seam-before_ch10-transit.png",
+        "hullBBox": [
+          168,
+          0,
+          1112,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/05_seam-at_ch10-transit.png",
+        "hullBBox": [
+          180,
+          0,
+          1100,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/06_seam-after_ch10-transit.png",
+        "hullBBox": [
+          8,
+          0,
+          1272,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/07_galaxy-absence-check_ch10-transit.png",
+        "hullBBox": [
+          16,
+          0,
+          1264,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/00_station-resolved-before_ch10-transit.png",
+        "hullBBox": [
+          200,
+          0,
+          1080,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png",
+        "hullBBox": [
+          144,
+          0,
+          1136,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/02_hold-mid_ch10-transit.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/03_hold-release_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/04_K11-painted_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/05_work-order-cleared_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/06_threshold-handback_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/07_threshold-handback-after_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/00_seam-before_ch10-transit.png",
+        "hullBBox": [
+          168,
+          0,
+          1112,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/01_seam-at_ch10-transit.png",
+        "hullBBox": [
+          168,
+          0,
+          1112,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/02_seam-after_ch10-transit.png",
+        "hullBBox": [
+          4,
+          0,
+          1276,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/03_station-resolved_ch10-transit.png",
+        "hullBBox": [
+          188,
+          0,
+          1092,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/04_hold-mid_ch10-transit.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "ch10-transit"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/05_hold-release_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/06_threshold-handback_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/07_threshold-handback-after_done.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true,
+        "beatStamp": "done"
+      }
+    ],
+    "ch10HighHeroStills": [
+      {
+        "file": "evidence/capture/still-seam-of-light.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "evidence/capture/still-station-resolved.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      }
+    ],
+    "ch8ShippedFlightFrames": [
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence/ch8-crossing-entry/000_000s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence/ch8-crossing-entry/001_004s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence/ch8-crossing-entry/002_008s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence/ch8-crossing-entry/003_013s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence/ch8-crossing-entry/004_017s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence/ch8-crossing-entry/005_021s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence/ch8-crossing-entry/006_025s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/000_000s_ch8-launch.png",
+        "hullBBox": [
+          16,
+          584,
+          284,
+          112
+        ],
+        "cockpitSilhouetteFillsFrame": false,
+        "notApplicable": "frame is fully black (no cockpit rendered yet); the fillsFrame=false here is a blank frame, not a cockpit-scale defect"
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/001_003s_ch8-launch.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/002_005s_ch8-launch.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/003_007s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/004_009s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/005_011s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/006_013s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      },
+      {
+        "file": "../2026-08-10-ch7-ch8-voice-repair/evidence-hires/ch8-launch/007_015s_ch8-crossing.png",
+        "hullBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "cockpitSilhouetteFillsFrame": true
+      }
+    ],
+    "reproduction": {
+      "probe": "scratchpad repro replaying the exact strip-transit-a / strip-transit-b plans from ch10-strip-probe.mjs with per-frame enumeration of every camera, every ship-cockpit group and every ship-cockpit-pressure-shell",
+      "result": "NOT REPRODUCED on the current working tree: 16/16 frames reported cameraCount=1, cockpitCount=1, shellCount=1, canopy projection 1094.8-1102.4 px, cockpit distanceFromRenderCamera=0.",
+      "note": "main/src is being edited live during this measurement. main/src/components/ShipController.tsx (mtime 2026-08-12 07:03) and main/src/story/autopilot.ts (07:07) were both modified AFTER the shipped strips were captured (capture-manifest capturedAt 2026-08-12T01:20:06Z). The ShipController diff adds the movieFlight.targetSystemPosition bearing branch whose comment states the chapter 10 leg previously \"thrusted with no bearing at all\"."
+    },
+    "transientDevServerErrorObserved": "POTATO run pageerror: SyntaxError: The requested module '/src/story/storyScore.ts?t=1786533134339' does not provide an export named 'getChapter10ScoreMood' (the export exists in the file; this is a Vite dev-server module-graph artifact from live editing). Two samples also lost the injected render hook, indicating a full page reload mid-run.",
+    "ch8Verdict": "ch8 does NOT share the divergence. 14/14 applicable ch8 flight frames (7 LOW evidence/ch8-crossing-entry + 7 evidence-hires/ch8-launch) render the cockpit hull filling the frame edge to edge, matching the ch10 HIGH hero stills and every fresh capture. The one non-filling ch8 frame is a fully black frame with no cockpit at all."
+  }
+}

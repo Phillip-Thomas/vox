@@ -15,10 +15,13 @@ import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
 import { signalMesaHandle } from './world/SignalMesa.tsx';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
+import { st0GazeHandle } from '../components/SystemCompanionBodies.tsx';
 import {
   getKeelMemoryPose,
-  storyAnchors
+  storyAnchors,
+  STORY_COORDINATE
 } from './world/storyWorld.ts';
+import { buildStarSystemManifest } from '../game/starSystem.ts';
 import { isSpawnSettled } from '../game/spawnSettle.ts';
 import { anomalyMassDesignated, beginA1, beginA2, vigilRestReady } from './storyDirector.ts';
 import { advanceToBeat } from './storyState.ts';
@@ -26,6 +29,7 @@ import { setStoryMoveScale } from './storyInputPolicy.ts';
 import {
   setCinematicGazeIntent,
   setCinematicLookTarget,
+  getCinematicLookWeight,
   setCinematicLookWeight,
   type CinematicGazeMode
 } from './cinematicLook.ts';
@@ -75,6 +79,7 @@ import {
   exitShip,
   getSpaceFlightSnapshot
 } from '../state/spaceFlight.ts';
+import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
 import { getCurrentDayPhase } from '../game/worldClock.ts';
 import {
   buildAndCertifyEmergentMovieShelter,
@@ -83,9 +88,20 @@ import {
   getEmergentMovieSettlementBinding,
   getEmergentMovieWreckBinding,
   installEmergentMovieHabitatCore,
+  openEmergentMovieShelterEgress,
   prepareEmergentMovieHabitatCore,
   prepareEmergentMovieWreckCraft
 } from './emergentMovieRuntime.ts';
+import {
+  commitChapter10BearingClaim,
+  commitChapter10FabricationAttempt,
+  commitChapter10FaultRead,
+  chapter10ClaimedStationBody,
+  chapter10WreckSitePosition,
+  commitChapter10RelayRequest,
+  STATION_STANDOFF_DISTANCE
+} from './emergentStoryDirector.ts';
+import { spaceStationApproachGeometry } from '../components/SpaceStationApproachDriver.tsx';
 import {
   getTidegardenChosenHabitatSite,
   TIDEGARDEN_SETTLEMENT_MILESTONES
@@ -173,7 +189,8 @@ const DRIVEN_BEATS: ReadonlySet<StoryBeat> = new Set([
   'ch4-audit', 'ch4-comply', 'ch4-defy',
   'ch5-maw', 'ch6-dive', 'ch7-reconstruct', 'ch7-board',
   'ch8-launch', 'ch8-crossing', 'ch8-landfall',
-  'ch9-settle', 'ch9-hearth'
+  'ch9-settle', 'ch9-hearth',
+  'ch10-cold', 'ch10-ask', 'ch10-transit'
 ]);
 
 export function isAutopilotDriving(): boolean {
@@ -231,20 +248,226 @@ export interface AutopilotFlightDirective {
   active: boolean;
   beat: StoryBeat | null;
   targetWorldId: string | null;
+  /**
+   * SYSTEM-SPACE point the movie lane wants the nose on, when the thing being
+   * flown toward is not a planet. `targetWorldId` can only name bodies in the
+   * system manifest's planet list, and chapter 10's destination is a station —
+   * so the one destination in the game that has no world id had no way to be
+   * aimed at, and the transit leg thrusted with no bearing.
+   *
+   * Null for every shipped beat and every ch1-ch9 movie path: the field exists
+   * so ONE lane can say a bearing out loud, not so the flight model grows a
+   * second steering authority.
+   */
+  targetSystemPosition: readonly [number, number, number] | null;
   controls: Readonly<AutopilotControls>;
 }
+
+/**
+ * Beats with a FLIGHT SEGMENT the movie lane must fly. A set, not a chain of
+ * beat literals: the literal chain is the bug class this run has now hit three
+ * times (the world-prop chapter regex, the boot-world enumeration, and this),
+ * and each time the symptom was a new chapter silently doing nothing.
+ *
+ * ch10-ask carries the return crossing (Tidegarden to the origin world, then
+ * landfall by the relay) and ch10-transit carries the whole issued-bearing
+ * flight, so both belong here beside ch8's three.
+ */
+const FLIGHT_DIRECTIVE_BEATS: ReadonlySet<StoryBeat> = new Set([
+  'ch8-launch', 'ch8-crossing', 'ch8-landfall',
+  'ch10-ask', 'ch10-transit'
+]);
 
 /** ShipController consumes the same virtual controls as the on-foot body. */
 export function getAutopilotFlightDirective(): AutopilotFlightDirective {
   const story = getStoryStateSnapshot();
   const beat = story.active ? story.beat : null;
-  const active = MOVIE && (beat === 'ch8-launch' || beat === 'ch8-crossing' || beat === 'ch8-landfall');
+  const chapter10 = beat === 'ch10-ask' || beat === 'ch10-transit';
+  // ch8's beats are wholly airborne. Chapter 10 interleaves walking and flying
+  // inside one beat, so its directive speaks only while the ship is the body
+  // being driven — on-foot frames stay exactly as they are today.
+  const active = MOVIE
+    && beat !== null
+    && FLIGHT_DIRECTIVE_BEATS.has(beat)
+    && (!chapter10 || getSpaceFlightSnapshot().controlMode === 'flight');
   return {
     active,
     beat,
-    targetWorldId: beat === 'ch8-crossing' ? TIDEGARDEN_WORLD_ID : null,
+    targetWorldId: flightDirectiveTargetWorldId(beat),
+    targetSystemPosition: flightDirectiveTargetSystemPosition(beat),
     controls
   };
+}
+
+/**
+ * The system-space point the transit leg flies at: the station the PLAYER
+ * committed at the relay, read back out of the same systemFlight target
+ * `commitSpaceStationTarget` wrote. The pilot never picks a destination — it
+ * only flies the bearing the claim already issued, which is the whole meaning
+ * of the beat.
+ */
+function flightDirectiveTargetSystemPosition(
+  beat: StoryBeat | null
+): readonly [number, number, number] | null {
+  // The origin-side descent aims at the WRECK SITE, which is where the beat
+  // lands and the only ground it is known to be able to land on.
+  //
+  // requestLanding() refuses silently unless the ship is essentially directly
+  // over a valid egress site (findValidSpawnSite runs with maxSearchRadius 0
+  // and requirePlayerEgress true). Holding the crossing heading put the ship
+  // wherever the planet-centre bearing happened to point, so whether the leg
+  // completed was a function of arrival POSITION — a lottery that hung the
+  // landfall rung indefinitely whenever it came up short. Aiming at the site
+  // the contract already tells the pilot to land near removes the lottery.
+  if (beat === 'ch10-ask') return chapter10AskDescentSystemTarget();
+  if (beat !== 'ch10-transit') return null;
+  // DURABLE, not transient. Reading the flight store alone meant a deep link or
+  // a reload — which seed the claim milestone without running the commit — gave
+  // the movie lane no bearing at all, and the ship held one attitude for the
+  // whole beat while the station receded past 222,000 units.
+  return chapter10ClaimedStationBody()?.systemPosition ?? null;
+}
+
+/** The world the ship is being flown TO, when the leg is a world crossing. */
+function flightDirectiveTargetWorldId(beat: StoryBeat | null): string | null {
+  if (beat === 'ch8-crossing') return TIDEGARDEN_WORLD_ID;
+  // The ask beat's return crossing is ch8's, reversed: hold the origin world's
+  // bearing until it is the enclosing world, then release the heading so the
+  // descent to the wreck is flown against the surface rather than the body.
+  if (beat === 'ch10-ask') {
+    return getSystemFlightSnapshot().activePlanetId === STORY_PRIMARY_WORLD_ID
+      ? null
+      : STORY_PRIMARY_WORLD_ID;
+  }
+  return null;
+}
+
+
+/**
+ * The wreck site in SYSTEM space, for the ch10-ask descent leg only.
+ *
+ * Derivable, not stored: the site is a pure function of the origin world's size
+ * and seed, exactly like the station bearing is a pure function of the system
+ * seed. Null until the origin world actually encloses the ship and null once it
+ * is down, so the crossing keeps the planet-centre heading it needs to arrive
+ * at all and nothing steers a grounded ship.
+ */
+export function chapter10AskDescentSystemTarget(): readonly [number, number, number] | null {
+  const system = getSystemFlightSnapshot();
+  if (system.activePlanetId !== STORY_PRIMARY_WORLD_ID) return null;
+  const flight = getSpaceFlightSnapshot();
+  if (flight.controlMode !== 'flight' || flight.phase === 'surface') return null;
+  const site = chapter10WreckSitePosition();
+  if (!site) return null;
+  const manifest = buildStarSystemManifest(STORY_COORDINATE);
+  const origin = manifest.planets.find(planet => planet.worldId === STORY_PRIMARY_WORLD_ID);
+  if (!origin) return null;
+  return [
+    origin.systemPosition[0] + site.x,
+    origin.systemPosition[1] + site.y,
+    origin.systemPosition[2] + site.z
+  ];
+}
+
+
+// --- ST-0 idle-gaze bias (D-A3, movie lane only) ----------------------------
+//
+// Cinematography's ruling, implemented to its exact terms. The night walk from
+// the hearth to the fabricator is the run's ST-0 evidence window, and an
+// unbiased pilot stares at its goal the whole way, so the dot never lands in
+// frame. This lets the pilot GLANCE UP between goal-critical look demands.
+//
+// It is a gaze bias and nothing else: heading and velocity are untouched, it
+// runs only while `isAutopilotDriving()` in the movie lane, and manual play
+// cannot reach it. ST-0 acquiring a forced look would be ST-0 acquiring a cue,
+// and the no-cue law is absolute — so the player is never steered, only the
+// film crew's own camera operator is.
+const ST0_GAZE_WEIGHT = 0.35;
+const ST0_GAZE_MIN_SECONDS = 1.5;
+/** A glance, not a stare: it ends on its own well before the walk does. */
+const ST0_GAZE_MAX_SECONDS = 3;
+const ST0_GAZE_RELEASE_SECONDS = 0.5;
+const ST0_GAZE_COOLDOWN_SECONDS = 10;
+const ST0_GAZE_PITCH_CAP_RADIANS = (25 * Math.PI) / 180;
+const ST0_GAZE_REACH = 240;
+
+let st0GazeStartedAt = -Infinity;
+let st0GazeEndedAt = -Infinity;
+let st0GazeActive = false;
+let st0GazeRestoreWeight = 1;
+const _st0GazeGoal = new THREE.Vector3();
+const _st0GazeAim = new THREE.Vector3();
+
+function resetSt0GazeBias(): void {
+  if (st0GazeActive) setCinematicLookWeight(st0GazeRestoreWeight);
+  st0GazeActive = false;
+  st0GazeStartedAt = -Infinity;
+  st0GazeEndedAt = -Infinity;
+}
+
+/**
+ * Returns true when the pilot is currently glancing at ST-0, in which case the
+ * caller must NOT issue its own look this frame. `goalCritical` is the caller's
+ * statement that the shot needs its eyes on the goal right now — arriving,
+ * acting, or anything the beat is about; a demand disengages within half a
+ * second and starts the cooldown.
+ */
+function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean {
+  if (!MOVIE || !isAutopilotDriving()) {
+    resetSt0GazeBias();
+    return false;
+  }
+  const up = getPlayerUp();
+  const available = st0GazeHandle.aboveHorizon && st0GazeHandle.direction !== null;
+  const held = beatClock - st0GazeStartedAt;
+
+  if (st0GazeActive) {
+    // A goal-critical demand releases the glance, but never mid-flick: the
+    // minimum dwell is what makes it read as looking rather than twitching.
+    const mustRelease = goalCritical || !available;
+    if (mustRelease && held >= ST0_GAZE_RELEASE_SECONDS) {
+      st0GazeActive = false;
+      st0GazeEndedAt = beatClock;
+      // Hand the walk's own look authority straight back, at exactly the
+      // strength it had before the glance borrowed it.
+      setCinematicLookWeight(st0GazeRestoreWeight);
+      return false;
+    }
+    // The ruling's floor is 1.5s and it is enforced here rather than assumed:
+    // retuning the glance length down can never take it below a look.
+    if (!mustRelease && held >= Math.max(ST0_GAZE_MIN_SECONDS, ST0_GAZE_MAX_SECONDS)) {
+      st0GazeActive = false;
+      st0GazeEndedAt = beatClock;
+      setCinematicLookWeight(st0GazeRestoreWeight);
+      return false;
+    }
+  } else {
+    if (goalCritical || !available) return false;
+    if (beatClock - st0GazeEndedAt < ST0_GAZE_COOLDOWN_SECONDS) return false;
+    st0GazeActive = true;
+    st0GazeStartedAt = beatClock;
+    st0GazeRestoreWeight = getCinematicLookWeight();
+  }
+
+  const direction = st0GazeHandle.direction;
+  if (!direction) {
+    resetSt0GazeBias();
+    return false;
+  }
+  // Pitch cap: look UP toward the dot, but never crane past +25 degrees, so the
+  // walk keeps its footing in frame and the horizon never leaves the shot.
+  _st0GazeAim.copy(direction).normalize();
+  const rise = _st0GazeAim.dot(up);
+  const cap = Math.sin(ST0_GAZE_PITCH_CAP_RADIANS);
+  if (rise > cap) {
+    _st0GazeAim.addScaledVector(up, cap - rise);
+    if (_st0GazeAim.lengthSq() < 1e-6) return false;
+    _st0GazeAim.normalize();
+  }
+  _st0GazeGoal.copy(player).addScaledVector(_st0GazeAim, ST0_GAZE_REACH);
+  setCinematicLookWeight(ST0_GAZE_WEIGHT);
+  lookNaturallyToward(_st0GazeGoal, player, 0, _st0GazeGoal, 'travel');
+  return true;
 }
 
 // Legacy presentation-ladder timeouts. No emergent beat is listed here: those
@@ -270,7 +493,13 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
   // Raised for the stargaze: night lands ~42s in, then the 8-line sequence
   // (~45.5s) + the 18s reveal ramp + the held rest prompt push natural
   // completion to ~100s. 140 keeps the beat's own resolution well inside.
-  'ch4-vigil': 140
+  'ch4-vigil': 140,
+  // ch10. Backstops only: honest completion is required well inside them, and
+  // the ch10-cold budget is sized so the hearth-to-fabricator night walk (the
+  // run's ST-0 evidence window) can hold a full 90s crossing without hurrying.
+  'ch10-cold': 200,
+  'ch10-ask': 320,
+  'ch10-transit': 260
 };
 
 let clockBeat: StoryBeat | null = null;
@@ -293,6 +522,12 @@ let dryCrossFaceWaterContactFramesTotal = 0;
 // minimum (see shouldReplanDryWaterContact).
 let dryWalkWaterContactFramesTotal = 0;
 const DRY_WALK_WATER_CONTACT_REPLAN_FRAMES = 8;
+
+/**
+ * At least one second between the ch10 egress face opening and the autopilot's
+ * first step, so no captured strip frame can straddle the change.
+ */
+const CH10_EGRESS_HOLD_SECONDS = 1;
 
 function noteGoal(target: THREE.Vector3): void {
   if (_goalRef.distanceTo(target) > 2.5) {
@@ -1757,6 +1992,137 @@ export function autopilotTick(dt: number): void {
         // between attempts instead of feeding the goal to the stuck watchdog.
         holdAt(corePosition, 0.8);
       }
+      break;
+    }
+    case 'ch10-cold': {
+      const actorId = getLocalActorId();
+      const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+      if (!habitat) break;
+      // The egress face opens once, at beat entry, and only while it is outside
+      // the movie camera's frustum; the walk does not begin for a full second
+      // afterwards so no strip frame straddles the change. The movie
+      // photographs neither the scaffolding nor its absence.
+      if (beatClock < CH10_EGRESS_HOLD_SECONDS) {
+        openEmergentMovieShelterEgress(true, actorId);
+        holdAt(_goalScratch.set(...habitat.core.position), 0.8);
+        break;
+      }
+      const corePosition = _goalScratch.set(...habitat.core.position);
+      if (!hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)) {
+        const coreDistance = walkToward(corePosition, 0.35, 0.8);
+        if (coreDistance <= 2) commitChapter10FaultRead(actorId);
+        break;
+      }
+      // The fabricator is the Kestrel's own: the night walk from the hearth to
+      // the ship IS the ST-0 evidence window, under open sky.
+      const ship = getShipPosition();
+      if (!ship) break;
+      const fabricator = _goalScratch.set(ship[0], ship[1], ship[2]);
+      const shipDistance = walkToward(fabricator, 3.4, 1.1);
+      // THE ST-0 EVIDENCE WINDOW. This walk is the one the contract nominates,
+      // so it is where the glance lives. Arrival is goal-critical — the eyes
+      // come back down for the act itself — and the bias never touches the
+      // route, only where the camera happens to be pointed on the way.
+      tickSt0GazeBias(getPlayerWorldPosition(), shipDistance <= 10);
+      if (shipDistance <= 6) commitChapter10FabricationAttempt(actorId);
+      break;
+    }
+    case 'ch10-ask': {
+      // THE VIRTUAL CONTROLS ARE STICKY. `controls` is a module-global cleared
+      // only on a beat change, so whatever a leg asserts survives into the next
+      // one — and a chapter that walks, boards, launches, crosses, lands and
+      // walks again inside ONE beat crosses six legs with no clear between
+      // them. An `interact` left over from the on-foot approach to the hatch is
+      // read by ShipController as requestLanding() on every subsequent frame,
+      // which is why the ship launched and immediately set back down, forever,
+      // with jump, forward and interact all asserted at once. Each leg below
+      // states its whole intent against a clean slate.
+      clearControls();
+      const actorId = getLocalActorId();
+      const flight = getSpaceFlightSnapshot();
+      const system = getSystemFlightSnapshot();
+      if (hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId)) {
+        // The rite. The pilot performs the claim exactly as a player would —
+        // it is never claimed on anyone's behalf by a timeout or a nudge.
+        const relay = wreckRelayHandle.position;
+        if (!relay) break;
+        if (walkToward(relay, 2.2, 0.8) <= 4) commitChapter10BearingClaim(actorId);
+        break;
+      }
+      if (system.activePlanetId === STORY_PRIMARY_WORLD_ID && flight.phase === 'surface') {
+        if (flight.controlMode === 'flight') {
+          exitShip();
+          break;
+        }
+        const relay = wreckRelayHandle.position;
+        if (!relay) break;
+        if (walkToward(relay, 2.2, 0.8) <= 4) commitChapter10RelayRequest(actorId);
+        break;
+      }
+      if (flight.controlMode !== 'flight') {
+        const ship = getShipPosition();
+        if (!ship) break;
+        const hatch = _goalScratch.set(ship[0], ship[1], ship[2]);
+        walkToward(hatch, 2.4, 1.1);
+        if (getPlayerWorldPosition().distanceTo(hatch) <= 3.5) enterShip();
+        break;
+      }
+      // ch8 flight grammar, reversed. The two legs are told apart by the
+      // ENCLOSING WORLD, never by the phase name: 'descent' is simply the
+      // in-atmosphere phase, so it is as true of a climb-out as of an arrival.
+      // Requesting a landing on that name alone made the pilot ask to land in
+      // the same frame it had just launched, and the ship sat at the Tidegarden
+      // hearth toggling surface/descent for the whole beat.
+      if (flight.phase === 'surface') {
+        controls.jump = true;
+        break;
+      }
+      const homeward = system.activePlanetId === STORY_PRIMARY_WORLD_ID;
+      if (homeward && (flight.phase === 'descent' || flight.phase === 'approach')) {
+        controls.forward = true;
+        controls.interact = true;
+        break;
+      }
+      controls.forward = true;
+      controls.sprint = true;
+      break;
+    }
+    case 'ch10-transit': {
+      // Same clean slate as the ask beat, and for the same reason: the transit
+      // inherits whatever the ask left asserted, and a stale interact here
+      // would ask to land on the way to a station that offers no berth.
+      clearControls();
+      const flight = getSpaceFlightSnapshot();
+      // THE BEAT DOES NOT ALWAYS BEGIN IN THE COCKPIT. Played through, chapter
+      // 10 enters the transit ON FOOT at the wreck relay — she has just claimed
+      // the bearing standing beside it — so a rail that only knows how to fly
+      // stands at the relay forever. The deep link seeds the pilot already in
+      // flight, which is exactly why the deep-link tail passed while the flow
+      // path never ignited. Same boarding grammar the ask beat uses.
+      if (flight.controlMode !== 'flight') {
+        const parked = getShipPosition();
+        if (!parked) break;
+        const hatch = _goalScratch.set(parked[0], parked[1], parked[2]);
+        walkToward(hatch, 2.4, 1.1);
+        if (getPlayerWorldPosition().distanceTo(hatch) <= 3.5) enterShip();
+        break;
+      }
+      // Ignite, then hold the claimed bearing. Nothing else: the seam, the
+      // resolve and the hand-back are all facts of the flight, not acts.
+      //
+      // THE END OF THE LEG IS A STANDOFF, NOT A DOCK. arrivalStandoff(body,
+      // 1,500) sits outside CORRIDOR_RANGE 1,400 precisely so no corridor is
+      // published and no berth is offered, so the pilot cuts thrust there and
+      // holds. Flying on would enter the corridor and stage a shot of an
+      // invitation the chapter refuses to make.
+      const contact = spaceStationApproachGeometry();
+      const atStandoff = contact !== null
+        && contact.readout.distance <= STATION_STANDOFF_DISTANCE;
+      controls.jump = flight.controlMode === 'flight' && flight.phase === 'surface';
+      controls.forward = flight.controlMode === 'flight'
+        && flight.phase !== 'surface'
+        && !atStandoff;
+      controls.sprint = controls.forward;
       break;
     }
     default:

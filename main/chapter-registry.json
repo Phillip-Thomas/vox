@@ -24,19 +24,44 @@
         "ch9-settle",
         "ch9-hearth"
       ]
+    },
+    {
+      "id": "ch10-station-introduction@draft-v6",
+      "sceneId": "ch10-station-introduction",
+      "contractVersion": "draft-v6",
+      "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json",
+      "sha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+      "coversBeats": [
+        "ch10-cold",
+        "ch10-ask",
+        "ch10-transit"
+      ]
     }
   ],
   "chapters": [
     {
       "id": "prologue",
       "order": 0,
-      "beats": ["crawl", "manifest", "voyage", "deflect", "crash"],
+      "beats": [
+        "crawl",
+        "manifest",
+        "voyage",
+        "deflect",
+        "crash"
+      ],
       "before": [],
-      "after": ["ch1"],
+      "after": [
+        "ch1"
+      ],
       "entry": {
         "beat": "crawl",
-        "requirements": ["milestone:story:started"],
-        "stateRefs": ["state:story/active-menu", "state:reality/bare"]
+        "requirements": [
+          "milestone:story:started"
+        ],
+        "stateRefs": [
+          "state:story/active-menu",
+          "state:reality/bare"
+        ]
       },
       "exit": {
         "beat": "crash",
@@ -61,24 +86,46 @@
           "key": "prologueSeen",
           "milestone": "story:prologue-seen",
           "resumeBeat": "ch1-fixed",
-          "evidenceRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#handoff"]
+          "evidenceRefs": [
+            "runtime:src/story/prologue/TerminalPrologue.tsx#handoff"
+          ]
         }
       ],
-      "objectiveRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#handoff"],
-      "revealRefs": ["runtime:src/story/storyScript.ts#prologue"],
+      "objectiveRefs": [
+        "runtime:src/story/prologue/TerminalPrologue.tsx#handoff"
+      ],
+      "revealRefs": [
+        "runtime:src/story/storyScript.ts#prologue"
+      ],
       "avBoundary": {
         "sceneContractRefs": [],
         "entry": {
-          "anchorRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#beat:crawl"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:crawl"],
-          "cameraRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#vector-mode:crawl"],
-          "paletteRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#terminal-palette"]
+          "anchorRefs": [
+            "runtime:src/story/prologue/TerminalPrologue.tsx#beat:crawl"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:crawl"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/prologue/TerminalPrologue.tsx#vector-mode:crawl"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/prologue/TerminalPrologue.tsx#terminal-palette"
+          ]
         },
         "exit": {
-          "anchorRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#handoff"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:crash"],
-          "cameraRefs": ["runtime:src/story/prologue/TerminalPrologue.tsx#phase:acknowledge"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:bare"]
+          "anchorRefs": [
+            "runtime:src/story/prologue/TerminalPrologue.tsx#handoff"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:crash"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/prologue/TerminalPrologue.tsx#phase:acknowledge"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:bare"
+          ]
         }
       },
       "acceptance": {
@@ -88,10 +135,46 @@
         ],
         "requiredObjectiveBeats": [],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -127,11 +210,18 @@
         "ch1-anomaly",
         "a1-ramp"
       ],
-      "before": ["prologue"],
-      "after": ["ch2"],
+      "before": [
+        "prologue"
+      ],
+      "after": [
+        "ch2"
+      ],
       "entry": {
         "beat": "descent",
-        "requirements": ["milestone:story:prologue-seen", "state:chapter/ch1-ready"],
+        "requirements": [
+          "milestone:story:prologue-seen",
+          "state:chapter/ch1-ready"
+        ],
         "stateRefs": [
           "state:world/origin",
           "state:story/active",
@@ -164,42 +254,54 @@
           "key": "ch1Track",
           "milestone": "story:ch1:track",
           "resumeBeat": "ch1-raster",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickTrackUnlock"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#tickTrackUnlock"
+          ]
         },
         {
           "beat": "ch1-raster",
           "key": "ch1Quota",
           "milestone": "story:ch1:quota",
           "resumeBeat": "ch1-depth",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#quotaCollected"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#quotaCollected"
+          ]
         },
         {
           "beat": "ch1-depth",
           "key": "ch1Depth",
           "milestone": "story:ch1:depth",
           "resumeBeat": "ch1-nav",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#supplyPodsComplete"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#supplyPodsComplete"
+          ]
         },
         {
           "beat": "ch1-nav",
           "key": "ch1Nav",
           "milestone": "story:ch1:nav",
           "resumeBeat": "ch1-iso",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#navWaypointsComplete"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#navWaypointsComplete"
+          ]
         },
         {
           "beat": "ch1-iso",
           "key": "ch1Iso",
           "milestone": "story:ch1:iso",
           "resumeBeat": "ch1-anomaly",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#signal-mesa-summit"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#signal-mesa-summit"
+          ]
         },
         {
           "beat": "a1-ramp",
           "key": "a1",
           "milestone": "story:a1",
           "resumeBeat": "ch2-color",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickA1Ramp"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#tickA1Ramp"
+          ]
         }
       ],
       "objectiveRefs": [
@@ -213,16 +315,32 @@
       "avBoundary": {
         "sceneContractRefs": [],
         "entry": {
-          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:descent"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:descent"],
-          "cameraRefs": ["runtime:src/story/storyDirector.ts#ERA_RIGS:descent"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:bare"]
+          "anchorRefs": [
+            "runtime:src/story/storyDirector.ts#beat:descent"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:descent"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/storyDirector.ts#ERA_RIGS:descent"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:bare"
+          ]
         },
         "exit": {
-          "anchorRefs": ["runtime:src/story/storyDirector.ts#tickA1Ramp"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:a1-ramp"],
-          "cameraRefs": ["runtime:src/story/storyDirector.ts#beat:a1-ramp"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+          "anchorRefs": [
+            "runtime:src/story/storyDirector.ts#tickA1Ramp"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:a1-ramp"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/storyDirector.ts#beat:a1-ramp"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:color"
+          ]
         }
       },
       "acceptance": {
@@ -230,12 +348,57 @@
           "runtime:src/story/storyState.test.ts#monochrome-ladder",
           "runtime:src/story/storyDirector.test.ts#chapter-1"
         ],
-        "requiredObjectiveBeats": ["ch1-fixed", "ch1-track", "ch1-raster", "ch1-depth", "ch1-nav", "ch1-iso", "ch1-lift", "ch1-anomaly"],
+        "requiredObjectiveBeats": [
+          "ch1-fixed",
+          "ch1-track",
+          "ch1-raster",
+          "ch1-depth",
+          "ch1-nav",
+          "ch1-iso",
+          "ch1-lift",
+          "ch1-anomaly"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -259,12 +422,23 @@
     {
       "id": "ch2",
       "order": 2,
-      "beats": ["ch2-color", "ch2-approach", "a2-awakening"],
-      "before": ["ch1"],
-      "after": ["ch3"],
+      "beats": [
+        "ch2-color",
+        "ch2-approach",
+        "a2-awakening"
+      ],
+      "before": [
+        "ch1"
+      ],
+      "after": [
+        "ch3"
+      ],
       "entry": {
         "beat": "ch2-color",
-        "requirements": ["milestone:story:a1", "state:chapter/ch2-ready"],
+        "requirements": [
+          "milestone:story:a1",
+          "state:chapter/ch2-ready"
+        ],
         "stateRefs": [
           "state:world/origin",
           "state:story/active",
@@ -298,24 +472,46 @@
           "key": "a2",
           "milestone": "story:a2",
           "resumeBeat": "ch3-gather",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#a2-handoff"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#a2-handoff"
+          ]
         }
       ],
-      "objectiveRefs": ["runtime:src/story/storyDirector.ts#beat:ch2-approach"],
-      "revealRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"],
+      "objectiveRefs": [
+        "runtime:src/story/storyDirector.ts#beat:ch2-approach"
+      ],
+      "revealRefs": [
+        "runtime:src/story/storyState.ts#stageForStoryPoint:color"
+      ],
       "avBoundary": {
         "sceneContractRefs": [],
         "entry": {
-          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:ch2-color"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch2-color"],
-          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch2-color"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+          "anchorRefs": [
+            "runtime:src/story/storyDirector.ts#beat:ch2-color"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:ch2-color"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/storyInputPolicy.ts#beat:ch2-color"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:color"
+          ]
         },
         "exit": {
-          "anchorRefs": ["runtime:src/story/storyDirector.ts#a2-handoff"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:a2-awakening"],
-          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:a2-awakening"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+          "anchorRefs": [
+            "runtime:src/story/storyDirector.ts#a2-handoff"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:a2-awakening"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/storyInputPolicy.ts#beat:a2-awakening"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:color"
+          ]
         }
       },
       "acceptance": {
@@ -323,12 +519,51 @@
           "runtime:src/story/storyState.test.ts#awakening-adjacency",
           "runtime:src/story/storyDirector.test.ts#a2"
         ],
-        "requiredObjectiveBeats": ["ch2-color", "ch2-approach"],
+        "requiredObjectiveBeats": [
+          "ch2-color",
+          "ch2-approach"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -361,11 +596,18 @@
         "ch3-forage",
         "ch3-signal"
       ],
-      "before": ["ch2"],
-      "after": ["ch4"],
+      "before": [
+        "ch2"
+      ],
+      "after": [
+        "ch4"
+      ],
       "entry": {
         "beat": "ch3-gather",
-        "requirements": ["milestone:story:a2", "state:chapter/ch3-ready"],
+        "requirements": [
+          "milestone:story:a2",
+          "state:chapter/ch3-ready"
+        ],
         "stateRefs": [
           "state:world/origin",
           "state:story/active",
@@ -400,28 +642,36 @@
           "key": "a3",
           "milestone": "story:a3",
           "resumeBeat": "ch3-thirst",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickA3Dawn"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#tickA3Dawn"
+          ]
         },
         {
           "beat": "ch3-thirst",
           "key": "ch3Drank",
           "milestone": "story:ch3:drank",
           "resumeBeat": "ch3-forage",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickThirst"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#tickThirst"
+          ]
         },
         {
           "beat": "ch3-forage",
           "key": "ch3Ate",
           "milestone": "story:ch3:ate",
           "resumeBeat": "ch3-signal",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickForage"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#tickForage"
+          ]
         },
         {
           "beat": "ch3-signal",
           "key": "ch3Signal",
           "milestone": "story:ch3:signal",
           "resumeBeat": "ch4-vigil",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickSignal"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#tickSignal"
+          ]
         }
       ],
       "objectiveRefs": [
@@ -436,16 +686,32 @@
       "avBoundary": {
         "sceneContractRefs": [],
         "entry": {
-          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:ch3-gather"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch3-gather"],
-          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch3-gather"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:color"]
+          "anchorRefs": [
+            "runtime:src/story/storyDirector.ts#beat:ch3-gather"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:ch3-gather"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/storyInputPolicy.ts#beat:ch3-gather"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:color"
+          ]
         },
         "exit": {
-          "anchorRefs": ["runtime:src/story/storyDirector.ts#tickSignal"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch3-signal"],
-          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch3-signal"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:material"]
+          "anchorRefs": [
+            "runtime:src/story/storyDirector.ts#tickSignal"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:ch3-signal"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/storyInputPolicy.ts#beat:ch3-signal"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:material"
+          ]
         }
       },
       "acceptance": {
@@ -453,12 +719,54 @@
           "runtime:src/story/storyState.test.ts#chapter-3-resume",
           "runtime:src/story/storyDirector.test.ts#chapter-3"
         ],
-        "requiredObjectiveBeats": ["ch3-gather", "ch3-await-rest", "ch3-thirst", "ch3-forage", "ch3-signal"],
+        "requiredObjectiveBeats": [
+          "ch3-gather",
+          "ch3-await-rest",
+          "ch3-thirst",
+          "ch3-forage",
+          "ch3-signal"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -482,12 +790,26 @@
     {
       "id": "ch4",
       "order": 4,
-      "beats": ["ch4-vigil", "ch4-arrival", "ch4-audit", "ch4-comply", "ch4-defy", "a4-exhale"],
-      "before": ["ch3"],
-      "after": ["ch5"],
+      "beats": [
+        "ch4-vigil",
+        "ch4-arrival",
+        "ch4-audit",
+        "ch4-comply",
+        "ch4-defy",
+        "a4-exhale"
+      ],
+      "before": [
+        "ch3"
+      ],
+      "after": [
+        "ch5"
+      ],
       "entry": {
         "beat": "ch4-vigil",
-        "requirements": ["milestone:story:ch3:signal", "state:chapter/ch4-ready"],
+        "requirements": [
+          "milestone:story:ch3:signal",
+          "state:chapter/ch4-ready"
+        ],
         "stateRefs": [
           "state:world/origin",
           "state:story/active",
@@ -521,14 +843,18 @@
           "key": "ch4Vigil",
           "milestone": "story:ch4:vigil",
           "resumeBeat": "ch4-arrival",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#tickVigil"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#tickVigil"
+          ]
         },
         {
           "beat": "ch4-arrival",
           "key": "ch4Arrived",
           "milestone": "story:ch4:arrived",
           "resumeBeat": "ch4-audit",
-          "evidenceRefs": ["runtime:src/story/storyDirector.ts#arrival-handback"]
+          "evidenceRefs": [
+            "runtime:src/story/storyDirector.ts#arrival-handback"
+          ]
         },
         {
           "beat": "ch4-audit",
@@ -557,14 +883,19 @@
           "key": "ch4Defied",
           "milestone": "story:ch4:refusal-complete",
           "resumeBeat": "a4-exhale",
-          "evidenceRefs": ["milestone:story:defy:refusal-committed"]
+          "evidenceRefs": [
+            "milestone:story:defy:refusal-committed"
+          ]
         },
         {
           "beat": "a4-exhale",
           "key": "a4Handback",
           "milestone": "story:a4:handback",
           "resumeBeat": "ch5-maw",
-          "evidenceRefs": ["milestone:story:a4", "milestone:story:a4:field-pack-dropped"]
+          "evidenceRefs": [
+            "milestone:story:a4",
+            "milestone:story:a4:field-pack-dropped"
+          ]
         }
       ],
       "objectiveRefs": [
@@ -580,18 +911,36 @@
         "scene:distance-between-fires@intent-v1#reveal:rev-a4-alive"
       ],
       "avBoundary": {
-        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "sceneContractRefs": [
+          "distance-between-fires@intent-v1"
+        ],
         "entry": {
-          "anchorRefs": ["runtime:src/story/storyDirector.ts#beat:ch4-vigil"],
-          "scoreRefs": ["runtime:src/story/storyScore.ts#MOODS:ch4-vigil"],
-          "cameraRefs": ["runtime:src/story/storyInputPolicy.ts#beat:ch4-vigil"],
-          "paletteRefs": ["runtime:src/story/storyState.ts#stageForStoryPoint:material"]
+          "anchorRefs": [
+            "runtime:src/story/storyDirector.ts#beat:ch4-vigil"
+          ],
+          "scoreRefs": [
+            "runtime:src/story/storyScore.ts#MOODS:ch4-vigil"
+          ],
+          "cameraRefs": [
+            "runtime:src/story/storyInputPolicy.ts#beat:ch4-vigil"
+          ],
+          "paletteRefs": [
+            "runtime:src/story/storyState.ts#stageForStoryPoint:material"
+          ]
         },
         "exit": {
-          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.a4.handback"],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.a4.breath-front"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.maw.01-follow-the-tear"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.a4.handback"
+          ],
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.a4.breath-front"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.maw.01-follow-the-tear"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         }
       },
       "acceptance": {
@@ -599,12 +948,53 @@
           "scene:distance-between-fires@intent-v1#evidence",
           "runtime:src/story/emergentStoryDirector.test.ts#chapter-4"
         ],
-        "requiredObjectiveBeats": ["ch4-vigil", "ch4-audit", "ch4-comply", "ch4-defy"],
+        "requiredObjectiveBeats": [
+          "ch4-vigil",
+          "ch4-audit",
+          "ch4-comply",
+          "ch4-defy"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -628,12 +1018,21 @@
     {
       "id": "ch5",
       "order": 5,
-      "beats": ["ch5-maw"],
-      "before": ["ch4"],
-      "after": ["ch6"],
+      "beats": [
+        "ch5-maw"
+      ],
+      "before": [
+        "ch4"
+      ],
+      "after": [
+        "ch6"
+      ],
       "entry": {
         "beat": "ch5-maw",
-        "requirements": ["milestone:story:a4:handback", "state:chapter/ch5-ready"],
+        "requirements": [
+          "milestone:story:a4:handback",
+          "state:chapter/ch5-ready"
+        ],
         "stateRefs": [
           "state:world/origin",
           "state:story/active",
@@ -670,22 +1069,36 @@
           "key": "ch5Maw",
           "milestone": "story:ch5:maw-repaired",
           "resumeBeat": "ch6-dive",
-          "evidenceRefs": ["milestone:maw_repaired"]
+          "evidenceRefs": [
+            "milestone:maw_repaired"
+          ]
         }
       ],
-      "objectiveRefs": ["runtime:src/story/emergentStoryDirector.ts#tickMaw"],
-      "revealRefs": ["scene:distance-between-fires@intent-v1#reveal:rev-purpose-after-power"],
+      "objectiveRefs": [
+        "runtime:src/story/emergentStoryDirector.ts#tickMaw"
+      ],
+      "revealRefs": [
+        "scene:distance-between-fires@intent-v1#reveal:rev-purpose-after-power"
+      ],
       "avBoundary": {
-        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "sceneContractRefs": [
+          "distance-between-fires@intent-v1"
+        ],
         "entry": {
           "anchorRefs": [
             "scene:distance-between-fires@intent-v1#anchor:anc.maw.pack-attended",
             "scene:distance-between-fires@intent-v1#anchor:anc.maw.kit-acquired",
             "scene:distance-between-fires@intent-v1#anchor:anc.maw.repair-begun"
           ],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.maw.direction"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.maw.02-open-the-pack"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.maw.direction"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.maw.02-open-the-pack"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         },
         "exit": {
           "anchorRefs": [
@@ -693,9 +1106,15 @@
             "scene:distance-between-fires@intent-v1#anchor:anc.maw.direction-handback",
             "scene:distance-between-fires@intent-v1#anchor:anc.maw.pond-resonance"
           ],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.maw.direction"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.dive.01-cross-the-line"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.maw.direction"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.dive.01-cross-the-line"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         }
       },
       "acceptance": {
@@ -703,12 +1122,50 @@
           "scene:distance-between-fires@intent-v1#evidence",
           "runtime:src/story/emergentStoryDirector.test.ts#maw"
         ],
-        "requiredObjectiveBeats": ["ch5-maw"],
+        "requiredObjectiveBeats": [
+          "ch5-maw"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -732,9 +1189,15 @@
     {
       "id": "ch6",
       "order": 6,
-      "beats": ["ch6-dive"],
-      "before": ["ch5"],
-      "after": ["ch7"],
+      "beats": [
+        "ch6-dive"
+      ],
+      "before": [
+        "ch5"
+      ],
+      "after": [
+        "ch7"
+      ],
       "entry": {
         "beat": "ch6-dive",
         "requirements": [
@@ -790,21 +1253,43 @@
           ]
         }
       ],
-      "objectiveRefs": ["runtime:src/story/emergentDive.ts#getAuthoredDiveGuidance"],
-      "revealRefs": ["scene:distance-between-fires@intent-v1#reveal:rev-body-counts"],
+      "objectiveRefs": [
+        "runtime:src/story/emergentDive.ts#getAuthoredDiveGuidance"
+      ],
+      "revealRefs": [
+        "scene:distance-between-fires@intent-v1#reveal:rev-body-counts"
+      ],
       "avBoundary": {
-        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "sceneContractRefs": [
+          "distance-between-fires@intent-v1"
+        ],
         "entry": {
-          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.dive.waterline"],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.dive.two-clocks"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.dive.02-air-stays-above"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.dive.waterline"
+          ],
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.dive.two-clocks"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.dive.02-air-stays-above"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         },
         "exit": {
-          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.dive.shore-bank"],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.dive.two-clocks"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.reconstruct.01-wreck-remembers"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.dive.shore-bank"
+          ],
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.dive.two-clocks"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.reconstruct.01-wreck-remembers"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         }
       },
       "acceptance": {
@@ -812,12 +1297,50 @@
           "scene:distance-between-fires@intent-v1#evidence",
           "runtime:src/story/emergentStoryDirector.test.ts#dive-guidance"
         ],
-        "requiredObjectiveBeats": ["ch6-dive"],
+        "requiredObjectiveBeats": [
+          "ch6-dive"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -841,9 +1364,16 @@
     {
       "id": "ch7",
       "order": 7,
-      "beats": ["ch7-reconstruct", "ch7-board"],
-      "before": ["ch6"],
-      "after": ["ch8"],
+      "beats": [
+        "ch7-reconstruct",
+        "ch7-board"
+      ],
+      "before": [
+        "ch6"
+      ],
+      "after": [
+        "ch8"
+      ],
       "entry": {
         "beat": "ch7-reconstruct",
         "requirements": [
@@ -914,7 +1444,9 @@
         "scene:distance-between-fires@intent-v1#reveal:rev-repair-reinterprets"
       ],
       "avBoundary": {
-        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "sceneContractRefs": [
+          "distance-between-fires@intent-v1"
+        ],
         "entry": {
           "anchorRefs": [
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.diagnosis",
@@ -925,9 +1457,15 @@
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.route-online",
             "scene:distance-between-fires@intent-v1#anchor:anc.reconstruct.calibration"
           ],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.reconstruct.one-instrument"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.reconstruct.02-bench-wakes"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.reconstruct.one-instrument"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.reconstruct.02-bench-wakes"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         },
         "exit": {
           "anchorRefs": [
@@ -936,9 +1474,15 @@
             "scene:distance-between-fires@intent-v1#anchor:anc.board.pressure-seal",
             "scene:distance-between-fires@intent-v1#anchor:anc.board.cockpit-handback"
           ],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.board.one-owner"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.board.03-pressure-boundary"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.board.one-owner"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.board.03-pressure-boundary"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         }
       },
       "acceptance": {
@@ -949,12 +1493,51 @@
           "runtime:src/story/reconstructionCalibration.test.ts#physical-calibration",
           "runtime:src/story/physicalBoarding.test.ts#physical-boarding"
         ],
-        "requiredObjectiveBeats": ["ch7-reconstruct", "ch7-board"],
+        "requiredObjectiveBeats": [
+          "ch7-reconstruct",
+          "ch7-board"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -978,9 +1561,17 @@
     {
       "id": "ch8",
       "order": 8,
-      "beats": ["ch8-launch", "ch8-crossing", "ch8-landfall"],
-      "before": ["ch7"],
-      "after": ["ch9"],
+      "beats": [
+        "ch8-launch",
+        "ch8-crossing",
+        "ch8-landfall"
+      ],
+      "before": [
+        "ch7"
+      ],
+      "after": [
+        "ch9"
+      ],
       "entry": {
         "beat": "ch8-launch",
         "requirements": [
@@ -1050,24 +1641,44 @@
           ]
         }
       ],
-      "objectiveRefs": ["runtime:src/story/emergentStoryDirector.ts#tickLaunchAndCrossing"],
+      "objectiveRefs": [
+        "runtime:src/story/emergentStoryDirector.ts#tickLaunchAndCrossing"
+      ],
       "revealRefs": [
         "scene:distance-between-fires@intent-v1#reveal:rev-distance-enlarges-relation",
         "scene:distance-between-fires@intent-v1#reveal:rev-a5-deferred"
       ],
       "avBoundary": {
-        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "sceneContractRefs": [
+          "distance-between-fires@intent-v1"
+        ],
         "entry": {
-          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.launch.ignition"],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.launch.ground-relents"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.launch.01-engine-finds-weight"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.launch.ignition"
+          ],
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.launch.ground-relents"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.launch.01-engine-finds-weight"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         },
         "exit": {
-          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.landfall.handback"],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.landfall.world-first"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.settle.01-too-much-signal"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.landfall.handback"
+          ],
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.landfall.world-first"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.settle.01-too-much-signal"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         }
       },
       "acceptance": {
@@ -1075,12 +1686,52 @@
           "scene:distance-between-fires@intent-v1#evidence",
           "runtime:src/story/storyState.test.ts#tidegarden-landfall"
         ],
-        "requiredObjectiveBeats": ["ch8-launch", "ch8-crossing", "ch8-landfall"],
+        "requiredObjectiveBeats": [
+          "ch8-launch",
+          "ch8-crossing",
+          "ch8-landfall"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,
@@ -1104,9 +1755,16 @@
     {
       "id": "ch9",
       "order": 9,
-      "beats": ["ch9-settle", "ch9-hearth"],
-      "before": ["ch8"],
-      "after": [],
+      "beats": [
+        "ch9-settle",
+        "ch9-hearth"
+      ],
+      "before": [
+        "ch8"
+      ],
+      "after": [
+        "ch10"
+      ],
       "entry": {
         "beat": "ch9-settle",
         "requirements": [
@@ -1161,25 +1819,45 @@
           ]
         }
       ],
-      "objectiveRefs": ["runtime:src/story/tidegardenSettlement.ts#getTidegardenSettlementGuidance"],
+      "objectiveRefs": [
+        "runtime:src/story/tidegardenSettlement.ts#getTidegardenSettlementGuidance"
+      ],
       "revealRefs": [
         "scene:distance-between-fires@intent-v1#reveal:rev-abundance-is-choice",
         "scene:distance-between-fires@intent-v1#reveal:rev-home-between-worlds",
         "scene:distance-between-fires@intent-v1#reveal:rev-worker9-trace"
       ],
       "avBoundary": {
-        "sceneContractRefs": ["distance-between-fires@intent-v1"],
+        "sceneContractRefs": [
+          "distance-between-fires@intent-v1"
+        ],
         "entry": {
-          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.settle.scanner-overload"],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.settle.abundance-choice"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.settle.02-see-one-relation"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.settle.scanner-overload"
+          ],
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.settle.abundance-choice"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.settle.02-see-one-relation"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         },
         "exit": {
-          "anchorRefs": ["scene:distance-between-fires@intent-v1#anchor:anc.hearth.freeplay-handback"],
-          "scoreRefs": ["scene:distance-between-fires@intent-v1#score:sc.hearth.between-fires"],
-          "cameraRefs": ["scene:distance-between-fires@intent-v1#camera:cin.hearth.04-the-line-remains-open"],
-          "paletteRefs": ["scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"]
+          "anchorRefs": [
+            "scene:distance-between-fires@intent-v1#anchor:anc.hearth.freeplay-handback"
+          ],
+          "scoreRefs": [
+            "scene:distance-between-fires@intent-v1#score:sc.hearth.between-fires"
+          ],
+          "cameraRefs": [
+            "scene:distance-between-fires@intent-v1#camera:cin.hearth.04-the-line-remains-open"
+          ],
+          "paletteRefs": [
+            "scene:distance-between-fires@intent-v1#palette:pal.distance-between-fires"
+          ]
         }
       },
       "acceptance": {
@@ -1187,12 +1865,250 @@
           "scene:distance-between-fires@intent-v1#evidence",
           "runtime:src/story/emergentStoryDirector.test.ts#settlement-guidance"
         ],
-        "requiredObjectiveBeats": ["ch9-settle", "ch9-hearth"],
+        "requiredObjectiveBeats": [
+          "ch9-settle",
+          "ch9-hearth"
+        ],
         "requiredVariantProfiles": [
-          { "id": "desktop-high", "qualityProfile": "HIGH", "deviceClass": "desktop", "viewport": { "width": 1440, "height": 900 }, "reducedMotion": false },
-          { "id": "desktop-medium-reduced-motion", "qualityProfile": "MEDIUM", "deviceClass": "desktop", "viewport": { "width": 1280, "height": 720 }, "reducedMotion": true },
-          { "id": "desktop-low", "qualityProfile": "LOW", "deviceClass": "desktop", "viewport": { "width": 1024, "height": 768 }, "reducedMotion": false },
-          { "id": "mobile-potato", "qualityProfile": "POTATO", "deviceClass": "mobile", "viewport": { "width": 390, "height": 844 }, "reducedMotion": true }
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
+        ],
+        "performanceBudgets": {
+          "maxEntryLoadMs": 45000,
+          "maxSceneReadyMs": 60000,
+          "maxBoundaryMs": 480000,
+          "minFps": 20,
+          "maxP95FrameTimeMs": 50,
+          "maxFrameGapMs": 1000,
+          "maxLongTasks": 50,
+          "maxHeapBytes": 1342177280
+        },
+        "budgets": {
+          "minimumColdRuns": 3,
+          "minimumVariantProfiles": 4,
+          "maxOpenCriticalDefects": 0,
+          "maxOpenHighDefects": 0,
+          "maxRepairLoops": 4
+        }
+      }
+    },
+    {
+      "id": "ch10",
+      "order": 10,
+      "beats": [
+        "ch10-cold",
+        "ch10-ask",
+        "ch10-transit"
+      ],
+      "before": [
+        "ch9"
+      ],
+      "after": [],
+      "entry": {
+        "beat": "ch10-cold",
+        "requirements": [
+          "milestone:story:ch9:hearth",
+          "state:story/complete",
+          "state:free-play/two-world-handoff"
+        ],
+        "stateRefs": [
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive"
+        ]
+      },
+      "exit": {
+        "beat": "ch10-transit",
+        "guarantees": [
+          "milestone:story:ch10-complete",
+          "milestone:story:ch10-bearing-claimed",
+          "milestone:story:ch10-seam-passed",
+          "milestone:story:complete",
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:space-station/targeted",
+          "state:reality/alive"
+        ],
+        "stateRefs": [
+          "state:story/complete",
+          "state:free-play/two-world-handoff",
+          "state:reality/alive",
+          "state:space-station/targeted",
+          "state:control/flight"
+        ]
+      },
+      "checkpoints": [
+        {
+          "beat": "ch10-cold",
+          "key": "ch10FabricationRefused",
+          "milestone": "story:ch10-fabrication-refused",
+          "resumeBeat": "ch10-ask",
+          "evidenceRefs": [
+            "milestone:story:ch10-cold-noticed",
+            "milestone:story:ch10-fault-read"
+          ]
+        },
+        {
+          "beat": "ch10-ask",
+          "key": "ch10BearingClaimed",
+          "milestone": "story:ch10-bearing-claimed",
+          "resumeBeat": "ch10-transit",
+          "evidenceRefs": [
+            "milestone:story:ch10-relay-asked",
+            "milestone:story:ch10-relay-answered",
+            "state:space-station/targeted",
+            "state:story/ch10-bearing-claimed"
+          ]
+        },
+        {
+          "beat": "ch10-transit",
+          "key": "ch10Complete",
+          "milestone": "story:ch10-complete",
+          "resumeBeat": "done",
+          "evidenceRefs": [
+            "milestone:story:ch10-transit-ignited",
+            "state:story/ch10-seam-passed",
+            "milestone:story:ch10-station-resolved"
+          ]
+        }
+      ],
+      "objectiveRefs": [
+        "runtime:src/story/storyObjectiveGuidance.ts#chapter-10-objective-ladders",
+        "runtime:src/story/emergentStoryDirector.ts#chapter-10-guidance"
+      ],
+      "revealRefs": [
+        "scene:ch10-station-introduction@draft-v6#reveal:r1",
+        "scene:ch10-station-introduction@draft-v6#reveal:r2",
+        "scene:ch10-station-introduction@draft-v6#reveal:r3",
+        "scene:ch10-station-introduction@draft-v6#reveal:r4",
+        "scene:ch10-station-introduction@draft-v6#reveal:r5-non-spends"
+      ],
+      "avBoundary": {
+        "sceneContractRefs": [
+          "ch10-station-introduction@draft-v6"
+        ],
+        "entry": {
+          "anchorRefs": [
+            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.cold-noticed"
+          ],
+          "scoreRefs": [
+            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.cold-step"
+          ],
+          "cameraRefs": [
+            "scene:ch10-station-introduction@draft-v6#camera:cin.cold.01-hum-drop"
+          ],
+          "paletteRefs": [
+            "scene:ch10-station-introduction@draft-v6#palette:pal.ch10.fire-night-and-station-amber"
+          ]
+        },
+        "exit": {
+          "anchorRefs": [
+            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.station-resolved",
+            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.threshold-handback"
+          ],
+          "scoreRefs": [
+            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.station-resolved",
+            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.threshold-release"
+          ],
+          "cameraRefs": [
+            "scene:ch10-station-introduction@draft-v6#camera:cin.transit.04-resolve",
+            "scene:ch10-station-introduction@draft-v6#camera:cin.transit.05-threshold-handback"
+          ],
+          "paletteRefs": [
+            "scene:ch10-station-introduction@draft-v6#palette:pal.ch10.fire-night-and-station-amber"
+          ]
+        }
+      },
+      "acceptance": {
+        "evidenceRefs": [
+          "scene:ch10-station-introduction@draft-v6#evidence",
+          "runtime:src/story/emergentStoryDirector.test.ts#chapter-10-guidance",
+          "runtime:src/story/storyBoundaryTelemetry.test.ts#chapter-10-station-claims"
+        ],
+        "requiredObjectiveBeats": [
+          "ch10-cold",
+          "ch10-ask",
+          "ch10-transit"
+        ],
+        "requiredVariantProfiles": [
+          {
+            "id": "desktop-high",
+            "qualityProfile": "HIGH",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1440,
+              "height": 900
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "desktop-medium-reduced-motion",
+            "qualityProfile": "MEDIUM",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1280,
+              "height": 720
+            },
+            "reducedMotion": true
+          },
+          {
+            "id": "desktop-low",
+            "qualityProfile": "LOW",
+            "deviceClass": "desktop",
+            "viewport": {
+              "width": 1024,
+              "height": 768
+            },
+            "reducedMotion": false
+          },
+          {
+            "id": "mobile-potato",
+            "qualityProfile": "POTATO",
+            "deviceClass": "mobile",
+            "viewport": {
+              "width": 390,
+              "height": 844
+            },
+            "reducedMotion": true
+          }
         ],
         "performanceBudgets": {
           "maxEntryLoadMs": 45000,

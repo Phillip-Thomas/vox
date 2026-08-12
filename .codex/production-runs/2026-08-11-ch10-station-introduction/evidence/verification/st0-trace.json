@@ -1,0 +1,160 @@
+{
+  "capturedAt": "2026-08-12T01:04:32.118Z",
+  "contexts": [
+    {
+      "id": "pure-sandbox",
+      "url": "?profile=LOW",
+      "beat": null,
+      "snapshotChapter": "none",
+      "predicateInput": {
+        "storyWorld": true,
+        "storyComplete": false,
+        "twoWorldHandoff": false,
+        "sandbox": false
+      },
+      "predicate": false,
+      "dayPhase": 0.041745416666070456,
+      "nightVisibilityNow": 0.7614547619081689,
+      "periodSeconds": 90,
+      "crossingsPer180sWindow": 2,
+      "profile": {
+        "phaseRadians": 0,
+        "periodSeconds": 90,
+        "longitudeAmplitudeRadians": 1,
+        "latitudeAmplitudeRadians": 0.6
+      },
+      "minPixels": 2.4,
+      "maxPixels": 3,
+      "color": "#ffb45a",
+      "nightFloor": 0.35,
+      "draws": {
+        "canvas": true
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "station-sandbox",
+      "url": "?spacestation=1&profile=LOW",
+      "beat": null,
+      "snapshotChapter": "none",
+      "predicateInput": {
+        "storyWorld": true,
+        "storyComplete": false,
+        "twoWorldHandoff": false,
+        "sandbox": true
+      },
+      "predicate": false,
+      "dayPhase": 0.25,
+      "nightVisibilityNow": 0,
+      "periodSeconds": 90,
+      "crossingsPer180sWindow": 2,
+      "profile": {
+        "phaseRadians": 0,
+        "periodSeconds": 90,
+        "longitudeAmplitudeRadians": 1,
+        "latitudeAmplitudeRadians": 0.6
+      },
+      "minPixels": 2.4,
+      "maxPixels": 3,
+      "color": "#ffb45a",
+      "nightFloor": 0.35,
+      "draws": {
+        "canvas": true
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "pre-done-story-beat",
+      "url": "?story=ch9-settle&profile=LOW",
+      "beat": "ch9-settle",
+      "snapshotChapter": "ch9",
+      "predicateInput": {
+        "storyWorld": true,
+        "storyComplete": false,
+        "twoWorldHandoff": false,
+        "sandbox": false
+      },
+      "predicate": false,
+      "dayPhase": 0.041229583333929565,
+      "nightVisibilityNow": 0.764402380948974,
+      "periodSeconds": 90,
+      "crossingsPer180sWindow": 2,
+      "profile": {
+        "phaseRadians": 0,
+        "periodSeconds": 90,
+        "longitudeAmplitudeRadians": 1,
+        "latitudeAmplitudeRadians": 0.6
+      },
+      "minPixels": 2.4,
+      "maxPixels": 3,
+      "color": "#ffb45a",
+      "nightFloor": 0.35,
+      "draws": {
+        "canvas": true
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "ch10-cold",
+      "url": "?story=ch10-cold&profile=LOW",
+      "beat": "ch10-cold",
+      "snapshotChapter": "ch10",
+      "predicateInput": {
+        "storyWorld": true,
+        "storyComplete": true,
+        "twoWorldHandoff": true,
+        "sandbox": false
+      },
+      "predicate": true,
+      "dayPhase": 0.041366666666666774,
+      "nightVisibilityNow": 0.763619047619047,
+      "periodSeconds": 90,
+      "crossingsPer180sWindow": 2,
+      "profile": {
+        "phaseRadians": 0,
+        "periodSeconds": 90,
+        "longitudeAmplitudeRadians": 1,
+        "latitudeAmplitudeRadians": 0.6
+      },
+      "minPixels": 2.4,
+      "maxPixels": 3,
+      "color": "#ffb45a",
+      "nightFloor": 0.35,
+      "draws": {
+        "canvas": true
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "done-free-play",
+      "url": "?story=done&profile=LOW",
+      "beat": "done",
+      "snapshotChapter": "complete",
+      "predicateInput": {
+        "storyWorld": true,
+        "storyComplete": true,
+        "twoWorldHandoff": false,
+        "sandbox": false
+      },
+      "predicate": false,
+      "dayPhase": 0.04115958333313463,
+      "nightVisibilityNow": 0.7648023809535164,
+      "periodSeconds": 90,
+      "crossingsPer180sWindow": 2,
+      "profile": {
+        "phaseRadians": 0,
+        "periodSeconds": 90,
+        "longitudeAmplitudeRadians": 1,
+        "latitudeAmplitudeRadians": 0.6
+      },
+      "minPixels": 2.4,
+      "maxPixels": 3,
+      "color": "#ffb45a",
+      "nightFloor": 0.35,
+      "draws": {
+        "canvas": true
+      },
+      "pageErrors": []
+    }
+  ]
+}

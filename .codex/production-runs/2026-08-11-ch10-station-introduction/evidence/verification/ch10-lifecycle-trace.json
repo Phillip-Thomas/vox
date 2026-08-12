@@ -1,0 +1,350 @@
+{
+  "capturedAt": "2026-08-12T03:26:06.610Z",
+  "base": "http://localhost:5176",
+  "scenarios": [
+    {
+      "id": "ch10-cold deep link",
+      "url": "?story=ch10-cold&profile=LOW",
+      "transitions": [
+        {
+          "scenario": "ch10-cold deep link",
+          "step": "entry",
+          "beat": "ch10-cold",
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "markerChip": "habitat core · read the fault · 46m",
+          "health": "ready",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+          "anchorId": "anc.ch10.cold-noticed",
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-cold deep link",
+          "step": "after-refused-out-of-order-fabrication",
+          "beat": "ch10-cold",
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "markerChip": "habitat core · read the fault · 46m",
+          "health": "ready",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+          "anchorId": "anc.ch10.cold-noticed",
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-cold deep link",
+          "step": "after-fault-read",
+          "beat": "ch10-cold",
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "markerChip": "kestrel fabricator · attempt replacement · 1m",
+          "health": "ready",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR · ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+          "caption": null,
+          "anchorId": "anc.ch10.fault-read",
+          "cueCount": 1,
+          "cueTypes": [
+            "objective-enter"
+          ],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-cold deep link",
+          "step": "after-fabrication-refused",
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "markerChip": "kestrel hatch · reboard · 1m",
+          "health": "ready",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "caption": "(the channel at the wreck never closed. askin",
+          "anchorId": null,
+          "cueCount": 2,
+          "cueTypes": [
+            "objective-enter",
+            "objective-enter"
+          ],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-cold deep link",
+          "step": "beat-exit",
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "markerChip": "kestrel hatch · reboard · 1m",
+          "health": "ready",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "anchorId": null,
+          "cueCount": 2,
+          "cueTypes": [
+            "objective-enter",
+            "objective-enter"
+          ],
+          "commitError": null
+        }
+      ],
+      "feedbackLog": [
+        {
+          "at": 17415,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:fabrication-attempt",
+            "action": "craft"
+          },
+          "beat": "ch10-cold"
+        },
+        {
+          "at": 22335,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:return:reboard",
+            "action": "travel"
+          },
+          "beat": "ch10-ask"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "ch10-ask deep link",
+      "url": "?story=ch10-ask&profile=LOW",
+      "transitions": [
+        {
+          "scenario": "ch10-ask deep link",
+          "step": "entry",
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "markerChip": "kestrel hatch · reboard · 1m",
+          "health": "ready",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "anchorId": null,
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-ask deep link",
+          "step": "after-relay-request",
+          "beat": "ch10-ask",
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "markerChip": "kestrel hatch · reboard · 1m",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": null,
+          "anchorId": "anc.ch10.relay-answer",
+          "cueCount": 1,
+          "cueTypes": [
+            "objective-enter"
+          ],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-ask deep link",
+          "step": "after-relay-answer",
+          "beat": "ch10-ask",
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "markerChip": "kestrel hatch · reboard · 1m",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "workOrder": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchorId": "anc.ch10.relay-answer",
+          "cueCount": 1,
+          "cueTypes": [
+            "objective-enter"
+          ],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-ask deep link",
+          "step": "after-bearing-claim",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": "kestrel hatch · reboard · 1m",
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": "(issued, not offered. the going is still yours.)",
+          "anchorId": null,
+          "cueCount": 2,
+          "cueTypes": [
+            "objective-enter",
+            "objective-enter"
+          ],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-ask deep link",
+          "step": "post-claim-marker-state",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": "kestrel hatch · reboard · 1m",
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": "(issued, not offered. the going is still yours.)",
+          "anchorId": null,
+          "cueCount": 2,
+          "cueTypes": [
+            "objective-enter",
+            "objective-enter"
+          ],
+          "commitError": null
+        }
+      ],
+      "feedbackLog": [
+        {
+          "at": 16583,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:bearing-claim",
+            "action": "interact"
+          },
+          "beat": "ch10-ask"
+        },
+        {
+          "at": 22868,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:transit:ignite",
+            "action": "interact"
+          },
+          "beat": "ch10-transit"
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "ch10-transit deep link",
+      "url": "?story=ch10-transit&profile=LOW",
+      "transitions": [
+        {
+          "scenario": "ch10-transit deep link",
+          "step": "entry-T1-ignite",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": null,
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "anchorId": null,
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-transit deep link",
+          "step": "after-30s-standing",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": null,
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "anchorId": null,
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-transit deep link",
+          "step": "after-60s-standing",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": null,
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "anchorId": null,
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        }
+      ],
+      "feedbackLog": [],
+      "pageErrors": []
+    },
+    {
+      "id": "ch10-transit movie lane",
+      "url": "?story=ch10-transit&movie=1&profile=LOW",
+      "transitions": [
+        {
+          "scenario": "ch10-transit movie lane",
+          "step": "entry-T1-ignite",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": null,
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "anchorId": null,
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-transit movie lane",
+          "step": "after-60s-movie",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": null,
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "anchorId": null,
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        },
+        {
+          "scenario": "ch10-transit movie lane",
+          "step": "after-120s-movie",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "markerChip": null,
+          "health": "ready",
+          "requiresMarker": "false",
+          "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "anchorId": null,
+          "cueCount": 0,
+          "cueTypes": [],
+          "commitError": null
+        }
+      ],
+      "feedbackLog": [],
+      "pageErrors": []
+    }
+  ]
+}

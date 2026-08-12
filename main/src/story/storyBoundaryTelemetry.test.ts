@@ -26,7 +26,14 @@ function runtime(
       signedAuthority: 'player-camera'
     },
     maw: { repaired: true, ritualPhase: 'committed' },
-    durable: { storyComplete: false, keelMemoryBanked: false, twoWorldHandoff: false }
+    durable: {
+      storyComplete: false,
+      keelMemoryBanked: false,
+      twoWorldHandoff: false,
+      ch10BearingClaimed: false,
+      ch10SeamPassed: false,
+      stationDockingAuthorized: false
+    }
   };
   return {
     ...base,
@@ -119,7 +126,14 @@ describe('story boundary telemetry', () => {
     const telemetry = deriveStoryBoundaryState(runtime({
       story: { active: false, chapter: 'complete', beat: 'done', runId: 7 },
       world: { systemId: '-1,-1', activePlanetId: TIDEGARDEN_WORLD_ID , spaceStationTargetId: null},
-      durable: { storyComplete: true, keelMemoryBanked: true, twoWorldHandoff: true }
+      durable: {
+        storyComplete: true,
+        keelMemoryBanked: true,
+        twoWorldHandoff: true,
+        ch10BearingClaimed: false,
+        ch10SeamPassed: false,
+        stationDockingAuthorized: false
+      }
     }));
 
     expect(telemetry.stateRefs).toEqual(expect.arrayContaining([
@@ -182,5 +196,30 @@ describe('space station boundary claims', () => {
     expect(refs).toContain('state:space-station/target=-1,-1:a0');
     // The planet the player left is still the world that is loaded.
     expect(refs).toContain(`state:system-flight/active-planet=${STORY_PRIMARY_WORLD_ID}`);
+  });
+
+  it('publishes the chapter 10 bearing and seam claims from durable facts only', () => {
+    const claimed = deriveStoryBoundaryState(runtime({
+      durable: {
+        storyComplete: true,
+        keelMemoryBanked: true,
+        twoWorldHandoff: true,
+        ch10BearingClaimed: true,
+        ch10SeamPassed: true,
+        stationDockingAuthorized: false
+      }
+    })).stateRefs;
+    expect(claimed).toContain('state:story/ch10-bearing-claimed');
+    expect(claimed).toContain('state:story/ch10-seam-passed');
+    // Defined this run, granted by nothing: the fence must read as absent even
+    // with every other chapter 10 fact true.
+    expect(claimed).not.toContain('state:station/docking-authorized');
+  });
+
+  it('says nothing about chapter 10 before its facts are earned', () => {
+    const refs = deriveStoryBoundaryState(runtime()).stateRefs;
+    expect(refs).not.toContain('state:story/ch10-bearing-claimed');
+    expect(refs).not.toContain('state:story/ch10-seam-passed');
+    expect(refs).not.toContain('state:station/docking-authorized');
   });
 });

@@ -1,4 +1,29 @@
 import { beforeEach, describe, expect, it } from 'vitest';
+import { CORRIDOR_RANGE, SCAN_RANGE } from '../game/spaceStation/spaceStationApproach.ts';
+import { subscribeStoryUxFeedback } from './ux/feedbackCues.ts';
+import {
+  CH10_ANCHOR_INTENSITY,
+  CH10_HANDBACK_PARK_INTENSITY,
+  CH10_MAX_INTENSITY,
+  chapter10RelayAnswerDelaySeconds,
+  chapter10ScoreMilestones,
+  enterEmergentScoreBeat,
+  getChapter10ScoreSnapshot,
+  isChapter10Beat,
+  noteChapter10ScoreAnchor,
+  releaseChapter10Score,
+  resetEmergentScoreDirectorForTests,
+  resolveChapter10ScoreState,
+  type Chapter10ScoreMilestones
+} from './emergentScoreDirector.ts';
+import {
+  CH10_CARRIER_DEGREE,
+  CH10_CARRIER_OCTAVE_DEGREE,
+  getChapter10ScoreMood,
+  getStoryScoreMood,
+  resetStoryScoreRuntime,
+  type Chapter10ScoreVariant
+} from './storyScore.ts';
 import * as THREE from 'three';
 import { dispatchGameplayCommand } from '../game/commandDispatchAdapter.ts';
 import type { BlockId } from '../game/data/blocks.ts';
@@ -21,7 +46,8 @@ import {
   resetShipRestoration
 } from '../game/systems/shipRestoration.ts';
 import { resetMaw } from '../game/systems/mawSystem.ts';
-import { resetHabitats } from '../game/systems/habitatSystem.ts';
+import { commitHabitatCorePlacement, resetHabitats } from '../game/systems/habitatSystem.ts';
+import { setShipPosition } from '../state/shipProximity.ts';
 import {
   placePiece,
   resetStructures,
@@ -68,9 +94,26 @@ import {
   CH8_STACK_ONE_SECONDS,
   CH8_STACK_THREE_SECONDS,
   CH8_STACK_TWO_SECONDS,
+  CH10_FREEPLAY_GRACE_SECONDS,
+  CH10_HEARTH_NOTICE_RADIUS,
+  CHAPTER_10_COPY,
+  chapter10ColdEntryReady,
+  chapter10ClaimedStationBody,
+  chapter10WreckSitePosition,
+  getChapter10MarkerTarget,
+  reconcileChapter10StationTarget,
+  chapter10SeamConditionMet,
+  commitChapter10FabricationAttempt,
+  commitChapter10FaultRead,
   emergentStoryDirectorTick,
   enterEmergentStoryBeat,
-  getEmergentStoryVoiceDiag
+  getEmergentStoryVoiceDiag,
+  K7_REVEAL_GUARD_SECONDS,
+  resetChapter10FreePlayWatch,
+  SEAM_FALLBACK_RANGE,
+  SEAM_OF_LIGHT_MIN_BLEND,
+  SEAM_VIEW_CONE_DEG,
+  STATION_STANDOFF_DISTANCE
 } from './emergentStoryDirector.ts';
 import {
   getEmergentStoryEvents,
@@ -81,7 +124,13 @@ import {
   getWreckReconstructionAction,
   performWreckReconstructionAction
 } from './wreckReconstruction.ts';
-import { getActiveGuidedStoryObjective } from './ux/objectiveDirector.ts';
+import {
+  activateGuidedStoryObjective,
+  clearGuidedStoryObjective,
+  getActiveGuidedStoryObjective,
+  getGuidedStoryObjectiveHealth,
+  observeGuidedStoryMarker
+} from './ux/objectiveDirector.ts';
 import {
   advanceToBeat,
   beginStory,
@@ -108,9 +157,12 @@ import {
   validateTidegardenHabitatSite,
   type TidegardenRelationshipProof
 } from './tidegardenSettlement.ts';
-import { STORY_SEED, storyAnchors } from './world/storyWorld.ts';
+import { chapter10AskDescentSystemTarget } from './autopilot.ts';
+import { buildStarSystemManifest } from '../game/starSystem.ts';
+import { STORY_COORDINATE, STORY_SEED, storyAnchors } from './world/storyWorld.ts';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
 import {
+  debugStartInDescent,
   debugStartInSpace,
   enterAtmosphere,
   enterShip,
@@ -122,6 +174,7 @@ import {
 import {
   commitSystemBodyTarget,
   commitSystemPlanetHandoff,
+  getSystemFlightSnapshot,
   resetSystemFlightForInterstellarArrival,
   resetSystemFlightStoreForTests,
   setActiveSystemPlanet
@@ -1343,5 +1396,829 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
       chapter: 'complete',
       beat: 'done'
     });
+  });
+});
+
+describe('objective lifecycle across a beat boundary', () => {
+  beforeEach(() => {
+    resetProgression();
+    clearGuidedStoryObjective();
+  });
+
+  /**
+   * The shipped ch9 defect: beat entry cleared guidance unconditionally, so the
+   * SAME wait-for-night objective, still the honest next action across the
+   * ch9-settle → ch9-hearth boundary, was re-activated and emitted a second
+   * objective-enter cue the player never earned. The fix is at the source, in
+   * beat entry, and it is measured the way the verifier measures it: the enter
+   * count for one activation drops by exactly one and nothing else changes.
+   */
+  it('does not double-enter an identical objective across a beat boundary', () => {
+    const cues: string[] = [];
+    const stop = subscribeStoryUxFeedback(cue => {
+      if (cue.type === 'objective-enter') cues.push(cue.objectiveId);
+    });
+
+    // The defect's exact shape: an objective that is the honest next action on
+    // BOTH sides of a beat boundary. Beat entry used to clear it and let the
+    // entering beat republish, which read to the objective director as a fresh
+    // activation and emitted a second enter cue the player never earned.
+    const carried = {
+      id: 'station:fault-read',
+      kind: 'interact' as const,
+      markerLabel: 'HABITAT CORE · READ THE FAULT',
+      workOrder: ['STAND AT THE SECOND HEARTH CORE.', '[F] READ THE HEARTH FAULT.'],
+      requiresMarker: true
+    };
+    expect(activateGuidedStoryObjective(carried)).toBe(true);
+    expect(cues).toEqual(['station:fault-read']);
+
+    advanceToBeat('ch10-cold');
+    enterEmergentStoryBeat('ch10-cold');
+
+    // One activation, one cue — and the objective survives the boundary rather
+    // than flickering through a clear the player would see as a lost marker.
+    expect(cues).toEqual(['station:fault-read']);
+    expect(getActiveGuidedStoryObjective()).toMatchObject({ id: 'station:fault-read' });
+    stop();
+  });
+
+  it('still clears all guidance when the entering beat guides nothing', () => {
+    activateGuidedStoryObjective({
+      id: 'settle:wait-night',
+      kind: 'wait',
+      markerLabel: 'SECOND HEARTH · WAIT FOR NIGHT',
+      workOrder: ['REMAIN NEAR THE SECOND HEARTH.', 'WAIT FOR NIGHT.'],
+      requiresMarker: false
+    });
+    // a4-exhale is a declared cinematic frame: it publishes no objective, so
+    // the boundary must leave no stale card behind it.
+    advanceToBeat('a4-exhale');
+    enterEmergentStoryBeat('a4-exhale');
+    expect(getActiveGuidedStoryObjective()).toBeNull();
+  });
+
+  it('emits exactly one enter cue when a beat boundary replaces the objective', () => {
+    const cues: string[] = [];
+    const stop = subscribeStoryUxFeedback(cue => {
+      if (cue.type === 'objective-enter') cues.push(cue.objectiveId);
+    });
+    markMilestone(STORY_MILESTONES.ch10FaultRead);
+    // The fabricator IS the Kestrel, so the rung needs the ship's pose to be
+    // publishable at all — the ladder now waits for the handle rather than
+    // announcing a rung that points at nothing.
+    setShipPosition([12, 10, 4]);
+    advanceToBeat('ch10-cold');
+    enterEmergentStoryBeat('ch10-cold');
+    expect(cues).toEqual(['station:fabrication-attempt']);
+    stop();
+  });
+});
+
+describe('chapter 10 — the station introduction', () => {
+  beforeEach(() => {
+    resetProgression();
+    resetHabitats();
+    clearGuidedStoryObjective();
+    observeGuidedStoryMarker(null);
+    resetChapter10FreePlayWatch();
+  });
+
+  it('waits for presence, night and the grace before the fault is noticed', () => {
+    const base = {
+      storyComplete: true,
+      twoWorldHandoff: true,
+      onTidegarden: true,
+      night: true,
+      hearthDistance: 3,
+      freePlaySeconds: CH10_FREEPLAY_GRACE_SECONDS
+    };
+    expect(chapter10ColdEntryReady(base)).toBe(true);
+    // Nothing fires anywhere the player is not.
+    expect(chapter10ColdEntryReady({ ...base, hearthDistance: null })).toBe(false);
+    expect(chapter10ColdEntryReady({
+      ...base,
+      hearthDistance: CH10_HEARTH_NOTICE_RADIUS + 0.01
+    })).toBe(false);
+    // If the player never comes home at night, the story waits indefinitely.
+    expect(chapter10ColdEntryReady({ ...base, night: false })).toBe(false);
+    expect(chapter10ColdEntryReady({ ...base, onTidegarden: false })).toBe(false);
+    // The "do not rush" dial.
+    expect(chapter10ColdEntryReady({
+      ...base,
+      freePlaySeconds: CH10_FREEPLAY_GRACE_SECONDS - 0.01
+    })).toBe(false);
+    // And the whole chapter presumes the finished two-world arc.
+    expect(chapter10ColdEntryReady({ ...base, storyComplete: false })).toBe(false);
+    expect(chapter10ColdEntryReady({ ...base, twoWorldHandoff: false })).toBe(false);
+  });
+
+  it('latches the seam from either trigger path and from neither one alone', () => {
+    // The composed reveal is preferred; the look-independent range is the floor.
+    expect(chapter10SeamConditionMet({
+      atmosphereSpaceBlend: SEAM_OF_LIGHT_MIN_BLEND,
+      stationOffAxisDeg: SEAM_VIEW_CONE_DEG,
+      stationDistance: null
+    })).toBe(true);
+    expect(chapter10SeamConditionMet({
+      atmosphereSpaceBlend: 1,
+      stationOffAxisDeg: 180,
+      stationDistance: SEAM_FALLBACK_RANGE
+    })).toBe(true);
+    // The sky must have finished going black first, whatever the look says.
+    expect(chapter10SeamConditionMet({
+      atmosphereSpaceBlend: SEAM_OF_LIGHT_MIN_BLEND - 0.01,
+      stationOffAxisDeg: 0,
+      stationDistance: 100
+    })).toBe(false);
+    // Neither condition met: looking away, still far out.
+    expect(chapter10SeamConditionMet({
+      atmosphereSpaceBlend: 1,
+      stationOffAxisDeg: SEAM_VIEW_CONE_DEG + 0.01,
+      stationDistance: SEAM_FALLBACK_RANGE + 1
+    })).toBe(false);
+  });
+
+  it('keeps the seam fallback equal BY REFERENCE to the shipped scan range', () => {
+    // One number, one source. If the instrument's range ever moves, the seam's
+    // floor moves with it and they can never disagree about the same distance.
+    expect(SEAM_FALLBACK_RANGE).toBe(SCAN_RANGE);
+    // And the standoff is strictly inside it, which is what makes the
+    // seam-before-resolve ordering a geometric fact rather than a hope.
+    expect(STATION_STANDOFF_DISTANCE).toBeLessThan(SEAM_FALLBACK_RANGE);
+    // Outside the corridor: no corridor publication, no berth invitation.
+    expect(STATION_STANDOFF_DISTANCE).toBeGreaterThan(CORRIDOR_RANGE);
+  });
+
+  it('lands the answer after the request finishes painting and inside its phrase', () => {
+    // The contract's tempo inequality, with an executable twin on both sides:
+    // the score owns the offset, the story owns the reveal guard, and a future
+    // retune fails here instead of silently reordering the exchange.
+    expect(chapter10RelayAnswerDelaySeconds()).toBeGreaterThanOrEqual(K7_REVEAL_GUARD_SECONDS);
+    expect(K7_REVEAL_GUARD_SECONDS).toBeCloseTo(1.36, 2);
+    expect(chapter10RelayAnswerDelaySeconds()).toBeCloseTo(1.76, 2);
+  });
+
+  it('has its marker resolved the frame the mandatory objective enters', () => {
+    // The lifecycle law: a mandatory objective may never publish before the
+    // shared marker can find its target. A deep link is where that breaks —
+    // the objective derives from durable milestones while the world is still
+    // arriving — so the hearth is registered BEFORE the beat is entered, and
+    // the marker must be live on the very first resolution afterwards.
+    expect(commitHabitatCorePlacement({
+      actorId: ACTOR_ID,
+      worldId: TIDEGARDEN_WORLD_ID,
+      shelterId: 'ch10-test-second-hearth',
+      cell: HABITAT_LOWER,
+      supportCell: [HABITAT_LOWER[0], HABITAT_LOWER[1] - 1, HABITAT_LOWER[2]],
+      position: [HABITAT_LOWER[0] + 0.5, HABITAT_LOWER[1], HABITAT_LOWER[2] + 0.5],
+      up: [0, 1, 0],
+      eventId: 'story:test:ch10-habitat-core'
+    })).toBe(true);
+
+    advanceToBeat('ch10-cold');
+    enterEmergentStoryBeat('ch10-cold');
+
+    const objective = getActiveGuidedStoryObjective();
+    expect(objective).toMatchObject({ id: 'station:fault-read', requiresMarker: true });
+    const marker = getChapter10MarkerTarget('ch10-cold');
+    // Same label, or the shared marker driver cannot match it to the objective.
+    expect(marker?.label).toBe(objective?.markerLabel);
+    expect(marker?.position).toBeDefined();
+    observeGuidedStoryMarker(marker?.label ?? null);
+    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
+  });
+
+  it('resolves a marker for every marker-bearing rung at its owning beat', () => {
+    // The lifecycle law applies to the whole ladder, not just its first rung.
+    // Each case below publishes a rung at the beat that owns it and asserts the
+    // shared marker can find its target with the objective's exact label.
+    expect(commitHabitatCorePlacement({
+      actorId: ACTOR_ID,
+      worldId: TIDEGARDEN_WORLD_ID,
+      shelterId: 'ch10-test-ladder-hearth',
+      cell: HABITAT_LOWER,
+      supportCell: [HABITAT_LOWER[0], HABITAT_LOWER[1] - 1, HABITAT_LOWER[2]],
+      position: [HABITAT_LOWER[0] + 0.5, HABITAT_LOWER[1], HABITAT_LOWER[2] + 0.5],
+      up: [0, 1, 0],
+      eventId: 'story:test:ch10-ladder-hearth'
+    })).toBe(true);
+    // The first world is resident, so the relay pose the marker computes is
+    // the relay's own. storyAnchors already carries this world's size and seed.
+    resetSystemFlightForInterstellarArrival({
+      system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
+      locationMode: 'surface',
+      activePlanetId: STORY_PRIMARY_WORLD_ID,
+      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+    });
+    // The Kestrel carries the fabricator, so its pose is that rung's handle.
+    setShipPosition([12, 10, 4]);
+
+    const rungs: Array<[StoryBeat, string, string]> = [
+      ['ch10-cold', 'station:fault-read', 'HABITAT CORE · READ THE FAULT'],
+      ['ch10-cold', 'station:fabrication-attempt', 'KESTREL FABRICATOR · ATTEMPT REPLACEMENT'],
+      ['ch10-ask', 'station:relay-query', 'WRECK RELAY · REQUEST A SOURCE'],
+      ['ch10-ask', 'station:bearing-claim', 'WRECK RELAY · CLAIM THE BEARING']
+    ];
+    for (const [beat, id, markerLabel] of rungs) {
+      advanceToBeat(beat);
+      enterEmergentStoryBeat(beat);
+      activateGuidedStoryObjective({
+        id,
+        kind: 'interact',
+        markerLabel,
+        workOrder: ['STAND IN.', 'ACT.'],
+        requiresMarker: true
+      });
+      const marker = getChapter10MarkerTarget(beat);
+      expect(marker?.label, id).toBe(markerLabel);
+      observeGuidedStoryMarker(marker?.label ?? null);
+      expect(getGuidedStoryObjectiveHealth(), id).toBe('ready');
+    }
+  });
+
+  it('never publishes a relay rung while another world is the enclosing one', () => {
+    // The relay stands on the origin world and nowhere else. Reading the
+    // answered receipt before the world let station:bearing-claim enter on
+    // Tidegarden against a target that cannot resolve, and a mandatory
+    // objective sitting at missing-marker is a signed invariant violation.
+    markMilestone(STORY_MILESTONES.ch10RelayAsked, ACTOR_ID);
+    markMilestone(STORY_MILESTONES.ch10RelayAnswered, ACTOR_ID);
+    resetSystemFlightForInterstellarArrival({
+      system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
+      locationMode: 'surface',
+      activePlanetId: TIDEGARDEN_WORLD_ID,
+      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+    });
+    setShipPosition([12, 10, 4]);
+
+    advanceToBeat('ch10-ask');
+    enterEmergentStoryBeat('ch10-ask');
+    const offWorld = getActiveGuidedStoryObjective();
+    expect(offWorld?.id).toBe('station:return:reboard');
+    observeGuidedStoryMarker(getChapter10MarkerTarget('ch10-ask')?.label ?? null);
+    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
+
+    // Home again, on foot, and the receipt is finally allowed to speak.
+    resetSystemFlightForInterstellarArrival({
+      system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
+      locationMode: 'surface',
+      activePlanetId: STORY_PRIMARY_WORLD_ID,
+      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+    });
+    emergentStoryDirectorTick(0.016);
+    expect(getActiveGuidedStoryObjective()?.id).toBe('station:bearing-claim');
+    const marker = getChapter10MarkerTarget('ch10-ask');
+    expect(marker?.label).toBe('WRECK RELAY · CLAIM THE BEARING');
+    observeGuidedStoryMarker(marker?.label ?? null);
+    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
+  });
+
+  it('flies the claimed bearing from durable state, on both entry paths', () => {
+    // The transit's attitude source was the transient flight store, but a
+    // `?story=ch10-transit` deep link and every reload seed the durable claim
+    // WITHOUT running commitSpaceStationTarget — so the movie lane had no
+    // bearing at all, held one attitude for 300s, and watched the station
+    // recede past 222,000 units. The bearing is now recovered from the claim.
+    expect(chapter10ClaimedStationBody()).toBeNull();
+
+    // ENTRY PATH ONE, the deep link / reload: the claim is durable, the store
+    // is empty. The bearing must still resolve, and the tick must re-commit it.
+    markMilestone(STORY_MILESTONES.ch10BearingClaimed, ACTOR_ID);
+    const claimed = chapter10ClaimedStationBody();
+    expect(claimed).not.toBeNull();
+    expect(getSystemFlightSnapshot().target?.kind).not.toBe('space_station');
+    expect(reconcileChapter10StationTarget(ACTOR_ID)).toBe(true);
+    const committed = getSystemFlightSnapshot().target;
+    expect(committed?.kind).toBe('space_station');
+    expect(committed && 'worldId' in committed ? committed.worldId : null)
+      .toBe(claimed!.worldId);
+    // Idempotent: a continuous run pays nothing and nothing is re-committed.
+    expect(reconcileChapter10StationTarget(ACTOR_ID)).toBe(false);
+
+    // ENTRY PATH TWO, the committed store: the same body, resolved the same way.
+    expect(chapter10ClaimedStationBody()?.worldId).toBe(claimed!.worldId);
+    expect(chapter10ClaimedStationBody()?.systemPosition).toEqual(claimed!.systemPosition);
+  });
+
+  it('never anticipates a bearing the player has not claimed', () => {
+    // The rite is the meaning: no target may exist before the claim, on any
+    // entry path, so the pilot cannot fly a course nobody asked for.
+    resetSystemFlightStoreForTests();
+    expect(chapter10ClaimedStationBody()).toBeNull();
+    expect(reconcileChapter10StationTarget(ACTOR_ID)).toBe(false);
+    expect(getSystemFlightSnapshot().target?.kind).not.toBe('space_station');
+  });
+
+  it('never lets a mandatory rung be observable at missing-marker, on either entry path', () => {
+    // THE SIGNED INVARIANT. Not "recovers next frame" — never observable. The
+    // publish and the marker resolution have to land in the SAME frame, so this
+    // walks every ch10 rung on both entry paths and samples health at the exact
+    // instant of publication.
+    expect(commitHabitatCorePlacement({
+      actorId: ACTOR_ID,
+      worldId: TIDEGARDEN_WORLD_ID,
+      shelterId: 'ch10-invariant-hearth',
+      cell: HABITAT_LOWER,
+      supportCell: [HABITAT_LOWER[0], HABITAT_LOWER[1] - 1, HABITAT_LOWER[2]],
+      position: [HABITAT_LOWER[0] + 0.5, HABITAT_LOWER[1], HABITAT_LOWER[2] + 0.5],
+      up: [0, 1, 0],
+      eventId: 'story:test:ch10-invariant-hearth'
+    })).toBe(true);
+    setShipPosition([12, 10, 4]);
+
+    const seen: string[] = [];
+    const sampleAtPublish = (beat: StoryBeat, world: string) => {
+      resetSystemFlightForInterstellarArrival({
+        system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
+        locationMode: 'surface',
+        activePlanetId: world,
+        pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+      });
+      advanceToBeat(beat);
+      enterEmergentStoryBeat(beat);
+      const objective = getActiveGuidedStoryObjective();
+      if (!objective) return;
+      seen.push(objective.id);
+      // Sampled with NO intervening frame: this is the publication instant.
+      expect(getGuidedStoryObjectiveHealth(), `${beat}/${objective.id}`)
+        .not.toBe('missing-marker');
+    };
+
+    // ENTRY PATH ONE: continuous play, world by world, receipt by receipt.
+    sampleAtPublish('ch10-cold', TIDEGARDEN_WORLD_ID);
+    markMilestone(STORY_MILESTONES.ch10FaultRead, ACTOR_ID);
+    sampleAtPublish('ch10-cold', TIDEGARDEN_WORLD_ID);
+    sampleAtPublish('ch10-ask', TIDEGARDEN_WORLD_ID);
+    sampleAtPublish('ch10-ask', STORY_PRIMARY_WORLD_ID);
+    markMilestone(STORY_MILESTONES.ch10RelayAsked, ACTOR_ID);
+    markMilestone(STORY_MILESTONES.ch10RelayAnswered, ACTOR_ID);
+    sampleAtPublish('ch10-ask', STORY_PRIMARY_WORLD_ID);
+    markMilestone(STORY_MILESTONES.ch10BearingClaimed, ACTOR_ID);
+    sampleAtPublish('ch10-transit', STORY_PRIMARY_WORLD_ID);
+    markMilestone(STORY_MILESTONES.ch10TransitIgnited, ACTOR_ID);
+    sampleAtPublish('ch10-transit', STORY_PRIMARY_WORLD_ID);
+
+    // ENTRY PATH TWO: the deep link / reload, arriving mid-chapter with the
+    // durable receipts already held and no session history at all.
+    for (const beat of ['ch10-cold', 'ch10-ask', 'ch10-transit'] as const) {
+      clearGuidedStoryObjective();
+      sampleAtPublish(beat, beat === 'ch10-cold' ? TIDEGARDEN_WORLD_ID : STORY_PRIMARY_WORLD_ID);
+    }
+
+    // Every marker-bearing rung in the chapter was actually exercised.
+    expect(new Set(seen).size).toBeGreaterThanOrEqual(5);
+  });
+
+  it('aims the movie-lane descent at the wreck site once the origin world encloses', () => {
+    // D-12: requestLanding() refuses silently unless the ship is essentially
+    // directly over a valid egress site, so holding the crossing heading made
+    // landfall a lottery on arrival position. The descent now aims at the site
+    // the beat actually lands at, derived from the world's size and seed.
+    const originSystem = parsePlanetWorldId(STORY_PRIMARY_WORLD_ID)!.system;
+
+    // Still crossing: the origin does not enclose the ship yet, so the leg keeps
+    // the planet-centre heading it needs in order to arrive at all.
+    resetSystemFlightForInterstellarArrival({
+      system: originSystem,
+      locationMode: 'local_space',
+      activePlanetId: TIDEGARDEN_WORLD_ID,
+      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+    });
+    expect(chapter10AskDescentSystemTarget()).toBeNull();
+
+    // Enclosed by the origin and still airborne: aim at the wreck site.
+    resetSystemFlightForInterstellarArrival({
+      system: originSystem,
+      locationMode: 'atmosphere',
+      activePlanetId: STORY_PRIMARY_WORLD_ID,
+      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+    });
+    debugStartInDescent();
+    const site = chapter10WreckSitePosition();
+    expect(site).not.toBeNull();
+    const target = chapter10AskDescentSystemTarget();
+    expect(target).not.toBeNull();
+    const manifest = buildStarSystemManifest(STORY_COORDINATE);
+    const origin = manifest.planets.find(p => p.worldId === STORY_PRIMARY_WORLD_ID)!;
+    expect(target).toEqual([
+      origin.systemPosition[0] + site!.x,
+      origin.systemPosition[1] + site!.y,
+      origin.systemPosition[2] + site!.z
+    ]);
+
+    // Down: nothing steers a grounded ship.
+    notifyLanded();
+    expect(chapter10AskDescentSystemTarget()).toBeNull();
+    // And on foot after egress: likewise.
+    exitShip();
+    expect(chapter10AskDescentSystemTarget()).toBeNull();
+  });
+
+  it('waits rather than publishing a rung that points at nothing', () => {
+    // No hearth exists, so there is no target. The chapter used to publish
+    // anyway and report a truthful missing-marker; that was honest about the
+    // HUD but violated the signed invariant, which is that a mandatory
+    // objective is never OBSERVABLE at missing-marker. Waiting is the honest
+    // answer: guidance genuinely has nothing findable to say yet, and `idle`
+    // says exactly that. The director ticks every frame, so publication
+    // follows the handle by one frame.
+    advanceToBeat('ch10-cold');
+    enterEmergentStoryBeat('ch10-cold');
+    expect(getChapter10MarkerTarget('ch10-cold')).toBeNull();
+    expect(getActiveGuidedStoryObjective()).toBeNull();
+    expect(getGuidedStoryObjectiveHealth()).toBe('idle');
+
+    // The deadlock detector itself is UNCHANGED and must keep working: an
+    // objective forced active without a resolvable target still reports
+    // missing-marker, which is what makes the invariant testable at all.
+    activateGuidedStoryObjective({
+      id: 'test:deadlock-probe',
+      kind: 'interact',
+      markerLabel: 'NOWHERE',
+      workOrder: ['STAND IN.', 'ACT.'],
+      requiresMarker: true
+    });
+    observeGuidedStoryMarker(null);
+    expect(getGuidedStoryObjectiveHealth()).toBe('missing-marker');
+  });
+
+  it('publishes the contracted ladder with contract-exact labels and work orders', () => {
+    // The hearth and the ship are the two handles this ladder points at; the
+    // real runtime always has them by the time the beat runs, and the ladder
+    // now waits for them rather than publishing at nothing.
+    expect(commitHabitatCorePlacement({
+      actorId: ACTOR_ID,
+      worldId: TIDEGARDEN_WORLD_ID,
+      shelterId: 'ch10-ladder-copy-hearth',
+      cell: HABITAT_LOWER,
+      supportCell: [HABITAT_LOWER[0], HABITAT_LOWER[1] - 1, HABITAT_LOWER[2]],
+      position: [HABITAT_LOWER[0] + 0.5, HABITAT_LOWER[1], HABITAT_LOWER[2] + 0.5],
+      up: [0, 1, 0],
+      eventId: 'story:test:ch10-ladder-copy-hearth'
+    })).toBe(true);
+    setShipPosition([12, 10, 4]);
+    advanceToBeat('ch10-cold');
+    enterEmergentStoryBeat('ch10-cold');
+    expect(getActiveGuidedStoryObjective()).toMatchObject({
+      id: 'station:fault-read',
+      kind: 'interact',
+      markerLabel: 'HABITAT CORE · READ THE FAULT',
+      workOrder: ['STAND AT THE SECOND HEARTH CORE.', '[F] READ THE HEARTH FAULT.'],
+      requiresMarker: true
+    });
+
+    expect(commitChapter10FaultRead()).toBe(true);
+    // Idempotent: the record is read once, and reading it again is not progress.
+    expect(commitChapter10FaultRead()).toBe(false);
+    emergentStoryDirectorTick(0.016);
+    expect(getActiveGuidedStoryObjective()).toMatchObject({
+      id: 'station:fabrication-attempt',
+      kind: 'craft',
+      markerLabel: 'KESTREL FABRICATOR · ATTEMPT REPLACEMENT',
+      workOrder: [
+        'TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR.',
+        '[F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.'
+      ]
+    });
+  });
+
+  it('refuses a fabrication attempt that precedes the fault record', () => {
+    advanceToBeat('ch10-cold');
+    enterEmergentStoryBeat('ch10-cold');
+    // Self-sufficiency is exhausted ON CAMERA, in order: the refusal cannot be
+    // collected before the record that motivates it.
+    expect(commitChapter10FabricationAttempt()).toBe(false);
+    expect(hasMilestone(STORY_MILESTONES.ch10FabricationRefused)).toBe(false);
+  });
+
+  it('waits at the rite forever and never claims on the player’s behalf', () => {
+    advanceToBeat('ch10-ask');
+    enterEmergentStoryBeat('ch10-ask');
+    markMilestone(STORY_MILESTONES.ch10RelayAsked);
+    // Ten minutes of waiting is not a claim, and no timeout may become one.
+    for (let i = 0; i < 600; i++) emergentStoryDirectorTick(1);
+    expect(hasMilestone(STORY_MILESTONES.ch10BearingClaimed)).toBe(false);
+    expect(getStoryStateSnapshot().beat).toBe('ch10-ask');
+  });
+
+  it('answers before the asking finishes, once, from the shared anchor', () => {
+    const recorder = recordStoryLines(() => beatClock);
+    advanceToBeat('ch10-ask');
+    enterEmergentStoryBeat('ch10-ask');
+    beatClock = 0;
+    markMilestone(STORY_MILESTONES.ch10RelayAsked);
+    tick(0.016);
+    expect(recorder.audits).toEqual([`WRECK RELAY | ${CHAPTER_10_COPY.K7}`]);
+    expect(hasMilestone(STORY_MILESTONES.ch10RelayAnswered)).toBe(false);
+
+    tick(chapter10RelayAnswerDelaySeconds());
+    expect(recorder.audits).toEqual([
+      `WRECK RELAY | ${CHAPTER_10_COPY.K7}`,
+      `WRECK RELAY | ${CHAPTER_10_COPY.K8}`
+    ]);
+    expect(hasMilestone(STORY_MILESTONES.ch10RelayAnswered)).toBe(true);
+    // One answer, ever.
+    tick(30);
+    expect(recorder.audits.filter(
+      line => line === `WRECK RELAY | ${CHAPTER_10_COPY.K8}`
+    )).toHaveLength(1);
+    recorder.stop();
+  });
+});
+
+// --- Chapter 10 score ---------------------------------------------------------
+//
+// The chapter's music is resolved from the SAME durable milestones this file's
+// story tests drive, so it is tested beside them rather than against a stubbed
+// score façade: every reading below is the real mood table, reached through the
+// real override seam, at the real milestone states.
+
+const CH10_SCORE_BEATS: readonly StoryBeat[] = ['ch10-cold', 'ch10-ask', 'ch10-transit'];
+
+const NO_CH10_SCORE_MILESTONES: Chapter10ScoreMilestones = {
+  faultRead: false,
+  relayAsked: false,
+  relayAnswered: false,
+  seamPassed: false,
+  stationResolved: false
+};
+
+/** Every reachable milestone state, in the order the chapter earns them. */
+const CH10_SCORE_LADDER: readonly (readonly [string, Chapter10ScoreMilestones])[] = [
+  ['entered', NO_CH10_SCORE_MILESTONES],
+  ['fault read', { ...NO_CH10_SCORE_MILESTONES, faultRead: true }],
+  ['asked', { ...NO_CH10_SCORE_MILESTONES, faultRead: true, relayAsked: true }],
+  ['answered', {
+    ...NO_CH10_SCORE_MILESTONES, faultRead: true, relayAsked: true, relayAnswered: true
+  }],
+  ['seam passed', {
+    ...NO_CH10_SCORE_MILESTONES,
+    faultRead: true, relayAsked: true, relayAnswered: true, seamPassed: true
+  }],
+  ['station resolved', {
+    faultRead: true, relayAsked: true, relayAnswered: true,
+    seamPassed: true, stationResolved: true
+  }]
+];
+
+function markChapter10ScoreLadder(milestones: Chapter10ScoreMilestones): void {
+  if (milestones.faultRead) markMilestone(STORY_MILESTONES.ch10FaultRead, ACTOR_ID);
+  if (milestones.relayAsked) markMilestone(STORY_MILESTONES.ch10RelayAsked, ACTOR_ID);
+  if (milestones.relayAnswered) markMilestone(STORY_MILESTONES.ch10RelayAnswered, ACTOR_ID);
+  if (milestones.seamPassed) markMilestone(STORY_MILESTONES.ch10SeamPassed, ACTOR_ID);
+  if (milestones.stationResolved) markMilestone(STORY_MILESTONES.ch10StationResolved, ACTOR_ID);
+}
+
+describe('emergent chapter 10 score director', () => {
+  beforeEach(() => {
+    resetEmergentScoreDirectorForTests();
+    resetStoryScoreRuntime();
+    resetProgression();
+  });
+
+  it('resolves variant and carrier as a pure function of beat and durable milestones', () => {
+    // The whole (beat x milestone) matrix, stated as a table. Nothing below
+    // reads a mutable module field, so nothing below can depend on which edges
+    // this particular session happened to observe.
+    const expected: Record<string, readonly [Chapter10ScoreVariant, boolean]> = {
+      'ch10-cold|entered': ['cold-settled', false],
+      'ch10-cold|fault read': ['fault-ledger', false],
+      'ch10-cold|asked': ['fault-ledger', false],
+      'ch10-cold|answered': ['fault-ledger', true],
+      'ch10-cold|seam passed': ['fault-ledger', true],
+      'ch10-cold|station resolved': ['fault-ledger', true],
+      'ch10-ask|entered': ['crossing-back', false],
+      'ch10-ask|fault read': ['crossing-back', false],
+      'ch10-ask|asked': ['relay-ask', false],
+      'ch10-ask|answered': ['relay-answer', true],
+      'ch10-ask|seam passed': ['relay-answer', true],
+      'ch10-ask|station resolved': ['relay-answer', true],
+      'ch10-transit|entered': ['transit-hold', false],
+      'ch10-transit|fault read': ['transit-hold', false],
+      'ch10-transit|asked': ['transit-hold', false],
+      'ch10-transit|answered': ['transit-hold', true],
+      'ch10-transit|seam passed': ['seam-ebb', true],
+      'ch10-transit|station resolved': ['station-resolved', true]
+    };
+
+    for (const beat of CH10_SCORE_BEATS) {
+      for (const [label, milestones] of CH10_SCORE_LADDER) {
+        const [variant, carrierAlive] = expected[`${beat}|${label}`];
+        expect(resolveChapter10ScoreState(beat, milestones), `${beat}|${label}`)
+          .toEqual({ variant, carrierAlive });
+      }
+    }
+
+    // Determinism, and nothing outside the chapter resolves to anything at all.
+    for (const [, milestones] of CH10_SCORE_LADDER) {
+      expect(resolveChapter10ScoreState('ch10-transit', milestones))
+        .toEqual(resolveChapter10ScoreState('ch10-transit', milestones));
+      for (const outside of ['ch9-hearth', 'done', null] as const) {
+        expect(resolveChapter10ScoreState(outside, milestones))
+          .toEqual({ variant: null, carrierAlive: false });
+        expect(isChapter10Beat(outside)).toBe(false);
+      }
+    }
+  });
+
+  it('reads its durable facts from the story lane and nowhere else', () => {
+    expect(chapter10ScoreMilestones()).toEqual(NO_CH10_SCORE_MILESTONES);
+    markChapter10ScoreLadder(CH10_SCORE_LADDER[4][1]);
+    expect(chapter10ScoreMilestones()).toEqual(CH10_SCORE_LADDER[4][1]);
+  });
+
+  it('restores the ebbed, pulse-less seam state through a mid-transit reload', () => {
+    // THE DEFECT, executable. Play the chapter continuously to the seam...
+    markChapter10ScoreLadder(CH10_SCORE_LADDER[3][1]);
+    enterEmergentScoreBeat('ch10-transit');
+    markMilestone(STORY_MILESTONES.ch10SeamPassed, ACTOR_ID);
+    noteChapter10ScoreAnchor('anc.ch10.seam-of-light');
+    const continuous = getChapter10ScoreSnapshot();
+    const continuousMood = getStoryScoreMood('ch10-transit');
+    expect(continuous).toMatchObject({ variant: 'seam-ebb', carrierAlive: true });
+    expect(continuousMood?.ost).toBe(0);
+    expect(continuousMood?.chord).toContain(CH10_CARRIER_DEGREE);
+
+    // ...then lose the session entirely and re-enter on the same milestones.
+    resetEmergentScoreDirectorForTests();
+    resetStoryScoreRuntime();
+    enterEmergentScoreBeat('ch10-transit');
+
+    expect(getChapter10ScoreSnapshot()).toEqual(continuous);
+    expect(getStoryScoreMood('ch10-transit')).toEqual(continuousMood);
+    // The pulse the seam ebbed away does NOT come back with the page.
+    expect(getStoryScoreMood('ch10-transit')?.ost).toBe(0);
+  });
+
+  it('keeps the resolve octave double through a reload, and refuses it without the carrier', () => {
+    markChapter10ScoreLadder(CH10_SCORE_LADDER[5][1]);
+    enterEmergentScoreBeat('ch10-transit');
+
+    expect(getChapter10ScoreSnapshot()).toMatchObject({
+      variant: 'station-resolved',
+      carrierAlive: true,
+      intensity: CH10_ANCHOR_INTENSITY['anc.ch10.station-resolved']
+    });
+    expect(getStoryScoreMood('ch10-transit')?.chord).toContain(CH10_CARRIER_OCTAVE_DEGREE);
+    // The control the audit rendered: the same variant with no carrier may not
+    // SOUND the confirmation. This asserts every surface the engine can play
+    // from, not just the static chord — checking `chord` alone passed while the
+    // octave double kept sounding out of the progression, and the control
+    // render came back sample-identical to the real resolve. The progression is
+    // the audible one: the engine plays progression[chordIndex] per bar and
+    // only falls back to `chord` when a mood publishes none.
+    const withoutCarrier = getChapter10ScoreMood('station-resolved', false);
+    const withCarrier = getChapter10ScoreMood('station-resolved', true);
+    const everyDegree = (mood: typeof withCarrier): number[] =>
+      [...mood.chord, ...(mood.progression ?? []).flat()];
+    expect(everyDegree(withoutCarrier)).not.toContain(CH10_CARRIER_OCTAVE_DEGREE);
+    expect(everyDegree(withCarrier)).toContain(CH10_CARRIER_OCTAVE_DEGREE);
+    // And the carrier itself is untouched by the guard — only its double goes.
+    expect(everyDegree(withoutCarrier)).toContain(CH10_CARRIER_DEGREE);
+  });
+
+  it('bounds the carrier: absent before the answer, present after, dead at release', () => {
+    enterEmergentScoreBeat('ch10-ask');
+    expect(getChapter10ScoreSnapshot().carrierAlive).toBe(false);
+    markMilestone(STORY_MILESTONES.ch10RelayAsked, ACTOR_ID);
+    noteChapter10ScoreAnchor('anc.ch10.relay-ask');
+    expect(getChapter10ScoreSnapshot()).toMatchObject({
+      variant: 'relay-ask',
+      carrierAlive: false,
+      intensity: CH10_ANCHOR_INTENSITY['anc.ch10.relay-ask']
+    });
+
+    markMilestone(STORY_MILESTONES.ch10RelayAnswered, ACTOR_ID);
+    noteChapter10ScoreAnchor('anc.ch10.relay-answer');
+    expect(getChapter10ScoreSnapshot()).toMatchObject({
+      variant: 'relay-answer',
+      carrierAlive: true,
+      intensity: CH10_ANCHOR_INTENSITY['anc.ch10.relay-answer']
+    });
+
+    // Every variant from the answer onward voices the carrier itself...
+    for (const variant of [
+      'relay-answer', 'bearing-claimed', 'transit-hold', 'seam-ebb', 'station-resolved'
+    ] as const) {
+      expect(getChapter10ScoreMood(variant, true).chord, variant)
+        .toContain(CH10_CARRIER_DEGREE);
+    }
+    // ...and no variant before it does.
+    for (const variant of [
+      'cold-settled', 'fault-ledger', 'refused', 'crossing-back', 'relay-ask'
+    ] as const) {
+      expect(getChapter10ScoreMood(variant).chord, variant)
+        .not.toContain(CH10_CARRIER_DEGREE);
+    }
+
+    noteChapter10ScoreAnchor('anc.ch10.threshold-handback');
+    expect(getChapter10ScoreSnapshot()).toEqual({
+      variant: null,
+      carrierAlive: false,
+      intensity: CH10_HANDBACK_PARK_INTENSITY,
+      maxIntensity: CH10_MAX_INTENSITY
+    });
+    releaseChapter10Score();
+    expect(getChapter10ScoreSnapshot().carrierAlive).toBe(false);
+  });
+
+  it('pitches the carrier as a colour of both home keys and a chord tone of neither', () => {
+    // The chord-membership check the original legality pass lacked. Degree 14
+    // (the ninth) is voiced in BOTH home chords, which is why it was not new
+    // information at birth; pitch-class 5 is legal in both home modes and a
+    // member of neither voicing.
+    const homeChords = [
+      getStoryScoreMood('ch9-hearth')!.chord,
+      getStoryScoreMood('ch8-crossing')!.chord
+    ];
+    const MIXOLYDIAN = [0, 2, 4, 5, 7, 9, 10];
+    const DORIAN = [0, 2, 3, 5, 7, 9, 10];
+    const carrierClass = ((CH10_CARRIER_DEGREE % 12) + 12) % 12;
+
+    expect(carrierClass).toBe(5);
+    for (const chord of homeChords) {
+      const classes = chord.map(degree => ((degree % 12) + 12) % 12);
+      expect(classes).not.toContain(carrierClass);
+      expect(classes).toContain(2);
+    }
+    for (const mode of [MIXOLYDIAN, DORIAN]) expect(mode).toContain(carrierClass);
+    expect(CH10_CARRIER_OCTAVE_DEGREE).toBe(CH10_CARRIER_DEGREE + 12);
+  });
+
+  it('gives the asking a sounding body the answer can arrive inside', () => {
+    const ask = getChapter10ScoreMood('relay-ask');
+    const answer = getChapter10ScoreMood('relay-answer', true);
+
+    // A two-bar quantized square figure on the REGULATION fifth...
+    expect(ask.wave).toBe('square');
+    expect(ask.tempo).toBe(68);
+    expect(ask.progression).toHaveLength(2);
+    expect(ask.progression?.[0]).toEqual([0, 7]);
+    // ...that the answer joins rather than replaces: same wave, same register,
+    // same pad and sub level, and the [0, 7] cell still sounding across the
+    // variant boundary. The answer lands inside the figure, not after it.
+    expect(answer.wave).toBe(ask.wave);
+    expect(answer.octave).toBe(ask.octave);
+    expect(answer.pad).toBe(ask.pad);
+    expect(answer.sub).toBe(ask.sub);
+    expect(answer.progression?.[0]).toEqual([0, 7]);
+    expect(answer.progression?.[1]).toContain(0);
+    expect(answer.progression?.[1]).toContain(7);
+    const askFigureSeconds = 2 * 4 * (60 / ask.tempo);
+    expect(chapter10RelayAnswerDelaySeconds()).toBeLessThan(askFigureSeconds);
+  });
+
+  it('keeps the destination under the awakening and the transit riser flat', () => {
+    const resolved = getChapter10ScoreMood('station-resolved', true);
+    const a4 = getStoryScoreMood('a4-exhale')!;
+
+    // D3: the run's peak may not out-measure the awakening it stays under. The
+    // pad is strictly below with no tie; the sub knob ties at 0.10 and separates
+    // on the bus, which the steady-window render measures.
+    expect(resolved.pad).toBeLessThan(a4.pad);
+    expect(resolved.sub).toBeLessThanOrEqual(a4.sub);
+    // D7: one riser value across the whole transit beat, and the pulse the seam
+    // ebbed away never returns inside the chapter.
+    const transitRisers = (['transit-hold', 'seam-ebb', 'station-resolved'] as const)
+      .map(variant => getChapter10ScoreMood(variant, true).riser);
+    expect(new Set(transitRisers).size).toBe(1);
+    expect(getChapter10ScoreMood('seam-ebb', true).ost).toBe(0);
+    expect(resolved.ost).toBe(0);
+    for (const intensity of Object.values(CH10_ANCHOR_INTENSITY)) {
+      expect(intensity).toBeLessThanOrEqual(CH10_MAX_INTENSITY);
+    }
+  });
+
+  it('leaves every shipped chapter 1 through 9 mood untouched', () => {
+    // Additive only: chapter 10 lives in its own table, and the beats that
+    // shipped before it still answer with their own authored values.
+    expect(getStoryScoreMood('ch9-hearth')).toMatchObject({
+      chord: [0, 4, 7, 10, 14], tempo: 56, wave: 'triangle',
+      pad: 0.17, sub: 0.08, ost: 0.024, riser: 0.05, baseline: 0.28
+    });
+    expect(getStoryScoreMood('ch8-crossing')).toMatchObject({
+      chord: [0, 3, 7, 9, 14], tempo: 68, wave: 'sawtooth',
+      pad: 0.17, sub: 0.12, ost: 0.035, riser: 0.14, baseline: 0.42
+    });
+    // No ch10 beat has a MOODS entry of its own: the chapter reaches the
+    // instrument only through the director's override.
+    for (const beat of CH10_SCORE_BEATS) expect(getStoryScoreMood(beat)).toBeNull();
+  });
+
+  it('releases the chapter in every direction out of it', () => {
+    markChapter10ScoreLadder(CH10_SCORE_LADDER[5][1]);
+    enterEmergentScoreBeat('ch10-transit');
+    expect(getChapter10ScoreSnapshot().carrierAlive).toBe(true);
+
+    enterEmergentScoreBeat('done');
+    expect(getChapter10ScoreSnapshot()).toEqual({
+      variant: null,
+      carrierAlive: false,
+      intensity: CH10_HANDBACK_PARK_INTENSITY,
+      maxIntensity: CH10_MAX_INTENSITY
+    });
+    // An anchor arriving after the chapter has been left moves nothing.
+    expect(noteChapter10ScoreAnchor('anc.ch10.station-resolved')).toBeNull();
   });
 });

@@ -1,0 +1,19 @@
+{
+  "schema": "paravoxia.repairContractDisposition.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "baseContractVersion": "draft-v3",
+  "activeContractVersion": "draft-v5",
+  "activeContractSha256": "ae0f6dd4242cc704a1fddb6f3a204af9180fccd91b7ffe8251c67200a3465446",
+  "defectRegisterSha256": "256a4b722b881a154a3a7678d44786c7ec30c8910ae1b79c16a092585711d43a",
+  "contractChangeRequired": true,
+  "route": "revised-and-resigned",
+  "directionRefs": [
+    "chapter-repair-direction.json",
+    "score-repair-direction.json"
+  ],
+  "triadResignRequired": true,
+  "triadResignComplete": true,
+  "amendmentLineage": "draft-v3 (glyph honesty) -> draft-v4 (story-audit F2/F3/F5 + score-audit D5/D4a, tri-signed 8e0b2230...) -> draft-v5 (verifier D-8: ST-0 recurrence re-derived at the real 119s night + operational still criterion, tri-signed ae0f6dd4...); orchestrator recorded peer signatures and compiled signoffs at each revision",
+  "decidedBy": "Chapter Director (Claude, creative triad run 2026-08-11-ch10-station-introduction) — amendment cycle two: story-audit F2/F3/F5 (chapter copy authority) plus score-audit D5/D4a (two score-block clauses; D5 re-signed by Chapter per the frozen chapter-note-01 section-3 endorsement); defect IDs story-audit-f2, story-audit-f3, story-audit-f5, score-audit-d5, score-audit-d4a; draft-v4 supersedes draft-v3 at lock sha 2ffadb278370f9890c7773bcc01ed5e8bbcb51f181d044e612c701160c624eb2 (post R4/R5, computed immediately before the contract hash); chapter re-signed, peer re-signatures collected by the orchestrator",
+  "decidedAt": "2026-08-12T03:05:00Z"
+}

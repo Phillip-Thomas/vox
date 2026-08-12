@@ -123,7 +123,15 @@ const STORY_INTERACTION_POLICY = {
   'story-tidegarden-choose-site': { interactionClass: 'required', priority: 500 },
   'story-habitat-core': { interactionClass: 'required', priority: 520 },
   'story-habitat-certify': { interactionClass: 'required', priority: 520 },
-  'story-habitat-rest': { interactionClass: 'required', priority: 520 }
+  'story-habitat-rest': { interactionClass: 'required', priority: 520 },
+  // Chapter 10. The first three are ordinary required story actions. The
+  // bearing claim outranks the relay query it replaces so that, on the frame
+  // the answer lands, the rite is what the player is offered — the claim is the
+  // agency peak of the run and must never queue behind the request that earned it.
+  'story-ch10-fault-read': { interactionClass: 'required', priority: 500 },
+  'story-ch10-fabrication-attempt': { interactionClass: 'required', priority: 500 },
+  'story-ch10-relay-query': { interactionClass: 'required', priority: 500 },
+  'story-ch10-bearing-claim': { interactionClass: 'required', priority: 520 }
 } as const satisfies Record<StoryInteractionId, InteractionPolicy>;
 
 const FALLBACK_POLICY: InteractionPolicy = {

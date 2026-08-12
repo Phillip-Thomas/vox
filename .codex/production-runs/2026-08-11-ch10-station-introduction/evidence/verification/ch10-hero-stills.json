@@ -1,0 +1,293 @@
+{
+  "capturedAt": "2026-08-12T03:17:31.186Z",
+  "base": "http://localhost:5176",
+  "method": "fly at LOW, raise to HIGH through the shipped setQualityProfile store at the named anchor, let HIGH frames render, then shoot",
+  "stills": [
+    {
+      "id": "still-st0-sighting",
+      "file": "evidence/capture/still-st0-sighting.png",
+      "tier": "HIGH",
+      "url": "?story=ch10-cold&profile=LOW + runtime raise to HIGH",
+      "risenAt": 36.448,
+      "raised": true,
+      "state": {
+        "beat": "ch10-cold",
+        "objectiveId": "station:fault-read",
+        "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+        "caption": null,
+        "av": {
+          "anchorId": "anc.ch10.cold-noticed",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fault-read"
+          },
+          "postFx": [],
+          "history": [
+            "anc.ch10.cold-noticed"
+          ]
+        },
+        "qualityProfile": "HIGH",
+        "graphics": {
+          "postProcess": true,
+          "bloom": null,
+          "shadows": null
+        },
+        "dayPhase": 0.9169,
+        "daylight": 0,
+        "isNight": true,
+        "flight": "surface",
+        "controlMode": "fps",
+        "contacts": {
+          "phase": "surface",
+          "ship": [
+            2180,
+            -110,
+            -1635
+          ],
+          "stations": [
+            {
+              "worldId": "-1,-1:a0",
+              "distance": 8766,
+              "phase": "unknown",
+              "canDock": false
+            }
+          ]
+        },
+        "sky": {
+          "st0": null,
+          "companions": [],
+          "galaxy": []
+        },
+        "cameraFov": 75
+      },
+      "preRaiseState": {
+        "beat": "ch10-cold",
+        "objectiveId": "station:fault-read",
+        "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+        "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+        "av": {
+          "anchorId": "anc.ch10.cold-noticed",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fault-read"
+          },
+          "postFx": [],
+          "history": [
+            "anc.ch10.cold-noticed"
+          ]
+        },
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null
+        },
+        "dayPhase": 0.7292,
+        "daylight": 0,
+        "isNight": true,
+        "flight": "surface",
+        "controlMode": "fps",
+        "contacts": {
+          "phase": "surface",
+          "ship": [
+            2180,
+            -110,
+            -1635
+          ],
+          "stations": [
+            {
+              "worldId": "-1,-1:a0",
+              "distance": 8766,
+              "phase": "unknown",
+              "canDock": false
+            }
+          ]
+        },
+        "sky": {
+          "st0": {
+            "name": "system-st0-station-light",
+            "visible": true,
+            "ndc": [
+              -0.792,
+              0.353
+            ],
+            "inFrame": true,
+            "altitudeDeg": 7.7,
+            "opacity": 1
+          },
+          "companions": [
+            {
+              "name": "system-companion-body--1,-1",
+              "visible": true,
+              "ndc": [
+                0.778,
+                -0.256
+              ],
+              "inFrame": false,
+              "altitudeDeg": -6.44
+            }
+          ],
+          "galaxy": []
+        },
+        "cameraFov": 75
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "still-seam-of-light",
+      "status": "BLOCKED",
+      "reason": "anc.ch10.seam-of-light never fired: the ship never leaves the ground in the movie lane",
+      "state": {
+        "beat": "ch10-transit",
+        "objectiveId": "station:transit:ignite",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "caption": null,
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": [],
+          "history": []
+        },
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null
+        },
+        "dayPhase": 0.2985,
+        "daylight": 1,
+        "isNight": false,
+        "flight": "surface",
+        "controlMode": "flight",
+        "contacts": {
+          "phase": "surface",
+          "ship": [
+            4,
+            53.5,
+            -6
+          ],
+          "stations": [
+            {
+              "worldId": "-1,-1:a0",
+              "distance": 6630,
+              "phase": "unknown",
+              "canDock": false
+            }
+          ]
+        },
+        "sky": {
+          "st0": {
+            "name": "system-st0-station-light",
+            "visible": false,
+            "ndc": [
+              0.68,
+              0.589
+            ],
+            "inFrame": true,
+            "altitudeDeg": 18.18,
+            "opacity": 0.005833111063285086
+          },
+          "companions": [
+            {
+              "name": "system-companion-body--1,-1:p1",
+              "visible": true,
+              "ndc": [
+                -0.556,
+                -0.127
+              ],
+              "inFrame": false,
+              "altitudeDeg": 11.32
+            }
+          ],
+          "galaxy": []
+        },
+        "cameraFov": 70
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "still-station-resolved",
+      "status": "BLOCKED",
+      "reason": "anc.ch10.station-resolved never fired: the ship never leaves the ground in the movie lane",
+      "state": {
+        "beat": "ch10-transit",
+        "objectiveId": "station:transit:ignite",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "caption": null,
+        "av": {
+          "anchorId": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": [],
+          "history": []
+        },
+        "qualityProfile": "LOW",
+        "graphics": {
+          "postProcess": false,
+          "bloom": null,
+          "shadows": null
+        },
+        "dayPhase": 0.3205,
+        "daylight": 1,
+        "isNight": false,
+        "flight": "surface",
+        "controlMode": "flight",
+        "contacts": {
+          "phase": "surface",
+          "ship": [
+            4,
+            53.5,
+            -6
+          ],
+          "stations": [
+            {
+              "worldId": "-1,-1:a0",
+              "distance": 6630,
+              "phase": "unknown",
+              "canDock": false
+            }
+          ]
+        },
+        "sky": {
+          "st0": {
+            "name": "system-st0-station-light",
+            "visible": false,
+            "ndc": [
+              0.68,
+              0.589
+            ],
+            "inFrame": true,
+            "altitudeDeg": 18.18,
+            "opacity": 0.005833111063285086
+          },
+          "companions": [
+            {
+              "name": "system-companion-body--1,-1:p1",
+              "visible": true,
+              "ndc": [
+                -0.607,
+                -0.135
+              ],
+              "inFrame": false,
+              "altitudeDeg": 11.56
+            }
+          ],
+          "galaxy": []
+        },
+        "cameraFov": 70
+      },
+      "pageErrors": []
+    }
+  ]
+}

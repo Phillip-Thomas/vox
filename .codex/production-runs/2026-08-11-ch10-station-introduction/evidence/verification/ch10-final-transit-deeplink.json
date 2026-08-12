@@ -1,0 +1,3485 @@
+{
+  "capturedAt": "2026-08-12T06:22:25.154Z",
+  "base": "http://localhost:5176",
+  "mode": "transit-deeplink",
+  "constants": {
+    "ASK_TIMEOUT": 320,
+    "TRANSIT_TIMEOUT": 260,
+    "HOLD_DURATION_MS": 2500,
+    "STANDOFF": 1500
+  },
+  "runs": [
+    {
+      "id": "transit-deeplink",
+      "url": "?story=ch10-transit&movie=1&profile=LOW",
+      "startedAt": "2026-08-12T06:22:25.213Z",
+      "legs": {
+        "bearing-attitude-published": 3.507,
+        "ignited": 5.102,
+        "anchor-transit-ignite": 5.102,
+        "seam-milestone": 12.276,
+        "anchor-seam-of-light": 12.276,
+        "T3-resolving-rung": 12.276,
+        "standoff-reached": 25.739,
+        "station-resolved-milestone": 25.739,
+        "anchor-station-resolved": 25.739,
+        "k11-painted": 26.512,
+        "anchor-threshold-handback": 28.323,
+        "guidance-cleared": 28.323
+      },
+      "legBeatClock": {
+        "bearing-attitude-published": 0.2,
+        "ignited": 1.8,
+        "anchor-transit-ignite": 1.8,
+        "seam-milestone": 8.9,
+        "anchor-seam-of-light": 8.9,
+        "T3-resolving-rung": 8.9,
+        "standoff-reached": 22.3,
+        "station-resolved-milestone": 22.3,
+        "anchor-station-resolved": 22.3,
+        "k11-painted": 23.1,
+        "anchor-threshold-handback": 24.7,
+        "guidance-cleared": 24.7
+      },
+      "legWallMs": {
+        "bearing-attitude-published": 599,
+        "ignited": 5629,
+        "anchor-transit-ignite": 5629,
+        "seam-milestone": 12865,
+        "anchor-seam-of-light": 12865,
+        "T3-resolving-rung": 12865,
+        "standoff-reached": 26330,
+        "station-resolved-milestone": 26330,
+        "anchor-station-resolved": 26330,
+        "k11-painted": 27104,
+        "anchor-threshold-handback": 28911,
+        "guidance-cleared": 28911
+      },
+      "objectiveEvents": [
+        {
+          "t": 3.507,
+          "beatClock": 0.2,
+          "beat": "ch10-transit",
+          "from": null,
+          "to": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "cues": 0
+        },
+        {
+          "t": 5.892,
+          "beatClock": 2.5,
+          "beat": "ch10-transit",
+          "from": "station:transit:ignite",
+          "to": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "cues": 0
+        },
+        {
+          "t": 12.276,
+          "beatClock": 8.9,
+          "beat": "ch10-transit",
+          "from": "station:transit:hold",
+          "to": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "cues": 0
+        },
+        {
+          "t": 28.323,
+          "beatClock": 24.7,
+          "beat": "done",
+          "from": "station:transit:resolve",
+          "to": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "cues": 0
+        }
+      ],
+      "trace": [
+        {
+          "t": 3.507,
+          "marker": "LEG:bearing-attitude-published",
+          "wallMs": 599,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "surface",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              0,
+              89,
+              0
+            ],
+            "quat": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "speed": 0
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              4,
+              53.80767339571502,
+              -6
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6630,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 0.2,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 3.507,
+          "wallMs": 599,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "surface",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              0,
+              89,
+              0
+            ],
+            "quat": [
+              0,
+              0,
+              0,
+              1
+            ],
+            "speed": 0
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              4,
+              53.80767339571502,
+              -6
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6630,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 0.2,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 4.217,
+          "wallMs": 4805,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "surface",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              4,
+              72,
+              -6
+            ],
+            "quat": [
+              0,
+              0.7071,
+              0,
+              0.7071
+            ],
+            "speed": 0
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              4,
+              72.91882220552444,
+              -6
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6634,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 0.9,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 5.102,
+          "marker": "LEG:ignited",
+          "wallMs": 5629,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              3,
+              87,
+              -6
+            ],
+            "quat": [
+              -0.0139,
+              0.6947,
+              0.0117,
+              0.7191
+            ],
+            "speed": 17.27
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.transit-ignite",
+            "history": [
+              "anc.ch10.transit-ignite"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.transit-ignite"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              2.9446065632087643,
+              87.47825965468323,
+              -6.0206569540299855
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6636,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 1.8,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ],
+            "stillTime": 0.2,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 5.102,
+          "marker": "LEG:anchor-transit-ignite",
+          "wallMs": 5629,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              3,
+              87,
+              -6
+            ],
+            "quat": [
+              -0.0139,
+              0.6947,
+              0.0117,
+              0.7191
+            ],
+            "speed": 17.27
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.transit-ignite",
+            "history": [
+              "anc.ch10.transit-ignite"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.transit-ignite"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              2.9446065632087643,
+              87.47825965468323,
+              -6.0206569540299855
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6636,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 1.8,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ],
+            "stillTime": 0.2,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 5.102,
+          "wallMs": 5629,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              3,
+              87,
+              -6
+            ],
+            "quat": [
+              -0.0139,
+              0.6947,
+              0.0117,
+              0.7191
+            ],
+            "speed": 17.27
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.transit-ignite",
+            "history": [
+              "anc.ch10.transit-ignite"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.transit-ignite"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              2.9446065632087643,
+              87.47825965468323,
+              -6.0206569540299855
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6636,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 1.8,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ],
+            "stillTime": 0.2,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 5.892,
+          "wallMs": 6468,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -53,
+              83,
+              -10
+            ],
+            "quat": [
+              -0.06,
+              0.6504,
+              0.0504,
+              0.7555
+            ],
+            "speed": 127.81
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.transit-ignite",
+            "history": [
+              "anc.ch10.transit-ignite"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.transit-ignite"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              -52.908243017909676,
+              82.75246726508543,
+              -10.479789860591618
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6580,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 2.5,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ],
+            "stillTime": 1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 7.31,
+          "wallMs": 7902,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -288,
+              49,
+              -42
+            ],
+            "quat": [
+              -0.0698,
+              0.6404,
+              0.0585,
+              0.7626
+            ],
+            "speed": 243.6
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.transit-ignite",
+            "history": [
+              "anc.ch10.transit-ignite"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.transit-ignite"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -288.33470955086904,
+              48.929291076984576,
+              -42.254686398664155
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6341,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 3.9,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 12.276,
+          "marker": "LEG:seam-milestone",
+          "wallMs": 12865,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -1565,
+              -181,
+              -258
+            ],
+            "quat": [
+              -0.0712,
+              0.639,
+              0.0596,
+              0.7636
+            ],
+            "speed": 303.97
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.seam-of-light",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.station-resolved"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -1564.7491130343944,
+              -181.01835955514534,
+              -257.8175135539986
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 5032,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 8.9,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.7,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 12.276,
+          "marker": "LEG:anchor-seam-of-light",
+          "wallMs": 12865,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -1565,
+              -181,
+              -258
+            ],
+            "quat": [
+              -0.0712,
+              0.639,
+              0.0596,
+              0.7636
+            ],
+            "speed": 303.97
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.seam-of-light",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.station-resolved"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -1564.7491130343944,
+              -181.01835955514534,
+              -257.8175135539986
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 5032,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 8.9,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.7,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 12.276,
+          "marker": "LEG:T3-resolving-rung",
+          "wallMs": 12865,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -1565,
+              -181,
+              -258
+            ],
+            "quat": [
+              -0.0712,
+              0.639,
+              0.0596,
+              0.7636
+            ],
+            "speed": 303.97
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.seam-of-light",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.station-resolved"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -1564.7491130343944,
+              -181.01835955514534,
+              -257.8175135539986
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 5032,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 8.9,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.7,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 12.276,
+          "wallMs": 12865,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -1565,
+              -181,
+              -258
+            ],
+            "quat": [
+              -0.0712,
+              0.639,
+              0.0596,
+              0.7636
+            ],
+            "speed": 303.97
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.seam-of-light",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.station-resolved"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -1564.7491130343944,
+              -181.01835955514534,
+              -257.8175135539986
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 5032,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 8.9,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.7,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 25.739,
+          "marker": "LEG:standoff-reached",
+          "wallMs": 26330,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(bo",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5089,
+              -855,
+              -889
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 285.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5089.219208572463,
+              -854.5759766885366,
+              -888.9101475547699
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1459,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 22.3,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 25.739,
+          "marker": "LEG:station-resolved-milestone",
+          "wallMs": 26330,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(bo",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5089,
+              -855,
+              -889
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 285.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5089.219208572463,
+              -854.5759766885366,
+              -888.9101475547699
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1459,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 22.3,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 25.739,
+          "marker": "LEG:anchor-station-resolved",
+          "wallMs": 26330,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(bo",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5089,
+              -855,
+              -889
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 285.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5089.219208572463,
+              -854.5759766885366,
+              -888.9101475547699
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1459,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 22.3,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 25.739,
+          "wallMs": 26330,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(bo",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5089,
+              -855,
+              -889
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 285.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5089.219208572463,
+              -854.5759766885366,
+              -888.9101475547699
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1459,
+                "phase": "detected",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 22.3,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 25.997,
+          "wallMs": 26587,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fire",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5154,
+              -867,
+              -900
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 251.03
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5157.529205210756,
+              -867.6637227204445,
+              -901.172499259431
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1394,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 22.6,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 26.255,
+          "wallMs": 26845,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5214,
+              -878,
+              -911
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 219.11
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5213.755297758121,
+              -878.4362722130611,
+              -911.2656650583606
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1340,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 22.8,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 26.512,
+          "marker": "LEG:k11-painted",
+          "wallMs": 27104,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5263,
+              -888,
+              -920
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 192.84
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5263.282547519219,
+              -887.9253674909368,
+              -920.1563192147496
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1293,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 23.1,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 26.512,
+          "wallMs": 27104,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5263,
+              -888,
+              -920
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 192.84
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5263.282547519219,
+              -887.9253674909368,
+              -920.1563192147496
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1293,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 23.1,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 26.769,
+          "wallMs": 27359,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5309,
+              -897,
+              -928
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 168.38
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5309.412656215458,
+              -896.7635928862261,
+              -928.4371513746862
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1250,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 23.3,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 27.025,
+          "wallMs": 27617,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead, a ligh",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5347,
+              -904,
+              -935
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 148.23
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5347.400753779579,
+              -904.0418625044662,
+              -935.2564082308797
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1214,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 23.6,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 27.283,
+          "wallMs": 27873,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead, a light someo",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5383,
+              -911,
+              -942
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 129.37
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5382.957724537395,
+              -910.8543442178881,
+              -941.6392526525156
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1181,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 23.9,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 27.542,
+          "wallMs": 28131,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead, a light someone else",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5412,
+              -916,
+              -947
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 113.88
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5412.166936655037,
+              -916.4506371296275,
+              -946.8826086710951
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1154,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 24.1,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 27.802,
+          "wallMs": 28390,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead, a light someone else keeps a",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5439,
+              -922,
+              -952
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 99.4
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5439.45507260841,
+              -921.6788644845927,
+              -951.7811116266244
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1129,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 24.4,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 28.061,
+          "wallMs": 28651,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5462,
+              -926,
+              -956
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 87.51
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-transit",
+            "targetWorldId": null,
+            "targetSystemPosition": [
+              -6772,
+              -1177,
+              -1191
+            ],
+            "keys": []
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": "anc.ch10.station-resolved",
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved"
+            ],
+            "authority": "player-camera",
+            "fov": 70,
+            "agency": {
+              "movement": "blended",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.threshold-handback"
+            },
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5461.873428139837,
+              -925.9740739427624,
+              -955.8054385728268
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1109,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 24.6,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 28.323,
+          "marker": "LEG:anchor-threshold-handback",
+          "wallMs": 28911,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5479,
+              -929,
+              -959
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 78.63
+          },
+          "directive": {
+            "active": false,
+            "beat": null,
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": []
+          },
+          "av": {
+            "active": false,
+            "beat": null,
+            "anchorId": null,
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved",
+              "anc.ch10.threshold-handback"
+            ],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": "completion"
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": true
+          },
+          "score": {
+            "variant": null,
+            "carrierAlive": false,
+            "intensity": 0.28,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5478.588727228915,
+              -929.1766152996829,
+              -958.8060078359786
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1094,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 24.7,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 28.323,
+          "marker": "LEG:guidance-cleared",
+          "wallMs": 28911,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5479,
+              -929,
+              -959
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 78.63
+          },
+          "directive": {
+            "active": false,
+            "beat": null,
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": []
+          },
+          "av": {
+            "active": false,
+            "beat": null,
+            "anchorId": null,
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved",
+              "anc.ch10.threshold-handback"
+            ],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": "completion"
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": true
+          },
+          "score": {
+            "variant": null,
+            "carrierAlive": false,
+            "intensity": 0.28,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5478.588727228915,
+              -929.1766152996829,
+              -958.8060078359786
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1094,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 24.7,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 28.323,
+          "wallMs": 28911,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": "space_station",
+            "targetWorldId": "-1,-1:a0",
+            "pos": [
+              -5479,
+              -929,
+              -959
+            ],
+            "quat": [
+              -0.0714,
+              0.6388,
+              0.0597,
+              0.7637
+            ],
+            "speed": 78.63
+          },
+          "directive": {
+            "active": false,
+            "beat": null,
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": []
+          },
+          "av": {
+            "active": false,
+            "beat": null,
+            "anchorId": null,
+            "history": [
+              "anc.ch10.transit-ignite",
+              "anc.ch10.seam-of-light",
+              "anc.ch10.station-resolved",
+              "anc.ch10.threshold-handback"
+            ],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": "completion"
+          },
+          "milestones": {
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": true,
+            "seamPassed": true,
+            "stationResolved": true,
+            "ch10Complete": true
+          },
+          "score": {
+            "variant": null,
+            "carrierAlive": false,
+            "intensity": 0.28,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -5478.588727228915,
+              -929.1766152996829,
+              -958.8060078359786
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 1094,
+                "phase": "approach",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-transit",
+            "clock": 24.7,
+            "pos": [
+              8,
+              53.85,
+              -6
+            ],
+            "keys": [],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        }
+      ],
+      "pageErrors": [],
+      "completed": true,
+      "specifiers": {
+        "spaceFlight": "/src/state/spaceFlight.ts",
+        "systemFlight": "/src/state/systemFlight.ts?t=1786514098957",
+        "storyState": "/src/story/storyState.ts?t=1786514098957",
+        "progression": "/src/game/systems/progressionSystem.ts",
+        "autopilot": "/src/story/autopilot.ts?t=1786514147901",
+        "signedAv": "/src/story/signedSceneAvRuntime.ts?t=1786514098957",
+        "director": "/src/story/emergentStoryDirector.ts?t=1786514125561",
+        "score": "/src/story/emergentScoreDirector.ts?t=1786514098957",
+        "relay": "/src/story/world/WreckRelay.tsx?t=1786514098957"
+      },
+      "durationSeconds": 48.5,
+      "lastBeatClock": 24.7,
+      "feedbackLog": [],
+      "legDurations": {
+        "ignited": 5.1,
+        "anchor-transit-ignite": 0,
+        "bearing-attitude-published": -1.6,
+        "seam-milestone": 8.77,
+        "anchor-seam-of-light": 0,
+        "T3-resolving-rung": 0,
+        "standoff-reached": 13.46,
+        "station-resolved-milestone": 0,
+        "anchor-station-resolved": 0,
+        "k11-painted": 0.77,
+        "anchor-threshold-handback": 1.81,
+        "guidance-cleared": 0
+      },
+      "holdMeasuredMs": 2581,
+      "holdSpecMs": 2500,
+      "holdWithinSamplingTolerance": true,
+      "standoffAtResolve": 1459,
+      "standoffSpec": 1500,
+      "fovAtResolve": 70,
+      "authorityAtResolve": "player-camera",
+      "scoreVariantAtResolve": "station-resolved",
+      "scoreIntensityAtResolve": 0.44,
+      "resolveQuantizeMs": 0,
+      "k11DelayMs": 774
+    }
+  ]
+}

@@ -81,6 +81,18 @@ export interface StoryBoundaryRuntimeSnapshot {
     readonly storyComplete: boolean;
     readonly keelMemoryBanked: boolean;
     readonly twoWorldHandoff: boolean;
+    /**
+     * Chapter 10's three durable station facts.
+     *
+     * `ch10BearingClaimed` is the targeting fence: it is what allows the story
+     * to aim at a station at all, and being durable it is never un-claimed.
+     * `ch10SeamPassed` is the one-shot seam latch (one milestone, two trigger
+     * paths). `stationDockingAuthorized` is DEFINED this run and set nowhere —
+     * it is published here so the boundary can prove docking stayed inert.
+     */
+    readonly ch10BearingClaimed: boolean;
+    readonly ch10SeamPassed: boolean;
+    readonly stationDockingAuthorized: boolean;
   };
 }
 
@@ -150,6 +162,12 @@ export function deriveStoryBoundaryState(
   if (runtime.maw.repaired) refs.add('state:maw/repaired');
   if (runtime.durable.keelMemoryBanked) refs.add('state:item/kestrel-keel-memory-banked');
   if (runtime.durable.twoWorldHandoff) refs.add('state:free-play/two-world-handoff');
+  // Chapter 10's station claims. The bearing and the seam are earned facts; the
+  // docking authorization is a fence this run only defines, so its ref exists
+  // precisely so a verifier can watch it stay absent.
+  if (runtime.durable.ch10BearingClaimed) refs.add('state:story/ch10-bearing-claimed');
+  if (runtime.durable.ch10SeamPassed) refs.add('state:story/ch10-seam-passed');
+  if (runtime.durable.stationDockingAuthorized) refs.add('state:station/docking-authorized');
 
   const verified = (
     Number.isInteger(runtime.story.runId)
@@ -234,7 +252,10 @@ export function readStoryBoundaryRuntime(
     durable: Object.freeze({
       storyComplete: hasMilestone(STORY_MILESTONES.complete, actorId),
       keelMemoryBanked: hasMilestone('story:item:kestrel-keel-memory:banked', actorId),
-      twoWorldHandoff: hasMilestone('story:tidegarden:two-world-handoff', actorId)
+      twoWorldHandoff: hasMilestone('story:tidegarden:two-world-handoff', actorId),
+      ch10BearingClaimed: hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId),
+      ch10SeamPassed: hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId),
+      stationDockingAuthorized: hasMilestone(STORY_MILESTONES.stationDockingAuthorized, actorId)
     })
   });
 }

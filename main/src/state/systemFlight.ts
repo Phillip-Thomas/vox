@@ -13,6 +13,7 @@ import {
   normalizeSpaceStationAddress
 } from '../game/spaceStation/spaceStationAddress.ts';
 import type { SpaceStationAddress } from '../game/spaceStation/spaceStationTypes.ts';
+import { spaceStationTargetingAuthorized } from '../game/spaceStation/spaceStationDevFlag.ts';
 import { coordinateKey, normalizeCoordinate, sameSystemCoordinate } from '../utils/worldCoordinates.ts';
 
 export type SystemLocationMode = 'surface' | 'atmosphere' | 'local_space' | 'system_cruise';
@@ -266,6 +267,12 @@ export function commitSpaceStationTarget(address: SpaceStationAddress): number {
   if (coordinateKey(normalized.system) !== snapshot.systemId) {
     throw new Error('SpaceStation target must belong to the current star system.');
   }
+  // The story fence. Aiming at a station is a thing the player earns by asking
+  // for it: in story worlds the bearing must have been claimed first. Sandbox
+  // membership is tested inside the predicate, so `?spacestation=` is
+  // unaffected. A refused commit is a NO-OP, never a throw — the caller is the
+  // shipped approach driver and a fence is not an error condition.
+  if (!spaceStationTargetingAuthorized()) return snapshot.activationEpoch;
   const activationEpoch = snapshot.activationEpoch + 1;
   const target = freezeTarget({
     kind: 'space_station',

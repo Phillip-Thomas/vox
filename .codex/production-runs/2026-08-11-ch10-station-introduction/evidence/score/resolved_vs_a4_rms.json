@@ -1,0 +1,46 @@
+{
+  "deliverable": "evidence/score/resolved_vs_a4_rms.json",
+  "window": "STEADY 8-12s, past the shared fade-in; whole-file RMS is a fade-in artifact and is not reported",
+  "knobs": {
+    "resolvedPad": 0.17,
+    "a4Pad": 0.18,
+    "resolvedSub": 0.1,
+    "a4Sub": 0.1,
+    "was": {
+      "pad": 0.19,
+      "sub": 0.12
+    },
+    "note": "pad is strictly below with no tie; the sub knob ties at 0.10 and separates on the bus (0.10 x 0.748 against a4 0.10 x 0.874)"
+  },
+  "reference": {
+    "primary": "evidence/score/resolved_ref-a4-exhale-authored.wav — a4-exhale at its AUTHORED baseline intensity 0.72",
+    "control": "evidence/score/resolved_ref-a4-exhale.wav — the equal-intensity 0.44 render, which understates the awakening and is retained only as a control"
+  },
+  "steadyRmsDb": {
+    "resolved": -19.231960091881366,
+    "a4Authored": -18.72794141682084,
+    "a4EqualIntensityControl": -19.364273897562526
+  },
+  "steadyPeak": {
+    "resolved": 0.311387300491333,
+    "a4Authored": 0.37242478132247925,
+    "a4EqualIntensityControl": 0.3284759223461151
+  },
+  "steadySubBandDb": {
+    "resolved": -24.331409308426032,
+    "a4Authored": -23.639820980066713,
+    "a4EqualIntensityControl": -24.29541741344789
+  },
+  "strictlyBelowAuthoredA4": {
+    "rms": true,
+    "marginDb": 0.504,
+    "peak": true,
+    "subBand": true
+  },
+  "againstEqualIntensityControl": {
+    "rms": false,
+    "peak": true,
+    "subBand": true
+  },
+  "peakIntensityReportedByScoreIntensityFor": 0.44
+}

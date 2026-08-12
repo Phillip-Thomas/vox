@@ -1,0 +1,89 @@
+{
+  "schema": "paravoxia.stage6CheckEvidence.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v3",
+  "contractSha256": "ad3cab3a8c7e6384dfa486cc967c8195b335a2a8888c8d169612db8b287c4ad8",
+  "capturedAt": "2026-08-11T20:56:08.179217-04:00",
+  "previewServer": {
+    "url": "http://localhost:5176",
+    "pid": 2880340,
+    "restartsByVerifier": [
+      {
+        "at": "2026-08-11T20:44-04:00",
+        "reason": "inherited 10h-old dev server served split module instances: dynamic-import reads of edited modules resolved to dead copies (AV active:false while __storyBeat was ch10-ask). One server only, per lock."
+      },
+      {
+        "at": "2026-08-11T20:55-04:00",
+        "reason": "coordinator hot-applied three source fixes; HMR re-versioned the edited modules and the split returned. Restarted once more after the tree settled; AV reads verified live."
+      }
+    ],
+    "duplicatePolicyHonoured": true
+  },
+  "checks": {
+    "verify": {
+      "command": "npm --prefix main run verify",
+      "result": "pass",
+      "steps": 9,
+      "sceneAv": "76 anchors from 2 signed contracts (3367b94f9f0f, ad3cab3a8c7e)",
+      "storyAuthorityChecks": 1088,
+      "testFiles": 277,
+      "tests": 2236,
+      "build": "ok",
+      "previousResult": "FAIL at scene:av:check (stale generated runtime); closed by the coordinator"
+    },
+    "creativeGateContract": {
+      "command": "npm --prefix main run creative:gate -- --run .codex/production-runs/2026-08-11-ch10-station-introduction --phase contract",
+      "result": "pass",
+      "reportedBy": "coordinator 1651/1685"
+    },
+    "chapterRegistryGate": {
+      "command": "node main/tools/chapter-registry-gate.mjs",
+      "result": "pass"
+    },
+    "chapterJourneyCheck": {
+      "command": "npm --prefix main run chapter:journey:check",
+      "result": "pass"
+    },
+    "storyUxCheck": {
+      "command": "npm --prefix main run story:ux:check",
+      "result": "pass",
+      "files": 6,
+      "tests": 54
+    }
+  },
+  "markerDefectRegression": {
+    "objectiveId": "station:fault-read",
+    "contractRule": "no marker-requiring objective publishes before its handle resolves; the ch9-settle missing-marker gap must not recur",
+    "before": {
+      "observedAt": "2026-08-11T20:45-04:00",
+      "health": "missing-marker",
+      "secondsAfterDeepLinkEntry": 15,
+      "hud": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | RETURN TO THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+      "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT"
+    },
+    "after": {
+      "observedAt": "2026-08-11T20:55-04:00",
+      "health": "ready",
+      "secondsAfterDeepLinkEntry": 15,
+      "hud": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | RETURN TO THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+      "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+      "recalibratingBannerPresent": false
+    },
+    "result": "pass",
+    "fixRef": "getChapter10MarkerTarget() resolves each rung from live handles before the shipped fallback",
+    "probe": "scratch avcheck (deep link ?story=ch10-cold&profile=LOW, 15s settle)"
+  },
+  "signedAvAtColdNoticed": {
+    "beat": "ch10-cold",
+    "anchor": "anc.ch10.cold-noticed",
+    "cameraAuthority": "player-camera",
+    "appliedFovDeg": 75,
+    "scoreCueRefs": [
+      "sc.ch10.cold-step"
+    ],
+    "scoreIntensity": 0.24,
+    "objectiveId": "station:fault-read",
+    "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+    "health": "ready"
+  }
+}

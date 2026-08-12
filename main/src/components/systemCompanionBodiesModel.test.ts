@@ -14,6 +14,17 @@ import {
   companionPresentationMotionWeight,
   companionSystemMotionProfile,
   companionVisualBudget,
+  st0ClampedPixels,
+  st0NightVisibility,
+  st0QuadScale,
+  st0RenderPredicate,
+  st0SystemMotionProfile,
+  ST0_ANGULAR_RATE_RAD_PER_SEC,
+  ST0_LATITUDE_AMPLITUDE_RADIANS,
+  ST0_LONGITUDE_AMPLITUDE_RADIANS,
+  ST0_MAX_PIXELS,
+  ST0_MIN_PIXELS,
+  ST0_TRANSIT_PERIOD_SECONDS,
   COMPANION_APPARENT_DRIFT_RATE_RAD_PER_SEC,
   COMPANION_MOTION_FADE_END,
   COMPANION_MOTION_FADE_START,
@@ -424,3 +435,82 @@ function tupleDistance(a: readonly number[], b: readonly number[]): number {
 function angleBetween(a: readonly number[], b: readonly number[]): number {
   return Math.acos(THREE.MathUtils.clamp(dot(a, b) / (tupleLength(a) * tupleLength(b)), -1, 1));
 }
+
+describe('ST-0 — the point that keeps time', () => {
+  it('crosses the sky unmistakably faster than the star field it lives among', () => {
+    // 7.0x the star drift and ~8.7x the companion drift: not a star, not the
+    // moon, not the sibling world. The ratio IS the recognition.
+    expect(ST0_TRANSIT_PERIOD_SECONDS).toBe(90);
+    expect(ST0_ANGULAR_RATE_RAD_PER_SEC).toBeCloseTo(0.070, 3);
+    expect(ST0_ANGULAR_RATE_RAD_PER_SEC / SKY_STARFIELD_DRIFT_RAD_PER_SEC).toBeCloseTo(7.0, 1);
+    expect(
+      ST0_ANGULAR_RATE_RAD_PER_SEC / COMPANION_APPARENT_DRIFT_RATE_RAD_PER_SEC
+    ).toBeGreaterThan(8);
+  });
+
+  it('rides its ellipse centred on the true bearing, at the contracted amplitudes', () => {
+    const bearing: [number, number, number] = [-0.992, -0.118, 0.049];
+    const profile = st0SystemMotionProfile(bearing);
+    expect(profile.periodSeconds).toBe(ST0_TRANSIT_PERIOD_SECONDS);
+    expect(profile.longitudeAmplitudeRadians).toBe(ST0_LONGITUDE_AMPLITUDE_RADIANS);
+    expect(profile.latitudeAmplitudeRadians).toBe(ST0_LATITUDE_AMPLITUDE_RADIANS);
+    // One loop returns to where it started: the ground track is periodic, so a
+    // player who waits sees the same crossing again.
+    const start = companionApparentRelativePosition(bearing, profile, 0, 0);
+    const oneLoop = companionApparentRelativePosition(
+      bearing, profile, ST0_TRANSIT_PERIOD_SECONDS, 0
+    );
+    expect(oneLoop.distanceTo(start)).toBeLessThan(1e-6);
+    // And it genuinely moves in between — no stalled dot pretending to be a star.
+    const quarter = companionApparentRelativePosition(
+      bearing, profile, ST0_TRANSIT_PERIOD_SECONDS / 4, 0
+    );
+    expect(quarter.distanceTo(start)).toBeGreaterThan(0.2);
+  });
+
+  it('is world state over durable milestones and never appears in a sandbox', () => {
+    const live = {
+      storyWorld: true,
+      storyComplete: true,
+      twoWorldHandoff: true,
+      sandbox: false
+    };
+    expect(st0RenderPredicate(live)).toBe(true);
+    // Pure sandbox, the station sandbox, and every pre-done story beat render
+    // byte-identically to the shipped build.
+    expect(st0RenderPredicate({ ...live, sandbox: true })).toBe(false);
+    expect(st0RenderPredicate({ ...live, storyComplete: false })).toBe(false);
+    expect(st0RenderPredicate({ ...live, twoWorldHandoff: false })).toBe(false);
+    expect(st0RenderPredicate({ ...live, storyWorld: false })).toBe(false);
+  });
+
+  it('clamps to a findable point that can never read as a disc', () => {
+    expect(st0ClampedPixels(0.2)).toBe(ST0_MIN_PIXELS);
+    expect(st0ClampedPixels(2.6)).toBeCloseTo(2.6, 6);
+    expect(st0ClampedPixels(40)).toBe(ST0_MAX_PIXELS);
+    expect(st0ClampedPixels(Number.NaN)).toBe(ST0_MIN_PIXELS);
+  });
+
+  it('means DEVICE pixels, so the clamp survives every DPR', () => {
+    const fov = THREE.MathUtils.degToRad(75);
+    const atDpr1 = st0QuadScale(500, fov, 720, 1, ST0_MIN_PIXELS);
+    const atDpr2 = st0QuadScale(500, fov, 720, 2, ST0_MIN_PIXELS);
+    // Twice the device pixels per CSS pixel means half the world size for the
+    // same device-pixel footprint.
+    expect(atDpr2).toBeCloseTo(atDpr1 / 2, 6);
+    // And it scales linearly with distance, so the angular size is invariant.
+    expect(st0QuadScale(1000, fov, 720, 1, ST0_MIN_PIXELS)).toBeCloseTo(atDpr1 * 2, 6);
+  });
+
+  it('is night-only and constant while it is up — no pulse, no blink', () => {
+    expect(st0NightVisibility(0)).toBe(1);
+    expect(st0NightVisibility(1)).toBe(0);
+    expect(st0NightVisibility(0.6)).toBe(0);
+    // Monotonic in darkness and free of any oscillation: a blink would be a cue,
+    // and cues are forbidden.
+    const samples = [0, 0.05, 0.1, 0.15, 0.2].map(st0NightVisibility);
+    for (let i = 1; i < samples.length; i++) {
+      expect(samples[i]).toBeLessThanOrEqual(samples[i - 1]);
+    }
+  });
+});

@@ -1,5 +1,9 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
-import { useStoryState } from '../storyState.ts';
+import {
+  storyChapterAtLeast,
+  storyFirstDayOrLater,
+  useStoryState
+} from '../storyState.ts';
 import { clearSideLens, setSideLens } from '../sideLens.ts';
 import {
   establishFieldPackDropPose,
@@ -75,7 +79,7 @@ const StoryWorldProps: React.FC<{
   );
   const fieldPackSource: FieldPackDropPoseSource | null = story.beat === 'a4-exhale'
     ? 'a4-planned-tear'
-    : liveWorldReady && (done || /^ch[5-9]$/.test(String(story.chapter)))
+    : liveWorldReady && (done || storyChapterAtLeast(story.chapter, 'ch5'))
       ? 'direct-ch5-fallback'
       : null;
   // Resolve before child render so FieldPack, MawPondResonance and all frame
@@ -218,9 +222,11 @@ const StoryWorldProps: React.FC<{
   if (!story.active && !done) return null;
   if (story.chapter === 'prologue') return null;
 
-  const firstDayOrLater = story.chapter === 'ch4' || done
-    || /^ch[5-9]$/.test(String(story.chapter))
-    || story.beat === 'ch3-thirst' || story.beat === 'ch3-forage' || story.beat === 'ch3-signal';
+  // Chapter ORDER, not chapter name shape: the old regex read as "five or
+  // later" and was not, so the wreck relay's scenery and its live lamp vanished
+  // the moment chapter 10 began. `done` is kept explicitly because free play
+  // reports the `complete` chapter with no beat of its own.
+  const firstDayOrLater = done || storyFirstDayOrLater(story);
 
   return (
     <>

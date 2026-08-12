@@ -1,0 +1,2960 @@
+{
+  "capturedAt": "2026-08-11T21:29:49.991Z",
+  "base": "http://localhost:5176",
+  "url": "http://localhost:5176/?story=base&movie=1&profile=LOW",
+  "viewport": "1280x720",
+  "qualityTierRequested": "LOW",
+  "trace": [
+    {
+      "t": 0.55,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:scan-waterline",
+      "markerLabel": "LIVING WATERLINE · SCAN",
+      "health": "missing-marker",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+      "captionText": "(abu",
+      "auditText": null,
+      "markerChipText": null,
+      "autopilot": null,
+      "feedbackCount": 0,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": null,
+        "cameraAuthority": null,
+        "appliedFovDeg": null,
+        "startFovDeg": null,
+        "endFovDeg": null,
+        "postFx": [],
+        "score": {
+          "cueRefs": [],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "missing-marker",
+      "objectiveVersion": 1
+    },
+    {
+      "t": 1.07,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:scan-waterline",
+      "markerLabel": "LIVING WATERLINE · SCAN",
+      "health": "missing-marker",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+      "captionText": "(abundance is not permission. it is a question with many answ",
+      "auditText": null,
+      "markerChipText": null,
+      "autopilot": null,
+      "feedbackCount": 0,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": null,
+        "cameraAuthority": null,
+        "appliedFovDeg": null,
+        "startFovDeg": null,
+        "endFovDeg": null,
+        "postFx": [],
+        "score": {
+          "cueRefs": [],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 2
+    },
+    {
+      "t": 4.53,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:scan-waterline",
+      "markerLabel": "LIVING WATERLINE · SCAN",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD.",
+      "captionText": "(abundance is not permission. it is a question with many answers.)",
+      "auditText": null,
+      "markerChipText": [
+        "living waterline · scan · 9m"
+      ],
+      "autopilot": {
+        "goal": [
+          10,
+          50.9,
+          -14
+        ],
+        "pos": [
+          9.3,
+          50.79,
+          -11.94
+        ],
+        "clock": 0.7,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 0,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": null,
+        "cameraAuthority": null,
+        "appliedFovDeg": null,
+        "startFovDeg": null,
+        "endFovDeg": null,
+        "postFx": [],
+        "score": {
+          "cueRefs": [],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:scan-waterline",
+        "kind": "travel",
+        "markerLabel": "LIVING WATERLINE · SCAN",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "READ THE SIGNAL FIELD."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 2
+    },
+    {
+      "t": 5.04,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:scan-waterline",
+      "markerLabel": "LIVING WATERLINE · SCAN",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD.",
+      "captionText": "(abundance is not permission. it is a question with many answers.)",
+      "auditText": null,
+      "markerChipText": [
+        "living waterline · scan · 8m"
+      ],
+      "autopilot": {
+        "goal": [
+          10,
+          50.9,
+          -16
+        ],
+        "pos": [
+          9.46,
+          50.79,
+          -14.38
+        ],
+        "clock": 1.2,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 0,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.scanner-overload",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.02-see-one-relation"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.28500000000000003,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:attend-waterline",
+        "kind": "interact",
+        "markerLabel": "LIVING WATERLINE · ATTEND",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "[F] ATTEND THE RELATIONSHIP."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 4
+    },
+    {
+      "t": 5.66,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:attend-waterline",
+      "markerLabel": "LIVING WATERLINE · ATTEND",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE · ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+      "captionText": "(abundance is not permission. it is a question with many answers.)",
+      "auditText": null,
+      "markerChipText": [
+        "living waterline · attend · 6m"
+      ],
+      "autopilot": {
+        "goal": [
+          12,
+          50.9,
+          -18
+        ],
+        "pos": [
+          10.45,
+          50.79,
+          -17.21
+        ],
+        "clock": 1.8,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 1,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.scanner-overload",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.02-see-one-relation"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.28500000000000003,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:attend-waterline",
+        "kind": "interact",
+        "markerLabel": "LIVING WATERLINE · ATTEND",
+        "workOrder": [
+          "FOLLOW THE LIVING WATERLINE MARKER.",
+          "[F] ATTEND THE RELATIONSHIP."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 4
+    },
+    {
+      "t": 6.67,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:choose-site",
+      "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+      "captionText": "(roots hol",
+      "auditText": null,
+      "markerChipText": [
+        "recommended habitat site · choose · 20m"
+      ],
+      "autopilot": {
+        "goal": [
+          10,
+          50.9,
+          -18
+        ],
+        "pos": [
+          11.8,
+          50.79,
+          -18.03
+        ],
+        "clock": 2.8,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 2,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.relationship-attended",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.03-three-kinds-of-neighbor"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.30400000000000005,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "kind": "interact",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "workOrder": [
+          "FOLLOW THE HABITAT SITE MARKER.",
+          "[F] CHOOSE THIS DRY, LEVEL SITE."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 6
+    },
+    {
+      "t": 7.19,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:choose-site",
+      "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+      "captionText": "(roots hold the bank. the",
+      "auditText": null,
+      "markerChipText": [
+        "recommended habitat site · choose · 19m"
+      ],
+      "autopilot": {
+        "goal": [
+          6,
+          50.9,
+          -18
+        ],
+        "pos": [
+          9.3,
+          50.79,
+          -17.72
+        ],
+        "clock": 3.3,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 2,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.relationship-attended",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.03-three-kinds-of-neighbor"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.30400000000000005,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "kind": "interact",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "workOrder": [
+          "FOLLOW THE HABITAT SITE MARKER.",
+          "[F] CHOOSE THIS DRY, LEVEL SITE."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 6
+    },
+    {
+      "t": 7.7,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:choose-site",
+      "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+      "captionText": "(roots hold the bank. the bank slows the",
+      "auditText": null,
+      "markerChipText": [
+        "recommended habitat site · choose · 18m"
+      ],
+      "autopilot": {
+        "goal": [
+          4,
+          50.9,
+          -18
+        ],
+        "pos": [
+          6.91,
+          50.79,
+          -18.09
+        ],
+        "clock": 3.8,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 2,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.relationship-attended",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.03-three-kinds-of-neighbor"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.30400000000000005,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "kind": "interact",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "workOrder": [
+          "FOLLOW THE HABITAT SITE MARKER.",
+          "[F] CHOOSE THIS DRY, LEVEL SITE."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 6
+    },
+    {
+      "t": 8.2,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:choose-site",
+      "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+      "captionText": "(roots hold the bank. the bank slows the water. neither",
+      "auditText": null,
+      "markerChipText": [
+        "recommended habitat site · choose · 17m"
+      ],
+      "autopilot": {
+        "goal": [
+          2,
+          50.9,
+          -18
+        ],
+        "pos": [
+          4.46,
+          50.79,
+          -18.19
+        ],
+        "clock": 4.3,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 2,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.relationship-attended",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.03-three-kinds-of-neighbor"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.30400000000000005,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "kind": "interact",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "workOrder": [
+          "FOLLOW THE HABITAT SITE MARKER.",
+          "[F] CHOOSE THIS DRY, LEVEL SITE."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 6
+    },
+    {
+      "t": 8.72,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:choose-site",
+      "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+      "captionText": "(roots hold the bank. the bank slows the water. neither stands alone.",
+      "auditText": null,
+      "markerChipText": [
+        "recommended habitat site · choose · 17m"
+      ],
+      "autopilot": {
+        "goal": [
+          0,
+          50.9,
+          -18
+        ],
+        "pos": [
+          1.93,
+          50.79,
+          -18.12
+        ],
+        "clock": 4.8,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 2,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.relationship-attended",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.03-three-kinds-of-neighbor"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.30400000000000005,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "kind": "interact",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "workOrder": [
+          "FOLLOW THE HABITAT SITE MARKER.",
+          "[F] CHOOSE THIS DRY, LEVEL SITE."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 6
+    },
+    {
+      "t": 9.23,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:choose-site",
+      "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE · CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+      "captionText": "(roots hold the bank. the bank slows the water. neither stands alone.)",
+      "auditText": null,
+      "markerChipText": [
+        "recommended habitat site · choose · 15m"
+      ],
+      "autopilot": {
+        "goal": [
+          0,
+          50.9,
+          -14
+        ],
+        "pos": [
+          0.65,
+          50.79,
+          -16.37
+        ],
+        "clock": 5.3,
+        "routeAction": "walk",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 2,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.relationship-attended",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.settle.03-three-kinds-of-neighbor"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.30400000000000005,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:choose-site",
+        "kind": "interact",
+        "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+        "workOrder": [
+          "FOLLOW THE HABITAT SITE MARKER.",
+          "[F] CHOOSE THIS DRY, LEVEL SITE."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 6
+    },
+    {
+      "t": 12.37,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+      "captionText": "",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · wait for night · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.88,
+          -1.77
+        ],
+        "clock": 8.5,
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 5,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.shelter-certified",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.01-living-night"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:wait-night",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+        "workOrder": [
+          "RETURN TO THE SECOND HEARTH.",
+          "REST BECOMES AVAILABLE AT NIGHT."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 12
+    },
+    {
+      "t": 12.88,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+      "captionText": "(not a claim on",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · wait for night · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 9,
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 5,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.shelter-certified",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.01-living-night"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:wait-night",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+        "workOrder": [
+          "RETURN TO THE SECOND HEARTH.",
+          "REST BECOMES AVAILABLE AT NIGHT."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 12
+    },
+    {
+      "t": 13.38,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+      "captionText": "(not a claim on the world. an",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · wait for night · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 9.5,
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 5,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.shelter-certified",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.01-living-night"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:wait-night",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+        "workOrder": [
+          "RETURN TO THE SECOND HEARTH.",
+          "REST BECOMES AVAILABLE AT NIGHT."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 12
+    },
+    {
+      "t": 13.89,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+      "captionText": "(not a claim on the world. an address inside",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · wait for night · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 10,
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 5,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.shelter-certified",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.01-living-night"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:wait-night",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+        "workOrder": [
+          "RETURN TO THE SECOND HEARTH.",
+          "REST BECOMES AVAILABLE AT NIGHT."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 12
+    },
+    {
+      "t": 14.39,
+      "changed": true,
+      "beat": "ch9-settle",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+      "captionText": "(not a claim on the world. an address inside a relationship",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · wait for night · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 10.5,
+        "routeAction": "idle",
+        "routeOutcome": "dry-surface-path"
+      },
+      "feedbackCount": 5,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-settle",
+        "anchorId": "anc.settle.shelter-certified",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.01-living-night"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:wait-night",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+        "workOrder": [
+          "RETURN TO THE SECOND HEARTH.",
+          "REST BECOMES AVAILABLE AT NIGHT."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 12
+    },
+    {
+      "t": 14.9,
+      "changed": true,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "health": "ready",
+      "requiresMarker": "true",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+      "captionText": "(not a claim on the world. an address inside a relationship.)",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · wait for night · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 0.1,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 6,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": "anc.settle.shelter-certified",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.01-living-night"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.settle.abundance-choice"
+          ],
+          "intensity": 0.38,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:wait-night",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+        "workOrder": [
+          "RETURN TO THE SECOND HEARTH.",
+          "REST BECOMES AVAILABLE AT NIGHT."
+        ],
+        "requiresMarker": true
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 15
+    },
+    {
+      "t": 15.49,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 0.7,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 30.19,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 15.4,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 45.37,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 30.5,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 60.09,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 45.2,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 75.29,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 60.3,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 90.47,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 75.4,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 105.15,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 90.1,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 120.37,
+      "changed": false,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:wait-night",
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 105.2,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    },
+    {
+      "t": 123.92,
+      "changed": true,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "health": "ready",
+      "requiresMarker": "false",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+      "captionText": "(",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · rest inside · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 108.6,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 8,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": "anc.hearth.freeplay-handback",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.04-the-line-remains-open"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.hearth.between-fires"
+          ],
+          "intensity": 0.28,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "workOrder": [
+          "THE SECOND HEARTH IS SAFE.",
+          "LET THE TWO-WORLD HANDOFF SETTLE."
+        ],
+        "requiresMarker": false
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 19
+    },
+    {
+      "t": 124.51,
+      "changed": true,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "health": "ready",
+      "requiresMarker": "false",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+      "captionText": "(one fire behind yo",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · rest inside · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 109.2,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 8,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": "anc.hearth.freeplay-handback",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.04-the-line-remains-open"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.hearth.between-fires"
+          ],
+          "intensity": 0.28,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "workOrder": [
+          "THE SECOND HEARTH IS SAFE.",
+          "LET THE TWO-WORLD HANDOFF SETTLE."
+        ],
+        "requiresMarker": false
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 19
+    },
+    {
+      "t": 125.02,
+      "changed": true,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "health": "ready",
+      "requiresMarker": "false",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+      "captionText": "(one fire behind you. one fire he",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · rest inside · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 109.7,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 8,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": "anc.hearth.freeplay-handback",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.04-the-line-remains-open"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.hearth.between-fires"
+          ],
+          "intensity": 0.28,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "workOrder": [
+          "THE SECOND HEARTH IS SAFE.",
+          "LET THE TWO-WORLD HANDOFF SETTLE."
+        ],
+        "requiresMarker": false
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 19
+    },
+    {
+      "t": 125.52,
+      "changed": true,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "health": "ready",
+      "requiresMarker": "false",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+      "captionText": "(one fire behind you. one fire here. home is the",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · rest inside · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 110.2,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 8,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": "anc.hearth.freeplay-handback",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.04-the-line-remains-open"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.hearth.between-fires"
+          ],
+          "intensity": 0.28,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "workOrder": [
+          "THE SECOND HEARTH IS SAFE.",
+          "LET THE TWO-WORLD HANDOFF SETTLE."
+        ],
+        "requiresMarker": false
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 19
+    },
+    {
+      "t": 126.03,
+      "changed": true,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "health": "ready",
+      "requiresMarker": "false",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+      "captionText": "(one fire behind you. one fire here. home is the distance you c",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · rest inside · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 110.8,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 8,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": "anc.hearth.freeplay-handback",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.04-the-line-remains-open"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.hearth.between-fires"
+          ],
+          "intensity": 0.28,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "workOrder": [
+          "THE SECOND HEARTH IS SAFE.",
+          "LET THE TWO-WORLD HANDOFF SETTLE."
+        ],
+        "requiresMarker": false
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 19
+    },
+    {
+      "t": 126.53,
+      "changed": true,
+      "beat": "ch9-hearth",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "health": "ready",
+      "requiresMarker": "false",
+      "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+      "captionText": "(one fire behind you. one fire here. home is the distance you can keep alive.)",
+      "auditText": null,
+      "markerChipText": [
+        "second hearth · rest inside · 0m"
+      ],
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 111.3,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 8,
+      "av": {
+        "active": true,
+        "suspended": false,
+        "beat": "ch9-hearth",
+        "anchorId": "anc.hearth.freeplay-handback",
+        "cameraAuthority": "player-camera",
+        "appliedFovDeg": 75,
+        "startFovDeg": 75,
+        "endFovDeg": 75,
+        "postFx": [
+          "fx.hearth.04-the-line-remains-open"
+        ],
+        "score": {
+          "cueRefs": [
+            "sc.hearth.between-fires"
+          ],
+          "intensity": 0.28,
+          "hit": null
+        },
+        "lastResetReason": null
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": {
+        "id": "settle:second-hearth-settling",
+        "kind": "wait",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "workOrder": [
+          "THE SECOND HEARTH IS SAFE.",
+          "LET THE TWO-WORLD HANDOFF SETTLE."
+        ],
+        "requiresMarker": false
+      },
+      "objectiveHealth": "ready",
+      "objectiveVersion": 19
+    },
+    {
+      "t": 129.65,
+      "changed": true,
+      "beat": "done",
+      "objectiveId": null,
+      "markerLabel": null,
+      "health": null,
+      "requiresMarker": null,
+      "hudText": null,
+      "captionText": "(one fire behind you. one fire here. home is the distance you can keep alive.)",
+      "auditText": null,
+      "markerChipText": null,
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 114.1,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      },
+      "feedbackCount": 8,
+      "av": {
+        "active": false,
+        "suspended": false,
+        "beat": null,
+        "anchorId": null,
+        "cameraAuthority": null,
+        "appliedFovDeg": null,
+        "startFovDeg": null,
+        "endFovDeg": null,
+        "postFx": [],
+        "score": {
+          "cueRefs": [],
+          "intensity": 0.28,
+          "hit": null
+        },
+        "lastResetReason": "completion"
+      },
+      "realityStage": "alive",
+      "inputPolicy": {
+        "lookMode": "free",
+        "targetFov": 75,
+        "targetDpr": null,
+        "moveSpeedScale": 1,
+        "allowBuild": true,
+        "allowCraft": true,
+        "feedBlend": 1,
+        "sideBlend": 1
+      },
+      "objective": null,
+      "objectiveHealth": "idle",
+      "objectiveVersion": 20
+    },
+    {
+      "t": 135.32,
+      "changed": false,
+      "beat": "done",
+      "objectiveId": null,
+      "autopilot": {
+        "goal": null,
+        "pos": [
+          -0.11,
+          50.91,
+          -1.77
+        ],
+        "clock": 114.1,
+        "routeAction": "idle",
+        "routeOutcome": "not-planned"
+      }
+    }
+  ],
+  "shots": [
+    {
+      "file": "evidence/baseline/00_015s_ch9-hearth_hearth-enter.png",
+      "t": 15,
+      "beat": "ch9-hearth",
+      "label": "hearth-enter",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "caption": "(not a claim on the world. an address inside a relationship.)"
+    },
+    {
+      "file": "evidence/baseline/01_124s_ch9-hearth_hearth-closing.png",
+      "t": 124,
+      "beat": "ch9-hearth",
+      "label": "hearth-closing",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "caption": "("
+    },
+    {
+      "file": "evidence/baseline/02_127s_ch9-hearth_hearth-closing-late.png",
+      "t": 127,
+      "beat": "ch9-hearth",
+      "label": "hearth-closing-late",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "caption": "(one fire behind you. one fire here. home is the distance you can keep alive.)"
+    },
+    {
+      "file": "evidence/baseline/03_130s_done_freeplay-seam.png",
+      "t": 130,
+      "beat": "done",
+      "label": "freeplay-seam",
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(one fire behind you. one fire here. home is the distance you can keep alive.)"
+    },
+    {
+      "file": "evidence/baseline/04_138s_done_freeplay-settled.png",
+      "t": 138,
+      "beat": "done",
+      "label": "freeplay-settled",
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(one fire behind you. one fire here. home is the distance you can keep alive.)"
+    },
+    {
+      "file": "evidence/baseline/05_184s_done_sky-mid.png",
+      "t": 184,
+      "beat": "done",
+      "label": "sky-mid",
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(one fire behind you. one fire here. home is the distance you can keep alive.)"
+    },
+    {
+      "file": "evidence/baseline/06_185s_done_sky-zenith.png",
+      "t": 185,
+      "beat": "done",
+      "label": "sky-zenith",
+      "objectiveId": null,
+      "markerLabel": null,
+      "caption": "(one fire behind you. one fire here. home is the distance you can keep alive.)"
+    }
+  ],
+  "anchors": {
+    "ch9HearthEnter": {
+      "tSeconds": 14.9,
+      "deep": {
+        "colorGrade": null,
+        "boundaryTelemetry": {
+          "schema": "paravoxia.storyBoundaryState.v1",
+          "verified": true,
+          "sampledAt": 1786483804884,
+          "stateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:system-flight/active-planet=-1,-1:p1",
+            "state:world/tidegarden"
+          ],
+          "runtime": {
+            "story": {
+              "active": true,
+              "chapter": "ch9",
+              "beat": "ch9-hearth",
+              "runId": 1
+            },
+            "app": {
+              "phase": "playing",
+              "sceneReady": true
+            },
+            "world": {
+              "systemId": "-1,-1",
+              "activePlanetId": "-1,-1:p1",
+              "spaceStationTargetId": null
+            },
+            "reality": {
+              "stage": "alive"
+            },
+            "control": {
+              "mode": "fps",
+              "phase": "surface"
+            },
+            "shipRestoration": {
+              "repairStage": "flight_ready"
+            },
+            "camera": {
+              "perspective": true,
+              "fov": 75,
+              "lookMode": "free",
+              "feedBlend": 1,
+              "sideBlend": 1,
+              "externalCameraMix": 0,
+              "signedAuthority": "player-camera"
+            },
+            "maw": {
+              "repaired": true,
+              "ritualPhase": "idle"
+            },
+            "durable": {
+              "storyComplete": false,
+              "keelMemoryBanked": true,
+              "twoWorldHandoff": false
+            }
+          }
+        },
+        "qualityProfile": "LOW",
+        "qualityFlags": {
+          "colorGrade": false,
+          "postProcess": false,
+          "outline": false,
+          "painterly": false,
+          "contactAO": false,
+          "skyClouds": false,
+          "waterReflections": "fresnel"
+        },
+        "dayPhase": 0.05163625000019878,
+        "storySnapshot": {
+          "active": true,
+          "chapter": "ch9",
+          "beat": "ch9-hearth",
+          "runId": 1
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "dpr": 1
+        },
+        "hudPresent": {
+          "guidanceHud": true,
+          "suitHud": true,
+          "inventoryChip": true,
+          "caption": true
+        },
+        "feedbackLog": [
+          {
+            "at": 5093,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:attend-waterline",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 6333,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:choose-site",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12274,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:craft-core",
+              "action": "craft"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12296,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:certify-shelter",
+              "action": "build"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12360,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 14774,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-hearth"
+          }
+        ]
+      },
+      "state": {
+        "beat": "ch9-hearth",
+        "objectiveId": "settle:wait-night",
+        "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+        "health": "ready",
+        "requiresMarker": "true",
+        "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+        "captionText": "(not a claim on the world. an address inside a relationship.)",
+        "auditText": null,
+        "markerChipText": [
+          "second hearth · wait for night · 0m"
+        ],
+        "autopilot": {
+          "goal": null,
+          "pos": [
+            -0.11,
+            50.91,
+            -1.77
+          ],
+          "clock": 0.1,
+          "routeAction": "idle",
+          "routeOutcome": "not-planned"
+        },
+        "feedbackCount": 6,
+        "av": {
+          "active": true,
+          "suspended": false,
+          "beat": "ch9-hearth",
+          "anchorId": "anc.settle.shelter-certified",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "startFovDeg": 75,
+          "endFovDeg": 75,
+          "postFx": [
+            "fx.hearth.01-living-night"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.settle.abundance-choice"
+            ],
+            "intensity": 0.38,
+            "hit": null
+          },
+          "lastResetReason": null
+        },
+        "realityStage": "alive",
+        "inputPolicy": {
+          "lookMode": "free",
+          "targetFov": 75,
+          "targetDpr": null,
+          "moveSpeedScale": 1,
+          "allowBuild": true,
+          "allowCraft": true,
+          "feedBlend": 1,
+          "sideBlend": 1
+        },
+        "objective": {
+          "id": "settle:wait-night",
+          "kind": "wait",
+          "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+          "workOrder": [
+            "RETURN TO THE SECOND HEARTH.",
+            "REST BECOMES AVAILABLE AT NIGHT."
+          ],
+          "requiresMarker": true
+        },
+        "objectiveHealth": "ready",
+        "objectiveVersion": 15
+      }
+    },
+    "ch9HearthClosing": {
+      "tSeconds": 123.92,
+      "deep": {
+        "colorGrade": null,
+        "boundaryTelemetry": {
+          "schema": "paravoxia.storyBoundaryState.v1",
+          "verified": true,
+          "sampledAt": 1786483913913,
+          "stateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:system-flight/active-planet=-1,-1:p1",
+            "state:world/tidegarden"
+          ],
+          "runtime": {
+            "story": {
+              "active": true,
+              "chapter": "ch9",
+              "beat": "ch9-hearth",
+              "runId": 1
+            },
+            "app": {
+              "phase": "playing",
+              "sceneReady": true
+            },
+            "world": {
+              "systemId": "-1,-1",
+              "activePlanetId": "-1,-1:p1",
+              "spaceStationTargetId": null
+            },
+            "reality": {
+              "stage": "alive"
+            },
+            "control": {
+              "mode": "fps",
+              "phase": "surface"
+            },
+            "shipRestoration": {
+              "repairStage": "flight_ready"
+            },
+            "camera": {
+              "perspective": true,
+              "fov": 75,
+              "lookMode": "free",
+              "feedBlend": 1,
+              "sideBlend": 1,
+              "externalCameraMix": 0,
+              "signedAuthority": "player-camera"
+            },
+            "maw": {
+              "repaired": true,
+              "ritualPhase": "idle"
+            },
+            "durable": {
+              "storyComplete": false,
+              "keelMemoryBanked": true,
+              "twoWorldHandoff": true
+            }
+          }
+        },
+        "qualityProfile": "LOW",
+        "qualityFlags": {
+          "colorGrade": false,
+          "postProcess": false,
+          "outline": false,
+          "painterly": false,
+          "contactAO": false,
+          "skyClouds": false,
+          "waterReflections": "fresnel"
+        },
+        "dayPhase": 0.5059220833331131,
+        "storySnapshot": {
+          "active": true,
+          "chapter": "ch9",
+          "beat": "ch9-hearth",
+          "runId": 1
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "dpr": 1
+        },
+        "hudPresent": {
+          "guidanceHud": true,
+          "suitHud": true,
+          "inventoryChip": true,
+          "caption": true
+        },
+        "feedbackLog": [
+          {
+            "at": 5093,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:attend-waterline",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 6333,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:choose-site",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12274,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:craft-core",
+              "action": "craft"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12296,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:certify-shelter",
+              "action": "build"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12360,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 14774,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-hearth"
+          },
+          {
+            "at": 123803,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:rest",
+              "action": "interact"
+            },
+            "beat": "ch9-hearth"
+          },
+          {
+            "at": 123854,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:second-hearth-settling",
+              "action": "wait"
+            },
+            "beat": "ch9-hearth"
+          }
+        ]
+      },
+      "state": {
+        "beat": "ch9-hearth",
+        "objectiveId": "settle:second-hearth-settling",
+        "markerLabel": "SECOND HEARTH · SETTLING",
+        "health": "ready",
+        "requiresMarker": "false",
+        "hudText": "CURRENT OBJECTIVE | SECOND HEARTH · SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+        "captionText": "(",
+        "auditText": null,
+        "markerChipText": [
+          "second hearth · rest inside · 0m"
+        ],
+        "autopilot": {
+          "goal": null,
+          "pos": [
+            -0.11,
+            50.91,
+            -1.77
+          ],
+          "clock": 108.6,
+          "routeAction": "idle",
+          "routeOutcome": "not-planned"
+        },
+        "feedbackCount": 8,
+        "av": {
+          "active": true,
+          "suspended": false,
+          "beat": "ch9-hearth",
+          "anchorId": "anc.hearth.freeplay-handback",
+          "cameraAuthority": "player-camera",
+          "appliedFovDeg": 75,
+          "startFovDeg": 75,
+          "endFovDeg": 75,
+          "postFx": [
+            "fx.hearth.04-the-line-remains-open"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.hearth.between-fires"
+            ],
+            "intensity": 0.28,
+            "hit": null
+          },
+          "lastResetReason": null
+        },
+        "realityStage": "alive",
+        "inputPolicy": {
+          "lookMode": "free",
+          "targetFov": 75,
+          "targetDpr": null,
+          "moveSpeedScale": 1,
+          "allowBuild": true,
+          "allowCraft": true,
+          "feedBlend": 1,
+          "sideBlend": 1
+        },
+        "objective": {
+          "id": "settle:second-hearth-settling",
+          "kind": "wait",
+          "markerLabel": "SECOND HEARTH · SETTLING",
+          "workOrder": [
+            "THE SECOND HEARTH IS SAFE.",
+            "LET THE TWO-WORLD HANDOFF SETTLE."
+          ],
+          "requiresMarker": false
+        },
+        "objectiveHealth": "ready",
+        "objectiveVersion": 19
+      }
+    },
+    "doneEnter": {
+      "tSeconds": 129.65,
+      "deep": {
+        "colorGrade": null,
+        "boundaryTelemetry": {
+          "schema": "paravoxia.storyBoundaryState.v1",
+          "verified": true,
+          "sampledAt": 1786483919663,
+          "stateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1:p1",
+            "state:world/tidegarden"
+          ],
+          "runtime": {
+            "story": {
+              "active": false,
+              "chapter": "complete",
+              "beat": "done",
+              "runId": 1
+            },
+            "app": {
+              "phase": "playing",
+              "sceneReady": true
+            },
+            "world": {
+              "systemId": "-1,-1",
+              "activePlanetId": "-1,-1:p1",
+              "spaceStationTargetId": null
+            },
+            "reality": {
+              "stage": "alive"
+            },
+            "control": {
+              "mode": "fps",
+              "phase": "surface"
+            },
+            "shipRestoration": {
+              "repairStage": "flight_ready"
+            },
+            "camera": {
+              "perspective": true,
+              "fov": 75,
+              "lookMode": "free",
+              "feedBlend": 1,
+              "sideBlend": 1,
+              "externalCameraMix": 0,
+              "signedAuthority": null
+            },
+            "maw": {
+              "repaired": true,
+              "ritualPhase": "idle"
+            },
+            "durable": {
+              "storyComplete": true,
+              "keelMemoryBanked": true,
+              "twoWorldHandoff": true
+            }
+          }
+        },
+        "qualityProfile": "LOW",
+        "qualityFlags": {
+          "colorGrade": false,
+          "postProcess": false,
+          "outline": false,
+          "painterly": false,
+          "contactAO": false,
+          "skyClouds": false,
+          "waterReflections": "fresnel"
+        },
+        "dayPhase": 0.5298824999997767,
+        "storySnapshot": {
+          "active": false,
+          "chapter": "complete",
+          "beat": "done",
+          "runId": 1
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "dpr": 1
+        },
+        "hudPresent": {
+          "guidanceHud": false,
+          "suitHud": true,
+          "inventoryChip": true,
+          "caption": true
+        },
+        "feedbackLog": [
+          {
+            "at": 5093,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:attend-waterline",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 6333,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:choose-site",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12274,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:craft-core",
+              "action": "craft"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12296,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:certify-shelter",
+              "action": "build"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12360,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 14774,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-hearth"
+          },
+          {
+            "at": 123803,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:rest",
+              "action": "interact"
+            },
+            "beat": "ch9-hearth"
+          },
+          {
+            "at": 123854,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:second-hearth-settling",
+              "action": "wait"
+            },
+            "beat": "ch9-hearth"
+          }
+        ]
+      },
+      "state": {
+        "beat": "done",
+        "objectiveId": null,
+        "markerLabel": null,
+        "health": null,
+        "requiresMarker": null,
+        "hudText": null,
+        "captionText": "(one fire behind you. one fire here. home is the distance you can keep alive.)",
+        "auditText": null,
+        "markerChipText": null,
+        "autopilot": {
+          "goal": null,
+          "pos": [
+            -0.11,
+            50.91,
+            -1.77
+          ],
+          "clock": 114.1,
+          "routeAction": "idle",
+          "routeOutcome": "not-planned"
+        },
+        "feedbackCount": 8,
+        "av": {
+          "active": false,
+          "suspended": false,
+          "beat": null,
+          "anchorId": null,
+          "cameraAuthority": null,
+          "appliedFovDeg": null,
+          "startFovDeg": null,
+          "endFovDeg": null,
+          "postFx": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.28,
+            "hit": null
+          },
+          "lastResetReason": "completion"
+        },
+        "realityStage": "alive",
+        "inputPolicy": {
+          "lookMode": "free",
+          "targetFov": 75,
+          "targetDpr": null,
+          "moveSpeedScale": 1,
+          "allowBuild": true,
+          "allowCraft": true,
+          "feedBlend": 1,
+          "sideBlend": 1
+        },
+        "objective": null,
+        "objectiveHealth": "idle",
+        "objectiveVersion": 20
+      }
+    },
+    "doneSky": {
+      "deep": {
+        "colorGrade": null,
+        "boundaryTelemetry": {
+          "schema": "paravoxia.storyBoundaryState.v1",
+          "verified": true,
+          "sampledAt": 1786483975294,
+          "stateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1:p1",
+            "state:world/tidegarden"
+          ],
+          "runtime": {
+            "story": {
+              "active": false,
+              "chapter": "complete",
+              "beat": "done",
+              "runId": 1
+            },
+            "app": {
+              "phase": "playing",
+              "sceneReady": true
+            },
+            "world": {
+              "systemId": "-1,-1",
+              "activePlanetId": "-1,-1:p1",
+              "spaceStationTargetId": null
+            },
+            "reality": {
+              "stage": "alive"
+            },
+            "control": {
+              "mode": "fps",
+              "phase": "surface"
+            },
+            "shipRestoration": {
+              "repairStage": "flight_ready"
+            },
+            "camera": {
+              "perspective": true,
+              "fov": 75,
+              "lookMode": "free",
+              "feedBlend": 1,
+              "sideBlend": 1,
+              "externalCameraMix": 0,
+              "signedAuthority": null
+            },
+            "maw": {
+              "repaired": true,
+              "ritualPhase": "idle"
+            },
+            "durable": {
+              "storyComplete": true,
+              "keelMemoryBanked": true,
+              "twoWorldHandoff": true
+            }
+          }
+        },
+        "qualityProfile": "LOW",
+        "qualityFlags": {
+          "colorGrade": false,
+          "postProcess": false,
+          "outline": false,
+          "painterly": false,
+          "contactAO": false,
+          "skyClouds": false,
+          "waterReflections": "fresnel"
+        },
+        "dayPhase": 0.7616766666660055,
+        "storySnapshot": {
+          "active": false,
+          "chapter": "complete",
+          "beat": "done",
+          "runId": 1
+        },
+        "viewport": {
+          "width": 1280,
+          "height": 720,
+          "dpr": 1
+        },
+        "hudPresent": {
+          "guidanceHud": false,
+          "suitHud": true,
+          "inventoryChip": true,
+          "caption": true
+        },
+        "feedbackLog": [
+          {
+            "at": 5093,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:attend-waterline",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 6333,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:choose-site",
+              "action": "interact"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12274,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:craft-core",
+              "action": "craft"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12296,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:certify-shelter",
+              "action": "build"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 12360,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-settle"
+          },
+          {
+            "at": 14774,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:wait-night",
+              "action": "wait"
+            },
+            "beat": "ch9-hearth"
+          },
+          {
+            "at": 123803,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:rest",
+              "action": "interact"
+            },
+            "beat": "ch9-hearth"
+          },
+          {
+            "at": 123854,
+            "cue": {
+              "type": "objective-enter",
+              "objectiveId": "settle:second-hearth-settling",
+              "action": "wait"
+            },
+            "beat": "ch9-hearth"
+          }
+        ]
+      },
+      "state": {
+        "beat": "done",
+        "objectiveId": null,
+        "markerLabel": null,
+        "health": null,
+        "requiresMarker": null,
+        "hudText": null,
+        "captionText": "(one fire behind you. one fire here. home is the distance you can keep alive.)",
+        "auditText": null,
+        "markerChipText": null,
+        "autopilot": {
+          "goal": null,
+          "pos": [
+            -0.11,
+            50.91,
+            -1.77
+          ],
+          "clock": 114.1,
+          "routeAction": "idle",
+          "routeOutcome": "not-planned"
+        },
+        "feedbackCount": 8,
+        "av": {
+          "active": false,
+          "suspended": false,
+          "beat": null,
+          "anchorId": null,
+          "cameraAuthority": null,
+          "appliedFovDeg": null,
+          "startFovDeg": null,
+          "endFovDeg": null,
+          "postFx": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.28,
+            "hit": null
+          },
+          "lastResetReason": "completion"
+        },
+        "realityStage": "alive",
+        "inputPolicy": {
+          "lookMode": "free",
+          "targetFov": 75,
+          "targetDpr": null,
+          "moveSpeedScale": 1,
+          "allowBuild": true,
+          "allowCraft": true,
+          "feedBlend": 1,
+          "sideBlend": 1
+        },
+        "objective": null,
+        "objectiveHealth": "idle",
+        "objectiveVersion": 20
+      }
+    }
+  },
+  "pageErrors": [],
+  "consoleErrors": [],
+  "closingStateAtSeconds": 123.92,
+  "reachedDone": true,
+  "reachedHearth": true,
+  "secondsToHearth": 14.9,
+  "secondsToDone": 129.7,
+  "hearthToDoneSeconds": 114.8,
+  "pointerLock": "CANVAS",
+  "skyWalk": {
+    "shelteredAtSeam": true,
+    "legs": [
+      {
+        "heading": 0,
+        "walkedMs": 6000,
+        "clear": false
+      },
+      {
+        "heading": 90,
+        "walkedMs": 6000,
+        "clear": false
+      },
+      {
+        "heading": 180,
+        "walkedMs": 6000,
+        "clear": false
+      },
+      {
+        "heading": 270,
+        "walkedMs": 6000,
+        "clear": false
+      },
+      {
+        "heading": 45,
+        "walkedMs": 6000,
+        "clear": false
+      },
+      {
+        "heading": 135,
+        "walkedMs": 6000,
+        "clear": false
+      }
+    ],
+    "clearedShelter": false
+  },
+  "durationSeconds": 185,
+  "feedbackLog": [
+    {
+      "at": 5093,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:attend-waterline",
+        "action": "interact"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 6333,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:choose-site",
+        "action": "interact"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 12274,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:craft-core",
+        "action": "craft"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 12296,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:certify-shelter",
+        "action": "build"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 12360,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:wait-night",
+        "action": "wait"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 14774,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:wait-night",
+        "action": "wait"
+      },
+      "beat": "ch9-hearth"
+    },
+    {
+      "at": 123803,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:rest",
+        "action": "interact"
+      },
+      "beat": "ch9-hearth"
+    },
+    {
+      "at": 123854,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:second-hearth-settling",
+        "action": "wait"
+      },
+      "beat": "ch9-hearth"
+    }
+  ]
+}

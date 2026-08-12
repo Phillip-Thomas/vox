@@ -1,9 +1,10 @@
-import { afterEach, describe, expect, it } from 'vitest';
+import { afterEach, describe, expect, it, vi } from 'vitest';
 import { markMilestone, resetProgression } from '../game/systems/progressionSystem.ts';
 import { emitEmergentStoryEvent, resetEmergentStoryEvents } from './emergentStoryEvents.ts';
 import {
   SIGNED_SCENE_AV_REVISION,
   SIGNED_SCENE_AV_SHA256,
+  activateSignedSceneAnchorById,
   activateSignedSceneSemanticEvent,
   enterSignedSceneAvBeat,
   getSignedSceneAvContract,
@@ -24,12 +25,13 @@ afterEach(() => {
 });
 
 describe('signed scene AV runtime', () => {
-  it('loads the actual frozen 66-anchor council contract and every reference resolves', () => {
+  it('loads both frozen council contracts and every reference resolves', () => {
     const contract = getSignedSceneAvContract();
     expect(contract.source.contractVersion).toBe(SIGNED_SCENE_AV_REVISION);
     expect(contract.source.sha256).toBe(SIGNED_SCENE_AV_SHA256);
-    expect(contract.anchors).toHaveLength(66);
-    expect(contract.beats).toHaveLength(13);
+    // 66 anchors from the A4-through-ch9 contract, plus chapter 10's ten.
+    expect(contract.anchors).toHaveLength(76);
+    expect(contract.beats).toHaveLength(16);
 
     const anchors = new Set(contract.anchors.map(anchor => anchor.id));
     const shots = new Set(contract.shots.map(shot => shot.id));
@@ -864,5 +866,84 @@ describe('signed scene AV runtime', () => {
 
     resetSignedSceneAvRuntime('sandbox');
     expect(getSignedSceneAvDebugSnapshot().activationHistoryAnchorIds).toEqual([]);
+  });
+});
+
+describe('chapter 10 lens parity across quality and motion profiles', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals();
+    resetSignedSceneAvRuntime('sandbox');
+  });
+
+  const setReducedMotion = (reduce: boolean) => {
+    vi.stubGlobal('window', {
+      matchMedia: (query: string) => ({
+        matches: reduce && query === '(prefers-reduced-motion: reduce)'
+      })
+    });
+  };
+
+  const transitFov = (): number | null => {
+    resetSignedSceneAvRuntime('sandbox');
+    enterSignedSceneAvBeat('ch10-transit');
+    activateSignedSceneAnchorById('anc.ch10.transit-ignite');
+    tickSignedSceneAvRuntime(0.1);
+    return getSignedSceneAvDebugSnapshot().shot?.lens.appliedFovDeg ?? null;
+  };
+
+  it('lands every profile on the same vehicle FOV, reduced motion included', () => {
+    // MEDIUM with reduced motion reported 75 where HIGH, LOW and POTATO
+    // reported 70. Skipping a lens move is a promise about MOTION, not a
+    // licence to change what the frame contains — a steady 75 frames the
+    // station differently from every other profile. Chapter 10's transit FOV
+    // is the vehicle's own state, not an effect: there is no authored lens
+    // motion anywhere in the beat (durationMs 0), so there is no ease to skip.
+    setReducedMotion(false);
+    const eased = transitFov();
+    expect(eased).toBe(70);
+
+    setReducedMotion(true);
+    const reduced = transitFov();
+    expect(reduced).toBe(70);
+    expect(reduced).toBe(eased);
+
+    // Quality tier is not an input to the lens rail at all, so the remaining
+    // two profiles cannot diverge: all four report the one vehicle value.
+    expect(getSignedSceneAvDebugSnapshot().shot?.lens.reducedMotion).toBe(true);
+  });
+
+  it('still skips the eased transition under reduced motion', () => {
+    // The accessibility promise is intact: reduced motion holds one value for
+    // the whole shot rather than animating toward it, so no frame of the beat
+    // shows an FOV between the endpoints.
+    setReducedMotion(true);
+    resetSignedSceneAvRuntime('sandbox');
+    enterSignedSceneAvBeat('ch10-transit');
+    activateSignedSceneAnchorById('anc.ch10.transit-ignite');
+    const samples: Array<number | null> = [];
+    for (let frame = 0; frame < 6; frame++) {
+      tickSignedSceneAvRuntime(0.1);
+      samples.push(getSignedSceneAvDebugSnapshot().shot?.lens.appliedFovDeg ?? null);
+    }
+    expect(new Set(samples)).toEqual(new Set([70]));
+  });
+
+  it('leaves the shipped chapters\' reduced-motion lens behaviour alone', () => {
+    // The ch1-ch9 shots keep parking at the neutral sandbox FOV under reduced
+    // motion: those lens moves ARE effects, and not doing the effect is the
+    // correct response to the preference.
+    setReducedMotion(true);
+    resetSignedSceneAvRuntime('sandbox');
+    enterSignedSceneAvBeat('ch5-maw');
+    emitEmergentStoryEvent({
+      id: 'test:maw-kit-reduced-motion',
+      type: 'maw_repair_kit_acquired',
+      payload: { itemId: 'maw_repair_kit' }
+    });
+    tickSignedSceneAvRuntime(0.1);
+    const snapshot = getSignedSceneAvDebugSnapshot();
+    if (snapshot.shot?.lens.appliedFovDeg != null) {
+      expect(snapshot.shot.lens.appliedFovDeg).toBe(75);
+    }
   });
 });

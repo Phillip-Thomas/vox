@@ -18,7 +18,7 @@ const CINEMATIC_BEATS = [
   'a4-exhale'
 ] as const satisfies readonly StoryBeat[];
 
-const AUTHORED_CHAPTERS = new Set(['ch1', 'ch2', 'ch3', 'ch4', 'ch8']);
+const AUTHORED_CHAPTERS = new Set(['ch1', 'ch2', 'ch3', 'ch4', 'ch8', 'ch10']);
 
 function resolve(
   beat: StoryBeat,

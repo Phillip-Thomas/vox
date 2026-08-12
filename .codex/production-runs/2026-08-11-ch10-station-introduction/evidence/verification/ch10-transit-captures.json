@@ -1,0 +1,209 @@
+{
+  "capturedAt": "2026-08-12T06:36:37.393Z",
+  "base": "http://localhost:5176",
+  "url": "http://localhost:5176/?story=ch10-transit&movie=1&profile=LOW",
+  "method": "flown at LOW; profile raised to HIGH through the shipped setQualityProfile store for the two stills only",
+  "stills": [
+    {
+      "id": "still-seam-of-light",
+      "file": "evidence/capture/still-seam-of-light.png",
+      "tier": "HIGH",
+      "atAnchor": "anc.ch10.seam-of-light",
+      "state": {
+        "beat": "done",
+        "objectiveId": null,
+        "hudText": null,
+        "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+        "av": {
+          "anchorId": null,
+          "history": [
+            "anc.ch10.transit-ignite",
+            "anc.ch10.seam-of-light",
+            "anc.ch10.station-resolved",
+            "anc.ch10.threshold-handback"
+          ],
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": []
+        },
+        "flight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "system": {
+          "activePlanetId": "-1,-1",
+          "locationMode": "local_space",
+          "targetWorldId": "-1,-1:a0",
+          "speed": 0.1
+        },
+        "milestones": {
+          "seamPassed": true,
+          "stationResolved": true
+        },
+        "qualityProfile": "HIGH",
+        "postProcess": true,
+        "contacts": {
+          "phase": "deep_space",
+          "ship": [
+            -5635.365481799194,
+            -959.216394980131,
+            -986.9512658963067
+          ],
+          "stations": [
+            {
+              "worldId": "-1,-1:a0",
+              "distance": 955,
+              "phase": "approach",
+              "canDock": false
+            }
+          ]
+        },
+        "galaxyObjects": [],
+        "galaxyVisible": false,
+        "cameraFov": 36,
+        "advisoryCopy": {
+          "holdForApproach": false,
+          "onTheCorridor": false,
+          "cleared": false,
+          "berth": false,
+          "localLock": false,
+          "flightCorridor": false
+        }
+      },
+      "galaxyInAperture": false
+    },
+    {
+      "id": "still-station-resolved",
+      "file": "evidence/capture/still-station-resolved.png",
+      "tier": "HIGH",
+      "atAnchor": "anc.ch10.station-resolved",
+      "workOrderCleared": true,
+      "captionAtCapture": null,
+      "stationDistance": 955,
+      "state": {
+        "beat": "done",
+        "objectiveId": null,
+        "hudText": null,
+        "caption": null,
+        "av": {
+          "anchorId": null,
+          "history": [
+            "anc.ch10.transit-ignite",
+            "anc.ch10.seam-of-light",
+            "anc.ch10.station-resolved",
+            "anc.ch10.threshold-handback"
+          ],
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": []
+        },
+        "flight": {
+          "phase": "deep_space",
+          "controlMode": "flight"
+        },
+        "system": {
+          "activePlanetId": "-1,-1",
+          "locationMode": "local_space",
+          "targetWorldId": "-1,-1:a0",
+          "speed": 0
+        },
+        "milestones": {
+          "seamPassed": true,
+          "stationResolved": true
+        },
+        "qualityProfile": "HIGH",
+        "postProcess": true,
+        "contacts": {
+          "phase": "deep_space",
+          "ship": [
+            -5635.56071051387,
+            -959.2537991216718,
+            -986.9863111055473
+          ],
+          "stations": [
+            {
+              "worldId": "-1,-1:a0",
+              "distance": 955,
+              "phase": "approach",
+              "canDock": false
+            }
+          ]
+        },
+        "galaxyObjects": [],
+        "galaxyVisible": false,
+        "cameraFov": 36,
+        "advisoryCopy": {
+          "holdForApproach": false,
+          "onTheCorridor": false,
+          "cleared": false,
+          "berth": false,
+          "localLock": false,
+          "flightCorridor": false
+        }
+      },
+      "galaxyInFrame": false
+    }
+  ],
+  "corridor": {
+    "reachedInside1400": true,
+    "samples": [
+      {
+        "t": 0,
+        "distance": 955,
+        "canDock": false,
+        "phase": "approach",
+        "speed": 3.69
+      }
+    ],
+    "distanceBefore": 949,
+    "distanceAfter": 949,
+    "canDockBefore": false,
+    "canDockAfter": false,
+    "approachPhase": "approach",
+    "speedBefore": 0.04,
+    "speedAfter": 0,
+    "keyFPresses": 2,
+    "navigated": false,
+    "systemTargetAfter": "-1,-1:a0",
+    "advisoryBefore": {
+      "holdForApproach": false,
+      "onTheCorridor": false,
+      "cleared": false,
+      "berth": false,
+      "localLock": false,
+      "flightCorridor": false
+    },
+    "advisoryAfter": {
+      "holdForApproach": false,
+      "onTheCorridor": false,
+      "cleared": false,
+      "berth": false,
+      "localLock": false,
+      "flightCorridor": false
+    },
+    "hudAfter": null,
+    "captionAfter": null,
+    "fence": {
+      "dockingAuthorized": false,
+      "targetingAuthorized": true,
+      "storyContext": true,
+      "sandbox": false,
+      "CORRIDOR_RANGE": 1400,
+      "DOCK_SPEED_LIMIT": 34,
+      "systemTarget": {
+        "kind": "space_station",
+        "address": {
+          "system": {
+            "x": -1,
+            "y": -1
+          },
+          "index": 0
+        },
+        "worldId": "-1,-1:a0"
+      }
+    }
+  },
+  "pageErrors": []
+}

@@ -1,0 +1,906 @@
+{
+  "capturedAt": "2026-08-12T03:05:36.857Z",
+  "base": "http://localhost:5176",
+  "anchors": [
+    "anc.ch10.cold-noticed",
+    "anc.ch10.fault-read",
+    "anc.ch10.fabrication-refused",
+    "anc.ch10.relay-ask",
+    "anc.ch10.relay-answer",
+    "anc.ch10.bearing-claimed",
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+  ],
+  "variants": {
+    "desktop-high": {
+      "id": "desktop-high",
+      "profile": "HIGH",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "isMobile": false,
+      "byAnchor": {
+        "anc.ch10.cold-noticed": {
+          "at": "2026-08-12T03:06:17.442Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fault-read"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.cold-step"
+            ],
+            "intensity": 0.24,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+          "scoreSnapshot": {
+            "variant": "cold-settled",
+            "carrierAlive": false,
+            "intensity": 0.24,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fault-read": {
+          "at": "2026-08-12T03:06:17.540Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.fault-ledger"
+            ],
+            "intensity": 0.3,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FABRICATOR · ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "fault-ledger",
+            "carrierAlive": false,
+            "intensity": 0.3,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fabrication-refused": {
+          "at": "2026-08-12T03:06:17.621Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.refusal-subtraction"
+            ],
+            "intensity": 0.22,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FABRICATOR · ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "refused",
+            "carrierAlive": false,
+            "intensity": 0.22,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-ask": {
+          "at": "2026-08-12T03:07:39.363Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.relay-answer"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-ask",
+            "carrierAlive": false,
+            "intensity": 0.34,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-answer": {
+          "at": "2026-08-12T03:07:41.173Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-answer",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.bearing-claimed": {
+          "at": "2026-08-12T03:07:41.247Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.bearing-claimed"
+            ],
+            "intensity": 0.38,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "",
+          "scoreSnapshot": {
+            "variant": "bearing-claimed",
+            "carrierAlive": true,
+            "intensity": 0.38,
+            "maxIntensity": 0.44
+          }
+        }
+      },
+      "pageErrors": [],
+      "notes": [],
+      "anchorsCaptured": 6,
+      "missingAnchors": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ]
+    },
+    "desktop-medium-reduced-motion": {
+      "id": "desktop-medium-reduced-motion",
+      "profile": "MEDIUM",
+      "viewport": "1280x720",
+      "reducedMotion": true,
+      "isMobile": false,
+      "byAnchor": {
+        "anc.ch10.cold-noticed": {
+          "at": "2026-08-12T03:24:04.245Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fault-read"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.cold-step"
+            ],
+            "intensity": 0.24,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "cold-settled",
+            "carrierAlive": false,
+            "intensity": 0.24,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fault-read": {
+          "at": "2026-08-12T03:24:04.331Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.fault-ledger"
+            ],
+            "intensity": 0.3,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FABRICATOR · ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "fault-ledger",
+            "carrierAlive": false,
+            "intensity": 0.3,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fabrication-refused": {
+          "at": "2026-08-12T03:24:04.397Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.refusal-subtraction"
+            ],
+            "intensity": 0.22,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FABRICATOR · ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "refused",
+            "carrierAlive": false,
+            "intensity": 0.22,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-ask": {
+          "at": "2026-08-12T03:24:37.314Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.relay-answer"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-ask",
+            "carrierAlive": false,
+            "intensity": 0.34,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-answer": {
+          "at": "2026-08-12T03:24:39.350Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-answer",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.bearing-claimed": {
+          "at": "2026-08-12T03:24:39.439Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.bearing-claimed"
+            ],
+            "intensity": 0.38,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "",
+          "scoreSnapshot": {
+            "variant": "bearing-claimed",
+            "carrierAlive": true,
+            "intensity": 0.38,
+            "maxIntensity": 0.44
+          }
+        }
+      },
+      "pageErrors": [],
+      "notes": [],
+      "anchorsCaptured": 6,
+      "missingAnchors": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ]
+    },
+    "desktop-low": {
+      "id": "desktop-low",
+      "profile": "LOW",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "isMobile": false,
+      "byAnchor": {
+        "anc.ch10.cold-noticed": {
+          "at": "2026-08-12T03:32:35.247Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fault-read"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.cold-step"
+            ],
+            "intensity": 0.24,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+          "scoreSnapshot": {
+            "variant": "cold-settled",
+            "carrierAlive": false,
+            "intensity": 0.24,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fault-read": {
+          "at": "2026-08-12T03:32:35.308Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.fault-ledger"
+            ],
+            "intensity": 0.3,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "fault-ledger",
+            "carrierAlive": false,
+            "intensity": 0.3,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fabrication-refused": {
+          "at": "2026-08-12T03:32:35.373Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.refusal-subtraction"
+            ],
+            "intensity": 0.22,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FABRICATOR · ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "refused",
+            "carrierAlive": false,
+            "intensity": 0.22,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-ask": {
+          "at": "2026-08-12T03:33:02.169Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.relay-answer"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-ask",
+            "carrierAlive": false,
+            "intensity": 0.34,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-answer": {
+          "at": "2026-08-12T03:33:04.195Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-answer",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.bearing-claimed": {
+          "at": "2026-08-12T03:33:04.276Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.bearing-claimed"
+            ],
+            "intensity": 0.38,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "bearing-claimed",
+            "carrierAlive": true,
+            "intensity": 0.38,
+            "maxIntensity": 0.44
+          }
+        }
+      },
+      "pageErrors": [],
+      "notes": [],
+      "anchorsCaptured": 6,
+      "missingAnchors": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ]
+    },
+    "mobile-potato": {
+      "id": "mobile-potato",
+      "profile": "POTATO",
+      "viewport": "390x844",
+      "reducedMotion": false,
+      "isMobile": true,
+      "byAnchor": {
+        "anc.ch10.cold-noticed": {
+          "at": "2026-08-12T03:40:53.921Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fault-read"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.cold-step"
+            ],
+            "intensity": 0.24,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "JOURNAL",
+          "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+          "scoreSnapshot": {
+            "variant": "cold-settled",
+            "carrierAlive": false,
+            "intensity": 0.24,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fault-read": {
+          "at": "2026-08-12T03:40:54.004Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.fault-ledger"
+            ],
+            "intensity": 0.3,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "JOURNAL",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "fault-ledger",
+            "carrierAlive": false,
+            "intensity": 0.3,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.fabrication-refused": {
+          "at": "2026-08-12T03:40:54.057Z",
+          "beat": "ch10-cold",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.fabrication-refused"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.refusal-subtraction"
+            ],
+            "intensity": 0.22,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "JOURNAL",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "refused",
+            "carrierAlive": false,
+            "intensity": 0.22,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-ask": {
+          "at": "2026-08-12T03:41:20.818Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.relay-answer"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "JOURNAL",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-ask",
+            "carrierAlive": false,
+            "intensity": 0.34,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.relay-answer": {
+          "at": "2026-08-12T03:41:22.839Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "JOURNAL",
+          "caption": null,
+          "scoreSnapshot": {
+            "variant": "relay-answer",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          }
+        },
+        "anc.ch10.bearing-claimed": {
+          "at": "2026-08-12T03:41:22.893Z",
+          "beat": "ch10-ask",
+          "authority": "player-camera",
+          "fov": 75,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.bearing-claimed"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "avScore": {
+            "cueRefs": [
+              "sc.ch10.bearing-claimed"
+            ],
+            "intensity": 0.38,
+            "hit": null
+          },
+          "reset": null,
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "JOURNAL",
+          "caption": "",
+          "scoreSnapshot": {
+            "variant": "bearing-claimed",
+            "carrierAlive": true,
+            "intensity": 0.38,
+            "maxIntensity": 0.44
+          }
+        }
+      },
+      "pageErrors": [],
+      "notes": [],
+      "anchorsCaptured": 6,
+      "missingAnchors": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ]
+    }
+  }
+}

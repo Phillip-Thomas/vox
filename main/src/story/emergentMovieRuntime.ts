@@ -10,7 +10,8 @@ import { RECIPES, type Recipe } from '../game/data/recipes.ts';
 import { getAccessibleStations } from '../game/data/stations.ts';
 import {
   craftRecipeCommand,
-  placeStructureCommand
+  placeStructureCommand,
+  removeStructureCommand
 } from '../game/gameplayCommands.ts';
 import { getLocalActorId, type ActorId } from '../game/playerActors.ts';
 import { getItemCount, addItem } from '../game/systems/inventorySystem.ts';
@@ -318,6 +319,49 @@ export function buildAndCertifyEmergentMovieShelter(
     commandContext: binding.commandContext
   });
   return certified.ok && !certified.pending;
+}
+
+/**
+ * The chapter-10 egress face.
+ *
+ * The movie lane's shelter is sealed by its own certification, and chapter 10
+ * opens with a night walk from the hearth to the Kestrel Fabricator — the run's
+ * ST-0 evidence window. This opens ONE authored face so the autopilot can leave
+ * a shelter it built itself.
+ *
+ * `outsideCameraFrustum` is supplied by the caller and is a precondition, not a
+ * hint: the movie photographs neither the scaffolding nor its absence, so the
+ * face may only open while it is off camera, and the caller holds a beat before
+ * the first step so no strip frame straddles the change. Movie lane only — a
+ * human-built shelter is never touched, because there is no binding outside a
+ * screening.
+ */
+export function openEmergentMovieShelterEgress(
+  outsideCameraFrustum: boolean,
+  actorId: ActorId = getLocalActorId()
+): boolean {
+  if (!outsideCameraFrustum) return false;
+  const binding = settlementBinding;
+  const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+  if (!binding || !habitat || binding.commandContext.actorId !== actorId) return false;
+  const upFace = faceIndexForNormal(
+    habitat.core.up[0],
+    habitat.core.up[1],
+    habitat.core.up[2]
+  );
+  const floorFace = oppositeFace(upFace);
+  const wallFaces = [0, 1, 2, 3, 4, 5].filter(face => face !== upFace && face !== floorFace);
+  const egressFace = wallFaces[0];
+  const cell = habitat.core.cell;
+  const existing = getPieceAt(cell[0], cell[1], cell[2], egressFace);
+  if (!existing) return true;
+  if (existing.type !== 'wall') return false;
+  if (resolveMultiplayerCommandLane() !== 'offline') return false;
+  const removed = dispatchGameplayCommand(() => removeStructureCommand(
+    binding.commandContext,
+    { cell, face: egressFace, commandId: `story:movie:${actorId}:ch10-shelter-egress` }
+  ));
+  return removed.ok;
 }
 
 export function completeEmergentMovieSafeRest(

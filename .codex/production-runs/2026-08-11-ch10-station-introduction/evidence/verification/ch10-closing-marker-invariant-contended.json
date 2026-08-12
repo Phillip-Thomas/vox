@@ -1,0 +1,228 @@
+{
+  "capturedAt": "2026-08-12T08:05:58.235Z",
+  "base": "http://localhost:5176",
+  "mode": "marker-invariant",
+  "paths": {
+    "deep-link-ch10-ask": {
+      "url": "?story=ch10-ask&movie=1&profile=LOW",
+      "reachedBearingClaim": false,
+      "pageErrors": [],
+      "observerErrors": [],
+      "eventCount": 6,
+      "events": [
+        {
+          "at": 423.1,
+          "why": "mounted",
+          "beat": "ch10-ask",
+          "id": "station:return:reboard",
+          "health": "missing-marker",
+          "requires-marker": "true",
+          "marker-label": "KESTREL HATCH · REBOARD",
+          "dwellMs": 3366.9
+        },
+        {
+          "at": 3790,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:reboard",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "KESTREL HATCH · REBOARD",
+          "dwellMs": 351.7
+        },
+        {
+          "at": 4141.7,
+          "why": "attr",
+          "beat": "ch10-ask",
+          "id": "station:return:crossing",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "ORIGIN WORLD · COURSE",
+          "dwellMs": 14131.3
+        },
+        {
+          "at": 18273,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:landfall",
+          "health": "missing-marker",
+          "requires-marker": "true",
+          "marker-label": "WRECK SITE · LAND",
+          "dwellMs": 243.8
+        },
+        {
+          "at": 18516.8,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:landfall",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "WRECK SITE · LAND",
+          "dwellMs": 5248.6
+        },
+        {
+          "at": 23765.4,
+          "why": "attr",
+          "beat": "ch10-ask",
+          "id": "station:relay-query",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "WRECK RELAY · REQUEST A SOURCE",
+          "dwellMs": null
+        }
+      ],
+      "mandatoryRungs": [
+        "station:return:reboard",
+        "station:return:crossing",
+        "station:return:landfall",
+        "station:relay-query"
+      ],
+      "missingMarkerViolations": [
+        {
+          "at": 423.1,
+          "why": "mounted",
+          "beat": "ch10-ask",
+          "id": "station:return:reboard",
+          "health": "missing-marker",
+          "requires-marker": "true",
+          "marker-label": "KESTREL HATCH · REBOARD",
+          "dwellMs": 3366.9
+        },
+        {
+          "at": 18273,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:landfall",
+          "health": "missing-marker",
+          "requires-marker": "true",
+          "marker-label": "WRECK SITE · LAND",
+          "dwellMs": 243.8
+        }
+      ],
+      "violationCount": 2,
+      "worstViolationDwellMs": 3366.9
+    },
+    "flow-ch10-cold-to-ask": {
+      "url": "?story=ch10-cold&movie=1&profile=LOW",
+      "reachedBearingClaim": true,
+      "pageErrors": [],
+      "observerErrors": [],
+      "eventCount": 9,
+      "events": [
+        {
+          "at": 381.2,
+          "why": "mounted",
+          "beat": "ch10-cold",
+          "id": "station:fault-read",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "HABITAT CORE · READ THE FAULT",
+          "dwellMs": 7738.1
+        },
+        {
+          "at": 8119.3,
+          "why": "poll",
+          "beat": "ch10-cold",
+          "id": "station:fabrication-attempt",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "dwellMs": 3583.7
+        },
+        {
+          "at": 11703,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:reboard",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "KESTREL HATCH · REBOARD",
+          "dwellMs": 174.5
+        },
+        {
+          "at": 11877.5,
+          "why": "attr",
+          "beat": "ch10-ask",
+          "id": "station:return:crossing",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "ORIGIN WORLD · COURSE",
+          "dwellMs": 14056.1
+        },
+        {
+          "at": 25933.6,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:landfall",
+          "health": "missing-marker",
+          "requires-marker": "true",
+          "marker-label": "WRECK SITE · LAND",
+          "dwellMs": 266
+        },
+        {
+          "at": 26199.6,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:landfall",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "WRECK SITE · LAND",
+          "dwellMs": 7041.1
+        },
+        {
+          "at": 33240.7,
+          "why": "attr",
+          "beat": "ch10-ask",
+          "id": "station:relay-query",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "WRECK RELAY · REQUEST A SOURCE",
+          "dwellMs": 14074.3
+        },
+        {
+          "at": 47315,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:bearing-claim",
+          "health": "ready",
+          "requires-marker": "true",
+          "marker-label": "WRECK RELAY · CLAIM THE BEARING",
+          "dwellMs": 1649.8
+        },
+        {
+          "at": 48964.8,
+          "why": "attr",
+          "beat": "ch10-transit",
+          "id": "station:transit:ignite",
+          "health": "ready",
+          "requires-marker": "false",
+          "marker-label": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "dwellMs": null
+        }
+      ],
+      "mandatoryRungs": [
+        "station:fault-read",
+        "station:fabrication-attempt",
+        "station:return:reboard",
+        "station:return:crossing",
+        "station:return:landfall",
+        "station:relay-query",
+        "station:bearing-claim"
+      ],
+      "missingMarkerViolations": [
+        {
+          "at": 25933.6,
+          "why": "poll",
+          "beat": "ch10-ask",
+          "id": "station:return:landfall",
+          "health": "missing-marker",
+          "requires-marker": "true",
+          "marker-label": "WRECK SITE · LAND",
+          "dwellMs": 266
+        }
+      ],
+      "violationCount": 1,
+      "worstViolationDwellMs": 266
+    }
+  }
+}

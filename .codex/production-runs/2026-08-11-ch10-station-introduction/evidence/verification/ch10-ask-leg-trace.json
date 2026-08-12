@@ -1,0 +1,1339 @@
+{
+  "capturedAt": "2026-08-12T09:45:25.401Z",
+  "base": "http://localhost:5176",
+  "watchSeconds": 150,
+  "runs": [
+    {
+      "run": 1,
+      "url": "?story=ch10-ask&movie=1&profile=LOW",
+      "completed": true,
+      "milestones": {
+        "landedOnOrigin": true,
+        "onFootOnOrigin": true,
+        "relayAsked": true,
+        "claimed": true
+      },
+      "transit": {
+        "ignited": true,
+        "seamPassed": true,
+        "stationResolved": false,
+        "enteredTransitOnFoot": true,
+        "boardedInTransit": true
+      },
+      "phaseTransitions": [
+        "7s deep_space->descent",
+        "14.1s descent->surface",
+        "22.1s surface->descent",
+        "25.3s descent->deep_space"
+      ],
+      "distinctPhases": [
+        "deep_space",
+        "descent",
+        "surface"
+      ],
+      "objectiveIds": [
+        "station:return:crossing",
+        "station:return:landfall",
+        "station:relay-query",
+        "station:bearing-claim",
+        "station:transit:ignite",
+        "station:transit:hold",
+        "station:transit:resolve"
+      ],
+      "worstObjectiveHealth": "ready",
+      "samples": [
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": null,
+            "terrainSeed": null,
+            "shipAltitude": 1357,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "local_space",
+          "targetKind": "system_body",
+          "shipPos": [
+            1044,
+            -13,
+            -867
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            8.01,
+            50.89,
+            -8
+          ],
+          "objectiveId": "station:return:crossing",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 0
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": null,
+            "terrainSeed": null,
+            "shipAltitude": 1068,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "local_space",
+          "targetKind": "system_body",
+          "shipPos": [
+            819,
+            -10,
+            -686
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            8.01,
+            50.89,
+            -8
+          ],
+          "objectiveId": "station:return:crossing",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": null,
+            "terrainSeed": null,
+            "shipAltitude": 746,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "local_space",
+          "targetKind": "system_body",
+          "shipPos": [
+            569,
+            -7,
+            -482
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            8.01,
+            50.89,
+            -8
+          ],
+          "objectiveId": "station:return:crossing",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 2
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": null,
+            "terrainSeed": null,
+            "shipAltitude": 494,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "local_space",
+          "targetKind": "system_body",
+          "shipPos": [
+            374,
+            -5,
+            -322
+          ],
+          "controls": {
+            "jump": true,
+            "forward": false,
+            "interact": false
+          },
+          "playerPos": [
+            8.01,
+            50.89,
+            -8
+          ],
+          "objectiveId": "station:return:crossing",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 3
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": null,
+            "terrainSeed": null,
+            "shipAltitude": 338,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "local_space",
+          "targetKind": "system_body",
+          "shipPos": [
+            255,
+            -3,
+            -223
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            8.01,
+            50.89,
+            -8
+          ],
+          "objectiveId": "station:return:crossing",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 4
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": null,
+            "terrainSeed": null,
+            "shipAltitude": 235,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "local_space",
+          "targetKind": "system_body",
+          "shipPos": [
+            174,
+            -2,
+            -157
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            8.01,
+            50.89,
+            -8
+          ],
+          "objectiveId": "station:return:crossing",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 5
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": null,
+            "terrainSeed": null,
+            "shipAltitude": 170,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "local_space",
+          "targetKind": "system_body",
+          "shipPos": [
+            124,
+            -2,
+            -117
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            8.01,
+            50.89,
+            -8
+          ],
+          "objectiveId": "station:return:crossing",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 6
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 122,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": null,
+          "shipPos": [
+            86,
+            0,
+            -86
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": true
+          },
+          "playerPos": [
+            116.53,
+            -1.67,
+            -111.03
+          ],
+          "objectiveId": "station:return:landfall",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 7
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 65,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": null,
+          "shipPos": [
+            46,
+            9,
+            -45
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": true
+          },
+          "playerPos": [
+            116.53,
+            -1.67,
+            -111.03
+          ],
+          "objectiveId": "station:return:landfall",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 8.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 63,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": null,
+          "shipPos": [
+            40,
+            29,
+            -39
+          ],
+          "controls": {
+            "jump": true,
+            "forward": false,
+            "interact": true
+          },
+          "playerPos": [
+            116.53,
+            -1.67,
+            -111.03
+          ],
+          "objectiveId": "station:return:landfall",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 9.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 73,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": null,
+          "shipPos": [
+            42,
+            36,
+            -47
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": true
+          },
+          "playerPos": [
+            116.53,
+            -1.67,
+            -111.03
+          ],
+          "objectiveId": "station:return:landfall",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 10.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 72,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": null,
+          "shipPos": [
+            29,
+            51,
+            -41
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": true
+          },
+          "playerPos": [
+            116.53,
+            -1.67,
+            -111.03
+          ],
+          "objectiveId": "station:return:landfall",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 11.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 67,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": null,
+          "shipPos": [
+            4,
+            65,
+            -11
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": true
+          },
+          "playerPos": [
+            116.53,
+            -1.67,
+            -111.03
+          ],
+          "objectiveId": "station:return:landfall",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 12.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": null,
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": true,
+            "forward": false,
+            "interact": true
+          },
+          "playerPos": [
+            116.53,
+            -1.67,
+            -111.03
+          ],
+          "objectiveId": "station:return:landfall",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 13.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "fps",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": null,
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            6.62,
+            57.84,
+            -6.17
+          ],
+          "objectiveId": "station:relay-query",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 14.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "fps",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": null,
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": false,
+            "forward": false,
+            "interact": false
+          },
+          "playerPos": [
+            2.08,
+            64.35,
+            -6.06
+          ],
+          "objectiveId": "station:relay-query",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 15.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "fps",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": null,
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": false,
+            "forward": false,
+            "interact": false
+          },
+          "playerPos": [
+            0.14,
+            62.96,
+            -6.06
+          ],
+          "objectiveId": "station:relay-query",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": false,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 16.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "fps",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": null,
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -1.95,
+            54.38,
+            -5.17
+          ],
+          "objectiveId": "station:relay-query",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 17.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "fps",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": null,
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": false,
+            "forward": false,
+            "interact": false
+          },
+          "playerPos": [
+            -2.03,
+            52.78,
+            -4.14
+          ],
+          "objectiveId": "station:relay-query",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": false,
+            "claimed": false,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 18.1
+        },
+        {
+          "beat": "ch10-ask",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "fps",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": null,
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": false,
+            "forward": false,
+            "interact": false
+          },
+          "playerPos": [
+            -2.03,
+            52.79,
+            -4.14
+          ],
+          "objectiveId": "station:bearing-claim",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 19.1
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 54,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "fps",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": "space_station",
+          "shipPos": [
+            2,
+            54,
+            -6
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -1.63,
+            52.79,
+            -4.97
+          ],
+          "objectiveId": "station:transit:ignite",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 20.1
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 71,
+            "shipToRelay": null
+          },
+          "phase": "surface",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "surface",
+          "targetKind": "space_station",
+          "shipPos": [
+            2,
+            70,
+            -6
+          ],
+          "controls": {
+            "jump": true,
+            "forward": false,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:ignite",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": false,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 21.1
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 88,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": "space_station",
+          "shipPos": [
+            -1,
+            87,
+            -6
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:hold",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 22.1
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 116,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": "space_station",
+          "shipPos": [
+            -83,
+            79,
+            -14
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:hold",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 23.1
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 241,
+            "shipToRelay": null
+          },
+          "phase": "descent",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "atmosphere",
+          "targetKind": "space_station",
+          "shipPos": [
+            -232,
+            58,
+            -34
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:hold",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 24.3
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 498,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "local_space",
+          "targetKind": "space_station",
+          "shipPos": [
+            -493,
+            15,
+            -74
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:hold",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 25.3
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 804,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "local_space",
+          "targetKind": "space_station",
+          "shipPos": [
+            -793,
+            -38,
+            -124
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:hold",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 26.3
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 1054,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "local_space",
+          "targetKind": "space_station",
+          "shipPos": [
+            -1038,
+            -83,
+            -166
+          ],
+          "controls": {
+            "jump": true,
+            "forward": false,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:hold",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 27.3
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 1273,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "local_space",
+          "targetKind": "space_station",
+          "shipPos": [
+            -1251,
+            -122,
+            -202
+          ],
+          "controls": {
+            "jump": false,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:hold",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": false,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 28.3
+        },
+        {
+          "beat": "ch10-transit",
+          "landing": {
+            "relayResolved": false,
+            "relay": null,
+            "planetSize": 50,
+            "terrainSeed": 3215739679,
+            "shipAltitude": 1550,
+            "shipToRelay": null
+          },
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "activePlanetId": "-1,-1",
+          "locationMode": "local_space",
+          "targetKind": "space_station",
+          "shipPos": [
+            -1520,
+            -172,
+            -250
+          ],
+          "controls": {
+            "jump": true,
+            "forward": true,
+            "interact": false
+          },
+          "playerPos": [
+            -0.19,
+            52.79,
+            -5.47
+          ],
+          "objectiveId": "station:transit:resolve",
+          "objectiveHealth": "ready",
+          "milestones": {
+            "asked": true,
+            "answered": true,
+            "claimed": true,
+            "ignited": true,
+            "seam": true,
+            "resolved": false,
+            "complete": false
+          },
+          "t": 29.3
+        }
+      ],
+      "pageErrors": []
+    }
+  ]
+}

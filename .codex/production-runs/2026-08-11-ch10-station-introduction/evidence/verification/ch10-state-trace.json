@@ -1,0 +1,2121 @@
+{
+  "capturedAt": "2026-08-12T00:58:14.881Z",
+  "base": "http://localhost:5176",
+  "scenarios": {
+    "coldVerbLane": {
+      "url": "?story=ch10-cold&profile=LOW",
+      "steps": [
+        {
+          "label": "entry",
+          "beat": "ch10-cold",
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | RETURN TO THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+          "band": null,
+          "cues": 0,
+          "av": {
+            "active": true,
+            "beat": "ch10-cold",
+            "anchorId": "anc.ch10.cold-noticed",
+            "authority": "player-camera",
+            "fov": 75,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.fault-read"
+            },
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [
+                "sc.ch10.cold-step"
+              ],
+              "intensity": 0.24,
+              "hit": null
+            },
+            "history": [
+              "anc.ch10.cold-noticed"
+            ],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": false
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        {
+          "label": "after-refused-out-of-order-fabrication",
+          "beat": "ch10-cold",
+          "objectiveId": "station:fault-read",
+          "markerLabel": "HABITAT CORE · READ THE FAULT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | HABITAT CORE · READ THE FAULT | RETURN TO THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+          "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+          "band": null,
+          "cues": 0,
+          "av": {
+            "active": true,
+            "beat": "ch10-cold",
+            "anchorId": "anc.ch10.cold-noticed",
+            "authority": "player-camera",
+            "fov": 75,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.fault-read"
+            },
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [
+                "sc.ch10.cold-step"
+              ],
+              "intensity": 0.24,
+              "hit": null
+            },
+            "history": [
+              "anc.ch10.cold-noticed"
+            ],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": false
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        {
+          "label": "after-fault-read",
+          "beat": "ch10-cold",
+          "objectiveId": "station:fabrication-attempt",
+          "markerLabel": "KESTREL FABRICATOR · ATTEMPT REPLACEMENT",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FABRICATOR · ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+          "caption": null,
+          "band": "BONDED CELL IS AN ISSUED COMPONENT. FABRICATION IS NOT AUTHOR",
+          "cues": 1,
+          "av": {
+            "active": true,
+            "beat": "ch10-cold",
+            "anchorId": "anc.ch10.fault-read",
+            "authority": "player-camera",
+            "fov": 75,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.fabrication-refused"
+            },
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [
+                "sc.ch10.fault-ledger"
+              ],
+              "intensity": 0.3,
+              "hit": null
+            },
+            "history": [
+              "anc.ch10.cold-noticed",
+              "anc.ch10.fault-read"
+            ],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": false
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        {
+          "label": "after-fabrication-refused",
+          "beat": "ch10-ask",
+          "objectiveId": "station:relay-query",
+          "markerLabel": "WRECK RELAY · REQUEST A SOURCE",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "(the channel at the wreck never closed. asking is still a t",
+          "band": "PATTERN NOT HELD · CLASS: ISSUED COMPONENT · SOURCE NOT HELD LOCALLY",
+          "cues": 2,
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.34,
+              "hit": null
+            },
+            "history": [
+              "anc.ch10.cold-noticed",
+              "anc.ch10.fault-read",
+              "anc.ch10.fabrication-refused"
+            ],
+            "reset": "beat-exit"
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": false
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "st0AtCold": {
+        "error": "TypeError: Failed to fetch dynamically imported module: http://localhost:5176/src/game/systems/milestoneSystem.ts"
+      },
+      "outOfOrderFabrication": false,
+      "faultRead": true,
+      "faultReadTwice": false,
+      "fabrication": true,
+      "feedbackLog": [
+        {
+          "at": 9692,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:fabrication-attempt",
+            "action": "craft"
+          },
+          "beat": "ch10-cold"
+        },
+        {
+          "at": 14668,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:relay-query",
+            "action": "interact"
+          },
+          "beat": "ch10-ask"
+        }
+      ]
+    },
+    "askVerbLane": {
+      "url": "?story=ch10-ask&profile=LOW",
+      "steps": [
+        {
+          "label": "entry",
+          "beat": "ch10-ask",
+          "objectiveId": "station:relay-query",
+          "markerLabel": "WRECK RELAY · REQUEST A SOURCE",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "band": null,
+          "cues": 1,
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.34,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": false
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        {
+          "label": "after-refused-claim-before-answer",
+          "beat": "ch10-ask",
+          "objectiveId": "station:relay-query",
+          "markerLabel": "WRECK RELAY · REQUEST A SOURCE",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "band": null,
+          "cues": 1,
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.34,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": false
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        {
+          "label": "after-relay-answer",
+          "beat": "ch10-ask",
+          "objectiveId": "station:bearing-claim",
+          "markerLabel": "WRECK RELAY · CLAIM THE BEARING",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK RELAY · CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "(the answer came back before the asking finished.)",
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "cues": 2,
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": "anc.ch10.relay-answer",
+            "authority": "player-camera",
+            "fov": 75,
+            "agency": {
+              "movement": "player",
+              "look": "player",
+              "interaction": "player",
+              "handBackAnchorRef": "anc.ch10.bearing-claimed"
+            },
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [
+                "sc.ch10.relay-answer"
+              ],
+              "intensity": 0.36,
+              "hit": null
+            },
+            "history": [
+              "anc.ch10.relay-ask",
+              "anc.ch10.relay-answer"
+            ],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": false
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        {
+          "label": "after-bearing-claim",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": "(issued, not offered. the going is still yours.)",
+          "band": null,
+          "cues": 3,
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "history": [
+              "anc.ch10.relay-ask",
+              "anc.ch10.relay-answer",
+              "anc.ch10.bearing-claimed"
+            ],
+            "reset": "beat-exit"
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": true
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 2,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2180,
+              -110,
+              -1635
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8766,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/ch10-bearing-claimed",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "claimBeforeAnswer": false,
+      "targetingBeforeClaim": false,
+      "relayRequest": true,
+      "answerWindow": [
+        {
+          "t": 0,
+          "band": "WRECK RELAY",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        {
+          "t": 0.25,
+          "band": "WRECK RELAY | SOURCE REQUEST",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        {
+          "t": 0.5,
+          "band": "WRECK RELAY | SOURCE REQUEST LOGGED · C",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        {
+          "t": 0.75,
+          "band": "WRECK RELAY | SOURCE REQUEST LOGGED · COMPONENT: B",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        {
+          "t": 1,
+          "band": "WRECK RELAY | SOURCE REQUEST LOGGED · COMPONENT: BONDED CELL (I",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        {
+          "t": 1.25,
+          "band": "WRECK RELAY | SOURCE REQUEST LOGGED · COMPONENT: BONDED CELL (ISSUED)",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        {
+          "t": 1.5,
+          "band": "WRECK RELAY | SOURCE REQUEST LOGGED · COMPONENT: BONDED CELL (ISSUED)",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.crossing-back"
+            ],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        {
+          "t": 1.75,
+          "band": "WRECK RELAY | SOU",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 2,
+          "band": "WRECK RELAY | SOURCE ON RECOR",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 2.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 2.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION ·",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 2.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM ·",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 3,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING AT",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 3.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADV",
+          "caption": null,
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 3.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(th",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 3.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 4,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came b",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 4.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back befo",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 4.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 4.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking f",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 5.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 5.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 5.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 6,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 6.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 6.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 6.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 7,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 7.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 7.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 7.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 8,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 8.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 8.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 8.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 9,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 9.25,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 9.5,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        },
+        {
+          "t": 9.75,
+          "band": "WRECK RELAY | SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)",
+          "caption": "(the answer came back before the asking finished.)",
+          "anchors": [
+            "anc.ch10.relay-ask",
+            "anc.ch10.relay-answer"
+          ],
+          "score": {
+            "cueRefs": [
+              "sc.ch10.relay-answer"
+            ],
+            "intensity": 0.36,
+            "hit": null
+          }
+        }
+      ],
+      "bearingClaim": true,
+      "targetingAfterClaim": true,
+      "feedbackLog": [
+        {
+          "at": 3745,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:relay-query",
+            "action": "interact"
+          },
+          "beat": "ch10-ask"
+        },
+        {
+          "at": 11431,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:bearing-claim",
+            "action": "interact"
+          },
+          "beat": "ch10-ask"
+        },
+        {
+          "at": 21563,
+          "cue": {
+            "type": "objective-enter",
+            "objectiveId": "station:transit:ignite",
+            "action": "interact"
+          },
+          "beat": "ch10-transit"
+        }
+      ]
+    },
+    "transitFence": {
+      "url": "?story=ch10-transit&profile=LOW",
+      "steps": [
+        {
+          "label": "entry",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "band": null,
+          "cues": 0,
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": true
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 1,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              4,
+              53.5,
+              -6
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6630,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/flight",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=flight",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/ch10-bearing-claimed",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        {
+          "label": "after-fence-read",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "band": null,
+          "cues": 0,
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": true
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 1,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              4,
+              53.5,
+              -6
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6630,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/flight",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=flight",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/ch10-bearing-claimed",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        }
+      ],
+      "pageErrors": [],
+      "commitEpochBefore": 1,
+      "commitResult": {
+        "targetingAuthorized": true,
+        "dockingAuthorized": false,
+        "beforeEpoch": 1,
+        "stations": [
+          {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          }
+        ]
+      },
+      "keyF": {
+        "before": {
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "band": null,
+          "cues": 0,
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": true
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 1,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              4,
+              53.5,
+              -6
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6630,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/flight",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=flight",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/ch10-bearing-claimed",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        "after": {
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "band": null,
+          "cues": 0,
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "tier": "LOW",
+          "station": {
+            "storyContext": true,
+            "sandbox": false,
+            "dockingAuthorized": false,
+            "targetingAuthorized": true
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "systemFlight": {
+            "systemId": "-1,-1",
+            "activePlanetId": "-1,-1",
+            "targetKind": null,
+            "activationEpoch": 1,
+            "locationMode": "surface"
+          },
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              4,
+              53.5,
+              -6
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6630,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "boundaryStateRefs": [
+            "state:camera/embodied",
+            "state:camera/free-look",
+            "state:control/on-foot",
+            "state:free-play/two-world-handoff",
+            "state:item/kestrel-keel-memory-banked",
+            "state:maw/repaired",
+            "state:reality/alive",
+            "state:ship-restoration/flight_ready",
+            "state:space-flight/control-mode=fps",
+            "state:space-flight/phase!=deep_space",
+            "state:space-flight/phase=surface",
+            "state:story/active",
+            "state:story/ch10-bearing-claimed",
+            "state:story/complete",
+            "state:system-flight/active-planet=-1,-1",
+            "state:world/origin"
+          ]
+        },
+        "unchanged": true
+      },
+      "feedbackLog": []
+    },
+    "st0Predicate": [
+      {
+        "id": "pure-sandbox",
+        "url": "?profile=LOW",
+        "st0": {
+          "error": "TypeError: Failed to fetch dynamically imported module: http://localhost:5176/src/game/systems/milestoneSystem.ts"
+        },
+        "beat": null,
+        "station": {
+          "storyContext": false,
+          "sandbox": false,
+          "dockingAuthorized": true,
+          "targetingAuthorized": true
+        },
+        "pageErrors": []
+      },
+      {
+        "id": "station-sandbox",
+        "url": "?spacestation=1&profile=LOW",
+        "st0": {
+          "error": "TypeError: Failed to fetch dynamically imported module: http://localhost:5176/src/game/systems/milestoneSystem.ts"
+        },
+        "beat": null,
+        "station": {
+          "storyContext": false,
+          "sandbox": true,
+          "dockingAuthorized": true,
+          "targetingAuthorized": true
+        },
+        "pageErrors": []
+      },
+      {
+        "id": "pre-done-story-beat",
+        "url": "?story=ch9-settle&profile=LOW",
+        "st0": {
+          "error": "TypeError: Failed to fetch dynamically imported module: http://localhost:5176/src/game/systems/milestoneSystem.ts"
+        },
+        "beat": "ch9-settle",
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": false
+        },
+        "pageErrors": []
+      },
+      {
+        "id": "ch10-cold",
+        "url": "?story=ch10-cold&profile=LOW",
+        "st0": {
+          "error": "TypeError: Failed to fetch dynamically imported module: http://localhost:5176/src/game/systems/milestoneSystem.ts"
+        },
+        "beat": "ch10-cold",
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": false
+        },
+        "pageErrors": []
+      }
+    ],
+    "variants": [
+      {
+        "variant": "desktop-high",
+        "url": "?story=ch10-transit&profile=HIGH",
+        "beat": "ch10-transit",
+        "tier": "HIGH",
+        "av": {
+          "active": true,
+          "beat": "ch10-transit",
+          "anchorId": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": [],
+          "reducedMotion": false,
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.42,
+            "hit": null
+          },
+          "history": [],
+          "reset": null
+        },
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": true
+        },
+        "pageErrors": []
+      },
+      {
+        "variant": "desktop-medium-reduced-motion",
+        "url": "?story=ch10-transit&profile=MEDIUM",
+        "beat": "ch10-transit",
+        "tier": "MEDIUM",
+        "av": {
+          "active": true,
+          "beat": "ch10-transit",
+          "anchorId": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": [],
+          "reducedMotion": true,
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.42,
+            "hit": null
+          },
+          "history": [],
+          "reset": null
+        },
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": true
+        },
+        "pageErrors": []
+      },
+      {
+        "variant": "desktop-low",
+        "url": "?story=ch10-transit&profile=LOW",
+        "beat": "ch10-transit",
+        "tier": "LOW",
+        "av": {
+          "active": true,
+          "beat": "ch10-transit",
+          "anchorId": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": [],
+          "reducedMotion": false,
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.42,
+            "hit": null
+          },
+          "history": [],
+          "reset": null
+        },
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": true
+        },
+        "pageErrors": []
+      },
+      {
+        "variant": "mobile-potato",
+        "url": "?story=ch10-transit&profile=POTATO",
+        "beat": "ch10-transit",
+        "tier": "POTATO",
+        "av": {
+          "active": true,
+          "beat": "ch10-transit",
+          "anchorId": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": [],
+          "reducedMotion": false,
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.42,
+            "hit": null
+          },
+          "history": [],
+          "reset": null
+        },
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "health": "ready",
+        "hudText": "JOURNAL",
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": true
+        },
+        "pageErrors": []
+      }
+    ],
+    "resetMatrix": [
+      {
+        "case": "deep_link",
+        "url": "?story=ch10-cold&profile=LOW",
+        "beat": "ch10-cold",
+        "objectiveId": "station:fault-read",
+        "avActive": true,
+        "avAuthority": "player-camera",
+        "avReset": null,
+        "avHistory": [
+          "anc.ch10.cold-noticed"
+        ],
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": false
+        },
+        "stateRefs": [
+          "state:camera/embodied",
+          "state:camera/free-look",
+          "state:control/on-foot",
+          "state:free-play/two-world-handoff",
+          "state:item/kestrel-keel-memory-banked",
+          "state:maw/repaired",
+          "state:reality/alive",
+          "state:ship-restoration/flight_ready",
+          "state:space-flight/control-mode=fps",
+          "state:space-flight/phase!=deep_space",
+          "state:space-flight/phase=surface",
+          "state:story/active",
+          "state:story/complete",
+          "state:system-flight/active-planet=-1,-1",
+          "state:world/origin"
+        ],
+        "pageErrors": []
+      },
+      {
+        "case": "completion",
+        "url": "?story=done&profile=LOW",
+        "beat": "done",
+        "objectiveId": null,
+        "avActive": false,
+        "avAuthority": null,
+        "avReset": null,
+        "avHistory": [],
+        "station": {
+          "storyContext": true,
+          "sandbox": false,
+          "dockingAuthorized": false,
+          "targetingAuthorized": false
+        },
+        "stateRefs": [
+          "state:control/on-foot",
+          "state:item/kestrel-keel-memory-banked",
+          "state:maw/repaired",
+          "state:reality/alive",
+          "state:ship-restoration/flight_ready",
+          "state:space-flight/control-mode=fps",
+          "state:space-flight/phase!=deep_space",
+          "state:space-flight/phase=surface",
+          "state:story/complete",
+          "state:system-flight/active-planet=-1,-1:p1",
+          "state:world/tidegarden"
+        ],
+        "pageErrors": []
+      },
+      {
+        "case": "sandbox_noop",
+        "url": "?profile=LOW",
+        "beat": null,
+        "objectiveId": null,
+        "avActive": false,
+        "avAuthority": null,
+        "avReset": null,
+        "avHistory": [],
+        "station": {
+          "storyContext": false,
+          "sandbox": false,
+          "dockingAuthorized": true,
+          "targetingAuthorized": true
+        },
+        "stateRefs": [
+          "state:control/on-foot",
+          "state:reality/alive",
+          "state:ship-restoration/wrecked",
+          "state:space-flight/control-mode=fps",
+          "state:space-flight/phase!=deep_space",
+          "state:space-flight/phase=surface",
+          "state:system-flight/active-planet=18,-2"
+        ],
+        "pageErrors": []
+      },
+      {
+        "case": "station_sandbox_noop",
+        "url": "?spacestation=1&profile=LOW",
+        "beat": null,
+        "objectiveId": null,
+        "avActive": false,
+        "avAuthority": null,
+        "avReset": null,
+        "avHistory": [],
+        "station": {
+          "storyContext": false,
+          "sandbox": true,
+          "dockingAuthorized": true,
+          "targetingAuthorized": true
+        },
+        "stateRefs": null,
+        "pageErrors": []
+      },
+      {
+        "case": "pause_focus",
+        "before": {
+          "beat": "ch10-transit",
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "objectiveId": "station:transit:ignite"
+        },
+        "after": {
+          "beat": "ch10-transit",
+          "av": {
+            "active": true,
+            "beat": "ch10-transit",
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reducedMotion": false,
+            "score": {
+              "cueRefs": [],
+              "intensity": 0.42,
+              "hit": null
+            },
+            "history": [],
+            "reset": null
+          },
+          "objectiveId": "station:transit:ignite"
+        },
+        "beatPreserved": true,
+        "pageErrors": []
+      },
+      {
+        "case": "quit_reload_mid_transit",
+        "before": {
+          "beat": "ch10-transit",
+          "history": [],
+          "objectiveId": "station:transit:ignite"
+        },
+        "after": {
+          "beat": "ch10-transit",
+          "history": [],
+          "objectiveId": "station:transit:ignite",
+          "cues": 0
+        },
+        "pageErrors": []
+      }
+    ]
+  }
+}

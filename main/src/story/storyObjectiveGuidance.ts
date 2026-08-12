@@ -41,7 +41,14 @@ export const STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION = {
   'a4-exhale': 'cinematic',
   'ch8-launch': 'objective',
   'ch8-crossing': 'objective',
-  'ch8-landfall': 'objective'
+  'ch8-landfall': 'objective',
+  // Chapter 10 is guided end to end: every beat carries a ladder the player can
+  // read and find. There is no cinematic frame anywhere in this chapter —
+  // camera authority is taken zero times, so a `cinematic` disposition would be
+  // a lie about who owns the frame.
+  'ch10-cold': 'objective',
+  'ch10-ask': 'objective',
+  'ch10-transit': 'objective'
 } as const satisfies Partial<Record<StoryBeat, StoryObjectiveBeatDisposition>>;
 
 export type StoryObjectiveGuidanceBeat = keyof typeof STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION;
@@ -74,6 +81,20 @@ export type DefianceObjectiveStage = 'test-maw' | 'refuse' | 'complete';
 export type Ch8LaunchObjectiveState = 'surface-on-foot' | 'surface-flight' | 'launching' | 'deep-space';
 export type Ch8CrossingObjectiveState = 'acquire-sibling' | 'hold-course' | 'approach-envelope';
 export type Ch8LandfallObjectiveState = 'descent' | 'surface-flight' | 'surface-fps';
+/** C1 → C2. The fault is read, then carried to a fabricator that refuses it. */
+export type Ch10ColdObjectiveState = 'fault-read' | 'fabrication-attempt';
+/**
+ * A1 → A4 then the rite. The return crossing reuses the ch8 ladder's shape
+ * rung for rung — deliberate reuse, in the opposite direction.
+ */
+export type Ch10AskObjectiveState =
+  | 'reboard'
+  | 'crossing'
+  | 'landfall'
+  | 'relay-query'
+  | 'bearing-claim';
+/** T1 → T3. Only the middle rung carries a marker; the other two are cards. */
+export type Ch10TransitObjectiveState = 'ignite' | 'hold' | 'resolve';
 
 /**
  * Presentation facts only. None of these values is evidence that gameplay
@@ -94,6 +115,9 @@ export interface StoryObjectiveGuidanceFacts {
   ch8LaunchState: Ch8LaunchObjectiveState;
   ch8CrossingState: Ch8CrossingObjectiveState;
   ch8LandfallState: Ch8LandfallObjectiveState;
+  ch10ColdState: Ch10ColdObjectiveState;
+  ch10AskState: Ch10AskObjectiveState;
+  ch10TransitState: Ch10TransitObjectiveState;
 }
 
 export const DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS: Readonly<StoryObjectiveGuidanceFacts> =
@@ -111,7 +135,10 @@ export const DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS: Readonly<StoryObjectiveGuid
     defianceStage: 'test-maw',
     ch8LaunchState: 'surface-flight',
     ch8CrossingState: 'acquire-sibling',
-    ch8LandfallState: 'descent'
+    ch8LandfallState: 'descent',
+    ch10ColdState: 'fault-read',
+    ch10AskState: 'reboard',
+    ch10TransitState: 'ignite'
   });
 
 type ObjectiveResolver = (
@@ -227,7 +254,10 @@ const OBJECTIVE_RESOLVERS = {
   'ch4-defy': facts => defianceObjective(facts.defianceStage),
   'ch8-launch': facts => launchObjective(facts.ch8LaunchState),
   'ch8-crossing': facts => crossingObjective(facts.ch8CrossingState),
-  'ch8-landfall': facts => landfallObjective(facts.ch8LandfallState)
+  'ch8-landfall': facts => landfallObjective(facts.ch8LandfallState),
+  'ch10-cold': facts => ch10ColdObjective(facts.ch10ColdState),
+  'ch10-ask': facts => ch10AskObjective(facts.ch10AskState),
+  'ch10-transit': facts => ch10TransitObjective(facts.ch10TransitState)
 } satisfies Record<StoryObjectiveAuthoredBeat, ObjectiveResolver>;
 
 /** Returns the authored disposition without inferring one for unrelated beats. */
@@ -556,6 +586,113 @@ function landfallObjective(state: Ch8LandfallObjectiveState): GuidedStoryObjecti
         'wait',
         'SIBLING WORLD · FIRST FOOTFALL',
         ['STAND ON THE SIBLING WORLD.', 'LET IT HOLD YOUR WEIGHT.'],
+        false
+      );
+  }
+}
+
+/**
+ * Chapter 10's ladders. Every marker label and work-order line below is quoted
+ * byte-for-byte from the frozen scene contract's guidance table; the runtime
+ * objective ids keep their colons (the contract transposes them to hyphens only
+ * because its own id schema forbids colons).
+ */
+function ch10ColdObjective(state: Ch10ColdObjectiveState): GuidedStoryObjective {
+  switch (state) {
+    case 'fault-read':
+      return objective(
+        'station:fault-read',
+        'interact',
+        'HABITAT CORE · READ THE FAULT',
+        // STAND, not RETURN: the order is issued while the player is already
+        // inside the 12 m notice radius, so "return" lied at birth. This one is
+        // true at entry and stays a valid instruction if she wanders first.
+        ['STAND AT THE SECOND HEARTH CORE.', '[F] READ THE HEARTH FAULT.']
+      );
+    case 'fabrication-attempt':
+      return objective(
+        'station:fabrication-attempt',
+        'craft',
+        'KESTREL FABRICATOR · ATTEMPT REPLACEMENT',
+        ['TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR.', '[F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.']
+      );
+  }
+}
+
+function ch10AskObjective(state: Ch10AskObjectiveState): GuidedStoryObjective {
+  switch (state) {
+    case 'reboard':
+      // Grammar identical to ch8:launch:reboard — deliberate reuse, and the
+      // reason the crossing back reads as the same act in the other direction.
+      return objective(
+        'station:return:reboard',
+        'travel',
+        'KESTREL HATCH · REBOARD',
+        ['RETURN TO THE KESTREL.', 'FOLLOW THE HATCH MARKER AND [F] BOARD.']
+      );
+    case 'crossing':
+      return objective(
+        'station:return:crossing',
+        'travel',
+        // ORIGIN, not FIRST: in caps on a HUD "FIRST WORLD" reads as
+        // development-tier discourse, and it coined a third name for the place
+        // ch8 already calls SIBLING WORLD. Label noun and order noun match
+        // exactly, as every other rung's do.
+        'ORIGIN WORLD · COURSE',
+        ['FIND THE ORIGIN WORLD.', 'CENTER IT AND CROSS.']
+      );
+    case 'landfall':
+      return objective(
+        'station:return:landfall',
+        'travel',
+        'WRECK SITE · LAND',
+        ['FOLLOW THE WRECK SITE MARKER DOWN.', 'LAND NEAR THE RELAY.']
+      );
+    case 'relay-query':
+      return objective(
+        'station:relay-query',
+        'interact',
+        'WRECK RELAY · REQUEST A SOURCE',
+        ['FOLLOW THE WRECK RELAY MARKER.', '[F] REQUEST A SOURCE FOR A BONDED CELL.']
+      );
+    case 'bearing-claim':
+      // The rite. It waits indefinitely and never acquires a timer, a nudge, or
+      // an automated claim — the wait IS the meaning.
+      return objective(
+        'station:bearing-claim',
+        'interact',
+        'WRECK RELAY · CLAIM THE BEARING',
+        ['A BEARING IS ATTACHED (ADVISORY).', '[F] CLAIM THE BEARING.']
+      );
+  }
+}
+
+function ch10TransitObjective(state: Ch10TransitObjectiveState): GuidedStoryObjective {
+  switch (state) {
+    case 'ignite':
+      return objective(
+        'station:transit:ignite',
+        'interact',
+        'KESTREL FLIGHT CONTROLS · IGNITE',
+        ['BRING THE KESTREL ONLINE.', 'HOLD [SPACE] TO IGNITE AND LIFT.'],
+        false
+      );
+    case 'hold':
+      return objective(
+        'station:transit:hold',
+        'travel',
+        'ISSUED BEARING · HOLD',
+        ['FLY THE CLAIMED BEARING.', 'FOLLOW IT UNTIL THE SOURCE RESOLVES.']
+      );
+    case 'resolve':
+      // No marker: the cut line of the run is the first frame in which the
+      // station exists with no guidance annotation, so this card clears to
+      // nothing rather than handing the frame a chevron.
+      return objective(
+        'station:transit:resolve',
+        'wait',
+        'ISSUING STATION · RESOLVING',
+        ['THE SOURCE IS RESOLVING.', 'HOLD.'],
         false
       );
   }

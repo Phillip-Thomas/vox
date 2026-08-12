@@ -1,0 +1,150 @@
+{
+  "capturedAt": "2026-08-12T10:08:34.903Z",
+  "base": "http://localhost:5176",
+  "mode": "cutline",
+  "contractVersion": "draft-v6",
+  "pageErrors": [],
+  "method": "flown at LOW; HIGH raised at anc.ch10.seam-of-light so the pipeline is warm; shutter armed in-page on rAF at the first frame after threshold-handback with K11 painted and the work order cleared; screenshot taken before any other evaluate",
+  "seamSeen": true,
+  "raisedToHighAtStationDistance": 5182,
+  "still": {
+    "id": "still-station-resolved",
+    "file": "evidence/capture/still-station-resolved.png",
+    "tier": "HIGH",
+    "criterion": "draft-v6 cut line",
+    "secondsHighWarmBeforeShutter": 17.4,
+    "armedAt": {
+      "at": 29143.5,
+      "handback": true,
+      "k11": true,
+      "cleared": true,
+      "distance": 1098,
+      "fov": null,
+      "authority": null
+    },
+    "shutterRow": {
+      "at": 29464.6,
+      "handback": true,
+      "k11": true,
+      "cleared": true,
+      "distance": 1084,
+      "fov": null,
+      "authority": null
+    },
+    "watcherError": null,
+    "framesBetweenArmAndShutter": 11,
+    "rangeSpec": [
+      1000,
+      1300
+    ],
+    "rangeAtShutter": 1084,
+    "rangeInSpec": true,
+    "fovSpec": 70,
+    "fovAtShutter": null,
+    "cameraFov": 70.00019422055504,
+    "standoffTriggerConstant": 1500,
+    "k11Painted": true,
+    "workOrderCleared": true,
+    "handbackReached": true,
+    "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "hudText": null,
+    "objectiveId": null,
+    "authority": null,
+    "postFx": [],
+    "galaxyInFrame": false,
+    "galaxyObjects": [],
+    "planetsInFrame": [],
+    "companionCount": 1,
+    "st0InFrame": false,
+    "state": {
+      "wallMs": 29491,
+      "beat": "done",
+      "objectiveId": null,
+      "markerLabel": null,
+      "health": null,
+      "requiresMarker": null,
+      "hudText": null,
+      "feedObjectiveId": null,
+      "feedHealth": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+      "flight": {
+        "phase": "deep_space",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1",
+        "locationMode": "local_space",
+        "targetWorldId": "-1,-1:a0",
+        "pos": [
+          -5490,
+          -931,
+          -961
+        ],
+        "speed": 76.85
+      },
+      "av": {
+        "active": false,
+        "beat": null,
+        "anchorId": null,
+        "history": [
+          "anc.ch10.transit-ignite",
+          "anc.ch10.seam-of-light",
+          "anc.ch10.station-resolved",
+          "anc.ch10.threshold-handback"
+        ],
+        "authority": null,
+        "fov": null,
+        "agency": null,
+        "letterbox": null,
+        "postFx": [],
+        "reset": "completion"
+      },
+      "milestones": {
+        "relayAsked": true,
+        "bearingClaimed": true,
+        "transitIgnited": true,
+        "seamPassed": true,
+        "stationResolved": true,
+        "ch10Complete": true
+      },
+      "score": {
+        "variant": null,
+        "carrierAlive": false,
+        "intensity": 0.28,
+        "maxIntensity": 0.44
+      },
+      "qualityProfile": "HIGH",
+      "dayPhase": 0.0206,
+      "daylight": 0.9228,
+      "isNight": false,
+      "contacts": {
+        "phase": "deep_space",
+        "ship": [
+          -5490.436266969369,
+          -931.4446048063146,
+          -960.9309691058279
+        ],
+        "stations": [
+          {
+            "worldId": "-1,-1:a0",
+            "distance": 1083,
+            "phase": "approach",
+            "canDock": false
+          }
+        ]
+      },
+      "autopilot": {
+        "beat": "ch10-transit",
+        "clock": 24.8,
+        "pos": [
+          8,
+          53.85,
+          -6
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "keys": []
+      }
+    }
+  }
+}

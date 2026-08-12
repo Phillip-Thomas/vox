@@ -3,6 +3,12 @@ import { subscribeFinalizedLocalGameplayCommand } from '../game/commandDispatchA
 import { getLocalActorId } from '../game/playerActors.ts';
 import { getCampfires } from '../game/systems/campfires.ts';
 import { getShipRepairStage } from '../game/systems/shipRestoration.ts';
+import { getShipPosition } from '../state/shipProximity.ts';
+import { registerStoryInteraction } from './storyInteractions.ts';
+import { readSystemCompanionBodyTarget } from '../state/systemCompanionBodyTargets.ts';
+import { buildStarSystemManifest } from '../game/starSystem.ts';
+import { systemSpaceStations } from '../game/spaceStation/spaceStationBody.ts';
+import { STORY_COORDINATE } from './world/storyWorld.ts';
 import { atLeast, type ShipRepairStage } from './emergentCapabilities.ts';
 import { hasMilestone, markMilestone } from '../game/systems/progressionSystem.ts';
 import {
@@ -31,13 +37,34 @@ import { emitEmergentStoryEvent } from './emergentStoryEvents.ts';
 import { scoreHit, setScoreIntensity } from './storyScore.ts';
 import {
   advanceToBeat,
+  completeChapter10,
   completeStory,
   getStoryStateSnapshot,
+  reactivateStoryAtBeat,
   STORY_MILESTONES,
   type StoryBeat
 } from './storyState.ts';
+import { spaceStationApproachGeometry } from '../components/SpaceStationApproachDriver.tsx';
+import { SCAN_RANGE } from '../game/spaceStation/spaceStationApproach.ts';
+import { getPlayerLook, getPlayerWorldPosition } from '../state/playerFrame.ts';
+import { commitSpaceStationTarget } from '../state/systemFlight.ts';
+import {
+  chapter10RelayAnswerDelaySeconds,
+  noteChapter10ScoreAnchor
+} from './emergentScoreDirector.ts';
+
+/**
+ * One anchor, every consumer. The signed rail and the score move together off
+ * the same id in the same frame — simultaneity by shared anchor, never by tuned
+ * offsets — and the rail's own ordering rules are what keep the sequence honest.
+ */
+function noteChapter10Anchor(anchorId: string): void {
+  activateSignedSceneAnchorById(anchorId);
+  noteChapter10ScoreAnchor(anchorId);
+}
 import { showAuditLine, showCaption, showSystemLine, setWorkOrder } from './storyText.ts';
-import { setStoryTargetFov, SANDBOX_FOV } from './storyInputPolicy.ts';
+import { setStoryMoveScale, setStoryTargetFov, SANDBOX_FOV } from './storyInputPolicy.ts';
+import { getHabitatWorldState } from '../game/systems/habitatSystem.ts';
 import {
   setCinematicLookTarget,
   setCinematicLookWeight
@@ -53,7 +80,7 @@ import {
 } from './tidegardenSettlement.ts';
 import { getItemCount } from '../game/systems/inventorySystem.ts';
 import { getCurrentDayPhase } from '../game/worldClock.ts';
-import { storyAnchors } from './world/storyWorld.ts';
+import { getWreckRelayPose, storyAnchors } from './world/storyWorld.ts';
 import { getAuditWorkerPose } from './world/AuditWorker.tsx';
 import { heroTreeHandle } from './world/HeroAppleTree.tsx';
 import { wreckRelayHandle } from './world/WreckRelay.tsx';
@@ -67,6 +94,7 @@ import {
 } from '../utils/groundedSurfaceMotion.ts';
 import { resolveSystemBodyMusicIdentity } from '../audio/destinationMusicIdentity.ts';
 import {
+  activateSignedSceneAnchorById,
   enterSignedSceneAvBeat,
   tickSignedSceneAvRuntime
 } from './signedSceneAvRuntime.ts';
@@ -98,9 +126,15 @@ import {
 } from './emergentScoreDirector.ts';
 import {
   activateGuidedStoryObjective,
-  clearGuidedStoryObjective
+  clearGuidedStoryObjective,
+  observeGuidedStoryMarker,
+  getActiveGuidedStoryObjective,
+  type GuidedStoryObjective
 } from './ux/objectiveDirector.ts';
-import { resolveStoryObjectiveGuidance } from './storyObjectiveGuidance.ts';
+import {
+  resolveStoryObjectiveGuidance,
+  type Ch10AskObjectiveState
+} from './storyObjectiveGuidance.ts';
 import {
   advanceFlightGuidanceDwell,
   CH8_FLIGHT_GUIDANCE_DWELL_SECONDS,
@@ -147,6 +181,11 @@ interface EmergentDirectorRuntime {
   reconstructM6At: number;
   reconstructReceiptAt: number;
   reconstructM7AnchorAt: number;
+  /** ch10 beat-runtime moments the REGULATION cadences key on; -1 until seen. */
+  ch10FaultReadAt: number;
+  ch10RefusedAt: number;
+  ch10AnswerAt: number;
+  ch10ResolvedAt: number;
 }
 
 /** The three-valued cause taxonomy for L2's firing moment (ruling R1). */
@@ -171,7 +210,11 @@ const runtime: EmergentDirectorRuntime = {
   reconstructSlotBusyUntil: -1,
   reconstructM6At: -1,
   reconstructReceiptAt: -1,
-  reconstructM7AnchorAt: -1
+  reconstructM7AnchorAt: -1,
+  ch10FaultReadAt: -1,
+  ch10RefusedAt: -1,
+  ch10AnswerAt: -1,
+  ch10ResolvedAt: -1
 };
 
 // --- Frozen cadence tables ------------------------------------------------
@@ -255,6 +298,78 @@ export const CH8_OPEN_QUERY_SECONDS = 14;
  */
 export const CH8_EXIT_HOLD_SECONDS = 17;
 
+// --- Chapter 10: the station introduction ---------------------------------
+//
+// Every constant the frozen scene contract names lands here with its exact
+// name. Numbers the contract left to implementation carry their reasoning.
+
+/**
+ * The "do not rush" dial. Accumulated `done` free-play time before the fault may
+ * be noticed at all. 180s is chosen against the contract's own ST-0 recurrence
+ * proof: any outdoor night window of at least three minutes contains at least
+ * one complete ST-0 crossing, so the chapter can never open before the sky has
+ * had the chance to show the player the dot it will later ask them to fly to.
+ * Owner-tunable.
+ */
+export const CH10_FREEPLAY_GRACE_SECONDS = 180;
+/**
+ * How near the second hearth's core the player must be for the fault to be
+ * noticed. Sits between the shipped rest radius (4.2) and marker-approach
+ * distances, so "at the hearth" means inside the shelter's own footprint rather
+ * than anywhere on the settlement. Owner-tunable.
+ */
+export const CH10_HEARTH_NOTICE_RADIUS = 12;
+/** Read dwell a REGULATION line holds the band on top of its own reveal. */
+export const CH10_REGULATION_DWELL_SECONDS = 0.4;
+/** AuditBand.tsx reveals the REGULATION/RELAY register one char every 22 ms. */
+const REGULATION_REVEAL_MS_PER_CHAR = 22;
+/** The 2.5s diegetic thrust-cold hold at the resolve. HOLD-START alignment. */
+export const HOLD_DURATION_MS = 2500;
+/** The octave double lands on the first beat-grid point after the anchor. */
+export const RESOLVE_QUANTIZE = 'beat' as const;
+/** The seam fires only once the sky has finished going black. */
+export const SEAM_OF_LIGHT_MIN_BLEND = 0.9;
+/** Preferred trigger: the composed reveal, target near view center. */
+export const SEAM_VIEW_CONE_DEG = 20;
+/**
+ * The look-independent floor. Equal BY REFERENCE to the shipped scan range, so
+ * the seam and the instrument can never disagree about the same distance.
+ */
+export const SEAM_FALLBACK_RANGE = SCAN_RANGE;
+/** Outside CORRIDOR_RANGE 1,400: no corridor publication, no berth invitation. */
+export const STATION_STANDOFF_DISTANCE = 1_500;
+
+function regulationRevealSeconds(line: string): number {
+  return (line.length * REGULATION_REVEAL_MS_PER_CHAR) / 1000;
+}
+
+/** K1–K11, byte-exact from the frozen contract. */
+const K1 = '(the hum has dropped a step. cold is coming through a wall you sealed yourself.)';
+const K2 = 'HAB CORE · POWER: ONE BONDED CELL · CONDITION: DEGRADING';
+const K3 = 'BONDED CELL IS AN ISSUED COMPONENT. FABRICATION IS NOT AUTHORIZED.';
+const K4 = '(a world gives stone, water, wood. it does not give this. this was issued.)';
+const K5 = 'PATTERN NOT HELD · CLASS: ISSUED COMPONENT · SOURCE NOT HELD LOCALLY';
+const K6 = '(the channel at the wreck never closed. asking is still a thing that can be done.)';
+const K7 = 'SOURCE REQUEST LOGGED · COMPONENT: BONDED CELL (ISSUED)';
+const K8 = 'SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)';
+const K9 = '(the answer came back before the asking finished.)';
+const K10 = '(issued, not offered. the going is still yours.)';
+const K11 = '(both fires behind you now. ahead, a light someone else keeps alive.)';
+
+/** The relay speaks as a record, in the third register, with no first person. */
+const CH10_RELAY_HEADER = 'WRECK RELAY';
+/**
+ * Her own tooling identifies itself. K2 self-identifies inline and K7/K8 carry
+ * the channel's header; K5 painting headerless in the band that once carried
+ * W-7744's orders was an unauthored ambiguity. Only the unanswerable things
+ * stay nameless.
+ */
+const CH10_FABRICATOR_HEADER = 'KESTREL FABRICATOR';
+
+export const CHAPTER_10_COPY = Object.freeze({
+  K1, K2, K3, K4, K5, K6, K7, K8, K9, K10, K11
+});
+
 const CH7_DIAGNOSIS_LATCH = 'ch7-m1-diagnosis';
 const CH8_L1_LATCH = 'ch8-l1-controls';
 const CH8_L2_LATCH = 'ch8-l2-self-order';
@@ -308,6 +423,33 @@ let finalizedLocalCommandStoryAdapterInstalled = false;
 // so `activateGuidedStoryObjective` cannot re-pop the card / re-chirp per frame.
 // `runtime.elapsed` is the monotonic time source (0 at entry, growing per tick).
 const ch8FlightGuidanceDwell = createFlightGuidanceDwell();
+
+/**
+ * True only inside `enterEmergentStoryBeat`. Every publish in this file routes
+ * through the wrapper below so beat entry can tell "this beat guides nothing"
+ * apart from "this beat re-published what was already true" — the distinction
+ * the ch9 double-enter defect turned on.
+ */
+let beatEntryInProgress = false;
+let beatEntryPublishedObjective = false;
+
+function publishGuidedObjective(objective: GuidedStoryObjective): boolean {
+  if (beatEntryInProgress) beatEntryPublishedObjective = true;
+  const activated = activateGuidedStoryObjective(objective);
+  // SAME-FRAME MARKER RESOLUTION. Activation deliberately clears markerVisible,
+  // and the shared marker driver only answers on the NEXT frame — so between
+  // the two, a mandatory rung was observable at `missing-marker`. The next
+  // frame healed it, which is exactly why it survived: the invariant is that a
+  // mandatory objective is never observable in that state, not that it recovers
+  // from it. Chapter 10 resolves its own targets from handles that already
+  // exist at publication time, so it can answer in the same frame it publishes.
+  // Non-ch10 beats resolve null here and keep their shipped driver behaviour.
+  if (activated) {
+    const target = getChapter10MarkerTarget(runtime.beat, objective);
+    if (target) observeGuidedStoryMarker(target.label);
+  }
+  return activated;
+}
 
 function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
   if (!beat) return;
@@ -391,11 +533,76 @@ function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
           ) as typeof rawLandfallState
         });
       }
+      case 'ch10-cold':
+        return resolveStoryObjectiveGuidance(beat, {
+          ch10ColdState: hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)
+            ? 'fabrication-attempt'
+            : 'fault-read'
+        });
+      case 'ch10-ask':
+        return resolveStoryObjectiveGuidance(beat, {
+          ch10AskState: chapter10AskState(actorId)
+        });
+      case 'ch10-transit':
+        return resolveStoryObjectiveGuidance(beat, {
+          ch10TransitState: hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)
+            ? 'resolve'
+            : hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId)
+              ? 'hold'
+              : 'ignite'
+        });
       default:
         return null;
     }
   })();
-  if (guidance) activateGuidedStoryObjective(guidance);
+  if (guidance && chapter10GuidanceFindable(beat, guidance)) publishGuidedObjective(guidance);
+}
+
+/**
+ * A mandatory rung may not be PUBLISHED before the thing it points at exists.
+ *
+ * Same-frame marker resolution fixed the case where the handle was already
+ * there. It could not fix the deep link, where the ladder publishes while the
+ * world is still arriving: `station:return:reboard` names the Kestrel's hatch,
+ * and the ship mounts a few seconds after the bootstrap, so the rung stood at
+ * missing-marker for 3.4 seconds. Waiting is the honest answer — an absent
+ * objective is `idle`, which is true (guidance has nothing findable to say yet)
+ * where a findable-looking rung pointing at nothing is a lie. The director ticks
+ * every frame, so publication follows the handle by one frame.
+ *
+ * Non-ch10 beats are unaffected: they resolve null here and keep publishing
+ * exactly as they ship today.
+ */
+function chapter10GuidanceFindable(
+  beat: StoryBeat,
+  objective: GuidedStoryObjective
+): boolean {
+  if (!beat.startsWith('ch10')) return true;
+  if (objective.requiresMarker === false) return true;
+  return getChapter10MarkerTarget(beat, objective) !== null;
+}
+
+/**
+ * The ch10-ask ladder, rung by rung, from durable receipts and unprotected
+ * flight facts. Every rung's marker resolves from a handle that already exists
+ * (hatch, flight target, wreck site, wreckRelayHandle), so no rung can publish
+ * a marker-requiring objective before its target is findable.
+ */
+function chapter10AskState(actorId: string): Ch10AskObjectiveState {
+  const flight = getSpaceFlightSnapshot();
+  const system = getSystemFlightSnapshot();
+  // WORLD FIRST, RECEIPT SECOND. Both relay rungs mark the relay itself, and
+  // the relay exists on the origin world and nowhere else — so neither may be
+  // published while another world is the enclosing one, no matter which durable
+  // receipts are already held. Reading the answered milestone first is what let
+  // `station:bearing-claim` enter on Tidegarden against an unresolvable target
+  // and sit at missing-marker, which no mandatory objective may ever do.
+  if (system.activePlanetId !== ORIGIN_WORLD_ID) {
+    return flight.controlMode === 'flight' ? 'crossing' : 'reboard';
+  }
+  if (flight.phase !== 'surface' || flight.controlMode === 'flight') return 'landfall';
+  if (hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId)) return 'bearing-claim';
+  return 'relay-query';
 }
 
 interface AuditRouteRuntime {
@@ -427,6 +634,7 @@ const AUDITOR_TURN_SPEED = 5.2;
 /** Called by the primary director at the same beat boundary as score/camera reset. */
 export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
   ensureFinalizedLocalCommandStoryAdapter();
+  ensureChapter10Interactions();
   const leavingA4 = runtime.beat === 'a4-exhale' && beat !== 'a4-exhale';
   if (leavingA4) {
     clearVoxelRealityOverrides();
@@ -454,8 +662,11 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
   runtime.reconstructM6At = -1;
   runtime.reconstructReceiptAt = -1;
   runtime.reconstructM7AnchorAt = -1;
+  runtime.ch10FaultReadAt = -1;
+  runtime.ch10RefusedAt = -1;
+  runtime.ch10AnswerAt = -1;
+  runtime.ch10ResolvedAt = -1;
   resetFlightGuidanceDwell(ch8FlightGuidanceDwell);
-  clearGuidedStoryObjective();
   resetAuditRoute();
   if (beat === 'a4-exhale' && hasMilestone(STORY_MILESTONES.a4)) {
     // Reload after the authority commit reconstructs at the committed front; it
@@ -463,6 +674,23 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
     runtime.elapsed = 1.75;
   }
 
+  // LIFECYCLE (defect ux: the shipped ch9 `settle:wait-night` double-enter).
+  //
+  // Beat entry used to CLEAR guidance unconditionally and then let the entering
+  // beat republish. When ch9-settle handed over to ch9-hearth while the same
+  // wait-for-night objective was still the honest next action, the clear made
+  // `activateGuidedStoryObjective` see a fresh id and emit a SECOND
+  // objective-enter cue for an activation the player never re-earned.
+  //
+  // The clear is now deferred to the end of entry and applied only when the
+  // entering beat published nothing of its own. Re-publishing an identical id
+  // is a no-op inside the objective director, so the identical objective
+  // survives the boundary with exactly one enter cue, while a different
+  // objective still replaces it with exactly one — and a beat that guides
+  // nothing still clears. Beat change therefore still clears all guidance; it
+  // just no longer manufactures an activation to do it.
+  beatEntryPublishedObjective = false;
+  beatEntryInProgress = true;
   switch (beat) {
     case 'ch4-audit':
       setWorkOrder(['FOLLOW THE INSPECTION.', 'ATTEND EACH MISMATCH.']);
@@ -484,17 +712,17 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
       // Publish before the first rendered world tick. Cold/direct chapter loads
       // can spend tens of seconds preparing terrain; guidance must not look
       // absent while the Canvas is still waiting to drive tickMaw().
-      activateGuidedStoryObjective(getAuthoredMawGuidance(getLocalActorId()));
+      publishGuidedObjective(getAuthoredMawGuidance(getLocalActorId()));
       showCaption('(something tore free when he ran.)');
       break;
     case 'ch6-dive':
-      activateGuidedStoryObjective(getAuthoredDiveGuidance(getLocalActorId()));
+      publishGuidedObjective(getAuthoredDiveGuidance(getLocalActorId()));
       showCaption('(the repaired tool has marked something beneath the water.)');
       break;
     case 'ch7-reconstruct':
       {
         const guidance = getWreckReconstructionGuidance(getLocalActorId());
-        activateGuidedStoryObjective({
+        publishGuidedObjective({
           ...guidance,
           id: `reconstruct:${guidance.id}`
         });
@@ -502,7 +730,7 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
       showCaption('(repair is not return.)');
       break;
     case 'ch7-board':
-      activateGuidedStoryObjective(getPhysicalBoardingGuidance());
+      publishGuidedObjective(getPhysicalBoardingGuidance());
       showCaption('(the wreck is waiting for an owner.)');
       break;
     case 'ch8-launch':
@@ -522,10 +750,21 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
     case 'ch9-hearth':
       activateSettlementGuidance(getLocalActorId());
       break;
+    case 'ch10-cold':
+      // The fault is noticed, not announced: no fanfare, one low line, and the
+      // ladder the player can act on. K1's claim is score-side and non-visual.
+      showCaption(K1);
+      break;
+    case 'ch10-ask':
+      // K6 bridges the beat boundary — it is the reason the player leaves.
+      showCaption(K6);
+      break;
     default:
       break;
   }
   syncEmergentObjectiveGuidance(beat);
+  beatEntryInProgress = false;
+  if (!beatEntryPublishedObjective) clearGuidedStoryObjective();
   // Story, score, camera and PostFX all enter the frozen council contract at
   // this same beat boundary. The rail changes presentation only; durable facts
   // above remain the sole progression authority.
@@ -584,6 +823,15 @@ export function emergentStoryDirectorTick(dt: number): void {
       break;
     case 'ch9-hearth':
       tickSecondHearth();
+      break;
+    case 'ch10-cold':
+      tickChapter10Cold();
+      break;
+    case 'ch10-ask':
+      tickChapter10Ask();
+      break;
+    case 'ch10-transit':
+      tickChapter10Transit(dt);
       break;
     default:
       break;
@@ -711,7 +959,7 @@ function tickA4(): void {
 
 function tickMaw(): void {
   const actorId = getLocalActorId();
-  activateGuidedStoryObjective(getAuthoredMawGuidance(actorId));
+  publishGuidedObjective(getAuthoredMawGuidance(actorId));
   if (!hasMilestone('maw_repaired', actorId)) return;
   once('maw-repaired', () => {
     markMilestone(STORY_MILESTONES.senseMaw, actorId);
@@ -738,7 +986,7 @@ function tickMaw(): void {
 
 function tickDive(): void {
   const actorId = getLocalActorId();
-  activateGuidedStoryObjective(getAuthoredDiveGuidance(actorId));
+  publishGuidedObjective(getAuthoredDiveGuidance(actorId));
   if (!hasBankedKestrelKeelMemory(actorId)) return;
   once('dive-banked', () => {
     runtime.completionObservedAt = runtime.elapsed;
@@ -764,7 +1012,7 @@ function tickReconstruction(): void {
         : 'none'
   });
   const guidance = getWreckReconstructionGuidance(actorId);
-  activateGuidedStoryObjective({
+  publishGuidedObjective({
     ...guidance,
     id: `reconstruct:${guidance.id}`
   });
@@ -883,7 +1131,7 @@ function tickBoarding(): void {
       transactionId: boarding.transactionId ?? undefined
     }));
   }
-  activateGuidedStoryObjective(getPhysicalBoardingGuidance());
+  publishGuidedObjective(getPhysicalBoardingGuidance());
   reconcilePhysicalBoardingSignedAvFromReceipt(actorId, ORIGIN_WORLD_ID);
   // Control ownership changes behind the hatch before the pressure boundary
   // closes. Do not collapse that staged transaction into "flight mode exists".
@@ -1149,7 +1397,7 @@ function activateSettlementGuidance(actorId: ReturnType<typeof getLocalActorId>)
     foundationPlaced,
     night: isHabitatNight(dayPhase)
   });
-  activateGuidedStoryObjective({
+  publishGuidedObjective({
     ...settlementGuidance,
     id: `settle:${settlementGuidance.id}`
   });
@@ -1202,7 +1450,7 @@ function tickSecondHearth(): void {
     activateSettlementGuidance(actorId);
     return;
   }
-  activateGuidedStoryObjective({
+  publishGuidedObjective({
     id: 'settle:second-hearth-settling',
     kind: 'wait',
     markerLabel: 'SECOND HEARTH · SETTLING',
@@ -1220,6 +1468,573 @@ function tickSecondHearth(): void {
   });
   if (runtime.elapsed < runtime.completionObservedAt + 5.5) return;
   completeStory();
+}
+
+// --- Chapter 10 -------------------------------------------------------------
+
+/**
+ * K7's reveal plus its settle: the answer may never land before the request has
+ * finished painting. 55 chars at the shipped 22 ms/char REGULATION rate is
+ * 1.21s; +0.15s settle gives the 1.36s the contract records as an inequality.
+ * The score's own answer offset is asserted against this in the test seam, so a
+ * future retune fails loudly instead of silently reordering the exchange.
+ */
+export const K7_REVEAL_GUARD_SECONDS = regulationRevealSeconds(K7) + 0.15;
+
+export interface Chapter10ColdEntryFacts {
+  /** Durable: the two-world arc finished. */
+  storyComplete: boolean;
+  /** Durable: free play was handed back at the second hearth. */
+  twoWorldHandoff: boolean;
+  onTidegarden: boolean;
+  night: boolean;
+  /** Metres from the second hearth's core, or null when no hearth exists. */
+  hearthDistance: number | null;
+  /** Accumulated `done` free-play seconds. */
+  freePlaySeconds: number;
+}
+
+/**
+ * The entry mechanism, as a pure predicate. The fault is NOTICED, not
+ * announced: nothing fires anywhere the player is not, and if they never come
+ * home at night the story waits indefinitely.
+ */
+export function chapter10ColdEntryReady(facts: Chapter10ColdEntryFacts): boolean {
+  return facts.storyComplete
+    && facts.twoWorldHandoff
+    && facts.onTidegarden
+    && facts.night
+    && facts.hearthDistance !== null
+    && facts.hearthDistance <= CH10_HEARTH_NOTICE_RADIUS
+    && facts.freePlaySeconds >= CH10_FREEPLAY_GRACE_SECONDS;
+}
+
+const chapter10FreePlayWatch = { seconds: 0 };
+
+export function resetChapter10FreePlayWatch(): void {
+  chapter10FreePlayWatch.seconds = 0;
+}
+
+export function getChapter10FreePlaySeconds(): number {
+  return chapter10FreePlayWatch.seconds;
+}
+
+/** Live read of the entry facts. Never mutates; safe to sample from a probe. */
+export function readChapter10ColdEntryFacts(
+  actorId: string = getLocalActorId()
+): Chapter10ColdEntryFacts {
+  const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+  const corePosition = habitat
+    ? new THREE.Vector3(...habitat.core.position)
+    : null;
+  return {
+    storyComplete: hasMilestone(STORY_MILESTONES.complete, actorId),
+    twoWorldHandoff: hasMilestone(
+      TIDEGARDEN_SETTLEMENT_MILESTONES.twoWorldHandoff,
+      actorId
+    ),
+    onTidegarden: getSystemFlightSnapshot().activePlanetId === TIDEGARDEN_WORLD_ID,
+    night: isHabitatNight(getCurrentDayPhase()),
+    hearthDistance: corePosition
+      ? getPlayerWorldPosition().distanceTo(corePosition)
+      : null,
+    freePlaySeconds: chapter10FreePlayWatch.seconds
+  };
+}
+
+/**
+ * Accumulates the `done` free-play grace and re-activates the story when the
+ * player is home, at night, at the hearth. Returns true on the frame chapter 10
+ * opens.
+ *
+ * Free play runs with `story.active === false`, so the only module that can
+ * host this is one that ticks on those frames: `StoryDirectorDriver.tsx` calls
+ * it from its story-inactive branch, which is the one place the player is and
+ * the story is not. Chapter 10 is also reachable by its deep links, the resume
+ * ladder and the movie lane, all of which bypass this watch entirely.
+ */
+export function tickChapter10FreePlayEntry(dt: number): boolean {
+  const story = getStoryStateSnapshot();
+  if (story.active || story.beat !== 'done') return false;
+  chapter10FreePlayWatch.seconds += Math.max(0, dt);
+  const actorId = getLocalActorId();
+  if (hasMilestone(STORY_MILESTONES.ch10ColdNoticed, actorId)) return false;
+  if (!chapter10ColdEntryReady(readChapter10ColdEntryFacts(actorId))) return false;
+  markMilestone(STORY_MILESTONES.ch10ColdNoticed, actorId);
+  return reactivateStoryAtBeat('ch10-cold');
+}
+
+// --- ch10 receipts ----------------------------------------------------------
+//
+// The physical verbs of ch10-cold and the relay live on world surfaces that are
+// outside this run's mutation boundary (`src/story/world/`, the interaction id
+// union, the craft surfaces). These are the receipt seams those producers — and
+// the movie lane's autopilot — commit through, so the ladder, the captions, the
+// score anchors and the telemetry are all driven by one durable fact each,
+// exactly as every shipped chapter drives itself.
+
+/** [F] at the habitat core: read the machine's own account of itself. */
+export function commitChapter10FaultRead(actorId: string = getLocalActorId()): boolean {
+  if (runtime.beat !== 'ch10-cold') return false;
+  if (hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)) return false;
+  markMilestone(STORY_MILESTONES.ch10FaultRead, actorId);
+  return true;
+}
+
+/** [F] at the Kestrel Fabricator: attempt a replacement, and be refused. */
+export function commitChapter10FabricationAttempt(
+  actorId: string = getLocalActorId()
+): boolean {
+  if (runtime.beat !== 'ch10-cold') return false;
+  if (!hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)) return false;
+  if (hasMilestone(STORY_MILESTONES.ch10FabricationRefused, actorId)) return false;
+  markMilestone(STORY_MILESTONES.ch10FabricationRefused, actorId);
+  return true;
+}
+
+/** [F] at the wreck relay: the game's first outbound request to another party. */
+export function commitChapter10RelayRequest(
+  actorId: string = getLocalActorId()
+): boolean {
+  if (runtime.beat !== 'ch10-ask') return false;
+  if (hasMilestone(STORY_MILESTONES.ch10RelayAsked, actorId)) return false;
+  markMilestone(STORY_MILESTONES.ch10RelayAsked, actorId);
+  return true;
+}
+
+/**
+ * [F] at the wreck relay: the agency peak. The story waits here forever — no
+ * timeout, no nudge and no automation may claim on the player's behalf.
+ */
+export function commitChapter10BearingClaim(
+  actorId: string = getLocalActorId()
+): boolean {
+  if (runtime.beat !== 'ch10-ask') return false;
+  if (!hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId)) return false;
+  if (hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId)) return false;
+  const contact = spaceStationApproachGeometry();
+  markMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId);
+  // The bearing is claimed BEFORE the target is committed, because the durable
+  // milestone is the fence commitSpaceStationTarget tests in story worlds.
+  if (contact) commitSpaceStationTarget(contact.body.address);
+  return true;
+}
+
+const _ch10RelayFallback = new THREE.Vector3();
+const _ch10StationMarker = new THREE.Vector3();
+
+/**
+ * The wreck relay's ground position, whether or not its prop is mounted.
+ *
+ * `wreckRelayHandle` is published by the WreckRelay component, and that
+ * component's mount predicate (`StoryWorldProps.tsx#firstDayOrLater`) tests
+ * chapter with a single-digit pattern, so it does not recognise ch10 — the
+ * handle is therefore null through the whole ask beat. The pose itself is a
+ * PURE function of the world's size and seed, so the marker resolves from the
+ * same arithmetic the prop would have used, on the first world only, where that
+ * arithmetic is the relay's. Routed as q-ch10-relay-prop-mount: the marker is
+ * correct today, but the relay's own scenery is still absent from ch10 and its
+ * mount predicate lives on a protected path.
+ */
+export function chapter10WreckSitePosition(): THREE.Vector3 | null {
+  if (wreckRelayHandle.position) return wreckRelayHandle.position;
+  if (getSystemFlightSnapshot().activePlanetId !== ORIGIN_WORLD_ID) return null;
+  const planetSize = storyAnchors.planetSize;
+  const terrainSeed = storyAnchors.terrainSeed;
+  if (planetSize === null || terrainSeed === null) return null;
+  return _ch10RelayFallback.copy(getWreckRelayPose(planetSize, terrainSeed).position);
+}
+
+/**
+ * The station this run's bearing names, resolved from DURABLE state.
+ *
+ * The claim commits a systemFlight target, but that store is transient: a
+ * `?story=ch10-transit` deep link and any reload seed `story:ch10-bearing-claimed`
+ * without ever running the commit, so anything that read the store alone saw
+ * nothing and the transit flew with no bearing at all. The system's stations are
+ * a pure function of its seed, so the claimed one is recoverable: prefer the
+ * committed target when the store has it, and otherwise reconstruct the same
+ * body the claim would have committed. Null before the claim — the bearing is
+ * the player's to earn and is never anticipated.
+ */
+export function chapter10ClaimedStationBody(actorId: string = getLocalActorId()) {
+  if (!hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId)) return null;
+  const manifest = buildStarSystemManifest(STORY_COORDINATE);
+  const bodies = systemSpaceStations(STORY_COORDINATE, manifest.systemSeed, 0);
+  if (bodies.length === 0) return null;
+  const target = getSystemFlightSnapshot().target;
+  if (target?.kind === 'space_station') {
+    const committed = bodies.find(candidate => candidate.worldId === target.worldId);
+    if (committed) return committed;
+  }
+  return bodies[0];
+}
+
+/**
+ * Re-commit the claimed bearing when the runtime arrived without it. Idempotent
+ * and durable-milestone gated, so it can never invent a target the player has
+ * not claimed, and a deep link, a reload and a continuous run all fly the same
+ * bearing — the contract's reload-purity term applied to the flight store.
+ */
+export function reconcileChapter10StationTarget(actorId: string = getLocalActorId()): boolean {
+  if (getSystemFlightSnapshot().target?.kind === 'space_station') return false;
+  const body = chapter10ClaimedStationBody(actorId);
+  if (!body) return false;
+  commitSpaceStationTarget(body.address);
+  return true;
+}
+
+/**
+ * The committed station target's world position, from durable state rather than
+ * from the approach instrument: the bearing is held for the whole transit, and
+ * the instrument only speaks inside its own scan range.
+ */
+function chapter10StationTargetPosition(): THREE.Vector3 | null {
+  const system = getSystemFlightSnapshot();
+  const body = chapter10ClaimedStationBody();
+  if (!body) return null;
+  // Render space: the ship's own pose is the origin the player is drawn at.
+  return _ch10StationMarker
+    .set(
+      body.systemPosition[0] - system.pose.position[0],
+      body.systemPosition[1] - system.pose.position[1],
+      body.systemPosition[2] - system.pose.position[2]
+    )
+    .add(getPlayerWorldPosition());
+}
+
+export interface Chapter10MarkerTarget {
+  position: THREE.Vector3;
+  label: string;
+  projectionSpace?: 'surface' | 'spatial';
+}
+
+/**
+ * World-space half of the chapter-10 objective contract.
+ *
+ * The shared marker must be present the FRAME a mandatory objective enters —
+ * that is the lifecycle law, and a deep link is the path most likely to break
+ * it, because the objective publishes from durable milestones while the world
+ * is still arriving. Every target below therefore resolves from a handle that
+ * already exists at publication time: the habitat core the bootstrap certified,
+ * the Kestrel's own pose, the wreck relay planted at the crash site, and the
+ * committed flight targets. If a handle is genuinely absent the answer is null
+ * and the HUD says so honestly rather than pointing at nothing.
+ */
+export function getChapter10MarkerTarget(
+  beat: StoryBeat | null,
+  objective = getActiveGuidedStoryObjective()
+): Chapter10MarkerTarget | null {
+  if (!beat || !beat.startsWith('ch10') || !objective) return null;
+  if (objective.requiresMarker === false) return null;
+  const label = objective.markerLabel;
+  switch (objective.id) {
+    case 'station:fault-read': {
+      const core = chapter10HabitatCorePosition();
+      return core ? { position: core.clone(), label } : null;
+    }
+    case 'station:fabrication-attempt':
+    case 'station:return:reboard': {
+      const fabricator = chapter10FabricatorPosition();
+      return fabricator ? { position: fabricator.clone(), label } : null;
+    }
+    case 'station:relay-query':
+    case 'station:bearing-claim': {
+      const relay = chapter10WreckSitePosition();
+      return relay ? { position: relay.clone(), label } : null;
+    }
+    case 'station:return:crossing': {
+      // The crossing back is ch8's grammar in the opposite direction, so it
+      // borrows ch8's marker treatment exactly: a spatial bearing, not a
+      // surface route.
+      const origin = readSystemCompanionBodyTarget(ORIGIN_WORLD_ID);
+      return origin ? { position: origin, label, projectionSpace: 'spatial' } : null;
+    }
+    case 'station:return:landfall': {
+      // The descent goal is the wreck site itself, read as a bearing rather
+      // than a surface route: the player is still in the air.
+      const site = chapter10WreckSitePosition();
+      return site ? { position: site.clone(), label, projectionSpace: 'spatial' } : null;
+    }
+    case 'station:transit:hold': {
+      const station = chapter10StationTargetPosition();
+      return station
+        ? { position: station.clone(), label, projectionSpace: 'spatial' }
+        : null;
+    }
+    default:
+      return null;
+  }
+}
+
+// --- ch10 player verbs ------------------------------------------------------
+//
+// Four prompts, one resolver, registered once. Every one of them reads the live
+// beat and the durable milestones and resolves from a handle that already
+// exists, so a prompt can never appear before the thing it names does. The
+// perform bodies are the receipt seams above: the prompt licenses the act, the
+// receipt records it, and the tick owns every consequence.
+
+const CH10_CORE_INTERACT_DISTANCE = 4.2;
+const CH10_FABRICATOR_INTERACT_DISTANCE = 6;
+const CH10_RELAY_INTERACT_DISTANCE = 4.2;
+
+let chapter10InteractionsInstalled = false;
+
+function withinChapter10Reach(
+  position: THREE.Vector3,
+  target: THREE.Vector3 | null,
+  distance: number
+): boolean {
+  return target !== null && position.distanceTo(target) <= distance;
+}
+
+const _ch10InteractionTarget = new THREE.Vector3();
+
+function chapter10HabitatCorePosition(): THREE.Vector3 | null {
+  const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+  return habitat ? _ch10InteractionTarget.set(...habitat.core.position) : null;
+}
+
+function chapter10FabricatorPosition(): THREE.Vector3 | null {
+  // The fabricator is the Kestrel's own, carried since chapter 7.
+  const ship = getShipPosition();
+  return ship ? _ch10InteractionTarget.set(ship[0], ship[1], ship[2]) : null;
+}
+
+function ensureChapter10Interactions(): void {
+  if (chapter10InteractionsInstalled) return;
+  chapter10InteractionsInstalled = true;
+  registerStoryInteraction((_camera, position) => {
+    const actorId = getLocalActorId();
+    switch (runtime.beat) {
+      case 'ch10-cold': {
+        if (!hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)) {
+          return withinChapter10Reach(position, chapter10HabitatCorePosition(), CH10_CORE_INTERACT_DISTANCE)
+            ? {
+                id: 'story-ch10-fault-read',
+                verb: 'Read the hearth fault',
+                perform: () => { commitChapter10FaultRead(actorId); }
+              }
+            : null;
+        }
+        if (hasMilestone(STORY_MILESTONES.ch10FabricationRefused, actorId)) return null;
+        return withinChapter10Reach(position, chapter10FabricatorPosition(), CH10_FABRICATOR_INTERACT_DISTANCE)
+          ? {
+              id: 'story-ch10-fabrication-attempt',
+              // Reads the same as the amended work order's action, so the
+              // prompt and the card name one act in one voice.
+              verb: 'Attempt to fabricate a replacement cell',
+              perform: () => { commitChapter10FabricationAttempt(actorId); }
+            }
+          : null;
+      }
+      case 'ch10-ask': {
+        const relay = wreckRelayHandle.position;
+        if (!withinChapter10Reach(position, relay, CH10_RELAY_INTERACT_DISTANCE)) return null;
+        if (hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId)) {
+          // The rite. It waits here indefinitely and is only ever performed.
+          return hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId)
+            ? null
+            : {
+                id: 'story-ch10-bearing-claim',
+                verb: 'Claim the bearing',
+                perform: () => { commitChapter10BearingClaim(actorId); }
+              };
+        }
+        if (hasMilestone(STORY_MILESTONES.ch10RelayAsked, actorId)) return null;
+        return {
+          id: 'story-ch10-relay-query',
+          verb: 'Request a source for a bonded cell',
+          perform: () => { commitChapter10RelayRequest(actorId); }
+        };
+      }
+      default:
+        return null;
+    }
+  }, { owner: 'ch10-station-introduction' });
+}
+
+// --- ch10 ticks -------------------------------------------------------------
+
+function tickChapter10Cold(): void {
+  const actorId = getLocalActorId();
+  if (hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)) {
+    once('ch10-fault-read', () => {
+      runtime.ch10FaultReadAt = runtime.elapsed;
+      noteChapter10Anchor('anc.ch10.fault-read');
+      showAuditLine(K2);
+    });
+  }
+  if (runtime.ch10FaultReadAt >= 0) {
+    // The record is two REGULATION lines and one low answer, spaced off their
+    // own derived reveals so the single band never cuts a line.
+    const sinceRecord = runtime.elapsed - runtime.ch10FaultReadAt;
+    const k3At = regulationRevealSeconds(K2) + CH10_REGULATION_DWELL_SECONDS;
+    if (sinceRecord >= k3At) once('ch10-k3', () => showAuditLine(K3));
+    if (sinceRecord >= k3At + regulationRevealSeconds(K3) + CH10_REGULATION_DWELL_SECONDS) {
+      once('ch10-k4', () => showCaption(K4));
+    }
+  }
+  if (!hasMilestone(STORY_MILESTONES.ch10FabricationRefused, actorId)) return;
+  once('ch10-refused', () => {
+    runtime.ch10RefusedAt = runtime.elapsed;
+    runtime.completionObservedAt = runtime.elapsed;
+    // Refusal as subtraction: the square fifth answers once and stops, and the
+    // melody voice does not return for the remainder of the beat.
+    noteChapter10Anchor('anc.ch10.fabrication-refused');
+    showAuditLine(K5, CH10_FABRICATOR_HEADER);
+  });
+  // K6 paints at ch10-ask entry, so the beat may not advance before K5 has been
+  // read: the boundary waits on the line, never the other way round.
+  if (runtime.elapsed < runtime.completionObservedAt
+    + regulationRevealSeconds(K5) + CH10_REGULATION_DWELL_SECONDS) return;
+  // The checkpoint is committed at the boundary itself, adjacent to the
+  // advance: the receipt above records the player's act the instant it happens,
+  // and this idempotent re-commit is what makes "checkpoint, then advance" one
+  // inspectable transition rather than two facts separated by a read delay.
+  markMilestone(STORY_MILESTONES.ch10FabricationRefused, actorId);
+  advanceToBeat('ch10-ask');
+}
+
+function tickChapter10Ask(): void {
+  const actorId = getLocalActorId();
+  if (hasMilestone(STORY_MILESTONES.ch10RelayAsked, actorId)) {
+    once('ch10-relay-ask', () => {
+      runtime.ch10AnswerAt = runtime.elapsed + chapter10RelayAnswerDelaySeconds();
+      noteChapter10Anchor('anc.ch10.relay-ask');
+      showAuditLine(K7, CH10_RELAY_HEADER);
+    });
+  }
+  if (runtime.ch10AnswerAt >= 0 && runtime.elapsed >= runtime.ch10AnswerAt) {
+    once('ch10-relay-answer', () => {
+      // ONE anchor, two consumers, same frame: K8's paint-begin and the answer
+      // figure's audio onset. Never tuned offsets — the simultaneity is the
+      // shared anchor itself, and the wrongness is metric, not dynamic.
+      markMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId);
+      noteChapter10Anchor('anc.ch10.relay-answer');
+      showAuditLine(K8, CH10_RELAY_HEADER);
+    });
+    if (runtime.elapsed >= runtime.ch10AnswerAt + regulationRevealSeconds(K8)) {
+      once('ch10-k9', () => showCaption(K9));
+    }
+  }
+  if (!hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId)) return;
+  once('ch10-bearing-claimed', () => {
+    runtime.completionObservedAt = runtime.elapsed;
+    noteChapter10Anchor('anc.ch10.bearing-claimed');
+    showCaption(K10);
+  });
+  if (runtime.elapsed < runtime.completionObservedAt + revealSeconds(K10)) return;
+  markMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId);
+  advanceToBeat('ch10-transit');
+}
+
+/**
+ * The seam of light, as a pure edge. Both trigger paths are the same latch: the
+ * composed view-cone reveal is preferred, the look-independent range is the
+ * floor, and either one records the SAME durable milestone so the resolver and
+ * the signed rail can never disagree about whether the seam happened.
+ */
+export interface Chapter10SeamFacts {
+  atmosphereSpaceBlend: number;
+  /** Degrees between view center and the committed target; null when unknown. */
+  stationOffAxisDeg: number | null;
+  /** Distance to the station; null when it is not on instruments. */
+  stationDistance: number | null;
+}
+
+export function chapter10SeamConditionMet(facts: Chapter10SeamFacts): boolean {
+  if (!(facts.atmosphereSpaceBlend >= SEAM_OF_LIGHT_MIN_BLEND)) return false;
+  const withinCone = facts.stationOffAxisDeg !== null
+    && facts.stationOffAxisDeg <= SEAM_VIEW_CONE_DEG;
+  const withinFallback = facts.stationDistance !== null
+    && facts.stationDistance <= SEAM_FALLBACK_RANGE;
+  return withinCone || withinFallback;
+}
+
+const _stationBearing = new THREE.Vector3();
+
+export function readChapter10SeamFacts(): Chapter10SeamFacts {
+  const flight = getSpaceFlightSnapshot();
+  const contact = spaceStationApproachGeometry();
+  // Deep space pins the blend at 1: any point inside SEAM_FALLBACK_RANGE of the
+  // station is more than 1,700 units off the nearest world by construction.
+  const blend = flight.phase === 'deep_space' ? 1 : 0;
+  if (!contact) {
+    return { atmosphereSpaceBlend: blend, stationOffAxisDeg: null, stationDistance: null };
+  }
+  const pose = getSystemFlightSnapshot().pose;
+  _stationBearing.set(
+    contact.body.systemPosition[0] - pose.position[0],
+    contact.body.systemPosition[1] - pose.position[1],
+    contact.body.systemPosition[2] - pose.position[2]
+  );
+  const forward = getPlayerLook().forward;
+  const offAxisDeg = _stationBearing.lengthSq() > 1e-6
+    ? THREE.MathUtils.radToDeg(_stationBearing.normalize().angleTo(forward))
+    : 0;
+  return {
+    atmosphereSpaceBlend: blend,
+    stationOffAxisDeg: offAxisDeg,
+    stationDistance: contact.readout.distance
+  };
+}
+
+function tickChapter10Transit(dt: number): void {
+  const actorId = getLocalActorId();
+  // The bearing before anything else: a deep link or a reload arrives holding
+  // the durable claim with an empty flight store, and everything downstream —
+  // the marker, the boundary telemetry, the movie lane's attitude — reads that
+  // target. Idempotent, so a continuous run pays nothing.
+  reconcileChapter10StationTarget(actorId);
+  const flight = getSpaceFlightSnapshot();
+  if (flight.controlMode === 'flight' && flight.phase !== 'surface') {
+    once('ch10-transit-ignite', () => {
+      markMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId);
+      noteChapter10Anchor('anc.ch10.transit-ignite');
+    });
+  }
+  if (!hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId)) return;
+
+  // THE LATCH. Once fired it never un-fires inside the beat, regardless of look
+  // direction, blend or distance; the durable milestone is what makes a
+  // mid-transit reload re-enter the post-seam state without re-firing.
+  if (!hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)
+    && chapter10SeamConditionMet(readChapter10SeamFacts())) {
+    markMilestone(STORY_MILESTONES.ch10SeamPassed, actorId);
+    noteChapter10Anchor('anc.ch10.seam-of-light');
+  }
+  // ORDERING INVARIANT: the resolve cannot fire while the seam is unset. Motion
+  // is continuous and the standoff is strictly inside the fallback range, so
+  // every possible flight passes the seam strictly earlier — this guard makes
+  // that geometric truth an executable one.
+  if (!hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)) return;
+
+  const contact = spaceStationApproachGeometry();
+  if (contact && contact.readout.distance <= STATION_STANDOFF_DISTANCE) {
+    once('ch10-station-resolved', () => {
+      runtime.ch10ResolvedAt = runtime.elapsed;
+      markMilestone(STORY_MILESTONES.ch10StationResolved, actorId);
+      // The hold begins at the anchor + 0 and K11 keys off the anchor directly,
+      // so the text never waits on the score's quantize choice.
+      noteChapter10Anchor('anc.ch10.station-resolved');
+      setStoryMoveScale(0);
+      showCaption(K11, 6500);
+    });
+  }
+  if (runtime.ch10ResolvedAt < 0) return;
+  if (runtime.elapsed < runtime.ch10ResolvedAt + HOLD_DURATION_MS / 1000) return;
+  once('ch10-threshold-handback', () => {
+    // Mandatory, visible hand-back: thrust re-arms, guidance clears to nothing,
+    // and free play resumes in space with the bearing held and no way in.
+    setStoryMoveScale(1);
+    setWorkOrder([]);
+    clearGuidedStoryObjective();
+    noteChapter10Anchor('anc.ch10.threshold-handback');
+    completeChapter10();
+  });
+  void dt;
 }
 
 /**

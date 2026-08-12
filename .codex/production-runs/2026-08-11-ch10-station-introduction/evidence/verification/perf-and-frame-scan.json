@@ -1,0 +1,668 @@
+{
+  "capturedAt": "2026-08-12T01:27:56.290Z",
+  "viewport": "1280x720",
+  "qualityTier": "LOW",
+  "baselineRef": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/shipped-visual-baseline.json#frameRateBaseline",
+  "baselineMedians": {
+    "ch7-reconstruct": 60.12,
+    "ch7-board": 60.11,
+    "ch8-launch": 60.17
+  },
+  "samples": [
+    {
+      "id": "done-night-free-play-st0",
+      "url": "?story=done&profile=LOW",
+      "fps": [
+        60.1,
+        60.04,
+        60.05
+      ],
+      "median": 60.05,
+      "min": 60.04,
+      "st0Predicate": true,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "pageErrors": []
+    },
+    {
+      "id": "ch10-cold",
+      "url": "?story=ch10-cold&profile=LOW",
+      "fps": [
+        60.1,
+        60.03,
+        60.03
+      ],
+      "median": 60.03,
+      "min": 60.03,
+      "st0Predicate": true,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "pageErrors": []
+    },
+    {
+      "id": "ch10-transit",
+      "url": "?story=ch10-transit&profile=LOW",
+      "fps": [
+        60.12,
+        60.02,
+        60.03
+      ],
+      "median": 60.03,
+      "min": 60.02,
+      "st0Predicate": true,
+      "renderer": "ANGLE (NVIDIA Corporation, NVIDIA GB10/PCIe, OpenGL 4.5.0)",
+      "pageErrors": []
+    }
+  ],
+  "drawCall": {
+    "withSt0": {
+      "info": null,
+      "keys": [
+        "spawn",
+        "player"
+      ]
+    },
+    "withoutSt0": {
+      "info": null,
+      "keys": [
+        "spawn",
+        "player"
+      ]
+    },
+    "note": "the shipped build exposes no renderer.info draw counter on __voxelDebug, so the one-draw-call claim is proven from the model instead: ST-0 reuses the SystemCompanionBodies instanced batch and adds no shader program."
+  },
+  "frameDefectScan": {
+    "scanned": 59,
+    "defective": [],
+    "frames": [
+      {
+        "file": "evidence/capture/still-seam-of-light.png",
+        "meanLuma": 53.97332710839176,
+        "minLuma": 0,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 0.7450564450675127,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/still-st0-sighting.png",
+        "meanLuma": 145.4215748727312,
+        "minLuma": 0,
+        "maxLuma": 246.3634,
+        "nonBlackFraction": 0.9740647827049361,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/still-station-resolved.png",
+        "meanLuma": 56.442824452153864,
+        "minLuma": 0,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 0.7651811407068546,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/00_relay-ask-before_ch10-ask.png",
+        "meanLuma": 122.42907877962531,
+        "minLuma": 0,
+        "maxLuma": 240.87519999999998,
+        "nonBlackFraction": 0.980908285988342,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/01_relay-ask-at_ch10-ask.png",
+        "meanLuma": 123.09988437615334,
+        "minLuma": 0,
+        "maxLuma": 241.5904,
+        "nonBlackFraction": 0.9812772079982292,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/02_relay-answer-at_ch10-ask.png",
+        "meanLuma": 126.3503121965699,
+        "minLuma": 0,
+        "maxLuma": 241.7204,
+        "nonBlackFraction": 0.9815723456061388,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/03_relay-answer-after_ch10-ask.png",
+        "meanLuma": 126.59089641779096,
+        "minLuma": 0,
+        "maxLuma": 241.93300000000002,
+        "nonBlackFraction": 0.9812218696967461,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/04_bearing-claimed-before_ch10-ask.png",
+        "meanLuma": 129.0144407548171,
+        "minLuma": 0,
+        "maxLuma": 242.933,
+        "nonBlackFraction": 0.9804286873754888,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/05_bearing-claimed-at_ch10-ask.png",
+        "meanLuma": 130.022891186442,
+        "minLuma": 0,
+        "maxLuma": 243.72039999999998,
+        "nonBlackFraction": 0.9800782114660961,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/06_bearing-claimed-after_ch10-transit.png",
+        "meanLuma": 136.48659937283003,
+        "minLuma": 0,
+        "maxLuma": 243.933,
+        "nonBlackFraction": 0.9792112447428614,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-ask-b/07_marker-state-post-claim_ch10-transit.png",
+        "meanLuma": 138.55120596176536,
+        "minLuma": 0,
+        "maxLuma": 244.933,
+        "nonBlackFraction": 0.9772006197889767,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/00_shelter-pre-activation_ch10-cold.png",
+        "meanLuma": 122.3178712609973,
+        "minLuma": 0,
+        "maxLuma": 240.72039999999998,
+        "nonBlackFraction": 0.9812772079982292,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/01_cold-noticed-before_ch10-cold.png",
+        "meanLuma": 125.95183521729491,
+        "minLuma": 0,
+        "maxLuma": 241.7204,
+        "nonBlackFraction": 0.981424776802184,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/02_cold-noticed-at_ch10-cold.png",
+        "meanLuma": 128.88603336163783,
+        "minLuma": 0,
+        "maxLuma": 241.93300000000002,
+        "nonBlackFraction": 0.9810927469932856,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/03_cold-noticed-after_ch10-cold.png",
+        "meanLuma": 132.7443377554793,
+        "minLuma": 0,
+        "maxLuma": 242.933,
+        "nonBlackFraction": 0.9802626724710396,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/04_K1-painted_ch10-cold.png",
+        "meanLuma": 135.64739991882257,
+        "minLuma": 0,
+        "maxLuma": 243.933,
+        "nonBlackFraction": 0.9793957057478049,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/05_fault-read-before_ch10-cold.png",
+        "meanLuma": 137.04923839000952,
+        "minLuma": 0,
+        "maxLuma": 244.6482,
+        "nonBlackFraction": 0.9788238766324799,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/06_fault-read-at_ch10-cold.png",
+        "meanLuma": 135.8365096325491,
+        "minLuma": 0,
+        "maxLuma": 244.86079999999998,
+        "nonBlackFraction": 0.978049140411717,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-a/07_fault-read-after_ch10-cold.png",
+        "meanLuma": 136.65814978968132,
+        "minLuma": 0,
+        "maxLuma": 245.64819999999997,
+        "nonBlackFraction": 0.9765918984726629,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/00_egress-face-pre_ch10-cold.png",
+        "meanLuma": 121.77848480781554,
+        "minLuma": 0,
+        "maxLuma": 240.803,
+        "nonBlackFraction": 0.9810005164908139,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/01_egress-face-post_ch10-cold.png",
+        "meanLuma": 126.38294235594059,
+        "minLuma": 0,
+        "maxLuma": 241.7204,
+        "nonBlackFraction": 0.9815354534051501,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/02_fabrication-refused-before_ch10-cold.png",
+        "meanLuma": 129.01922717478368,
+        "minLuma": 0,
+        "maxLuma": 242.933,
+        "nonBlackFraction": 0.9803917951745001,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/03_fabrication-refused-at_ch10-cold.png",
+        "meanLuma": 131.62904788607167,
+        "minLuma": 0,
+        "maxLuma": 243.6482,
+        "nonBlackFraction": 0.9800782114660961,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/04_fabrication-refused-after_ch10-ask.png",
+        "meanLuma": 133.260899361759,
+        "minLuma": 0,
+        "maxLuma": 243.933,
+        "nonBlackFraction": 0.9793772596473106,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/05_refusal-band-dwell_ch10-ask.png",
+        "meanLuma": 136.4101256326894,
+        "minLuma": 0,
+        "maxLuma": 244.933,
+        "nonBlackFraction": 0.9779200177082564,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/06_beat-exit-guidance_ch10-ask.png",
+        "meanLuma": 139.43040259349078,
+        "minLuma": 0,
+        "maxLuma": 244.933,
+        "nonBlackFraction": 0.9766841289751347,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-cold-b/07_ask-fresh-entry_ch10-ask.png",
+        "meanLuma": 141.06352999336116,
+        "minLuma": 0,
+        "maxLuma": 245.933,
+        "nonBlackFraction": 0.9754666863425072,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/00_station-resolved-before_ch10-transit.png",
+        "meanLuma": 44.48378190437131,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8578543495904966,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/01_station-resolved-at_ch10-transit.png",
+        "meanLuma": 45.05933314026252,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8687928871836493,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/02_hold-mid_ch10-transit.png",
+        "meanLuma": 45.084231502249224,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8704161440271526,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/03_hold-release_ch10-transit.png",
+        "meanLuma": 45.126253405150926,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.871522910056814,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/04_K11-painted_ch10-transit.png",
+        "meanLuma": 45.172750929683346,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8728694753929019,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/05_work-order-cleared_ch10-transit.png",
+        "meanLuma": 45.250414992990976,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.873699549915148,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/06_threshold-handback-at_ch10-transit.png",
+        "meanLuma": 45.381448254998894,
+        "minLuma": 0.7874,
+        "maxLuma": 248.2454,
+        "nonBlackFraction": 0.8749538847487641,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-rm-transit/07_threshold-handback-after_ch10-transit.png",
+        "meanLuma": 45.55803321035692,
+        "minLuma": 0.0722,
+        "maxLuma": 248.2454,
+        "nonBlackFraction": 0.8759684202759537,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/00_transit-ignite-before_ch10-transit.png",
+        "meanLuma": 45.100775230571934,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.88179738803217,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/01_transit-ignite-at_ch10-transit.png",
+        "meanLuma": 44.914755467421564,
+        "minLuma": 0.9318,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8719287242676899,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/02_transit-ignite-after_ch10-transit.png",
+        "meanLuma": 44.965595665157196,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8622076293071644,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/03_T2-hold-marker_ch10-transit.png",
+        "meanLuma": 46.38403661919132,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8760790968789198,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/04_seam-before_ch10-transit.png",
+        "meanLuma": 43.91164687891748,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8586106397107651,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/05_seam-at_ch10-transit.png",
+        "meanLuma": 45.022420430897284,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.67059999999998,
+        "nonBlackFraction": 0.8647347450748911,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/06_seam-after_ch10-transit.png",
+        "meanLuma": 45.14960264517082,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8719287242676899,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-a/07_galaxy-absence-check_ch10-transit.png",
+        "meanLuma": 45.304582229026714,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8742160407289898,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/00_station-resolved-before_ch10-transit.png",
+        "meanLuma": 44.46872738507682,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8578543495904966,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png",
+        "meanLuma": 45.06119370987804,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8687375488821663,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/02_hold-mid_ch10-transit.png",
+        "meanLuma": 45.079395491771734,
+        "minLuma": 0.8595999999999999,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8703423596251753,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/03_hold-release_ch10-transit.png",
+        "meanLuma": 45.120248192282936,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8715044639563196,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/04_K11-painted_ch10-transit.png",
+        "meanLuma": 45.17273856710678,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8728325831919133,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/05_work-order-cleared_ch10-transit.png",
+        "meanLuma": 45.24498437246414,
+        "minLuma": 0.7874,
+        "maxLuma": 248.458,
+        "nonBlackFraction": 0.8735888733121818,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/06_threshold-handback-at_ch10-transit.png",
+        "meanLuma": 45.382765439386134,
+        "minLuma": 0.7874,
+        "maxLuma": 248.2454,
+        "nonBlackFraction": 0.8749354386482697,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/capture/strip-transit-b/07_threshold-handback-after_ch10-transit.png",
+        "meanLuma": 45.56023841215722,
+        "minLuma": 0.0722,
+        "maxLuma": 248.2454,
+        "nonBlackFraction": 0.8759684202759537,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/00_015s_ch9-hearth_hearth-enter.png",
+        "meanLuma": 34.405098325094684,
+        "minLuma": 10.9146,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 1,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/01_124s_ch9-hearth_hearth-closing.png",
+        "meanLuma": 31.320428624655634,
+        "minLuma": 6.4384,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 1,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/02_127s_ch9-hearth_hearth-closing-late.png",
+        "meanLuma": 31.435808986940998,
+        "minLuma": 6.651,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 1,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/03_130s_done_freeplay-seam.png",
+        "meanLuma": 36.15355908654832,
+        "minLuma": 6.651,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 1,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/04_138s_done_freeplay-settled.png",
+        "meanLuma": 38.730367936988245,
+        "minLuma": 7.791399999999999,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 1,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/06_185s_done_sky-zenith.png",
+        "meanLuma": 39.987008492578184,
+        "minLuma": 8.148399999999999,
+        "maxLuma": 236.94899999999998,
+        "nonBlackFraction": 1,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/sky_161s_ch9-hearth_outdoor-sky-mid.png",
+        "meanLuma": 19.2070467830007,
+        "minLuma": 0,
+        "maxLuma": 254.99999999999997,
+        "nonBlackFraction": 0.6499299048181214,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      },
+      {
+        "file": "evidence/baseline/sky_163s_ch9-hearth_outdoor-sky-zenith.png",
+        "meanLuma": 16.177952763225502,
+        "minLuma": 2.2888,
+        "maxLuma": 254.99999999999997,
+        "nonBlackFraction": 0.7183280454511917,
+        "width": 1280,
+        "height": 720,
+        "defects": []
+      }
+    ]
+  }
+}

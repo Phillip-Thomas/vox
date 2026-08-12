@@ -11,6 +11,7 @@ import {
   showCaption,
   subscribeStoryText
 } from './storyText.ts';
+import { CHAPTER_10_COPY } from './emergentStoryDirector.ts';
 
 const SRC_ROOT = fileURLToPath(new URL('..', import.meta.url));
 
@@ -51,6 +52,45 @@ describe('story text bands', () => {
     }
     expect(offenders).toEqual([]);
     expect(approvedOccurrences).toBeGreaterThan(0);
+  });
+
+  it('pins chapter 10 copy byte-exact, K1 through K11', () => {
+    // The frozen scene contract is the sole authority for these eleven lines.
+    // Any drift — a comma, a capital, a lost interior period — is a copy defect,
+    // so they are compared against literals written out here in full.
+    const contractCopy = [
+      '(the hum has dropped a step. cold is coming through a wall you sealed yourself.)',
+      'HAB CORE · POWER: ONE BONDED CELL · CONDITION: DEGRADING',
+      'BONDED CELL IS AN ISSUED COMPONENT. FABRICATION IS NOT AUTHORIZED.',
+      '(a world gives stone, water, wood. it does not give this. this was issued.)',
+      'PATTERN NOT HELD · CLASS: ISSUED COMPONENT · SOURCE NOT HELD LOCALLY',
+      '(the channel at the wreck never closed. asking is still a thing that can be done.)',
+      'SOURCE REQUEST LOGGED · COMPONENT: BONDED CELL (ISSUED)',
+      'SOURCE ON RECORD · ISSUING STATION · THIS SYSTEM · BEARING ATTACHED (ADVISORY)',
+      '(the answer came back before the asking finished.)',
+      '(issued, not offered. the going is still yours.)',
+      '(both fires behind you now. ahead, a light someone else keeps alive.)'
+    ];
+    expect(Object.values(CHAPTER_10_COPY)).toEqual(contractCopy);
+    // K7's reveal budget is load-bearing: the answer's placement is measured
+    // against 55 characters at the shipped 22 ms/char REGULATION rate.
+    expect(CHAPTER_10_COPY.K7.length).toBe(55);
+  });
+
+  it('spends no station name, no ST-0 copy, and no advisory register in chapter 10', () => {
+    // Authored absence, contracted as such. This run coins no proper name, says
+    // nothing about the station's interior, wares, crowd or disposition, and
+    // gives ST-0 zero copy in any register.
+    const forbidden = ['ISSUING STATION ·', 'ANCHORAGE', 'ST-0', 'ST0 '];
+    for (const line of Object.values(CHAPTER_10_COPY)) {
+      // 'ISSUING STATION' survives only as the functional noun inside K8.
+      if (line === CHAPTER_10_COPY.K8) continue;
+      for (const term of forbidden) {
+        expect(line.toUpperCase().includes(term.toUpperCase()), line).toBe(false);
+      }
+    }
+    // The station itself says nothing this run: zero station lines exist.
+    expect(Object.values(CHAPTER_10_COPY).filter(line => line.startsWith('STATION'))).toEqual([]);
   });
 
   it('holds exactly one caption and one audit line, replaced by cut rather than queued', () => {

@@ -1,0 +1,177 @@
+{
+  "capturedAt": "2026-08-12T01:18:41.552Z",
+  "cases": [
+    {
+      "id": "D2-done-st0",
+      "url": "?story=done&profile=LOW",
+      "settle": 14000,
+      "atSettle": {
+        "beat": "done",
+        "objectiveId": null,
+        "markerLabel": null,
+        "health": null,
+        "requiresMarker": null,
+        "hudText": null,
+        "markerChips": [],
+        "av": {
+          "active": false,
+          "anchor": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "history": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": null,
+            "hit": null
+          }
+        },
+        "st0": {
+          "predicate": true
+        }
+      },
+      "plus8s": {
+        "beat": "done",
+        "objectiveId": null,
+        "markerLabel": null,
+        "health": null,
+        "requiresMarker": null,
+        "hudText": null,
+        "markerChips": [],
+        "av": {
+          "active": false,
+          "anchor": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "history": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": null,
+            "hit": null
+          }
+        },
+        "st0": {
+          "predicate": true
+        }
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "D1-ask-entry",
+      "url": "?story=ch10-ask&profile=LOW",
+      "settle": 16000,
+      "atSettle": {
+        "beat": "ch10-ask",
+        "objectiveId": "station:relay-query",
+        "markerLabel": "WRECK RELAY · REQUEST A SOURCE",
+        "health": "ready",
+        "requiresMarker": "true",
+        "hudText": "CURRENT OBJECTIVE | WRECK RELAY · REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL.",
+        "markerChips": [
+          "wreck relay · request a source · 9m"
+        ],
+        "av": {
+          "active": true,
+          "anchor": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "history": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        "st0": {
+          "predicate": true
+        }
+      },
+      "plus8s": {
+        "beat": "ch10-ask",
+        "objectiveId": "station:relay-query",
+        "markerLabel": "WRECK RELAY · REQUEST A SOURCE",
+        "health": "ready",
+        "requiresMarker": "true",
+        "hudText": "CURRENT OBJECTIVE | WRECK RELAY · REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL.",
+        "markerChips": [
+          "wreck relay · request a source · 9m"
+        ],
+        "av": {
+          "active": true,
+          "anchor": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "history": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.34,
+            "hit": null
+          }
+        },
+        "st0": {
+          "predicate": true
+        }
+      },
+      "pageErrors": []
+    },
+    {
+      "id": "D1-transit-entry",
+      "url": "?story=ch10-transit&profile=LOW",
+      "settle": 16000,
+      "atSettle": {
+        "beat": "ch10-transit",
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "health": "ready",
+        "requiresMarker": "false",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "markerChips": [],
+        "av": {
+          "active": true,
+          "anchor": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "history": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.42,
+            "hit": null
+          }
+        },
+        "st0": {
+          "predicate": true
+        }
+      },
+      "plus8s": {
+        "beat": "ch10-transit",
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "health": "ready",
+        "requiresMarker": "false",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "markerChips": [],
+        "av": {
+          "active": true,
+          "anchor": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "history": [],
+          "score": {
+            "cueRefs": [],
+            "intensity": 0.42,
+            "hit": null
+          }
+        },
+        "st0": {
+          "predicate": true
+        }
+      },
+      "pageErrors": []
+    }
+  ]
+}

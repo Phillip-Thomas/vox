@@ -40,6 +40,7 @@ import {
   resetTravel
 } from '../state/spaceFlight.ts';
 import {
+  bootstrapTidegardenHabitatDebug,
   bootstrapTidegardenLandfallDebug,
   bootstrapTidegardenSurfaceDebug,
   resumeTidegardenLandfallFromSave
@@ -70,6 +71,7 @@ import { bootstrapOriginLaunchDebug } from './originLaunchBootstrap.ts';
 export type StoryChapter =
   | 'none' | 'prologue'
   | 'ch1' | 'ch2' | 'ch3' | 'ch4' | 'ch5' | 'ch6' | 'ch7' | 'ch8' | 'ch9'
+  | 'ch10'
   | 'complete';
 
 export type StoryBeat =
@@ -95,6 +97,11 @@ export type StoryBeat =
   | 'ch7-reconstruct' | 'ch7-board'
   | 'ch8-launch' | 'ch8-crossing' | 'ch8-landfall'
   | 'ch9-settle' | 'ch9-hearth'
+  // chapter 10 — the station introduction. Re-activated from INSIDE `done` free
+  // play: the second hearth's core runs on an issued component, the world
+  // cannot answer it, and the one channel that never closed answers instead.
+  // The run ends at the threshold — a bearing held, the station never entered.
+  | 'ch10-cold' | 'ch10-ask' | 'ch10-transit'
   | 'done';
 
 export interface StorySnapshot {
@@ -149,6 +156,30 @@ export const STORY_MILESTONES = {
   ch8Landfall: 'story:ch8:landfall',
   ch9Settled: 'story:ch9:settled',
   ch9Hearth: 'story:ch9:hearth',
+  /**
+   * Chapter 10 — station introduction. Milestone ids are spelled exactly as the
+   * frozen scene contract spells them (hyphenated, not `story:ch10:`): the
+   * contract is the sole creative authority and these strings are quoted in it.
+   */
+  ch10ColdNoticed: 'story:ch10-cold-noticed',
+  ch10FaultRead: 'story:ch10-fault-read',
+  ch10FabricationRefused: 'story:ch10-fabrication-refused',
+  ch10RelayAsked: 'story:ch10-relay-asked',
+  ch10RelayAnswered: 'story:ch10-relay-answered',
+  /** Durable, and never un-claimed: the bearing, once claimed, is the fiction. */
+  ch10BearingClaimed: 'story:ch10-bearing-claimed',
+  ch10TransitIgnited: 'story:ch10-transit-ignited',
+  /** The seam latch. One milestone, two trigger paths, monotonic in the beat. */
+  ch10SeamPassed: 'story:ch10-seam-passed',
+  ch10StationResolved: 'story:ch10-station-resolved',
+  ch10Complete: 'story:ch10-complete',
+  /**
+   * DEFINED THIS RUN AND SET BY NOTHING. Docking, the dock offer, the canDock
+   * grant, the KeyF commit-and-navigate path and the approach advisory are all
+   * inert in story worlds until this milestone exists; run two's owner docking
+   * packet owns when it becomes true.
+   */
+  stationDockingAuthorized: 'story:station-docking-authorized',
   /**
    * Legacy slice terminal. Saves that finished the A0→A3 slice carry it; the
    * story now CONTINUES past it (they resume at ch3-thirst). The live terminal
@@ -209,6 +240,13 @@ export interface StoryEntryPoint {
  * state (e.g. quota progress re-reads the inventory).
  */
 export function storyEntryPoint(): StoryEntryPoint {
+  // Chapter 10 is a RE-ACTIVATION out of `done`, so its rungs are read before
+  // the two-world terminal below: a save that has noticed the cold resumes
+  // inside ch10, and a save that finished ch10 returns to free play.
+  if (hasMilestone(STORY_MILESTONES.ch10Complete)) return { chapter: 'complete', beat: 'done' };
+  if (hasMilestone(STORY_MILESTONES.ch10BearingClaimed)) return { chapter: 'ch10', beat: 'ch10-transit' };
+  if (hasMilestone(STORY_MILESTONES.ch10FabricationRefused)) return { chapter: 'ch10', beat: 'ch10-ask' };
+  if (hasMilestone(STORY_MILESTONES.ch10ColdNoticed)) return { chapter: 'ch10', beat: 'ch10-cold' };
   if (hasMilestone(STORY_MILESTONES.ch9Hearth)) return { chapter: 'complete', beat: 'done' };
   if (hasMilestone(STORY_MILESTONES.ch9Settled)) return { chapter: 'ch9', beat: 'ch9-hearth' };
   if (hasMilestone(STORY_MILESTONES.ch8Landfall)) return { chapter: 'ch9', beat: 'ch9-settle' };
@@ -250,7 +288,8 @@ export function storyEntryPoint(): StoryEntryPoint {
 export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
   if (entry.chapter === 'complete') return 'alive';
   if (entry.chapter === 'ch5' || entry.chapter === 'ch6' || entry.chapter === 'ch7'
-    || entry.chapter === 'ch8' || entry.chapter === 'ch9') return 'alive';
+    || entry.chapter === 'ch8' || entry.chapter === 'ch9'
+    || entry.chapter === 'ch10') return 'alive';
   if (entry.chapter === 'ch4') {
     return entry.beat === 'a4-exhale' && hasMilestone(STORY_MILESTONES.a4)
       ? 'alive'
@@ -268,7 +307,10 @@ export function stageForStoryPoint(entry: StoryEntryPoint): VoxelRealityStage {
  *  Keyed on the LIVE terminal (ch4Arrived), not the legacy slice terminal —
  *  finished-slice saves see "Continue Story" again and resume at ch3-thirst. */
 export function canContinueStory(): boolean {
-  return hasMilestone(STORY_MILESTONES.started) && !hasMilestone(STORY_MILESTONES.ch9Hearth);
+  // Derived from the resume ladder rather than from one terminal milestone: a
+  // save that has re-activated into chapter 10 has somewhere to continue TO
+  // again, and the ladder is the single authority on where that is.
+  return hasMilestone(STORY_MILESTONES.started) && storyEntryPoint().chapter !== 'complete';
 }
 
 /** True only once the two-world arc has returned control at the second hearth. */
@@ -297,6 +339,10 @@ export const STORY_BEAT_ORDER: readonly StoryBeat[] = [
   'ch7-reconstruct', 'ch7-board',
   'ch8-launch', 'ch8-crossing', 'ch8-landfall',
   'ch9-settle', 'ch9-hearth',
+  // ch10 opens from `done` free play, but it is ordered BEFORE the terminal
+  // beat: `done` is the runtime terminal (the registry gate pins it as the last
+  // authority beat) and free play is where the chapter both starts and ends.
+  'ch10-cold', 'ch10-ask', 'ch10-transit',
   'done'
 ];
 
@@ -317,7 +363,9 @@ const JUMP_ALIASES: Record<string, StoryBeat> = {
   launch: 'ch8-launch',
   tidegarden: 'ch8-landfall',
   base: 'ch9-settle',
-  hearth: 'ch9-hearth'
+  hearth: 'ch9-hearth',
+  ch10: 'ch10-cold',
+  station: 'ch10-transit'
 };
 
 /** True ONLY for a `?story=<beat|alias>` dev jump — not `?story=1`, not the menu
@@ -357,7 +405,10 @@ function clearStalePreFireCampfires(beat: StoryBeat): void {
 }
 
 export function chapterForBeat(beat: StoryBeat): StoryChapter {
-  return beat === 'crawl' || beat === 'manifest' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
+  // `ch10-*` is tested FIRST: `'ch10-cold'.startsWith('ch1')` is true, so the
+  // monochrome-ladder clause below would otherwise claim the station chapter.
+  return beat.startsWith('ch10') ? 'ch10'
+    : beat === 'crawl' || beat === 'manifest' || beat === 'voyage' || beat === 'deflect' || beat === 'crash' ? 'prologue'
     : beat === 'descent' || beat.startsWith('ch1') || beat === 'a1-ramp' ? 'ch1'
     : beat.startsWith('ch2') || beat === 'a2-awakening' ? 'ch2'
     : beat.startsWith('ch4') || beat === 'a4-exhale' ? 'ch4'
@@ -500,10 +551,49 @@ function seedForBeat(beat: StoryBeat): void {
   if (at >= beatIndex('ch8-landfall')) markMilestone(m.ch8Crossed);
   if (at >= beatIndex('ch9-settle')) markMilestone(m.ch8Landfall);
   if (at >= beatIndex('ch9-hearth')) markMilestone(m.ch9Settled);
+  // Chapter 10 re-activates from a FINISHED two-world arc, so every ch10 jump
+  // target (and the terminal `done` target) reconstructs the completed story
+  // plus the durable settlement receipts free play depends on — the second
+  // hearth exists, the handoff happened, and ST-0's render predicate is true.
+  // Bounded to the ch10 targets themselves: `?story=done` must keep seeding the
+  // shipped free-play state exactly as before, with no chapter-10 receipts.
+  const inChapter10 = at >= beatIndex('ch10-cold') && at <= beatIndex('ch10-transit');
+  if (inChapter10) {
+    markMilestone(m.ch9Hearth);
+    markMilestone(m.ch4Arrived);
+    markMilestone(m.complete);
+    // tidegardenSettlement's durable receipts, by id (importing the module here
+    // would close a cycle: it reads story state).
+    markMilestone('story:tidegarden:relationship-attended');
+    markMilestone('story:tidegarden:habitat-core-online');
+    markMilestone('story:tidegarden:shelter-certified');
+    markMilestone('story:tidegarden:safe-rest-completed');
+    markMilestone('story:tidegarden:two-world-handoff');
+  }
+  if (inChapter10 && at >= beatIndex('ch10-ask')) {
+    markMilestone(m.ch10ColdNoticed);
+    markMilestone(m.ch10FaultRead);
+    markMilestone(m.ch10FabricationRefused);
+  }
+  if (inChapter10 && at >= beatIndex('ch10-transit')) {
+    markMilestone(m.ch10RelayAsked);
+    markMilestone(m.ch10RelayAnswered);
+    markMilestone(m.ch10BearingClaimed);
+  }
   if (at >= beatIndex('done')) {
     markMilestone(m.ch9Hearth);
     markMilestone(m.ch4Arrived);
     markMilestone(m.complete);
+    // A real playthrough arrives at `done` through the second hearth, so the
+    // rehearsal must arrive carrying the same durable settlement receipts. The
+    // two-world handoff in particular is half of ST-0's render predicate: seed
+    // it and the rehearsal sky keeps its fact; omit it and `?story=done` is a
+    // free play no real player has ever had.
+    markMilestone('story:tidegarden:relationship-attended');
+    markMilestone('story:tidegarden:habitat-core-online');
+    markMilestone('story:tidegarden:shelter-certified');
+    markMilestone('story:tidegarden:safe-rest-completed');
+    markMilestone('story:tidegarden:two-world-handoff');
   }
 }
 
@@ -626,6 +716,18 @@ export function initStoryFromSave(): void {
     debugStartInDescent();
   } else if (param === 'ch9-settle' || param === 'ch9-hearth') {
     bootstrapTidegardenSurfaceDebug();
+  } else if (param === 'ch10-cold' || param === 'ch10-ask') {
+    // Both ch10 surface beats begin at the second hearth on Tidegarden, so the
+    // jump target reconstructs the same physical world a continuous run holds —
+    // including the certified hearth itself, which chapter 10 opens inside.
+    bootstrapTidegardenSurfaceDebug();
+    bootstrapTidegardenHabitatDebug();
+  } else if (param === 'ch10-transit') {
+    // The transit launches from the first world at the wreck, in ch8 grammar.
+    // The hearth is still reconstructed: the player may fly home to it, and the
+    // ST-0 predicate reads the same durable settlement facts either way.
+    bootstrapTidegardenHabitatDebug();
+    bootstrapOriginLaunchDebug();
   }
   setVoxelRealityStage(stageForStoryPoint({ chapter, beat: param }));
   setSnapshot({ active: true, chapter, beat: param, runId });
@@ -694,6 +796,23 @@ export function advanceToBeat(beat: StoryBeat): void {
   setSnapshot({ chapter: chapterForBeat(beat), beat });
 }
 
+/**
+ * Chapter 10's entry mechanism: the story RE-ACTIVATES out of `done` free play.
+ *
+ * `advanceToBeat` cannot do this — free play is `active: false`, and the beat is
+ * only observed while the story owns the frame. Durable `storyComplete` stays
+ * true throughout chapter 10 (the two-world arc is not un-finished by it); only
+ * the live session's story-active flag changes. Idempotent: a second call while
+ * the beat already leads is a no-op, so no producer can double-enter a beat.
+ */
+export function reactivateStoryAtBeat(beat: StoryBeat): boolean {
+  if (snapshot.active && snapshot.beat === beat) return false;
+  const chapter = chapterForBeat(beat);
+  setVoxelRealityStage(stageForStoryPoint({ chapter, beat }));
+  setSnapshot({ active: true, chapter, beat });
+  return true;
+}
+
 /** The two-world arc's end: hand the world back without erasing either world. */
 export function completeStory(): void {
   markMilestone(STORY_MILESTONES.a3);
@@ -711,6 +830,17 @@ export function completeStory(): void {
   setVoxelRealityStage('alive');
   setStoryForcedDayPhase(null); // the day cycle is the player's now
   setSnapshot({ active: false, chapter: 'complete', beat: 'done' });
+}
+
+/**
+ * Chapter 10's terminal: the threshold hand-back. Commits the chapter's final
+ * durable checkpoint and returns the world through the same completion path the
+ * two-world arc used, so free play resumes in space with the bearing held and
+ * nothing about the finished story un-finished.
+ */
+export function completeChapter10(): void {
+  markMilestone(STORY_MILESTONES.ch10Complete);
+  completeStory();
 }
 
 /** Quit-to-menu mid-story: progress is already in milestones; go dormant. */
@@ -805,6 +935,53 @@ export function storyHudMask(s: StorySnapshot = snapshot): boolean {
  * run, the spawn is the arrival — a saved pose (off-row, in the pond, mid-map)
  * must never override it. Free chapters (ch2+) resume where the player stood.
  */
+/**
+ * Canonical chapter order, DERIVED from the beat order rather than written down
+ * a second time: the first beat that names a chapter fixes that chapter's
+ * position. One authority, so a new chapter joins the ordering the moment its
+ * beats join STORY_BEAT_ORDER.
+ */
+export const STORY_CHAPTER_ORDER: readonly StoryChapter[] = (() => {
+  const ordered: StoryChapter[] = [];
+  for (const beat of STORY_BEAT_ORDER) {
+    const chapter = chapterForBeat(beat);
+    if (!ordered.includes(chapter)) ordered.push(chapter);
+  }
+  return ordered;
+})();
+
+/**
+ * Chapter comparison by ORDER, never by name shape.
+ *
+ * The world props used to ask this with `/^ch[5-9]$/`, which reads as "chapter
+ * five or later" and is not: it silently excluded ch10 (the relay's own scenery
+ * stopped rendering the moment the station chapter began) and would exclude
+ * every chapter after it too. Ordering is the fact being asked about, so
+ * ordering is what this compares. `none` is nowhere in the story and is never
+ * at-or-after anything.
+ */
+export function storyChapterAtLeast(
+  chapter: StoryChapter,
+  reference: StoryChapter
+): boolean {
+  const at = STORY_CHAPTER_ORDER.indexOf(chapter);
+  const from = STORY_CHAPTER_ORDER.indexOf(reference);
+  return at >= 0 && from >= 0 && at >= from;
+}
+
+/**
+ * The world is the lived-in one: the first day alive onward. Props that are
+ * scenery before the klaxon and live afterwards — the wreck relay above all —
+ * gate on this, and it must stay true for every chapter from five onward,
+ * including the ones that do not exist yet.
+ */
+export function storyFirstDayOrLater(s: StorySnapshot = snapshot): boolean {
+  if (s.chapter === 'complete') return true;
+  if (s.chapter === 'ch4') return true;
+  if (storyChapterAtLeast(s.chapter, 'ch5')) return true;
+  return s.beat === 'ch3-thirst' || s.beat === 'ch3-forage' || s.beat === 'ch3-signal';
+}
+
 export function storyAnchoredSpawn(s: StorySnapshot = snapshot): boolean {
   if (!s.active) return false;
   return s.chapter === 'prologue' || s.chapter === 'ch1';

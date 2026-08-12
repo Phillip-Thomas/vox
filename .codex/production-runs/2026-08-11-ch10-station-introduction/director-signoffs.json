@@ -1,0 +1,27 @@
+{
+  "schema": "paravoxia.directorSignoffs.v1",
+  "contractRevision": "draft-v6",
+  "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+  "sameRevision": true,
+  "chapter": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v6",
+    "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+    "signedBy": "Chapter Director (Claude, creative triad run 2026-08-11-ch10-station-introduction)",
+    "signedAt": "2026-08-12T00:30:00Z"
+  },
+  "score": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v6",
+    "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+    "signedBy": "score-director (Claude Fable 5), run 2026-08-11-ch10-station-introduction",
+    "signedAt": "2026-08-11T21:20:00-04:00"
+  },
+  "cinematography": {
+    "disposition": "approve-with-notes",
+    "revision": "draft-v6",
+    "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+    "signedBy": "Cinematography Director (Fable 5)",
+    "signedAt": "2026-08-12T01:30:00-04:00"
+  }
+}

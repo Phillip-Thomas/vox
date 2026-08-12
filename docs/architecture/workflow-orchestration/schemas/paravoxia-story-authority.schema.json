@@ -20,13 +20,17 @@
     "requiredIndependentReviews"
   ],
   "properties": {
-    "schema": { "const": "paravoxia.storyAuthority.v2" },
-    "snapshotDate": { "const": "2026-07-15" },
+    "schema": {
+      "const": "paravoxia.storyAuthority.v2"
+    },
+    "snapshotDate": {
+      "const": "2026-07-15"
+    },
     "status": {
       "const": {
         "documentationLane": "existing-story-reconciliation",
         "runtimeLane": "owner-authorized-implemented-release-gated",
-        "runtimeStoryCeiling": "ch9-hearth",
+        "runtimeStoryCeiling": "ch10-transit",
         "releaseStoryCeiling": "ch4-arrival",
         "runtimeTerminalBeat": "done"
       }
@@ -133,6 +137,9 @@
         "ch8-landfall",
         "ch9-settle",
         "ch9-hearth",
+        "ch10-cold",
+        "ch10-ask",
+        "ch10-transit",
         "done"
       ]
     },
@@ -270,6 +277,38 @@
           "evidence": [
             "milestone:story:tidegarden:safe-rest-completed",
             "milestone:story:tidegarden:two-world-handoff"
+          ]
+        },
+        {
+          "beat": "ch10-cold",
+          "checkpointKey": "ch10FabricationRefused",
+          "checkpoint": "story:ch10-fabrication-refused",
+          "resumeBeat": "ch10-ask",
+          "evidence": [
+            "milestone:story:ch10-cold-noticed",
+            "milestone:story:ch10-fault-read"
+          ]
+        },
+        {
+          "beat": "ch10-ask",
+          "checkpointKey": "ch10BearingClaimed",
+          "checkpoint": "story:ch10-bearing-claimed",
+          "resumeBeat": "ch10-transit",
+          "evidence": [
+            "milestone:story:ch10-relay-asked",
+            "milestone:story:ch10-relay-answered",
+            "state:space-station/targeted"
+          ]
+        },
+        {
+          "beat": "ch10-transit",
+          "checkpointKey": "ch10Complete",
+          "checkpoint": "story:ch10-complete",
+          "resumeBeat": "done",
+          "evidence": [
+            "milestone:story:ch10-transit-ignited",
+            "state:story/ch10-seam-passed",
+            "milestone:story:ch10-station-resolved"
           ]
         }
       ]

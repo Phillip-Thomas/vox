@@ -16,93 +16,197 @@
       "certificationRole": "blocking",
       "execution": "headed-trusted-input",
       "policy": "Enter from the registered predecessor, complete with player-owned controls, and continue through the successor handoff without a rescue.",
-      "assertions": ["predecessor-entry", "trusted-manual-input", "successor-handoff", "no-rescue"]
+      "assertions": [
+        "predecessor-entry",
+        "trusted-manual-input",
+        "successor-handoff",
+        "no-rescue"
+      ]
     },
     {
       "id": "movie",
       "certificationRole": "blocking",
       "execution": "automated-movie",
       "policy": "Complete the same objective and continuity contract under automated movie control without privileged progression shortcuts.",
-      "assertions": ["objective-parity", "interaction-parity", "successor-handoff", "no-rescue"]
+      "assertions": [
+        "objective-parity",
+        "interaction-parity",
+        "successor-handoff",
+        "no-rescue"
+      ]
     },
     {
       "id": "reload-continue",
       "certificationRole": "blocking",
       "execution": "planned-reload",
       "policy": "Reload after every registered checkpoint and at declared transition seams, then continue from the first rendered frame.",
-      "assertions": ["every-registered-checkpoint", "declared-transition-seams", "first-frame-postconditions", "no-rescue"]
+      "assertions": [
+        "every-registered-checkpoint",
+        "declared-transition-seams",
+        "first-frame-postconditions",
+        "no-rescue"
+      ]
     },
     {
       "id": "direct-entry-diagnostic",
       "certificationRole": "diagnostic",
       "execution": "direct-entry",
       "policy": "Start at the chapter developer entry to diagnose initialization, while never substituting this lane for predecessor continuity.",
-      "assertions": ["entry-state-initialized", "objective-visible", "diagnostic-only"]
+      "assertions": [
+        "entry-state-initialized",
+        "objective-visible",
+        "diagnostic-only"
+      ]
     },
     {
       "id": "recovery-detour",
       "certificationRole": "blocking",
       "execution": "scripted-adversarial",
       "policy": "Exercise at least one recoverable detour or invalid attempt without teleporting, granting receipts, or deadlocking progression.",
-      "assertions": ["minimum-one-detour", "no-false-receipt", "no-teleport-rescue", "eventual-recovery"]
+      "assertions": [
+        "minimum-one-detour",
+        "no-false-receipt",
+        "no-teleport-rescue",
+        "eventual-recovery"
+      ]
     },
     {
       "id": "variants",
       "certificationRole": "blocking",
       "execution": "variant-matrix",
       "policy": "Run every exact registry profile and preserve interaction, guidance, lifecycle, and input behavior across the matrix.",
-      "assertions": ["exact-profile-projection", "guidance-readable", "interaction-reachable", "no-layout-occlusion"]
+      "assertions": [
+        "exact-profile-projection",
+        "guidance-readable",
+        "interaction-reachable",
+        "no-layout-occlusion"
+      ]
     }
   ],
   "escapedDefectCoverage": [
     {
       "id": "w7744-departure-reload",
-      "contractRefs": ["lifecycle:w7744-departure-reload"],
-      "requiredLaneIds": ["continuous-manual", "reload-continue"],
-      "failureModes": ["Departed actor remains rendered after the field pack drops.", "Reload reconstructs W-7744 after departure."]
+      "contractRefs": [
+        "lifecycle:w7744-departure-reload"
+      ],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "reload-continue"
+      ],
+      "failureModes": [
+        "Departed actor remains rendered after the field pack drops.",
+        "Reload reconstructs W-7744 after departure."
+      ]
     },
     {
       "id": "persistent-scar-prompt-arbitration",
-      "contractRefs": ["interaction:persistent-scar-arbitration"],
-      "requiredLaneIds": ["continuous-manual", "movie", "variants"],
-      "failureModes": ["Optional scar prompt defeats a mandatory repair interaction.", "A visible prompt performs no new state change or feedback."]
+      "contractRefs": [
+        "interaction:persistent-scar-arbitration"
+      ],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "variants"
+      ],
+      "failureModes": [
+        "Optional scar prompt defeats a mandatory repair interaction.",
+        "A visible prompt performs no new state change or feedback."
+      ]
     },
     {
       "id": "voyage-name-keyboard-focus",
-      "contractRefs": ["input:voyage-worker-name"],
-      "requiredLaneIds": ["continuous-manual", "variants"],
-      "failureModes": ["The naming field looks editable but cannot receive typed text.", "Gameplay shortcuts consume typing or Enter submits more than once."]
+      "contractRefs": [
+        "input:voyage-worker-name"
+      ],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "variants"
+      ],
+      "failureModes": [
+        "The naming field looks editable but cannot receive typed text.",
+        "Gameplay shortcuts consume typing or Enter submits more than once."
+      ]
     },
     {
       "id": "ch7-hover-relocation",
-      "contractRefs": ["placement:ch7-hover-relocation", "capability:tidegarden-aerial-site-survey"],
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue"],
-      "failureModes": ["Origin ship repair is blocked by hover and grounded-return receipts.", "The relocated Tidegarden aerial survey becomes mandatory progression."]
+      "contractRefs": [
+        "placement:ch7-hover-relocation",
+        "capability:tidegarden-aerial-site-survey"
+      ],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue"
+      ],
+      "failureModes": [
+        "Origin ship repair is blocked by hover and grounded-return receipts.",
+        "The relocated Tidegarden aerial survey becomes mandatory progression."
+      ]
     },
     {
       "id": "ch9-settlement-guidance-and-arbitration",
-      "contractRefs": ["interaction:tidegarden-required-over-optional"],
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "variants"],
-      "failureModes": ["The objective HUD mounts without a stable target owned by the Tidegarden world.", "An optional waterline observation masks the mandatory site, Core, shelter, or rest interaction.", "HUD night state or foundation completion disagrees with the interaction validator."]
+      "contractRefs": [
+        "interaction:tidegarden-required-over-optional"
+      ],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "variants"
+      ],
+      "failureModes": [
+        "The objective HUD mounts without a stable target owned by the Tidegarden world.",
+        "An optional waterline observation masks the mandatory site, Core, shelter, or rest interaction.",
+        "HUD night state or foundation completion disagrees with the interaction validator."
+      ]
     },
     {
       "id": "ch1-nav-water-strand",
-      "contractRefs": ["lifecycle:ch1-nav-dry-traversal"],
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue"],
-      "failureModes": ["A triangulation beacon seeds in or behind water so the top-down autopilot steers into the shoreline until the stuck watchdog hops it.", "A nominally dry navigation leg keeps dragging the pilot's feet through a pond edge without ever replanning onto a dry or jetpack route."]
+      "contractRefs": [
+        "lifecycle:ch1-nav-dry-traversal"
+      ],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue"
+      ],
+      "failureModes": [
+        "A triangulation beacon seeds in or behind water so the top-down autopilot steers into the shoreline until the stuck watchdog hops it.",
+        "A nominally dry navigation leg keeps dragging the pilot's feet through a pond edge without ever replanning onto a dry or jetpack route."
+      ]
     }
   ],
   "chapters": [
     {
       "id": "prologue",
-      "continuity": { "before": [], "after": ["ch1"] },
+      "continuity": {
+        "before": [],
+        "after": [
+          "ch1"
+        ]
+      },
       "registryProjection": {
         "requiredObjectiveBeats": [],
-        "checkpointReceipts": ["runtime:src/story/prologue/TerminalPrologue.tsx#handoff"],
+        "checkpointReceipts": [
+          "runtime:src/story/prologue/TerminalPrologue.tsx#handoff"
+        ],
         "requiredSignedAnchorIds": [],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [],
       "lifecycleContracts": [],
       "interactionContracts": [],
@@ -129,9 +233,25 @@
     },
     {
       "id": "ch1",
-      "continuity": { "before": ["prologue"], "after": ["ch2"] },
+      "continuity": {
+        "before": [
+          "prologue"
+        ],
+        "after": [
+          "ch2"
+        ]
+      },
       "registryProjection": {
-        "requiredObjectiveBeats": ["ch1-fixed", "ch1-track", "ch1-raster", "ch1-depth", "ch1-nav", "ch1-iso", "ch1-lift", "ch1-anomaly"],
+        "requiredObjectiveBeats": [
+          "ch1-fixed",
+          "ch1-track",
+          "ch1-raster",
+          "ch1-depth",
+          "ch1-nav",
+          "ch1-iso",
+          "ch1-lift",
+          "ch1-anomaly"
+        ],
         "checkpointReceipts": [
           "runtime:src/story/storyDirector.ts#tickTrackUnlock",
           "runtime:src/story/storyDirector.ts#quotaCollected",
@@ -141,9 +261,21 @@
           "runtime:src/story/storyDirector.ts#tickA1Ramp"
         ],
         "requiredSignedAnchorIds": [],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch1:ch1-fixed",
@@ -151,20 +283,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Regain embodied control after impact and traverse the fixed presentation safely.",
-            "completionEvidenceRefs": ["beat:ch1-track"],
+            "completionEvidenceRefs": [
+              "beat:ch1-track"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The crash must become playable before the perception ladder can ask the player to interpret it.",
             "capability": "Embodied locomotion and task-row orientation.",
             "storyFunction": "Turns passive survival into the first deliberate movement.",
-            "expectedPlayerSeconds": { "min": 8, "max": 90 },
+            "expectedPlayerSeconds": {
+              "min": 8,
+              "max": 90
+            },
             "spatialTolerance": "The complete task remains reachable on the single traversable row without jetpack correction.",
             "recovery": "Reset restores a safe surface position without awarding the objective.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -173,20 +319,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Follow the readable side-on task path and establish directional movement.",
-            "completionEvidenceRefs": ["milestone:story:ch1:track"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch1:track"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "A clear traversal beat teaches authored direction before collection and dimensional expansion add complexity.",
             "capability": "Directional traversal in the two-dimensional frame.",
             "storyFunction": "Makes the imposed track physically legible to the player.",
-            "expectedPlayerSeconds": { "min": 10, "max": 120 },
+            "expectedPlayerSeconds": {
+              "min": 10,
+              "max": 120
+            },
             "spatialTolerance": "All mandatory targets occupy the one legal task row and tolerate ordinary approach angles.",
             "recovery": "Backtracking remains possible and movie navigation cannot leave the legal row.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -195,20 +355,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Collect the complete raster quota from reachable objects on the task row.",
-            "completionEvidenceRefs": ["milestone:story:ch1:quota"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch1:quota"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Collection gives the flat world material stakes before depth and free navigation become available.",
             "capability": "Reachable collection and quota comprehension.",
             "storyFunction": "Embodies the Authority habit of reducing survival to counted work.",
-            "expectedPlayerSeconds": { "min": 20, "max": 180 },
+            "expectedPlayerSeconds": {
+              "min": 20,
+              "max": 180
+            },
             "spatialTolerance": "Every required collectible is on the legal row with redundant interaction reach.",
             "recovery": "Collected state persists while missed targets remain explicitly marked.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -217,20 +391,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Resolve the supply-pod work order as depth begins to emerge.",
-            "completionEvidenceRefs": ["milestone:story:ch1:depth"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch1:depth"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The player has learned the flat work grammar and can now feel spatial depth as a meaningful reveal.",
             "capability": "Depth reading and supply-pod interaction.",
             "storyFunction": "Turns a rendering change into an embodied expansion of the possible.",
-            "expectedPlayerSeconds": { "min": 20, "max": 180 },
+            "expectedPlayerSeconds": {
+              "min": 20,
+              "max": 180
+            },
             "spatialTolerance": "Pods remain reachable from ordinary approaches with markers that survive perspective transition.",
             "recovery": "The objective preserves completed pods and redirects to the nearest unresolved pod.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -239,20 +427,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Traverse the navigation waypoints after the world permits broader movement.",
-            "completionEvidenceRefs": ["milestone:story:ch1:nav"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch1:nav"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Expanded space should be exercised immediately so the camera transition becomes player-owned knowledge.",
             "capability": "Two-axis navigation and waypoint reading.",
             "storyFunction": "Converts a new viewpoint into genuine agency rather than spectacle alone.",
-            "expectedPlayerSeconds": { "min": 20, "max": 180 },
+            "expectedPlayerSeconds": {
+              "min": 20,
+              "max": 180
+            },
             "spatialTolerance": "Waypoint capture volumes allow varied grounded paths without requiring water traversal.",
             "recovery": "A missed waypoint remains marked and can be approached by a dry or intelligent jetpack route.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -261,20 +463,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Reach and inspect the signal mesa from the expanded navigable field.",
-            "completionEvidenceRefs": ["milestone:story:ch1:iso"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch1:iso"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The signal becomes a destination only after the player can choose paths in more than one direction.",
             "capability": "Landmark navigation and elevation approach.",
             "storyFunction": "Makes distant evidence interrupt the Authority task sequence.",
-            "expectedPlayerSeconds": { "min": 25, "max": 210 },
+            "expectedPlayerSeconds": {
+              "min": 25,
+              "max": 210
+            },
             "spatialTolerance": "The summit trigger accepts natural arrival positions and never demands a hidden row alignment.",
             "recovery": "Directional guidance points around hazards and reset returns to nearby flat ground.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -283,20 +499,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Use the newly revealed vertical affordance without losing grounded orientation.",
-            "completionEvidenceRefs": ["beat:ch1-anomaly"],
+            "completionEvidenceRefs": [
+              "beat:ch1-anomaly"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Vertical movement follows landmark navigation so the player expands one spatial assumption at a time.",
             "capability": "Controlled elevation and safe grounded return.",
             "storyFunction": "Prepares the body to encounter evidence outside the original plane.",
-            "expectedPlayerSeconds": { "min": 8, "max": 90 },
+            "expectedPlayerSeconds": {
+              "min": 8,
+              "max": 90
+            },
             "spatialTolerance": "A broad target envelope accepts natural ascent and landing rather than exact hovering.",
             "recovery": "Fuel, fall, and landing failures return the player to a safe nearby surface without completion.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -305,20 +535,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Attend to the anomaly and complete the first reality-stage handoff.",
-            "completionEvidenceRefs": ["beat:a1-ramp"],
+            "completionEvidenceRefs": [
+              "beat:a1-ramp"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The player has exhausted the imposed spatial grammar and is ready for evidence that exceeds it.",
             "capability": "Directed attention and anomaly inspection.",
             "storyFunction": "Pays off the chapter ladder by breaking its apparently complete model.",
-            "expectedPlayerSeconds": { "min": 10, "max": 120 },
+            "expectedPlayerSeconds": {
+              "min": 10,
+              "max": 120
+            },
             "spatialTolerance": "The observation cue tolerates a natural gaze cone and provides directional guidance when off-screen.",
             "recovery": "Looking away retains the cue and returning attention can complete it without replaying prior work.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -335,12 +579,18 @@
               "entity:prop:nav-beacon-final/reached=true"
             ]
           },
-          "alwaysAfter": ["entity:actor:local/stranded-in-water=false"],
-          "neverAfter": ["entity:actor:local/stranded-in-water=true"],
+          "alwaysAfter": [
+            "entity:actor:local/stranded-in-water=false"
+          ],
+          "neverAfter": [
+            "entity:actor:local/stranded-in-water=true"
+          ],
           "resume": {
             "required": true,
             "reloadWindow": "mid ch1-nav triangulation route",
-            "assertOnFirstFrame": ["entity:actor:local/feet-in-water=false"],
+            "assertOnFirstFrame": [
+              "entity:actor:local/feet-in-water=false"
+            ],
             "continueToBeat": "ch1-nav",
             "forbidRescue": true
           }
@@ -357,12 +607,18 @@
               "entity:actor:local/travel-offset-within-band=true"
             ]
           },
-          "alwaysAfter": ["entity:actor:local/on-arrival-cube-face=true"],
-          "neverAfter": ["entity:actor:local/crossed-cube-face=true"],
+          "alwaysAfter": [
+            "entity:actor:local/on-arrival-cube-face=true"
+          ],
+          "neverAfter": [
+            "entity:actor:local/crossed-cube-face=true"
+          ],
           "resume": {
             "required": true,
             "reloadWindow": "mid ch1 pure-2D salvage traversal (ch1-fixed / ch1-raster / ch1-depth)",
-            "assertOnFirstFrame": ["entity:actor:local/on-arrival-cube-face=true"],
+            "assertOnFirstFrame": [
+              "entity:actor:local/on-arrival-cube-face=true"
+            ],
             "continueToBeat": "ch1-raster",
             "forbidRescue": true
           }
@@ -375,14 +631,38 @@
     },
     {
       "id": "ch2",
-      "continuity": { "before": ["ch1"], "after": ["ch3"] },
-      "registryProjection": {
-        "requiredObjectiveBeats": ["ch2-color", "ch2-approach"],
-        "checkpointReceipts": ["runtime:src/story/storyDirector.ts#a2-handoff"],
-        "requiredSignedAnchorIds": [],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+      "continuity": {
+        "before": [
+          "ch1"
+        ],
+        "after": [
+          "ch3"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "registryProjection": {
+        "requiredObjectiveBeats": [
+          "ch2-color",
+          "ch2-approach"
+        ],
+        "checkpointReceipts": [
+          "runtime:src/story/storyDirector.ts#a2-handoff"
+        ],
+        "requiredSignedAnchorIds": [],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
+      },
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch2:ch2-color",
@@ -390,20 +670,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Explore the newly chromatic surface and identify the changed environmental language.",
-            "completionEvidenceRefs": ["beat:ch2-approach"],
+            "completionEvidenceRefs": [
+              "beat:ch2-approach"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Color arrives as a causal consequence and needs a quiet playable interval before another task competes.",
             "capability": "Chromatic landmark and environmental reading.",
             "storyFunction": "Lets the player inhabit rather than merely witness the first reality expansion.",
-            "expectedPlayerSeconds": { "min": 15, "max": 150 },
+            "expectedPlayerSeconds": {
+              "min": 15,
+              "max": 150
+            },
             "spatialTolerance": "Several nearby valid observation positions support different camera and movement choices.",
             "recovery": "Guidance returns after wandering without moving the player or auto-completing observation.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -412,20 +706,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Approach the awakened landmark and accept the embodied camera handoff.",
-            "completionEvidenceRefs": ["beat:a2-awakening"],
+            "completionEvidenceRefs": [
+              "beat:a2-awakening"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Free exploration needs a precise emotional destination before the next survival chapter opens.",
             "capability": "Natural approach and embodied first-person attention.",
             "storyFunction": "Turns expanded perception into an intimate encounter with the living world.",
-            "expectedPlayerSeconds": { "min": 15, "max": 150 },
+            "expectedPlayerSeconds": {
+              "min": 15,
+              "max": 150
+            },
             "spatialTolerance": "The approach volume accepts multiple grounded paths and a natural forward gaze.",
             "recovery": "Leaving the area preserves the marker and returning resumes the handoff cleanly.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -437,9 +745,22 @@
     },
     {
       "id": "ch3",
-      "continuity": { "before": ["ch2"], "after": ["ch4"] },
+      "continuity": {
+        "before": [
+          "ch2"
+        ],
+        "after": [
+          "ch4"
+        ]
+      },
       "registryProjection": {
-        "requiredObjectiveBeats": ["ch3-gather", "ch3-await-rest", "ch3-thirst", "ch3-forage", "ch3-signal"],
+        "requiredObjectiveBeats": [
+          "ch3-gather",
+          "ch3-await-rest",
+          "ch3-thirst",
+          "ch3-forage",
+          "ch3-signal"
+        ],
         "checkpointReceipts": [
           "runtime:src/story/storyDirector.ts#tickA3Dawn",
           "runtime:src/story/storyDirector.ts#tickThirst",
@@ -447,9 +768,21 @@
           "runtime:src/story/storyDirector.ts#tickSignal"
         ],
         "requiredSignedAnchorIds": [],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch3:ch3-gather",
@@ -457,20 +790,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Gather the materials required for the first campfire without obscuring the next task.",
-            "completionEvidenceRefs": ["beat:ch3-dusk"],
+            "completionEvidenceRefs": [
+              "beat:ch3-dusk"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The living world first asks for reciprocal material attention rather than another abstract perception test.",
             "capability": "Resource gathering and recipe comprehension.",
             "storyFunction": "Begins the fire metaphor through player labor and local materials.",
-            "expectedPlayerSeconds": { "min": 30, "max": 300 },
+            "expectedPlayerSeconds": {
+              "min": 30,
+              "max": 300
+            },
             "spatialTolerance": "Nearby resources remain quality-independent and reachable by safe grounded routes.",
             "recovery": "Partial inventory persists and guidance identifies the remaining ingredient rather than a generic goal.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -479,20 +826,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Rest at the completed campfire and allow the night-to-dawn transition to settle.",
-            "completionEvidenceRefs": ["milestone:story:a3"],
+            "completionEvidenceRefs": [
+              "milestone:story:a3"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Crafting the fire needs immediate embodied payoff before survival needs redirect attention elsewhere.",
             "capability": "Rest interaction and safe-state recognition.",
             "storyFunction": "Makes the first hearth a temporal shelter rather than a decorative prop.",
-            "expectedPlayerSeconds": { "min": 8, "max": 90 },
+            "expectedPlayerSeconds": {
+              "min": 8,
+              "max": 90
+            },
             "spatialTolerance": "Rest accepts a broad safe radius and closes any crafting panel before cinematic control begins.",
             "recovery": "Interrupted rest returns control cleanly and can be resumed without rebuilding the fire.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -501,20 +862,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Find safe water, look down naturally when near it, and drink through the real interaction.",
-            "completionEvidenceRefs": ["milestone:story:ch3:drank"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch3:drank"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Dawn converts the protected camp into a body with needs and teaches attention below the horizon.",
             "capability": "Water discovery, contextual gaze, and drinking.",
             "storyFunction": "Grounds awakening in dependence on the world rather than power over it.",
-            "expectedPlayerSeconds": { "min": 20, "max": 210 },
+            "expectedPlayerSeconds": {
+              "min": 20,
+              "max": 210
+            },
             "spatialTolerance": "The drink gaze cone includes natural downward angles while off-screen guidance points toward water.",
             "recovery": "Unsafe approaches redirect to a dry bank and reset never spawns the player in water.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -523,20 +898,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Forage from the living tree and register nourishment without consuming its story role.",
-            "completionEvidenceRefs": ["milestone:story:ch3:ate"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch3:ate"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Thirst establishes dependence first, allowing food to deepen relationship rather than feel like generic loot.",
             "capability": "Foraging and nourishment interaction.",
             "storyFunction": "Establishes the tree as provider and later protected subject.",
-            "expectedPlayerSeconds": { "min": 15, "max": 150 },
+            "expectedPlayerSeconds": {
+              "min": 15,
+              "max": 150
+            },
             "spatialTolerance": "Several reachable fruit interactions support ordinary ground-level approaches.",
             "recovery": "A consumed fruit records immediately and guidance advances instead of leaving the player directionless.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -545,20 +934,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Leave the immediate hearth area and investigate the incoming signal.",
-            "completionEvidenceRefs": ["milestone:story:ch3:signal"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch3:signal"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Once immediate bodily needs are met, an external signal can interrupt the new home without confusing survival guidance.",
             "capability": "Long-range directional guidance and signal investigation.",
             "storyFunction": "Carries the player from private recovery toward the returning institutional gaze.",
-            "expectedPlayerSeconds": { "min": 20, "max": 210 },
+            "expectedPlayerSeconds": {
+              "min": 20,
+              "max": 210
+            },
             "spatialTolerance": "The source occupies navigable two-axis space and never requires task-row alignment.",
             "recovery": "Directional indicators persist off-screen and routes avoid water unless a safe jetpack crossing is chosen.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -570,9 +973,21 @@
     },
     {
       "id": "ch4",
-      "continuity": { "before": ["ch3"], "after": ["ch5"] },
+      "continuity": {
+        "before": [
+          "ch3"
+        ],
+        "after": [
+          "ch5"
+        ]
+      },
       "registryProjection": {
-        "requiredObjectiveBeats": ["ch4-vigil", "ch4-audit", "ch4-comply", "ch4-defy"],
+        "requiredObjectiveBeats": [
+          "ch4-vigil",
+          "ch4-audit",
+          "ch4-comply",
+          "ch4-defy"
+        ],
         "checkpointReceipts": [
           "runtime:src/story/storyDirector.ts#tickVigil",
           "runtime:src/story/storyDirector.ts#arrival-handback",
@@ -586,10 +1001,24 @@
           "milestone:story:a4",
           "milestone:story:a4:field-pack-dropped"
         ],
-        "requiredSignedAnchorIds": ["anc.a4.handback"],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "requiredSignedAnchorIds": [
+          "anc.a4.handback"
+        ],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch4:ch4-vigil",
@@ -597,20 +1026,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Hold vigil at the fire and observe the arrival without abandoning embodied control.",
-            "completionEvidenceRefs": ["milestone:story:ch4:vigil"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch4:vigil"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The player has built attachment to the hearth, so waiting there gives the arriving audit something felt to threaten.",
             "capability": "Sustained attention and cinematic handoff.",
             "storyFunction": "Frames institutional return against a player-made source of warmth.",
-            "expectedPlayerSeconds": { "min": 12, "max": 120 },
+            "expectedPlayerSeconds": {
+              "min": 12,
+              "max": 120
+            },
             "spatialTolerance": "A generous fireside envelope accepts standing or seated-looking positions without exact gaze lock.",
             "recovery": "Leaving pauses the vigil and returning resumes it without replaying the entire approach.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -619,20 +1062,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Perform the three physical mismatch observations while W-7744 remains constrained to believable movement.",
-            "completionEvidenceRefs": ["milestone:story:ch4:audit-complete"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch4:audit-complete"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The audit must expose incompatible perception before asking the player to comply with its conclusions.",
             "capability": "Multi-target observation and actor following.",
             "storyFunction": "Shows W-7744's limited world through actions rather than interior exposition.",
-            "expectedPlayerSeconds": { "min": 45, "max": 360 },
+            "expectedPlayerSeconds": {
+              "min": 45,
+              "max": 360
+            },
             "spatialTolerance": "All audit targets and actor routes use flat dry ground with visible off-screen direction cues.",
             "recovery": "Completed mismatches persist and the actor waits or reroutes without walking through water.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -641,20 +1098,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Perform both compliance transactions and witness their material regression.",
-            "completionEvidenceRefs": ["milestone:story:ch4:compliance-complete"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch4:compliance-complete"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The player must understand the audit mismatch before obedience can carry legible consequence.",
             "capability": "Causal interaction and consequence recognition.",
             "storyFunction": "Makes compliance self-diminishing without converting it into an abstract morality score.",
-            "expectedPlayerSeconds": { "min": 35, "max": 300 },
+            "expectedPlayerSeconds": {
+              "min": 35,
+              "max": 300
+            },
             "spatialTolerance": "Each transaction has a broad reachable interaction zone and cannot be obscured by optional prompts.",
             "recovery": "Each committed transaction persists and the remaining required act receives exclusive prompt priority.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -663,20 +1134,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Commit the lowercase refusal through the real player interaction and retain its consequence.",
-            "completionEvidenceRefs": ["milestone:story:ch4:refusal-complete"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch4:refusal-complete"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Only after performing compliance and feeling its cost can refusal become an authored act rather than a menu preference.",
             "capability": "Explicit refusal and irreversible story choice.",
             "storyFunction": "Turns will into a player-performed verb and opens material-to-alive authority.",
-            "expectedPlayerSeconds": { "min": 10, "max": 150 },
+            "expectedPlayerSeconds": {
+              "min": 10,
+              "max": 150
+            },
             "spatialTolerance": "The refusal control remains focusable and legible across all profiles without competing interactions.",
             "recovery": "Invalid attempts give feedback while a committed refusal persists across reload and cannot double-fire.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -688,14 +1173,31 @@
           "triggerRef": "milestone:story:a4:field-pack-dropped",
           "eventually": {
             "withinMs": 1500,
-            "assertions": ["entity:actor:w7744/mounted=false", "entity:actor:w7744/visible=false", "entity:prop:field-pack/mounted=true", "entity:prop:field-pack/visible=true"]
+            "assertions": [
+              "entity:actor:w7744/mounted=false",
+              "entity:actor:w7744/visible=false",
+              "entity:prop:field-pack/mounted=true",
+              "entity:prop:field-pack/visible=true"
+            ]
           },
-          "alwaysAfter": ["entity:actor:w7744/mounted=false", "entity:actor:w7744/visible=false", "entity:prop:field-pack/mounted=true"],
-          "neverAfter": ["entity:actor:w7744/mounted=true", "entity:actor:w7744/visible=true"],
+          "alwaysAfter": [
+            "entity:actor:w7744/mounted=false",
+            "entity:actor:w7744/visible=false",
+            "entity:prop:field-pack/mounted=true"
+          ],
+          "neverAfter": [
+            "entity:actor:w7744/mounted=true",
+            "entity:actor:w7744/visible=true"
+          ],
           "resume": {
             "required": true,
             "reloadWindow": "after:milestone:story:a4:field-pack-dropped,before:anchor:anc.a4.handback",
-            "assertOnFirstFrame": ["entity:actor:w7744/mounted=false", "entity:actor:w7744/visible=false", "entity:prop:field-pack/mounted=true", "entity:prop:field-pack/visible=true"],
+            "assertOnFirstFrame": [
+              "entity:actor:w7744/mounted=false",
+              "entity:actor:w7744/visible=false",
+              "entity:prop:field-pack/mounted=true",
+              "entity:prop:field-pack/visible=true"
+            ],
             "continueToBeat": "ch5-maw",
             "forbidRescue": true
           }
@@ -708,14 +1210,44 @@
     },
     {
       "id": "ch5",
-      "continuity": { "before": ["ch4"], "after": ["ch6"] },
-      "registryProjection": {
-        "requiredObjectiveBeats": ["ch5-maw"],
-        "checkpointReceipts": ["milestone:maw_repaired"],
-        "requiredSignedAnchorIds": ["anc.maw.pack-attended", "anc.maw.kit-acquired", "anc.maw.repair-begun", "anc.maw.repair-committed", "anc.maw.direction-handback", "anc.maw.pond-resonance"],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+      "continuity": {
+        "before": [
+          "ch4"
+        ],
+        "after": [
+          "ch6"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "registryProjection": {
+        "requiredObjectiveBeats": [
+          "ch5-maw"
+        ],
+        "checkpointReceipts": [
+          "milestone:maw_repaired"
+        ],
+        "requiredSignedAnchorIds": [
+          "anc.maw.pack-attended",
+          "anc.maw.kit-acquired",
+          "anc.maw.repair-begun",
+          "anc.maw.repair-committed",
+          "anc.maw.direction-handback",
+          "anc.maw.pond-resonance"
+        ],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
+      },
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch5:ch5-maw",
@@ -723,20 +1255,35 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Attend the dropped pack, acquire the repair kit, and restore the Maw through physical steps.",
-            "completionEvidenceRefs": ["milestone:story:ch5:maw-repaired", "milestone:maw_repaired"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch5:maw-repaired",
+              "milestone:maw_repaired"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "W-7744's departure leaves capability without issued purpose, allowing repair to become the player's first chosen direction.",
             "capability": "Multi-stage tool repair and directional handback.",
             "storyFunction": "Transforms abandoned Authority equipment into a self-directed instrument.",
-            "expectedPlayerSeconds": { "min": 45, "max": 360 },
+            "expectedPlayerSeconds": {
+              "min": 45,
+              "max": 360
+            },
             "spatialTolerance": "Pack, kit, work target, and handback remain reachable on dry ground with exclusive required prompts.",
             "recovery": "Every completed repair stage persists across reload and guidance resumes at the next physical step.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -748,9 +1295,18 @@
     },
     {
       "id": "ch6",
-      "continuity": { "before": ["ch5"], "after": ["ch7"] },
+      "continuity": {
+        "before": [
+          "ch5"
+        ],
+        "after": [
+          "ch7"
+        ]
+      },
       "registryProjection": {
-        "requiredObjectiveBeats": ["ch6-dive"],
+        "requiredObjectiveBeats": [
+          "ch6-dive"
+        ],
         "checkpointReceipts": [
           "milestone:story:dive:waterline-entered",
           "milestone:story:sense:oxygen",
@@ -758,10 +1314,25 @@
           "milestone:story:dive:surfaced-with-keel",
           "milestone:story:item:kestrel-keel-memory:banked"
         ],
-        "requiredSignedAnchorIds": ["anc.dive.waterline", "anc.dive.shore-bank"],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "requiredSignedAnchorIds": [
+          "anc.dive.waterline",
+          "anc.dive.shore-bank"
+        ],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch6:ch6-dive",
@@ -769,20 +1340,34 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Enter the water, manage oxygen, free the Keel memory, surface legally, and bank it on shore.",
-            "completionEvidenceRefs": ["milestone:story:ch6:keel-banked"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch6:keel-banked"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Repairing the Maw gives the player a reason to enter a previously avoided medium and recover embodied ship memory.",
             "capability": "Swimming, oxygen management, recovery, and dry banking.",
             "storyFunction": "Makes knowledge physical, breath-limited, and carried back rather than downloaded.",
-            "expectedPlayerSeconds": { "min": 60, "max": 480 },
+            "expectedPlayerSeconds": {
+              "min": 60,
+              "max": 480
+            },
             "spatialTolerance": "Waterline, submerged target, surfacing, and bank zones support varied legal approaches with visible oxygen feedback.",
             "recovery": "Failed dives return the player to a dry bank without granting acquire, surface, or bank receipts.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -794,9 +1379,19 @@
     },
     {
       "id": "ch7",
-      "continuity": { "before": ["ch6"], "after": ["ch8"] },
+      "continuity": {
+        "before": [
+          "ch6"
+        ],
+        "after": [
+          "ch8"
+        ]
+      },
       "registryProjection": {
-        "requiredObjectiveBeats": ["ch7-reconstruct", "ch7-board"],
+        "requiredObjectiveBeats": [
+          "ch7-reconstruct",
+          "ch7-board"
+        ],
         "checkpointReceipts": [
           "milestone:story:reconstruct:relationships-diagnosed-physical",
           "milestone:story:reconstruct:calibration-completed-physical",
@@ -818,9 +1413,21 @@
           "anc.board.pressure-seal",
           "anc.board.cockpit-handback"
         ],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch7:ch7-reconstruct",
@@ -828,20 +1435,38 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Diagnose the scar, restore the same wreck through every stage, calibrate it, and bring the Tidegarden route online.",
-            "completionEvidenceRefs": ["milestone:story:ch7:flight-ready", "state:ship-restoration/flight_ready", "milestone:story:route:tidegarden:online"],
-            "forbiddenInteractionIds": ["story-wreck-scar-attend"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch7:flight-ready",
+              "state:ship-restoration/flight_ready",
+              "milestone:story:route:tidegarden:online"
+            ],
+            "forbiddenInteractionIds": [
+              "story-wreck-scar-attend"
+            ],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The banked Keel memory and repaired Maw make the scarred ship legible as a recoverable relationship rather than a replacement prize.",
             "capability": "Staged ship restoration, diagnosis, and calibration.",
             "storyFunction": "Converts accumulated local knowledge into chosen travel capability while retaining visible damage.",
-            "expectedPlayerSeconds": { "min": 90, "max": 720 },
+            "expectedPlayerSeconds": {
+              "min": 90,
+              "max": 720
+            },
             "spatialTolerance": "Required bench interactions accept broad grounded access and always outrank optional scar observation.",
             "recovery": "Every stage and calibration receipt persists; reload resumes at the next incomplete physical transaction.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -850,20 +1475,35 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Enter the restored hatch, complete pressure transfer, and receive cockpit flight control.",
-            "completionEvidenceRefs": ["milestone:story:ch7:boarded", "state:space-flight/control-mode=flight"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch7:boarded",
+              "state:space-flight/control-mode=flight"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Boarding follows verified flight readiness so a cinematic transfer cannot conceal unfinished physical repair.",
             "capability": "Physical boarding and control-mode transfer.",
             "storyFunction": "Lets the player inhabit the repaired vessel before asking it to leave home.",
-            "expectedPlayerSeconds": { "min": 20, "max": 180 },
+            "expectedPlayerSeconds": {
+              "min": 20,
+              "max": 180
+            },
             "spatialTolerance": "The hatch transaction tolerates ordinary approach angles and cannot trigger from outside the boarding envelope.",
             "recovery": "Cancelled boarding restores surface control and can restart without duplicating pressure or receipt events.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -873,9 +1513,15 @@
           "id": "interaction:persistent-scar-arbitration",
           "beat": "ch7-reconstruct",
           "type": "prompt-arbitration",
-          "requiredInteractionIds": ["story-wreck-diagnosis", "story-wreck-salvage", "story-ship-repair"],
+          "requiredInteractionIds": [
+            "story-wreck-diagnosis",
+            "story-wreck-salvage",
+            "story-ship-repair"
+          ],
           "optionalInteractionId": "story-wreck-scar-attend",
-          "successEvidenceRefs": ["observation:wreck-scar:current-stage-recorded"],
+          "successEvidenceRefs": [
+            "observation:wreck-scar:current-stage-recorded"
+          ],
           "rules": {
             "requiredWins": true,
             "suppressWhenAlreadyRecorded": true,
@@ -898,15 +1544,30 @@
             "milestone:story:reconstruct:first-hover-grounded-return",
             "anchor:anc.reconstruct.first-hover"
           ],
-          "destination": { "chapterId": "ch9", "beat": "ch9-settle", "blocking": false }
+          "destination": {
+            "chapterId": "ch9",
+            "beat": "ch9-settle",
+            "blocking": false
+          }
         }
       ]
     },
     {
       "id": "ch8",
-      "continuity": { "before": ["ch7"], "after": ["ch9"] },
+      "continuity": {
+        "before": [
+          "ch7"
+        ],
+        "after": [
+          "ch9"
+        ]
+      },
       "registryProjection": {
-        "requiredObjectiveBeats": ["ch8-launch", "ch8-crossing", "ch8-landfall"],
+        "requiredObjectiveBeats": [
+          "ch8-launch",
+          "ch8-crossing",
+          "ch8-landfall"
+        ],
         "checkpointReceipts": [
           "state:space-flight/control-mode=flight",
           "state:space-flight/phase=deep_space",
@@ -915,10 +1576,25 @@
           "state:space-flight/phase=surface",
           "state:space-flight/control-mode=fps"
         ],
-        "requiredSignedAnchorIds": ["anc.launch.ignition", "anc.landfall.handback"],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "requiredSignedAnchorIds": [
+          "anc.launch.ignition",
+          "anc.landfall.handback"
+        ],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch8:ch8-launch",
@@ -926,20 +1602,35 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Ignite, leave the Origin surface, and establish stable flight control.",
-            "completionEvidenceRefs": ["milestone:story:ch8:launched", "state:space-flight/phase=deep_space"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch8:launched",
+              "state:space-flight/phase=deep_space"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The player has repaired, calibrated, and boarded the ship, so launch is the earned release of stored capability.",
             "capability": "Ship ignition, ascent, and flight stabilization.",
             "storyFunction": "Turns leaving into a physical choice while preserving Origin as a returnable home.",
-            "expectedPlayerSeconds": { "min": 25, "max": 210 },
+            "expectedPlayerSeconds": {
+              "min": 25,
+              "max": 210
+            },
             "spatialTolerance": "Launch clearance and control handoff tolerate supported frame rates and do not require exact steering input.",
             "recovery": "Interrupted launch restores a stable ship state or resumes from the last authoritative flight phase.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -948,20 +1639,35 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Navigate the local system crossing and commit the full Tidegarden identity as destination.",
-            "completionEvidenceRefs": ["milestone:story:ch8:crossed", "state:system-flight/active-planet=-1,-1:p1"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch8:crossed",
+              "state:system-flight/active-planet=-1,-1:p1"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "After ascent clears the home surface, the player can experience distance without spending later interstellar spectacle.",
             "capability": "Local system navigation and destination commitment.",
             "storyFunction": "Creates a felt interval between fires and preserves both worlds as distinct places.",
-            "expectedPlayerSeconds": { "min": 35, "max": 300 },
+            "expectedPlayerSeconds": {
+              "min": 35,
+              "max": 300
+            },
             "spatialTolerance": "Course capture permits varied steering while binding the complete canonical planet identity.",
             "recovery": "Course deviation remains correctable and reload restores the authoritative phase and destination bundle.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -970,20 +1676,36 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Descend to Tidegarden, land on validated terrain, and regain surface control.",
-            "completionEvidenceRefs": ["milestone:story:ch8:landfall", "state:space-flight/phase=surface", "state:space-flight/control-mode=fps"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch8:landfall",
+              "state:space-flight/phase=surface",
+              "state:space-flight/control-mode=fps"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "The crossing needs a physical handback on a visibly different abundant world before settlement work begins.",
             "capability": "Planetary descent, safe landing, and surface handoff.",
             "storyFunction": "Reveals verdant diversity without treating the second world as a hostile biome gimmick.",
-            "expectedPlayerSeconds": { "min": 30, "max": 300 },
+            "expectedPlayerSeconds": {
+              "min": 30,
+              "max": 300
+            },
             "spatialTolerance": "Ship and player spawn validation require flat dry ground and reject water or obstructed terrain.",
             "recovery": "Invalid landing candidates reroute before handback and never spawn ship or character in water.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -999,26 +1721,98 @@
           "actionHoldMs": 80,
           "feedbackWithinMs": 5000,
           "assertions": [
-            { "id": "runtime-schema", "path": "schema", "equals": "paravoxia.journeyRuntimeSnapshot.v1" },
-            { "id": "story-active", "path": "story.active", "equals": true },
-            { "id": "story-chapter", "path": "story.chapter", "equals": "ch8" },
-            { "id": "story-beat", "path": "story.beat", "equals": "ch8-launch" },
-            { "id": "objective-id", "path": "objective.id", "equals": "ch8:launch:ignite" },
-            { "id": "objective-health", "path": "objective.health", "equals": "ready" },
-            { "id": "space-flight-phase", "path": "state.spaceFlight.phase", "equals": "surface" },
-            { "id": "space-flight-control", "path": "state.spaceFlight.controlMode", "equals": "flight" },
-            { "id": "system-id", "path": "state.systemFlight.systemId", "equals": "-1,-1" },
-            { "id": "origin-active", "path": "state.systemFlight.activePlanetId", "equals": "-1,-1" },
-            { "id": "system-location", "path": "state.systemFlight.locationMode", "equals": "surface" },
-            { "id": "ship-flight-ready", "path": "state.shipRestoration.repairStage", "equals": "flight_ready" },
-            { "id": "physical-boarding", "path": "state.localActor.milestones", "includes": "story:board:physical-transaction-complete" },
-            { "id": "pressure-sealed", "path": "state.localActor.milestones", "includes": "story:board:pressure-boundary-sealed" }
+            {
+              "id": "runtime-schema",
+              "path": "schema",
+              "equals": "paravoxia.journeyRuntimeSnapshot.v1"
+            },
+            {
+              "id": "story-active",
+              "path": "story.active",
+              "equals": true
+            },
+            {
+              "id": "story-chapter",
+              "path": "story.chapter",
+              "equals": "ch8"
+            },
+            {
+              "id": "story-beat",
+              "path": "story.beat",
+              "equals": "ch8-launch"
+            },
+            {
+              "id": "objective-id",
+              "path": "objective.id",
+              "equals": "ch8:launch:ignite"
+            },
+            {
+              "id": "objective-health",
+              "path": "objective.health",
+              "equals": "ready"
+            },
+            {
+              "id": "space-flight-phase",
+              "path": "state.spaceFlight.phase",
+              "equals": "surface"
+            },
+            {
+              "id": "space-flight-control",
+              "path": "state.spaceFlight.controlMode",
+              "equals": "flight"
+            },
+            {
+              "id": "system-id",
+              "path": "state.systemFlight.systemId",
+              "equals": "-1,-1"
+            },
+            {
+              "id": "origin-active",
+              "path": "state.systemFlight.activePlanetId",
+              "equals": "-1,-1"
+            },
+            {
+              "id": "system-location",
+              "path": "state.systemFlight.locationMode",
+              "equals": "surface"
+            },
+            {
+              "id": "ship-flight-ready",
+              "path": "state.shipRestoration.repairStage",
+              "equals": "flight_ready"
+            },
+            {
+              "id": "physical-boarding",
+              "path": "state.localActor.milestones",
+              "includes": "story:board:physical-transaction-complete"
+            },
+            {
+              "id": "pressure-sealed",
+              "path": "state.localActor.milestones",
+              "includes": "story:board:pressure-boundary-sealed"
+            }
           ],
           "afterActionAssertions": [
-            { "id": "launch-remains-owned", "path": "story.beat", "equals": "ch8-launch" },
-            { "id": "launch-ignition-created", "path": "state.signedSceneAv.activationHistoryAnchorIds", "includes": "anc.launch.ignition" },
-            { "id": "launch-physically-departed", "path": "state.signedSceneAv.activationHistoryAnchorIds", "includes": "anc.launch.liftoff" },
-            { "id": "launch-keeps-flight-control", "path": "state.spaceFlight.controlMode", "equals": "flight" }
+            {
+              "id": "launch-remains-owned",
+              "path": "story.beat",
+              "equals": "ch8-launch"
+            },
+            {
+              "id": "launch-ignition-created",
+              "path": "state.signedSceneAv.activationHistoryAnchorIds",
+              "includes": "anc.launch.ignition"
+            },
+            {
+              "id": "launch-physically-departed",
+              "path": "state.signedSceneAv.activationHistoryAnchorIds",
+              "includes": "anc.launch.liftoff"
+            },
+            {
+              "id": "launch-keeps-flight-control",
+              "path": "state.spaceFlight.controlMode",
+              "equals": "flight"
+            }
           ]
         }
       ],
@@ -1027,9 +1821,19 @@
     },
     {
       "id": "ch9",
-      "continuity": { "before": ["ch8"], "after": [] },
+      "continuity": {
+        "before": [
+          "ch8"
+        ],
+        "after": [
+          "ch10"
+        ]
+      },
       "registryProjection": {
-        "requiredObjectiveBeats": ["ch9-settle", "ch9-hearth"],
+        "requiredObjectiveBeats": [
+          "ch9-settle",
+          "ch9-hearth"
+        ],
         "checkpointReceipts": [
           "milestone:story:tidegarden:relationship-attended",
           "milestone:story:tidegarden:habitat-core-online",
@@ -1037,10 +1841,25 @@
           "milestone:story:tidegarden:safe-rest-completed",
           "milestone:story:tidegarden:two-world-handoff"
         ],
-        "requiredSignedAnchorIds": ["anc.settle.scanner-overload", "anc.hearth.freeplay-handback"],
-        "variantProfileIds": ["desktop-high", "desktop-medium-reduced-motion", "desktop-low", "mobile-potato"]
+        "requiredSignedAnchorIds": [
+          "anc.settle.scanner-overload",
+          "anc.hearth.freeplay-handback"
+        ],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
       },
-      "requiredLaneIds": ["continuous-manual", "movie", "reload-continue", "direct-entry-diagnostic", "recovery-detour", "variants"],
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
       "objectives": [
         {
           "id": "objective:ch9:ch9-settle",
@@ -1048,20 +1867,35 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Attend a local relationship, choose a valid site, place the habitat core, and certify shelter.",
-            "completionEvidenceRefs": ["milestone:story:ch9:settled", "milestone:story:tidegarden:shelter-certified"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch9:settled",
+              "milestone:story:tidegarden:shelter-certified"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "Landfall provides presence but not belonging, so settlement begins by attending before claiming a site.",
             "capability": "Observation, site choice, base placement, and shelter certification.",
             "storyFunction": "Frames abundance as relationship and choice rather than entitlement or extraction.",
-            "expectedPlayerSeconds": { "min": 120, "max": 900 },
+            "expectedPlayerSeconds": {
+              "min": 120,
+              "max": 900
+            },
             "spatialTolerance": "Many dry level clear sites remain valid and no exact prescribed settlement layout is required.",
             "recovery": "Rejected sites explain the failing condition and preserve resources until a valid choice is committed.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         },
         {
@@ -1070,20 +1904,35 @@
           "criticality": "mandatory",
           "interaction": {
             "intent": "Complete a safe rest at the second hearth and return control to two-world free play.",
-            "completionEvidenceRefs": ["milestone:story:ch9:hearth", "milestone:story:tidegarden:two-world-handoff"],
+            "completionEvidenceRefs": [
+              "milestone:story:ch9:hearth",
+              "milestone:story:tidegarden:two-world-handoff"
+            ],
             "forbiddenInteractionIds": [],
             "feedbackWithinMs": 1000
           },
-          "postconditions": { "clearPromptWithinFrames": 2, "clearMarkerWithinFrames": 2, "mustNotReappearWithoutStateChange": true },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
           "placementFitness": {
             "whyNow": "A certified shelter becomes home only after the player safely rests and experiences the new hearth as returnable.",
             "capability": "Safe rest, hearth completion, and free-play handoff.",
             "storyFunction": "Completes the distance-between-fires metaphor without replacing Origin or closing future questions.",
-            "expectedPlayerSeconds": { "min": 20, "max": 210 },
+            "expectedPlayerSeconds": {
+              "min": 20,
+              "max": 210
+            },
             "spatialTolerance": "Rest works throughout the certified shelter envelope and closes transient build interfaces automatically.",
             "recovery": "Interrupted rest preserves the shelter and can resume without replaying settlement transactions.",
             "blocking": true,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
@@ -1093,9 +1942,21 @@
           "id": "interaction:tidegarden-required-over-optional",
           "beat": "ch9-settle",
           "type": "prompt-arbitration",
-          "requiredInteractionIds": ["story-tidegarden-attend", "story-tidegarden-choose-site", "story-habitat-core", "story-habitat-certify", "story-habitat-rest"],
+          "requiredInteractionIds": [
+            "story-tidegarden-attend",
+            "story-tidegarden-choose-site",
+            "story-habitat-core",
+            "story-habitat-certify",
+            "story-habitat-rest"
+          ],
           "optionalInteractionId": "story-tidegarden-record",
-          "successEvidenceRefs": ["milestone:story:tidegarden:relationship-attended", "milestone:story:tidegarden:habitat-core-online", "milestone:story:tidegarden:shelter-certified", "milestone:story:tidegarden:safe-rest-completed", "observation:observation:tidegarden:tideline-root-water-exchange"],
+          "successEvidenceRefs": [
+            "milestone:story:tidegarden:relationship-attended",
+            "milestone:story:tidegarden:habitat-core-online",
+            "milestone:story:tidegarden:shelter-certified",
+            "milestone:story:tidegarden:safe-rest-completed",
+            "observation:observation:tidegarden:tideline-root-water-exchange"
+          ],
           "rules": {
             "requiredWins": true,
             "suppressWhenAlreadyRecorded": true,
@@ -1111,19 +1972,218 @@
           "id": "capability:tidegarden-aerial-site-survey",
           "beat": "ch9-settle",
           "criticality": "optional",
-          "completionEvidenceRefs": ["milestone:story:tidegarden:aerial-site-survey"],
+          "completionEvidenceRefs": [
+            "milestone:story:tidegarden:aerial-site-survey"
+          ],
           "placementFitness": {
             "whyNow": "A chosen Tidegarden site gives jetpack practice a useful exploratory purpose and a readable local footprint.",
             "capability": "Sustained jetpack survey above a chosen habitat site.",
             "storyFunction": "Rewards spatial curiosity without delaying ship repair, travel, settlement, or free play.",
-            "expectedPlayerSeconds": { "min": 8, "max": 120 },
+            "expectedPlayerSeconds": {
+              "min": 8,
+              "max": 120
+            },
             "spatialTolerance": "A broad clearance and lateral envelope accepts a believable aerial look rather than an exact hover point.",
             "recovery": "Landing or drifting resets only optional dwell and never removes settlement progress.",
             "blocking": false,
-            "reviewOwners": ["story", "score", "cinematography", "ux"]
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
           }
         }
       ],
+      "placementExceptions": []
+    },
+    {
+      "id": "ch10",
+      "continuity": {
+        "before": [
+          "ch9"
+        ],
+        "after": []
+      },
+      "registryProjection": {
+        "requiredObjectiveBeats": [
+          "ch10-cold",
+          "ch10-ask",
+          "ch10-transit"
+        ],
+        "checkpointReceipts": [
+          "milestone:story:ch10-cold-noticed",
+          "milestone:story:ch10-fault-read",
+          "milestone:story:ch10-relay-asked",
+          "milestone:story:ch10-relay-answered",
+          "state:space-station/targeted",
+          "state:story/ch10-bearing-claimed",
+          "milestone:story:ch10-transit-ignited",
+          "state:story/ch10-seam-passed",
+          "milestone:story:ch10-station-resolved"
+        ],
+        "requiredSignedAnchorIds": [
+          "anc.ch10.cold-noticed",
+          "anc.ch10.station-resolved",
+          "anc.ch10.threshold-handback"
+        ],
+        "variantProfileIds": [
+          "desktop-high",
+          "desktop-medium-reduced-motion",
+          "desktop-low",
+          "mobile-potato"
+        ]
+      },
+      "requiredLaneIds": [
+        "continuous-manual",
+        "movie",
+        "reload-continue",
+        "direct-entry-diagnostic",
+        "recovery-detour",
+        "variants"
+      ],
+      "objectives": [
+        {
+          "id": "objective:ch10:ch10-cold",
+          "beat": "ch10-cold",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Read the habitat core's fault record, then carry it to the Kestrel Fabricator and receive the refusal.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch10-fault-read",
+              "milestone:story:ch10-fabrication-refused"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "The finished home is the only place a need a world cannot answer can be noticed, and it must be noticed rather than announced.",
+            "capability": "Diagnose a machine's own account of itself, then attempt the shipped craft verb against an issued component.",
+            "storyFunction": "Exhausts self-sufficiency on camera before anything is asked of another party.",
+            "expectedPlayerSeconds": {
+              "min": 60,
+              "max": 420
+            },
+            "spatialTolerance": "The core and the fabricator are both fixed shipped handles; the player may wander freely between them and the fault never worsens on a timer.",
+            "recovery": "Both objectives persist until performed and there is no failure state to recover from.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch10:ch10-ask",
+          "beat": "ch10-ask",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Fly the crossing back to the first world, land at the wreck, request a source at the relay, and claim the attached bearing.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch10-relay-asked",
+              "milestone:story:ch10-relay-answered",
+              "milestone:story:ch10-bearing-claimed"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "Asking must cost a journey, or it is a menu: the channel that never closed is on the world she left.",
+            "capability": "Reboard, cross in ch8 flight grammar, land, interact at the relay, and commit the station target.",
+            "storyFunction": "Turns 'one fire behind you' from an image into a route, and makes the reply's speed the chapter's single hidden-pillar spend.",
+            "expectedPlayerSeconds": {
+              "min": 180,
+              "max": 900
+            },
+            "spatialTolerance": "Landing anywhere on the first world is accepted; landfall-to-relay marker guidance persists and detour is never punished.",
+            "recovery": "Shipped ch8 flight rescue applies unchanged; a rescue moves the vehicle and never performs the ask or the claim.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        },
+        {
+          "id": "objective:ch10:ch10-transit",
+          "beat": "ch10-transit",
+          "criticality": "mandatory",
+          "interaction": {
+            "intent": "Launch on the claimed bearing and hold course until the source resolves at standoff.",
+            "completionEvidenceRefs": [
+              "milestone:story:ch10-transit-ignited",
+              "milestone:story:ch10-seam-passed",
+              "milestone:story:ch10-station-resolved"
+            ],
+            "forbiddenInteractionIds": [],
+            "feedbackWithinMs": 1000
+          },
+          "postconditions": {
+            "clearPromptWithinFrames": 2,
+            "clearMarkerWithinFrames": 2,
+            "mustNotReappearWithoutStateChange": true
+          },
+          "placementFitness": {
+            "whyNow": "The bearing was issued but the going is the player's, so the last act of the chapter is a flight nobody ordered.",
+            "capability": "ch8 launch and cruise grammar aimed at a non-planet target for the first time in the story.",
+            "storyFunction": "Scale and smallness, then threshold restraint: the station resolves into a place and is never entered.",
+            "expectedPlayerSeconds": {
+              "min": 120,
+              "max": 600
+            },
+            "spatialTolerance": "Travel objectives do not fail if course drifts; the seam latch fires once from either its view-cone or its look-independent range condition.",
+            "recovery": "Shipped ch8 flight rescue applies unchanged; a rescue never claims, never docks, and never counts as having flown the bearing.",
+            "blocking": true,
+            "reviewOwners": [
+              "story",
+              "score",
+              "cinematography",
+              "ux"
+            ]
+          }
+        }
+      ],
+      "lifecycleContracts": [],
+      "interactionContracts": [
+        {
+          "id": "interaction:ch10-threshold-instrument-silence",
+          "beat": "ch10-transit",
+          "type": "prompt-arbitration",
+          "requiredInteractionIds": [
+            "story-ch10-relay-query",
+            "story-ch10-bearing-claim"
+          ],
+          "optionalInteractionId": "story-ch10-station-dock",
+          "successEvidenceRefs": [
+            "milestone:story:ch10-relay-asked",
+            "milestone:story:ch10-bearing-claimed",
+            "milestone:story:ch10-station-resolved"
+          ],
+          "rules": {
+            "requiredWins": true,
+            "suppressWhenAlreadyRecorded": true,
+            "maxVisiblePrompts": 1,
+            "noOpForbidden": true,
+            "feedbackWithinMs": 500
+          }
+        }
+      ],
+      "inputContracts": [],
+      "optionalCapabilities": [],
       "placementExceptions": []
     }
   ]

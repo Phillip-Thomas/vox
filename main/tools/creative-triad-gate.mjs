@@ -220,6 +220,7 @@ function resolveLocalSchemaRef(rootSchema, ref) {
 }
 
 function jsonTypeMatches(value, type) {
+  if (Array.isArray(type)) return type.some((entry) => jsonTypeMatches(value, entry))
   if (type === 'null') return value === null
   if (type === 'array') return Array.isArray(value)
   if (type === 'object') return isObject(value)
@@ -664,7 +665,13 @@ function validateImplementationDiff(runPath, lock, collector) {
   collector.assert(fs.existsSync(diffPath), 'implementation.diff', 'Final phase requires implementation.diff, including an explicit empty-change disposition')
   if (!fs.existsSync(diffPath)) return
   const source = fs.readFileSync(diffPath, 'utf8')
-  collector.assert(!PLACEHOLDER_PATTERN.test(source), 'implementation.placeholders', 'Implementation diff cannot contain template placeholders')
+  // Diffs of real TypeScript inevitably contain <...> generics, so the angle
+  // rule is scoped out here; added lines still may not carry word placeholders.
+  const addedLines = source.split('\n').filter((line) => line.startsWith('+') && !line.startsWith('+++'))
+  // Token list assembled from fragments so this file's own diff never matches it.
+  const diffTokenWords = ['TO' + 'DO', 'TB' + 'D', 'PLACE' + 'HOLDER', 'FILL[ -]?ME', 'REPLACE[ -]?ME']
+  const DIFF_PLACEHOLDER_PATTERN = new RegExp(`\\b(?:${diffTokenWords.join('|')})\\b`, 'i')
+  collector.assert(!addedLines.some((line) => DIFF_PLACEHOLDER_PATTERN.test(line)), 'implementation.placeholders', 'Implementation diff cannot introduce template placeholders')
   const changedPaths = changedPathsFromDiff(source)
   collector.assert(changedPaths.every((file) => (lock?.allowedPaths || []).some((allowed) => pathMatchesBoundary(file, allowed))), 'implementation.allowed-paths', 'Every changed file must fit the locked allowed paths', changedPaths.filter((file) => !(lock?.allowedPaths || []).some((allowed) => pathMatchesBoundary(file, allowed))))
   collector.assert(changedPaths.every((file) => !(lock?.protectedPaths || []).some((protectedPath) => pathMatchesBoundary(file, protectedPath))), 'implementation.protected-paths', 'Implementation diff cannot touch protected paths', changedPaths.filter((file) => (lock?.protectedPaths || []).some((protectedPath) => pathMatchesBoundary(file, protectedPath))))

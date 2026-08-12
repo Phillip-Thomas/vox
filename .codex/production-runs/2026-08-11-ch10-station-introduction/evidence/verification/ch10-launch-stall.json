@@ -1,0 +1,1618 @@
+{
+  "capturedAt": "2026-08-12T04:08:50.143Z",
+  "base": "http://localhost:5176",
+  "scenarios": {
+    "ch10-ask-movie": {
+      "url": "?story=ch10-ask&movie=1&profile=LOW",
+      "samples": [
+        {
+          "t": 0,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 3,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 6,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 9,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 12,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 15.1,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 18.1,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 21.1,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 24.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 27.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 30.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 33.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 36.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 39.1,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 42.1,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 45.2,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 48.2,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 51.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 54.2,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 57.2,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 60.2,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": false,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 63.2,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 66.2,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 69.2,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 72.4,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 75.4,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 78.4,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 81.4,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 84.4,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 87.4,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 90.4,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 93.4,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 96.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 99.5,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 102.5,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 105.5,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 108.5,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 111.5,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 114.5,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 117.5,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 120.5,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 123.5,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 126.5,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 129.5,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 132.6,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 135.6,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 138.6,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 141.6,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 144.6,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        },
+        {
+          "t": 147.6,
+          "phase": "surface",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch10-ask"
+        }
+      ],
+      "phaseChanged": true,
+      "firstPhase": "deep_space",
+      "fullStateAtEnd": {
+        "beat": "ch10-ask",
+        "spaceFlight": {
+          "phase": "surface",
+          "controlMode": "flight",
+          "destination": null,
+          "target": null
+        },
+        "systemFlight": {
+          "systemId": "-1,-1",
+          "layoutVersion": 1,
+          "locationMode": "surface",
+          "activePlanetId": "-1,-1:p1",
+          "lastActivePlanetId": "-1,-1:p1",
+          "pose": {
+            "position": [
+              2182,
+              -29.683764182549695,
+              -1637
+            ],
+            "velocity": [
+              0,
+              0,
+              0
+            ],
+            "quaternion": [
+              0,
+              0.7071067811865475,
+              0,
+              0.7071067811865476
+            ]
+          },
+          "target": null,
+          "renderOrigin": [
+            0,
+            0,
+            0
+          ],
+          "activationEpoch": 11
+        },
+        "inputPolicy": {
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": true,
+          "allowCraft": true,
+          "recipeAllowed": "[fn]",
+          "allowBaseInteraction": "[fn]",
+          "lookMode": "free",
+          "feedBlend": 1,
+          "sideBlend": 1,
+          "targetFov": 75,
+          "targetDpr": null,
+          "voxelPropsOnly": false,
+          "mawRechargePerSecond": 0
+        },
+        "story": {
+          "beat": "ch10-ask",
+          "chapter": "ch10",
+          "active": true
+        },
+        "autopilot": {
+          "beat": "ch10-ask",
+          "clock": 78.3,
+          "pos": [
+            8.34,
+            51.01,
+            -8
+          ],
+          "controls": {
+            "forward": true,
+            "backward": true,
+            "left": false,
+            "right": false,
+            "jump": true,
+            "descend": false,
+            "sprint": true,
+            "delete": false,
+            "interact": true
+          },
+          "stillTime": 2.1,
+          "nudges": 0,
+          "surfaceContact": {
+            "feetInWater": false,
+            "physicallySupported": false
+          }
+        },
+        "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS."
+      },
+      "afterHeldRealSpace": {
+        "phase": "surface",
+        "controlMode": "flight",
+        "pos": [
+          8.34,
+          51.01,
+          -8
+        ]
+      },
+      "pageErrors": []
+    },
+    "ch8-launch-movie-control": {
+      "url": "?story=ch8-launch&movie=1&profile=LOW",
+      "samples": [
+        {
+          "t": 0,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-launch"
+        },
+        {
+          "t": 3,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-launch"
+        },
+        {
+          "t": 6,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": false,
+          "allowJump": true,
+          "beat": "ch8-launch"
+        },
+        {
+          "t": 9,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-launch"
+        },
+        {
+          "t": 12,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 15,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 18.1,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 21.1,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 24.1,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 27.1,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 30.1,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 33.1,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 36.1,
+          "phase": "deep_space",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            8,
+            53.85,
+            -6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-crossing"
+        },
+        {
+          "t": 39.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": false,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 42.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 45.1,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 48.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 51.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 54.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 57.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 60.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 63.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 66.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 69.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 72.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 75.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 78.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 81.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 84.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 87.2,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 90.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 93.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 96.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 99.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 102.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 105.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 108.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 111.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 114.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 117.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 120.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 123.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 126.3,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 129.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 132.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 135.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 138.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 141.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 144.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        },
+        {
+          "t": 147.4,
+          "phase": "descent",
+          "controlMode": "flight",
+          "altitude": null,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "jump": true,
+          "allowJump": true,
+          "beat": "ch8-landfall"
+        }
+      ],
+      "phaseChanged": true,
+      "firstPhase": "deep_space",
+      "fullStateAtEnd": {
+        "beat": "ch8-landfall",
+        "spaceFlight": {
+          "phase": "descent",
+          "controlMode": "flight",
+          "destination": null,
+          "target": null
+        },
+        "systemFlight": {
+          "systemId": "-1,-1",
+          "layoutVersion": 1,
+          "locationMode": "atmosphere",
+          "activePlanetId": "-1,-1:p1",
+          "lastActivePlanetId": "-1,-1:p1",
+          "pose": {
+            "position": [
+              2238.806765443423,
+              -232.17393369195685,
+              -1604.8031242189575
+            ],
+            "velocity": [
+              2.0864421634325772e-23,
+              -5.84762790047203e-23,
+              1.522306885540762e-23
+            ],
+            "quaternion": [
+              -0.4368983668264831,
+              -0.4476931853886253,
+              0.2667875777628982,
+              -0.7331541564857581
+            ]
+          },
+          "target": null,
+          "renderOrigin": [
+            2180,
+            -110,
+            -1635
+          ],
+          "activationEpoch": 3
+        },
+        "inputPolicy": {
+          "moveSpeedScale": 1,
+          "allowJump": true,
+          "allowSprint": true,
+          "allowBuild": false,
+          "allowCraft": false,
+          "recipeAllowed": "[fn]",
+          "allowBaseInteraction": "[fn]",
+          "lookMode": "free",
+          "feedBlend": 1,
+          "sideBlend": 1,
+          "targetFov": 75,
+          "targetDpr": null,
+          "voxelPropsOnly": false,
+          "mawRechargePerSecond": 0
+        },
+        "story": {
+          "beat": "ch8-landfall",
+          "chapter": "ch8",
+          "active": true
+        },
+        "autopilot": {
+          "beat": "ch8-landfall",
+          "clock": 112.7,
+          "pos": [
+            -102.71,
+            123.29,
+            1.6
+          ],
+          "controls": {
+            "forward": true,
+            "backward": true,
+            "left": false,
+            "right": false,
+            "jump": true,
+            "descend": false,
+            "sprint": false,
+            "delete": false,
+            "interact": true
+          },
+          "stillTime": 0,
+          "nudges": 0,
+          "surfaceContact": {
+            "feetInWater": false,
+            "physicallySupported": false
+          }
+        },
+        "hudText": "CURRENT OBJECTIVE | DRY LEVEL GROUND | READ THE SURFACE FOR A DRY, LEVEL SITE. | [F] LAND ON DRY, LEVEL GROUND."
+      },
+      "afterHeldRealSpace": {
+        "phase": "descent",
+        "controlMode": "flight",
+        "pos": [
+          -102.71,
+          123.29,
+          1.6
+        ]
+      },
+      "pageErrors": []
+    }
+  }
+}

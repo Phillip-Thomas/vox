@@ -1,0 +1,87 @@
+{
+  "capturedAt": "2026-08-12T01:22:35.735Z",
+  "url": "?story=base&movie=1&profile=LOW",
+  "reachedDone": true,
+  "secondsToDone": 132,
+  "cueCount": 7,
+  "enterCueCountsByObjectiveId": {
+    "settle:attend-waterline": 1,
+    "settle:choose-site": 1,
+    "settle:craft-core": 1,
+    "settle:certify-shelter": 1,
+    "settle:wait-night": 1,
+    "settle:rest": 1,
+    "settle:second-hearth-settling": 1
+  },
+  "waitNightEmissions": 1,
+  "oneCuePerActivation": true,
+  "baselineCueCount": 8,
+  "acceptanceSignal": "baseline 8 becomes 7 with oneCuePerActivation true",
+  "pass": true,
+  "feedbackLog": [
+    {
+      "at": 5408,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:attend-waterline",
+        "action": "interact"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 6655,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:choose-site",
+        "action": "interact"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 12608,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:craft-core",
+        "action": "craft"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 12633,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:certify-shelter",
+        "action": "build"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 12814,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:wait-night",
+        "action": "wait"
+      },
+      "beat": "ch9-settle"
+    },
+    {
+      "at": 124019,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:rest",
+        "action": "interact"
+      },
+      "beat": "ch9-hearth"
+    },
+    {
+      "at": 124097,
+      "cue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:second-hearth-settling",
+        "action": "wait"
+      },
+      "beat": "ch9-hearth"
+    }
+  ],
+  "pageErrors": []
+}

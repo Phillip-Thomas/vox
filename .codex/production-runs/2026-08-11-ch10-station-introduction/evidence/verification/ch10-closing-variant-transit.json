@@ -1,0 +1,533 @@
+{
+  "capturedAt": "2026-08-12T10:03:23.653Z",
+  "base": "http://localhost:5176",
+  "mode": "variant-transit",
+  "anchors": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+  ],
+  "variants": {
+    "desktop-high": {
+      "id": "desktop-high",
+      "profile": "HIGH",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "isMobile": false,
+      "byAnchor": {
+        "anc.ch10.transit-ignite": {
+          "t": 0.01,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.seam-of-light",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.station-resolved"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1724
+        },
+        "anc.ch10.seam-of-light": {
+          "t": 0.01,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.seam-of-light",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.station-resolved"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1724
+        },
+        "anc.ch10.station-resolved": {
+          "t": 1.03,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.station-resolved",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "blended",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.threshold-handback"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both",
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1441
+        },
+        "anc.ch10.threshold-handback": {
+          "t": 3.64,
+          "beat": "done",
+          "anchorIdLive": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "letterbox": null,
+          "postFx": [],
+          "reset": "completion",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "score": {
+            "variant": null,
+            "carrierAlive": false,
+            "intensity": 0.28,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1092
+        }
+      },
+      "order": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "pageErrors": [],
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true
+    },
+    "desktop-medium-reduced-motion": {
+      "id": "desktop-medium-reduced-motion",
+      "profile": "MEDIUM",
+      "viewport": "1280x720",
+      "reducedMotion": true,
+      "isMobile": false,
+      "byAnchor": {
+        "anc.ch10.transit-ignite": {
+          "t": 0.01,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.seam-of-light",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.station-resolved"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 4506
+        },
+        "anc.ch10.seam-of-light": {
+          "t": 0.01,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.seam-of-light",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.station-resolved"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 4506
+        },
+        "anc.ch10.station-resolved": {
+          "t": 11.69,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.station-resolved",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "blended",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.threshold-handback"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "",
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1486
+        },
+        "anc.ch10.threshold-handback": {
+          "t": 14.45,
+          "beat": "done",
+          "anchorIdLive": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "letterbox": null,
+          "postFx": [],
+          "reset": "completion",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "score": {
+            "variant": null,
+            "carrierAlive": false,
+            "intensity": 0.28,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1091
+        }
+      },
+      "order": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "pageErrors": [],
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true
+    },
+    "desktop-low": {
+      "id": "desktop-low",
+      "profile": "LOW",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "isMobile": false,
+      "byAnchor": {
+        "anc.ch10.transit-ignite": {
+          "t": 0.01,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.transit-ignite",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.transit-ignite"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 5547
+        },
+        "anc.ch10.seam-of-light": {
+          "t": 1.54,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.seam-of-light",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.station-resolved"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 5189
+        },
+        "anc.ch10.station-resolved": {
+          "t": 15.42,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.station-resolved",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "blended",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.threshold-handback"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "",
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1494
+        },
+        "anc.ch10.threshold-handback": {
+          "t": 17.98,
+          "beat": "done",
+          "anchorIdLive": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "letterbox": null,
+          "postFx": [],
+          "reset": "completion",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "score": {
+            "variant": null,
+            "carrierAlive": false,
+            "intensity": 0.28,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1102
+        }
+      },
+      "order": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "pageErrors": [],
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true
+    },
+    "mobile-potato": {
+      "id": "mobile-potato",
+      "profile": "POTATO",
+      "viewport": "390x844",
+      "reducedMotion": false,
+      "isMobile": true,
+      "byAnchor": {
+        "anc.ch10.transit-ignite": {
+          "t": 0.01,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.transit-ignite",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.transit-ignite"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "JOURNAL",
+          "caption": null,
+          "score": {
+            "variant": "transit-hold",
+            "carrierAlive": true,
+            "intensity": 0.42,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 5417
+        },
+        "anc.ch10.seam-of-light": {
+          "t": 1.04,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.seam-of-light",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "player",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.station-resolved"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "JOURNAL",
+          "caption": null,
+          "score": {
+            "variant": "seam-ebb",
+            "carrierAlive": true,
+            "intensity": 0.36,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 5172
+        },
+        "anc.ch10.station-resolved": {
+          "t": 14.94,
+          "beat": "ch10-transit",
+          "anchorIdLive": "anc.ch10.station-resolved",
+          "authority": "player-camera",
+          "fov": 70,
+          "agency": {
+            "movement": "blended",
+            "look": "player",
+            "interaction": "player",
+            "handBackAnchorRef": "anc.ch10.threshold-handback"
+          },
+          "letterbox": null,
+          "postFx": [],
+          "reset": null,
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "JOURNAL",
+          "caption": "(",
+          "score": {
+            "variant": "station-resolved",
+            "carrierAlive": true,
+            "intensity": 0.44,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1479
+        },
+        "anc.ch10.threshold-handback": {
+          "t": 17.57,
+          "beat": "done",
+          "anchorIdLive": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "letterbox": null,
+          "postFx": [],
+          "reset": "completion",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "requiresMarker": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "score": {
+            "variant": null,
+            "carrierAlive": false,
+            "intensity": 0.28,
+            "maxIntensity": 0.44
+          },
+          "stationDistance": 1108
+        }
+      },
+      "order": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "pageErrors": [],
+      "anchorsCaptured": 4,
+      "missingAnchors": [],
+      "seamStrictlyBeforeResolved": true
+    }
+  }
+}

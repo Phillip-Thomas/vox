@@ -1,0 +1,575 @@
+{
+  "schema": "paravoxia.shippedUxBaseline.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "sceneId": "ch10-station-introduction",
+  "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+  "capturedAt": "2026-08-11T21:29:49.991Z",
+  "contextRef": "main/src/story/ux/README.md",
+  "capturedBy": "story-verifier (mechanical, read-only). No runtime source was modified.",
+  "evidenceRefs": [
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/evidence/baseline/baseline-trace.json",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/evidence/baseline/sky-baseline-trace.json",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/baseline-probe.mjs",
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/sky-baseline-probe.mjs"
+  ],
+  "checks": {
+    "story:ux:check": {
+      "command": "npm --prefix main run story:ux:check",
+      "result": "pass",
+      "files": 6,
+      "tests": 54,
+      "durationSeconds": 1.5,
+      "ranAt": "2026-08-11T17:22-04:00 (baseline, pre-mutation)"
+    }
+  },
+  "sourceFiles": [
+    {
+      "path": "main/src/story/ux/README.md",
+      "sha256": "84851ca01ab09bae0210eaf8ff898e04d5f42a997067237d9115feb79dd3f477",
+      "note": "executable player-guidance context contract"
+    },
+    {
+      "path": "main/src/story/ux/objectiveDirector.ts",
+      "sha256": "ab1d968f5929ec1c3ab7e56a207afe15ab6d6e221855e75d8273b6e3649e4a1a",
+      "note": "objective store, exact marker contract, health signal"
+    },
+    {
+      "path": "main/src/story/ux/feedbackCues.ts",
+      "sha256": "e162310b61b059a8a93b00c5db9646b0a2b1a958d3e67cadc59b20e8f392d71b",
+      "note": "one semantic acknowledgement per objective activation"
+    },
+    {
+      "path": "main/src/story/ux/StoryGuidanceHud.tsx",
+      "sha256": "e4db40a7b0252ef6a84652541aafbdbf38241ebb8e4d0a3c5cd5c5efd5918999",
+      "note": "standing work-order HUD"
+    },
+    {
+      "path": "main/src/story/ux/storyGuidancePresentation.ts",
+      "sha256": "1a02e6c41b3841b390ea5c7b934310ed6bd6d587b7ddb18c28ca80585027fda1",
+      "note": "guidance presentation"
+    },
+    {
+      "path": "main/src/story/ux/storyHudLayout.ts",
+      "sha256": "74bc73206262689c06f03e2e67657d8363b453417fbfd867fcc7da8429f75766",
+      "note": "HUD layout/safe-area"
+    },
+    {
+      "path": "main/src/story/ux/cinematicHud.ts",
+      "sha256": "39e1d327b2296d33b0fe64d593a89b60a4e1a8177d85d3078b60d5a66ea3ae67",
+      "note": "cinematic HUD suppression"
+    },
+    {
+      "path": "main/src/story/ux/inputGlyphs.ts",
+      "sha256": "a11df2f1fc1b9f8fb3e1cf143205c4fab8b5fa29fd420a9eb683474875338187",
+      "note": "keyboard/touch token substitution"
+    },
+    {
+      "path": "main/src/story/tidegardenSettlement.ts",
+      "sha256": "2a67058a536c63e792114643bec63e8ad1b2f3fd811476b5b083e6ff9145715a",
+      "note": "ch9 settlement objective/marker/work-order source of truth"
+    },
+    {
+      "path": "main/src/story/storyText.ts",
+      "sha256": "2824b82b7af7acb95326916ec88cf212f2f2a76c1fe63c17b1a6c628bcc2efac",
+      "note": "copy pins"
+    }
+  ],
+  "objectiveContract": {
+    "sourceRef": "main/src/story/ux/objectiveDirector.ts",
+    "stableObjectiveIds": true,
+    "markerMatching": "exact",
+    "requiresActionableWorkOrder": true,
+    "feedbackPresentationOnly": true,
+    "feedbackAdvancesProgression": false,
+    "feedbackDedupeScope": "the currently active objective only — activateGuidedStoryObjective returns early when runtime.objective.id already equals the incoming id; a clear() between two activations of the same id re-emits",
+    "healthStates": [
+      "idle",
+      "ready",
+      "missing-marker"
+    ],
+    "healthRule": "ready when !requiresMarker or the observed marker label equals the objective marker label exactly; otherwise missing-marker",
+    "feedbackEmissionsPerEntry": 1
+  },
+  "doneFreePlayInventory": {
+    "beat": "done",
+    "storySnapshot": {
+      "active": false,
+      "chapter": "complete",
+      "beat": "done",
+      "runId": 1
+    },
+    "activeObjective": null,
+    "objectiveHealth": "idle",
+    "guidanceHudMounted": false,
+    "standingWorkOrder": [],
+    "directionalMarkers": "none — no marker chip present in either done frame",
+    "mandatoryObjectives": "none",
+    "ambientObjectives": "none",
+    "hudSurfacesPresent": [
+      "SUIT HUD vitals (HEALTH/FOOD/WATER/TEMP/STAM/OXY) with the sandbox thermal chip (◆ SHELTERED in this capture)",
+      "INV chip",
+      "B / C / M sandbox action buttons and the journal flag button",
+      "ORBITAL SCAN minimap — mounts only after the story goes inactive (absent through ch9-hearth)",
+      "crosshair",
+      "story caption element, still painting the authored closing line for its remaining ~4s"
+    ],
+    "inputPolicy": {
+      "lookMode": "free",
+      "targetFov": 75,
+      "targetDpr": null,
+      "moveSpeedScale": 1,
+      "allowBuild": true,
+      "allowCraft": true,
+      "feedBlend": 1,
+      "sideBlend": 1
+    },
+    "boundaryStateRefs": [
+      "state:camera/embodied",
+      "state:camera/free-look",
+      "state:control/on-foot",
+      "state:free-play/two-world-handoff",
+      "state:item/kestrel-keel-memory-banked",
+      "state:maw/repaired",
+      "state:reality/alive",
+      "state:ship-restoration/flight_ready",
+      "state:space-flight/control-mode=fps",
+      "state:space-flight/phase!=deep_space",
+      "state:space-flight/phase=surface",
+      "state:story/complete",
+      "state:system-flight/active-planet=-1,-1:p1",
+      "state:world/tidegarden"
+    ],
+    "evidence": [
+      "evidence/baseline/03_130s_done_freeplay-seam.png",
+      "evidence/baseline/04_138s_done_freeplay-settled.png"
+    ]
+  },
+  "markerAndWorkOrderMap": [
+    {
+      "objectiveId": "settle:attend-waterline",
+      "kind": "interact",
+      "markerLabel": "LIVING WATERLINE · ATTEND",
+      "workOrder": [
+        "FOLLOW THE LIVING WATERLINE MARKER.",
+        "[F] ATTEND THE RELATIONSHIP."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle",
+        "ch9-hearth"
+      ],
+      "observedMarkerParity": "exact",
+      "shippedWorkOrderIsActionable": true
+    },
+    {
+      "objectiveId": "settle:choose-site",
+      "kind": "interact",
+      "markerLabel": "RECOMMENDED HABITAT SITE · CHOOSE",
+      "workOrder": [
+        "FOLLOW THE HABITAT SITE MARKER.",
+        "[F] CHOOSE THIS DRY, LEVEL SITE."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle"
+      ],
+      "observedMarkerParity": "exact",
+      "shippedWorkOrderIsActionable": true
+    },
+    {
+      "objectiveId": "settle:craft-core",
+      "kind": "craft",
+      "markerLabel": "KESTREL FABRICATOR · CRAFT HABITAT CORE",
+      "workOrder": [
+        "RETURN TO THE FLIGHT-READY KESTREL FABRICATOR.",
+        "[C] CRAFT HABITAT CORE."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle"
+      ],
+      "observedMarkerParity": "exact",
+      "shippedWorkOrderIsActionable": true
+    },
+    {
+      "objectiveId": "settle:foundation",
+      "kind": "build",
+      "markerLabel": "CHOSEN SITE · PLACE FOUNDATION",
+      "workOrder": [
+        "[B] PLACE A FOUNDATION AT THE CHOSEN SITE."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle"
+      ],
+      "observedMarkerParity": "exact",
+      "shippedWorkOrderIsActionable": true
+    },
+    {
+      "objectiveId": "settle:install-core",
+      "kind": "interact",
+      "markerLabel": "CHOSEN SITE · INSTALL HABITAT CORE",
+      "workOrder": [
+        "RETURN TO THE CHOSEN FOUNDATION.",
+        "[F] INSTALL HABITAT CORE."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle"
+      ],
+      "observedMarkerParity": "exact",
+      "shippedWorkOrderIsActionable": true
+    },
+    {
+      "objectiveId": "settle:wait-night",
+      "kind": "wait",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "workOrder": [
+        "RETURN TO THE SECOND HEARTH.",
+        "REST BECOMES AVAILABLE AT NIGHT."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle",
+        "ch9-hearth"
+      ],
+      "observedMarkerParity": "exact",
+      "shippedWorkOrderIsActionable": true
+    },
+    {
+      "objectiveId": "settle:rest",
+      "kind": "interact",
+      "markerLabel": "SECOND HEARTH · REST INSIDE",
+      "workOrder": [
+        "RETURN INSIDE THE CERTIFIED SHELTER.",
+        "[F] REST AT THE SECOND HEARTH."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-hearth"
+      ],
+      "observedMarkerParity": "exact",
+      "shippedWorkOrderIsActionable": true
+    }
+  ],
+  "lastGuidedBeatSemantics": {
+    "beat": "ch9-hearth",
+    "sourceRefs": [
+      "main/src/story/emergentStoryDirector.ts#enterBeat (case ch9-hearth)",
+      "main/src/story/emergentStoryDirector.ts#tickSecondHearth",
+      "main/src/story/storyState.ts#completeStory",
+      "main/src/story/storyDirector.ts#onBeatEntered -> enterEmergentStoryBeat",
+      "main/src/story/tidegardenSettlement.ts#getTidegardenSettlementGuidance"
+    ],
+    "enter": {
+      "code": "enterBeat() calls clearGuidedStoryObjective() unconditionally, then activateSettlementGuidance(actorId) republishes the settlement objective for the live milestone state.",
+      "observed": "objective settle:wait-night, markerLabel \"SECOND HEARTH · WAIT FOR NIGHT\", health ready, requiresMarker true; marker chip \"second hearth · wait for night · 0m\" resolves the exact label.",
+      "observedAtSeconds": 14.9,
+      "feedbackCue": {
+        "type": "objective-enter",
+        "objectiveId": "settle:wait-night",
+        "action": "wait",
+        "emittedAtMs": 14774
+      }
+    },
+    "change": {
+      "code": "tickSecondHearth re-runs activateSettlementGuidance every tick until BOTH safeRestCompleted and twoWorldHandoff exist; activateGuidedStoryObjective dedupes on id so the HUD is stable. When night opens, guidance flips wait-night -> rest; on rest commit it becomes the terminal settle:second-hearth-settling hold.",
+      "observedTransitions": [
+        {
+          "tSeconds": 123.8,
+          "from": "settle:wait-night",
+          "to": "settle:rest",
+          "markerLabel": "SECOND HEARTH · REST INSIDE"
+        },
+        {
+          "tSeconds": 123.9,
+          "from": "settle:rest",
+          "to": "settle:second-hearth-settling",
+          "markerLabel": "SECOND HEARTH · SETTLING",
+          "requiresMarker": false
+        }
+      ],
+      "note": "settle:rest existed for ~51ms in the movie lane because completeEmergentMovieSafeRest commits rest in the same frame the night predicate opens. A human player holds settle:rest until they physically rest."
+    },
+    "completeAndClear": {
+      "code": "once(\"second-hearth-rest\") latches: setWorkOrder([]), setScoreIntensity(0.36), showCaption(closing line, 6500ms). After runtime.elapsed >= latch + 5.5s, completeStory() marks ch9Hearth/complete/senses, setVoxelRealityStage(\"alive\"), setStoryForcedDayPhase(null) and sets snapshot {active:false, chapter:\"complete\", beat:\"done\"}. The beat transition to done runs the primary bridge storyDirector.onBeatEntered -> enterEmergentStoryBeat(done), whose unconditional clearGuidedStoryObjective() drops the settling objective; the done case has no re-activation arm, so the store itself reads null (not merely an unmounted HUD).",
+      "observed": {
+        "closingLatchAtSeconds": 123.9,
+        "closingCaption": "(one fire behind you. one fire here. home is the distance you can keep alive.)",
+        "doneAtSeconds": 129.7,
+        "holdSeconds": 5.8,
+        "authoredHoldSeconds": 5.5,
+        "objectiveAfter": null,
+        "objectiveHealthAfter": "idle",
+        "guidanceHudAfter": false,
+        "signedAvLastResetReason": "completion",
+        "cameraAuthorityAfter": null,
+        "fovAfter": 75,
+        "realityStageAfter": "alive",
+        "stateRefDelta": "+state:story/complete, -state:story/active (state:free-play/two-world-handoff already present from the rest commit at 123.8s)"
+      },
+      "residue": "the authored 6.5s caption outlives the beat by ~0.7s and is visible in the first done frame; no objective, marker, work order or signed-AV state survives."
+    }
+  },
+  "measuredLifecycle": {
+    "feedbackCueLog": [
+      {
+        "at": 5093,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:attend-waterline",
+          "action": "interact"
+        },
+        "beat": "ch9-settle"
+      },
+      {
+        "at": 6333,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:choose-site",
+          "action": "interact"
+        },
+        "beat": "ch9-settle"
+      },
+      {
+        "at": 12274,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:craft-core",
+          "action": "craft"
+        },
+        "beat": "ch9-settle"
+      },
+      {
+        "at": 12296,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:certify-shelter",
+          "action": "build"
+        },
+        "beat": "ch9-settle"
+      },
+      {
+        "at": 12360,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:wait-night",
+          "action": "wait"
+        },
+        "beat": "ch9-settle"
+      },
+      {
+        "at": 14774,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:wait-night",
+          "action": "wait"
+        },
+        "beat": "ch9-hearth"
+      },
+      {
+        "at": 123803,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:rest",
+          "action": "interact"
+        },
+        "beat": "ch9-hearth"
+      },
+      {
+        "at": 123854,
+        "cue": {
+          "type": "objective-enter",
+          "objectiveId": "settle:second-hearth-settling",
+          "action": "wait"
+        },
+        "beat": "ch9-hearth"
+      }
+    ],
+    "cueCount": 8,
+    "oneCuePerActivation": true,
+    "duplicateIdCues": [
+      {
+        "objectiveId": "settle:wait-night",
+        "emissions": 2,
+        "atMs": [
+          12360,
+          14774
+        ],
+        "beats": [
+          "ch9-settle",
+          "ch9-hearth"
+        ],
+        "cause": "emergentStoryDirector.enterBeat clears the objective at the ch9-settle -> ch9-hearth boundary and the same guidance is immediately re-activated; objectiveDirector dedupes only against the currently active id, so the clear/reactivate pair re-emits objective-enter for an unchanged player action.",
+        "reproduced": "2 of 2 cold runs",
+        "classification": "measurement — reported, not adjudicated"
+      }
+    ],
+    "transientMissingMarker": [
+      {
+        "objectiveId": "settle:scan-waterline",
+        "beat": "ch9-settle",
+        "health": "missing-marker",
+        "firstSeenAtSeconds": 0.55,
+        "clearedAtSeconds": 4.53,
+        "durationSeconds": 3.98,
+        "note": "mandatory objective published before the directional marker resolves at beat entry; it does not persist"
+      }
+    ],
+    "progressFeedback": "no progress-type cue exists in the shipped StoryUxFeedbackCue union; progress is communicated by objective replacement and marker distance in the chip (e.g. \"· 20m\" -> \"· 0m\")",
+    "completionFeedback": "completion is acknowledged by caption + work-order clear + score intensity change, not by a feedback cue"
+  },
+  "variantsCovered": {
+    "desktopLow": true,
+    "mobile": false,
+    "reducedMotion": false,
+    "potato": false,
+    "high": false,
+    "note": "Stage 1 grounding is the desktop LOW baseline only, per the lock's lean evidence budget. The four-variant state-trace matrix is owed at verification of this run's own anchors, not at baseline."
+  },
+  "knownConstraintsForCh10": [
+    {
+      "id": "MF-1",
+      "summary": "The movie lane enters done sealed inside a doorless certified shelter (emergentMovieRuntime.buildAndCertifyEmergentMovieShelter places ceiling + all wall faces on both core cells). A free-play ST-0 sky perception is not observable from the movie lane's own done state.",
+      "evidence": [
+        "evidence/baseline/06_185s_done_sky-zenith.png",
+        "evidence/baseline/baseline-trace.json#skyWalk"
+      ]
+    },
+    {
+      "id": "MF-2",
+      "summary": "?story=ch9-hearth&movie=1 never advances (autopilot returns early when the Tidegarden habitat world state is null). ch9/ch10 movie evidence must enter at ?story=base or earlier.",
+      "evidence": "recon: 400s at ch9-hearth, autopilot position frozen, no timeout rescue"
+    },
+    {
+      "id": "MF-3",
+      "summary": "ST-0 must be legible without a marker, a cue or a name (lock prelude). The shipped free-play HUD at done carries no guidance surface at all — there is no existing objective lane to compete with, and none to lean on.",
+      "evidence": [
+        "evidence/baseline/03_130s_done_freeplay-seam.png",
+        "evidence/baseline/04_138s_done_freeplay-settled.png"
+      ]
+    }
+  ],
+  "markerAndWorkOrderMapScope": "markerAndWorkOrderMap holds every shipped settlement objective that both requires an exact directional marker and carries its kind action verb or input on the final work-order line. Objectives with requiresMarker false are preserved with the same fields in markerlessObjectives; marker-bound objectives whose final line does not carry the kind verb are preserved verbatim in nonActionableFinalLineObjectives. No shipped copy was reworded to satisfy the gate.",
+  "markerlessObjectives": [
+    {
+      "objectiveId": "settle:second-hearth-settling",
+      "kind": "wait",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "workOrder": [
+        "THE SECOND HEARTH IS SAFE.",
+        "LET THE TWO-WORLD HANDOFF SETTLE."
+      ],
+      "requiresMarker": false,
+      "beats": [
+        "ch9-hearth"
+      ],
+      "note": "the only shipped guided objective with requiresMarker:false; its work order is a state statement, not a verb — it is the authored terminal hold before completion",
+      "observedMarkerParity": "n/a (requiresMarker false)",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "The shipped terminal hold states that the hearth is safe and asks the player to let the handoff settle. Both lines are status, not a verb or an input, so it does not satisfy the actionable-work-order contract that markerAndWorkOrderMap encodes. It is recorded here verbatim as the shipped baseline rather than reworded. It is also the only shipped guided objective with requiresMarker false."
+    }
+  ],
+  "nonActionableFinalLineObjectives": [
+    {
+      "objectiveId": "settle:scan-waterline",
+      "kind": "travel",
+      "markerLabel": "LIVING WATERLINE · SCAN",
+      "workOrder": [
+        "FOLLOW THE LIVING WATERLINE MARKER.",
+        "READ THE SIGNAL FIELD."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle"
+      ],
+      "observedMarkerParity": "exact (marker chip \"living waterline · scan · 9m\" observed at t=4.53s)",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "Shipped kind is travel and the travel verb is on the route line, FOLLOW THE LIVING WATERLINE MARKER. The final line, READ THE SIGNAL FIELD., is a read instruction, so the last-line actionable check for kind travel does not match. Recorded verbatim; no copy reworded."
+    },
+    {
+      "objectiveId": "settle:certify-shelter",
+      "kind": "build",
+      "markerLabel": "HABITAT CORE · ENCLOSE AND CERTIFY",
+      "workOrder": [
+        "BUILD A CLOSED SHELTER AROUND THE CORE.",
+        "[F] CERTIFY THE WORKING SHELTER."
+      ],
+      "requiresMarker": true,
+      "beats": [
+        "ch9-settle"
+      ],
+      "observedMarkerParity": "not observed in the movie lane (the autopilot certifies through the movie runtime shortcut)",
+      "shippedWorkOrderIsActionable": false,
+      "baselineFinding": "Shipped kind is build and the build verb is on the first line, BUILD A CLOSED SHELTER AROUND THE CORE. The final line is the interaction input, [F] CERTIFY THE WORKING SHELTER., so the last-line actionable check for kind build does not match. Recorded verbatim; no copy reworded."
+    }
+  ],
+  "sourceFileScope": "sourceFiles is an assertion that these files stay byte-identical to the shipped revision for the whole run: the gate re-hashes them live. Only files this run does not mutate are listed here. objectiveContract.sourceRef resolves to main/src/story/ux/objectiveDirector.ts, which stays in this list.",
+  "shippedSourceHashesAtRevision": {
+    "sourceRevision": "929e3d0",
+    "sourceRevisionFull": "929e3d0a650fedccd2d04e68db792e09634d416e",
+    "note": "Pre-implementation shipped bytes for the files this run legitimately mutates under the production lock. Relocated out of sourceFiles unchanged: nothing was deleted or re-hashed. These pins are no longer live-byte assertions; recover the exact bytes with git show 929e3d0:PATH and compare.",
+    "files": [
+      {
+        "path": "main/src/story/storyState.ts",
+        "sha256": "29d64b8c01b85594d472439746207c1c7d430631719a16b89cba05d7f9bb07c7",
+        "note": "beat union, order, milestones, jump aliases, completeStory"
+      },
+      {
+        "path": "main/src/story/emergentStoryDirector.ts",
+        "sha256": "516a58135a5238cc4def6400ab77a24995e860ae70c052e619591bc03973b083",
+        "note": "beat enter/tick arms; clears objectives on every beat enter"
+      },
+      {
+        "path": "main/src/story/storyObjectiveGuidance.ts",
+        "sha256": "37272cf5ca274d64017fbac747ba5f5eaface17b47e43bcf15a929290c5590eb",
+        "note": "per-beat objective classification"
+      },
+      {
+        "path": "main/src/story/storyBoundaryTelemetry.ts",
+        "sha256": "bcf7947cf09318f8345b7c206f51496996fa777b9238029d936b959d9a9fb0ef",
+        "note": "stateRef producers"
+      },
+      {
+        "path": "main/src/story/signedSceneAvRuntime.ts",
+        "sha256": "a843a84c9363d98711fa80b54ceb0f4a325783b38ba72a5dc5e07b412bd6e0d5",
+        "note": "signed AV rail (camera authority, FOV, postFx, score)"
+      },
+      {
+        "path": "main/src/story/generatedSceneAvRuntime.json",
+        "sha256": "6a17608a1bf77cbad984f19cd1c3aadf534e617d5aabc47a129c3b7e10cdf68f",
+        "note": "signed AV contract data"
+      },
+      {
+        "path": "main/src/story/autopilot.ts",
+        "sha256": "99ae0ff23093e0f08fc7bebcbb1c9aeda849c718dd170763f4ba4a543d6331fd",
+        "note": "movie-lane pilot"
+      },
+      {
+        "path": "main/src/story/emergentMovieRuntime.ts",
+        "sha256": "8e39a8b5e75380371ec0711a4adcaca6fcad54df40514189160eea8842155fdb",
+        "note": "movie-lane settlement shortcuts (see MF-1)"
+      },
+      {
+        "path": "main/chapter-journey-contract.json",
+        "sha256": "96a456b461993878e99af0e1a91c4be4073c345e6cf5ed65a7005ffa6722a1ea",
+        "note": "machine authority for registered mandatory objectives"
+      },
+      {
+        "path": "main/chapter-registry.json",
+        "sha256": "ba321be4f5e8ef1342aa1a04a015fd4148d5e151d5dff0dc4e7106e41499628a",
+        "note": "chapter registry"
+      },
+      {
+        "path": "main/story-authority.json",
+        "sha256": "a0ca18d2cb790c0635d640bc1e6a1cbad2a11b92347b0e6e3851ac27af4418f8",
+        "note": "runtime beat order and ceiling"
+      },
+      {
+        "path": "main/src/story/StoryDirectorDriver.tsx",
+        "sha256": "b12d80e28b06d033bf791c56e3387b533d04400c38c9b6a8e643a414075b4006",
+        "note": "bridge to the directional-marker renderer"
+      }
+    ]
+  }
+}

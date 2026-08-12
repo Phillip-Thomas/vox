@@ -5,16 +5,28 @@ import { readFile, writeFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
 
-const EXPECTED_SOURCE_SHA256 = '3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e';
-const EXPECTED_REVISION = 'intent-v1';
-const EXPECTED_ANCHOR_COUNT = 66;
+// The rail is compiled from EVERY signed scene contract the runtime carries, in
+// registration order. The first is the rail's identity (`source`); each one
+// pins its own bytes and its own anchor count, so a contract cannot drift and a
+// chapter cannot be silently dropped by regenerating.
+const SIGNED_SOURCES = [
+  {
+    contractPath: '../.codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json',
+    sha256: '3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e',
+    contractVersion: 'intent-v1',
+    anchorCount: 66
+  },
+  {
+    contractPath: '../.codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json',
+    sha256: '4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94',
+    contractVersion: 'draft-v6',
+    anchorCount: 10
+  }
+];
+const EXPECTED_ANCHOR_COUNT = SIGNED_SOURCES.reduce((total, entry) => total + entry.anchorCount, 0);
 
 const toolDir = path.dirname(fileURLToPath(import.meta.url));
 const mainDir = path.resolve(toolDir, '..');
-const sourcePath = path.resolve(
-  mainDir,
-  '../.codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json'
-);
 const outputPath = path.resolve(mainDir, 'src/story/generatedSceneAvRuntime.json');
 
 function requiredString(value, label) {
@@ -147,14 +159,14 @@ function sanitizeResetState(state) {
   };
 }
 
-function sanitizeContract(contract, sourceSha256) {
+function sanitizeContract(contract, sourceSha256, expected) {
   if (contract.schema !== 'paravoxia.sceneContract.v1') {
     throw new Error(`Unexpected scene contract schema: ${contract.schema}`);
   }
   if (contract.status !== 'frozen') throw new Error('Scene contract is not frozen.');
-  if (contract.contractVersion !== EXPECTED_REVISION) {
+  if (contract.contractVersion !== expected.contractVersion) {
     throw new Error(
-      `Scene contract revision drifted: expected ${EXPECTED_REVISION}, got ${contract.contractVersion}.`
+      `Scene contract revision drifted: expected ${expected.contractVersion}, got ${contract.contractVersion}.`
     );
   }
 
@@ -174,8 +186,10 @@ function sanitizeContract(contract, sourceSha256) {
       `${anchor.id}.cinematography[${index}].shotRef`
     ))
   }));
-  if (anchors.length !== EXPECTED_ANCHOR_COUNT) {
-    throw new Error(`Expected ${EXPECTED_ANCHOR_COUNT} anchors, got ${anchors.length}.`);
+  if (anchors.length !== expected.anchorCount) {
+    throw new Error(
+      `${contract.sceneId}: expected ${expected.anchorCount} anchors, got ${anchors.length}.`
+    );
   }
   const shots = contract.shots.map(sanitizeShot);
   const scoreCues = contract.score.cues.map(sanitizeScoreCue);
@@ -228,15 +242,67 @@ function sanitizeContract(contract, sourceSha256) {
   };
 }
 
-const sourceBytes = await readFile(sourcePath);
-const sourceSha256 = createHash('sha256').update(sourceBytes).digest('hex');
-if (sourceSha256 !== EXPECTED_SOURCE_SHA256) {
-  throw new Error(
-    `Frozen scene contract SHA drifted: expected ${EXPECTED_SOURCE_SHA256}, got ${sourceSha256}.`
-  );
+/**
+ * Merge the compiled contracts into one rail. Ids are globally unique across
+ * contracts by construction and re-asserted here, so a merge can never silently
+ * shadow one chapter's anchor with another's. Reset states are unioned by id:
+ * the domains are shared vocabulary and every contract restates the ones it
+ * relies on.
+ */
+function mergeCompiledContracts(parts) {
+  const [first] = parts;
+  const merged = {
+    schema: first.schema,
+    source: first.source,
+    sources: parts.map(part => part.source),
+    beats: [],
+    anchors: [],
+    shots: [],
+    scoreCues: [],
+    reset: {
+      triggers: [],
+      states: [],
+      sandboxNoOpRequired: parts.every(part => part.reset.sandboxNoOpRequired)
+    }
+  };
+  const resetById = new Map();
+  for (const part of parts) {
+    merged.beats.push(...part.beats);
+    merged.anchors.push(...part.anchors);
+    merged.shots.push(...part.shots);
+    merged.scoreCues.push(...part.scoreCues);
+    for (const trigger of part.reset.triggers) {
+      if (!merged.reset.triggers.includes(trigger)) merged.reset.triggers.push(trigger);
+    }
+    for (const state of part.reset.states) {
+      if (!resetById.has(state.id)) resetById.set(state.id, state);
+    }
+  }
+  merged.reset.states = [...resetById.values()];
+  assertUnique(merged.beats.map(beat => ({ id: beat })), 'beat');
+  assertUnique(merged.anchors, 'anchor');
+  assertUnique(merged.shots, 'shot');
+  assertUnique(merged.scoreCues, 'score cue');
+  return merged;
 }
-const contract = JSON.parse(sourceBytes.toString('utf8'));
-const generated = `${JSON.stringify(sanitizeContract(contract, sourceSha256), null, 2)}\n`;
+
+const compiled = [];
+for (const expected of SIGNED_SOURCES) {
+  const contractPath = path.resolve(mainDir, expected.contractPath);
+  const sourceBytes = await readFile(contractPath);
+  const sourceSha256 = createHash('sha256').update(sourceBytes).digest('hex');
+  if (sourceSha256 !== expected.sha256) {
+    throw new Error(
+      `Frozen scene contract SHA drifted for ${expected.contractPath}: `
+        + `expected ${expected.sha256}, got ${sourceSha256}.`
+    );
+  }
+  const contract = JSON.parse(sourceBytes.toString('utf8'));
+  compiled.push(sanitizeContract(contract, sourceSha256, expected));
+}
+
+const merged = mergeCompiledContracts(compiled);
+const generated = `${JSON.stringify(merged, null, 2)}\n`;
 
 if (process.argv.includes('--check')) {
   const existing = await readFile(outputPath, 'utf8').catch(() => '');
@@ -246,7 +312,8 @@ if (process.argv.includes('--check')) {
     );
   }
   process.stdout.write(
-    `scene-av runtime: ${EXPECTED_ANCHOR_COUNT} anchors, ${sourceSha256.slice(0, 12)} (current)\n`
+    `scene-av runtime: ${EXPECTED_ANCHOR_COUNT} anchors from ${SIGNED_SOURCES.length} signed `
+      + `contracts (${SIGNED_SOURCES.map(entry => entry.sha256.slice(0, 12)).join(', ')}) (current)\n`
   );
 } else {
   await writeFile(outputPath, generated);

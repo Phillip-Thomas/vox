@@ -1,0 +1,139 @@
+{
+  "capturedAt": "2026-08-12T03:00:44.485Z",
+  "base": "http://localhost:5176",
+  "which": "ask",
+  "strips": [
+    {
+      "id": "strip-ask-a",
+      "url": "?story=ch10-ask&movie=1&profile=LOW",
+      "tier": "LOW",
+      "viewport": "1280x720",
+      "frameCount": 1,
+      "frames": [
+        {
+          "file": "evidence/capture/strip-ask-a/01_reboard-at_ch10-ask.png",
+          "label": "reboard-at",
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "chips": {
+            "localLock": false,
+            "flightCorridor": false
+          },
+          "av": {
+            "active": true,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "history": [],
+            "reset": null
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "surface",
+            "targetKind": null,
+            "targetWorldId": null
+          },
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "dayPhase": 0.0491,
+          "daylight": 1,
+          "isNight": false,
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 10,
+            "pos": [
+              8.5,
+              51.03,
+              -8
+            ],
+            "goal": null,
+            "keys": [
+              "left",
+              "jump"
+            ],
+            "stillTime": 1,
+            "nudges": 0
+          }
+        }
+      ],
+      "pageErrors": []
+    },
+    {
+      "id": "strip-ask-b",
+      "url": "?story=ch10-ask&movie=1&profile=LOW",
+      "tier": "LOW",
+      "viewport": "1280x720",
+      "frameCount": 0,
+      "frames": [],
+      "pageErrors": [],
+      "relayFramingAtClaim": null,
+      "relayPosition": null
+    }
+  ],
+  "traces": {
+    "ask": [
+      {
+        "t": 0,
+        "beat": "ch10-ask",
+        "objectiveId": "station:return:crossing",
+        "markerLabel": "ORIGIN WORLD · COURSE",
+        "health": "ready",
+        "requiresMarker": "true",
+        "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+        "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+        "chips": {
+          "localLock": false,
+          "flightCorridor": false
+        },
+        "av": {
+          "active": true,
+          "anchorId": null,
+          "authority": null,
+          "fov": null,
+          "agency": null,
+          "postFx": [],
+          "history": [],
+          "reset": null
+        },
+        "system": {
+          "activePlanetId": "-1,-1:p1",
+          "locationMode": "surface",
+          "targetKind": null,
+          "targetWorldId": null
+        },
+        "flight": {
+          "phase": "surface",
+          "controlMode": "flight"
+        },
+        "dayPhase": 0.0491,
+        "daylight": 1,
+        "isNight": false,
+        "autopilot": {
+          "beat": "ch10-ask",
+          "clock": 10,
+          "pos": [
+            8.5,
+            51.03,
+            -8
+          ],
+          "goal": null,
+          "keys": [
+            "left",
+            "jump"
+          ],
+          "stillTime": 1,
+          "nudges": 0
+        }
+      }
+    ]
+  }
+}

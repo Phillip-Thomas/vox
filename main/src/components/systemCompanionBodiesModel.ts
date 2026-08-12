@@ -409,6 +409,131 @@ export function companionCelestialPlacement(
   return out;
 }
 
+// --- ST-0: the point that keeps time ----------------------------------------
+//
+// A moving point of light in the night sky over the two-world home, on the true
+// bearing to the issuing station. It is world state, not cutscene state: no
+// marker, no cue, no caption, no name, no look-at response, and no forced look
+// in any lane. A route intelligence sees a schedule; a new player sees a
+// satellite. Both are correct, and the game says neither.
+//
+// One billboard quad on the existing material class — no new shader, at most one
+// additional draw call — placed by `companionCelestialPlacement` along the true
+// active-planet → station direction, so the ground track and the flown bearing
+// are the same fact by construction rather than by tuning.
+
+/** One crossing of the sky, in seconds. */
+export const ST0_TRANSIT_PERIOD_SECONDS = 90;
+/**
+ * Uniform ellipse rate: 2π/90 ≈ 0.070 rad/s. That is 7.0x the star-field drift
+ * and ~8.7x the companion-body drift — unmistakably not a star, not the moon,
+ * and not the sibling world.
+ */
+export const ST0_ANGULAR_RATE_RAD_PER_SEC = (Math.PI * 2) / ST0_TRANSIT_PERIOD_SECONDS;
+/** ±57° of longitude, centred on the true bearing. */
+export const ST0_LONGITUDE_AMPLITUDE_RADIANS = 1.0;
+/** ±34° of latitude: from a −6.8° mean the track peaks near +27° elevation. */
+export const ST0_LATITUDE_AMPLITUDE_RADIANS = 0.6;
+/**
+ * The shipped MIN_BEACON_PIXELS precedent, in DEVICE pixels. Distance would
+ * otherwise shrink the dot below a pixel; the clamp keeps it findable and the
+ * ceiling below keeps it from ever reading as a disc.
+ */
+export const ST0_MIN_PIXELS = 2.4;
+/** It may never exceed ~3 px at any tier, DPR or viewport. */
+export const ST0_MAX_PIXELS = 3;
+/** Warm sodium-family amber: the station's kept light, at its first distance. */
+export const ST0_COLOR = '#ffb45a';
+/** Night-only, like the stars it lives among — and physically honest. */
+export const ST0_NIGHT_VISIBILITY_FLOOR = 0.35;
+
+/**
+ * ST-0's sky ellipse. Same machinery and same class of presentational fiction
+ * as the shipped companion ellipse, but at its own pace and amplitude, and
+ * centred on the true bearing rather than on a seeded phase.
+ */
+export function st0SystemMotionProfile(
+  bearingReference: Vec3Tuple
+): CompanionSystemMotionProfile {
+  const reference = normalizedTuple(bearingReference, FALLBACK_ORBIT_REFERENCE);
+  let latitudeAxis = normalizedTuple([-reference[2], 0, reference[0]], [0, 0, 1]);
+  let orbitAxis = normalizedTuple(crossTuple(reference, latitudeAxis), [0, 1, 0]);
+  if (orbitAxis[1] < 0) {
+    orbitAxis = negateTuple(orbitAxis);
+    latitudeAxis = negateTuple(latitudeAxis);
+  }
+  return {
+    orbitAxis,
+    latitudeAxis,
+    // Phase zero: the loop begins on the true bearing, so the ground track and
+    // the flown bearing coincide once per period by construction.
+    phaseRadians: 0,
+    periodSeconds: ST0_TRANSIT_PERIOD_SECONDS,
+    longitudeAmplitudeRadians: ST0_LONGITUDE_AMPLITUDE_RADIANS,
+    latitudeAmplitudeRadians: ST0_LATITUDE_AMPLITUDE_RADIANS
+  };
+}
+
+export interface St0RenderPredicateInput {
+  /** The camera is inside one of the two authored story worlds. */
+  storyWorld: boolean;
+  /** Durable: the two-world arc finished. */
+  storyComplete: boolean;
+  /** Durable: free play was handed back at the second hearth. */
+  twoWorldHandoff: boolean;
+  /** The station sandbox, or any other development surface. */
+  sandbox: boolean;
+}
+
+/**
+ * Stateless render predicate over durable milestones. It survives quit and
+ * resume, never needs clearing, and keeps rendering in `done` after chapter 10
+ * completes as well, because the sky keeps its fact. In pure sandbox, in the
+ * station sandbox, and in every pre-`done` story beat it is false, so those
+ * render byte-identically to the shipped build.
+ */
+export function st0RenderPredicate(input: St0RenderPredicateInput): boolean {
+  if (input.sandbox) return false;
+  return input.storyWorld && input.storyComplete && input.twoWorldHandoff;
+}
+
+/**
+ * The angular size the quad must take to occupy a given number of DEVICE pixels
+ * at a given distance, so the clamp means device pixels on every DPR.
+ */
+export function st0QuadScale(
+  centerDistance: number,
+  verticalFovRadians: number,
+  viewportHeightPixels: number,
+  devicePixelRatio: number,
+  projectedPixels: number
+): number {
+  const safeHeight = Math.max(1, viewportHeightPixels * Math.max(1, devicePixelRatio));
+  const pixelsPerRadian = safeHeight / Math.max(1e-6, verticalFovRadians);
+  const angular = Math.max(0, projectedPixels) / Math.max(1e-6, pixelsPerRadian);
+  return Math.max(1e-4, centerDistance * angular);
+}
+
+/** Never smaller than findable, never large enough to read as a disc. */
+export function st0ClampedPixels(naturalPixels: number): number {
+  if (!Number.isFinite(naturalPixels)) return ST0_MIN_PIXELS;
+  return Math.min(ST0_MAX_PIXELS, Math.max(ST0_MIN_PIXELS, naturalPixels));
+}
+
+/**
+ * Night-only visibility, derived from the shipped daylight curve rather than
+ * from a second clock: full while the sky is dark, gone by daylight, and
+ * CONSTANT in between — no pulse and no blink, because a blink is a cue and
+ * cues are forbidden. It is the same rule the stars it lives among follow.
+ */
+export function st0NightVisibility(daylight: number): number {
+  if (!Number.isFinite(daylight)) return 0;
+  const darkness = 1 - THREE.MathUtils.clamp(daylight, 0, 1);
+  const floor = 1 - ST0_NIGHT_VISIBILITY_FLOOR;
+  if (darkness <= floor) return 0;
+  return THREE.MathUtils.clamp((darkness - floor) / Math.max(1e-6, 1 - floor), 0, 1);
+}
+
 export function companionExactTerrainFaceCount(instanceData: Float32Array, terrainCount: number): number {
   let faces = 0;
   for (let index = 0; index < terrainCount; index++) {

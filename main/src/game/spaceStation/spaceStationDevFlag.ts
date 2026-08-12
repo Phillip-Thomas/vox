@@ -1,4 +1,6 @@
 import type { SpaceStationAddress } from './spaceStationTypes.ts';
+import { hasMilestone } from '../systems/progressionSystem.ts';
+import { getStoryStateSnapshot, STORY_MILESTONES } from '../../story/storyState.ts';
 
 /**
  * The spaceStation is a development surface, not shipped content.
@@ -123,3 +125,48 @@ export function parseSpaceStationFlag(raw: string | null): SpaceStationAddress |
 }
 
 export { DEFAULT_ADDRESS as DEFAULT_SPACE_STATION_ADDRESS };
+
+// --- The story fence --------------------------------------------------------
+//
+// Chapter 10 turns the dev flag into a milestone-driven story predicate. Both
+// predicates below TEST SANDBOX MEMBERSHIP FIRST, so `?spacestation=` behaviour
+// stays byte-identical: the sandbox is not a story world and never consults a
+// story milestone. Everything else is a decision about the player's own save.
+
+/**
+ * True when the station being approached belongs to the story's world rather
+ * than to a development sandbox. A save that has started the story owns its
+ * system's station, including in free play after the story is complete.
+ */
+export function isStorySpaceStationContext(): boolean {
+  if (isSpaceStationSandbox()) return false;
+  const story = getStoryStateSnapshot();
+  if (story.active || story.chapter === 'complete') return true;
+  return hasMilestone(STORY_MILESTONES.started);
+}
+
+/**
+ * Whether the approach driver may publish its advisory register, grant
+ * `canDock`, or let [F] commit-and-enter the station.
+ *
+ * In story worlds this run answers NO, always: `story:station-docking-authorized`
+ * is defined and set by nothing. A player who noses inside CORRIDOR_RANGE gets
+ * exactly nothing — no advisory, no dock offer, no refusal line. The station
+ * does not answer this run: it is never the actor, and a refusal is an act.
+ */
+export function spaceStationDockingAuthorized(): boolean {
+  if (!isStorySpaceStationContext()) return true;
+  return hasMilestone(STORY_MILESTONES.stationDockingAuthorized);
+}
+
+/**
+ * Whether a station target may be committed at all. In story worlds the fence
+ * is the claimed bearing: the player asked, the network answered, and the going
+ * is theirs. Durable, so post-run free play may legally re-target the station
+ * after flying home — the bearing, once claimed, is never un-claimed, which is
+ * also the fiction.
+ */
+export function spaceStationTargetingAuthorized(): boolean {
+  if (!isStorySpaceStationContext()) return true;
+  return hasMilestone(STORY_MILESTONES.ch10BearingClaimed);
+}

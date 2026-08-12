@@ -1,0 +1,87 @@
+{
+  "capturedAt": "2026-08-12T03:20:06.760Z",
+  "base": "http://localhost:5176",
+  "url": "?story=ch10-cold&profile=LOW",
+  "method": "WebGL2 draw entry points wrapped in an init script; same scene and camera, night vs noon",
+  "samples": {
+    "warmup": {
+      "frames": 120,
+      "calls": 5160,
+      "callsPerFrame": 43,
+      "programsCreated": 0,
+      "fps": 60.37,
+      "st0Visible": false,
+      "st0Opacity": 0,
+      "dayPhase": 0.575,
+      "daylight": 0
+    },
+    "st0Visible": {
+      "frames": 180,
+      "calls": 7920,
+      "callsPerFrame": 44,
+      "programsCreated": 0,
+      "fps": 57.3,
+      "st0Visible": true,
+      "st0Opacity": 0.7919653600497246,
+      "dayPhase": 0.7055,
+      "daylight": 0
+    },
+    "st0VisibleCheck": true,
+    "st0Hidden": {
+      "frames": 180,
+      "calls": 7740,
+      "callsPerFrame": 43,
+      "programsCreated": 0,
+      "fps": 60.06,
+      "st0Visible": false,
+      "st0Opacity": 0.0570857478059206,
+      "dayPhase": 0.8689,
+      "daylight": 0
+    },
+    "st0HiddenCheck": false,
+    "night": {
+      "frames": 180,
+      "calls": 7920,
+      "callsPerFrame": 44,
+      "programsCreated": 0,
+      "fps": 57.3,
+      "st0Visible": true,
+      "st0Opacity": 0.7919653600497246,
+      "dayPhase": 0.7055,
+      "daylight": 0
+    },
+    "noon": {
+      "frames": 180,
+      "calls": 7740,
+      "callsPerFrame": 43,
+      "programsCreated": 0,
+      "fps": 60.06,
+      "st0Visible": false,
+      "st0Opacity": 0.0570857478059206,
+      "dayPhase": 0.8689,
+      "daylight": 0
+    },
+    "nightAgain": {
+      "frames": 180,
+      "calls": 7920,
+      "callsPerFrame": 44,
+      "programsCreated": 0,
+      "fps": 57.3,
+      "st0Visible": true,
+      "st0Opacity": 0.7919653600497246,
+      "dayPhase": 0.7055,
+      "daylight": 0
+    }
+  },
+  "pageErrors": [],
+  "reachedVisible": true,
+  "reachedHidden": true,
+  "st0DrawCallDelta": 1,
+  "st0DrawCallDeltaRepeat": 1,
+  "shaderProgramsAfterSt0Appears": 0,
+  "acceptance": {
+    "rule": "ST-0 adds at most one draw call and zero shader programs",
+    "drawCallDeltaWithinOne": true,
+    "zeroNewPrograms": true
+  }
+}

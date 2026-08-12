@@ -1,0 +1,20 @@
+{
+  "schema": "paravoxia.humanDecision.v1",
+  "runId": "{{RUN_ID}}",
+  "contractVersion": "draft-v0",
+  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
+  "reviewer": "{{HUMAN_APPROVER}}",
+  "reviewedAt": "{{ISO_8601}}",
+  "decision": "pending",
+  "headedRealGpuEvidence": false,
+  "scopeMatchesProductionLock": false,
+  "evidenceRefs": [],
+  "tasteRationale": "{{WHAT_WORKS_WHAT_DOES_NOT_AND_WHY}}",
+  "dissentDisposition": "{{DISPOSITION_OR_PENDING}}",
+  "acceptedExceptions": [],
+  "remainingGates": [
+    "{{GATE}}"
+  ],
+  "publishDecision": "not_requested",
+  "publishAuthorityRef": null
+}

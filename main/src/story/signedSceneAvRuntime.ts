@@ -21,11 +21,41 @@ import {
 import { EMERGENT_MAW_MILESTONES } from './emergentMawRepair.ts';
 import { AUTHORED_DIVE_MILESTONES } from './emergentDive.ts';
 import { EMERGENT_UNIQUE_ITEM_MILESTONES } from './emergentUniqueItems.ts';
-import { setEmergentScorePaused } from './emergentScoreDirector.ts';
+import {
+  CH10_ANCHOR_INTENSITY,
+  setEmergentScorePaused
+} from './emergentScoreDirector.ts';
 
 export const SIGNED_SCENE_AV_SHA256 =
   '3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e';
 export const SIGNED_SCENE_AV_REVISION = 'intent-v1';
+/**
+ * The rail now carries two signed contracts. The A4→ch9 contract above remains
+ * the rail's identity (`source`); chapter 10 is registered beside it, and every
+ * signed contract the generated runtime derives from must appear here with its
+ * exact bytes or the runtime refuses to load.
+ */
+export const CH10_SCENE_AV_SHA256 =
+  '4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94';
+export const CH10_SCENE_AV_REVISION = 'draft-v6';
+export const SIGNED_SCENE_AV_SOURCES: readonly {
+  readonly sceneId: string;
+  readonly contractVersion: string;
+  readonly sha256: string;
+}[] = Object.freeze([
+  Object.freeze({
+    sceneId: 'distance-between-fires',
+    contractVersion: SIGNED_SCENE_AV_REVISION,
+    sha256: SIGNED_SCENE_AV_SHA256
+  }),
+  Object.freeze({
+    sceneId: 'ch10-station-introduction',
+    contractVersion: CH10_SCENE_AV_REVISION,
+    sha256: CH10_SCENE_AV_SHA256
+  })
+]);
+/** 66 anchors from the A4→ch9 contract, plus chapter 10's exactly ten. */
+const SIGNED_SCENE_AV_ANCHOR_COUNT = 76;
 
 interface SignedAnchor {
   id: string;
@@ -92,14 +122,17 @@ interface SignedScoreCue {
   resetRef: string;
 }
 
+interface SignedSceneAvSource {
+  sceneId: string;
+  contractVersion: string;
+  sha256: string;
+  status: string;
+}
+
 interface SignedSceneAvContract {
   schema: string;
-  source: {
-    sceneId: string;
-    contractVersion: string;
-    sha256: string;
-    status: string;
-  };
+  source: SignedSceneAvSource;
+  sources: SignedSceneAvSource[];
   beats: string[];
   anchors: SignedAnchor[];
   shots: SignedShot[];
@@ -183,9 +216,15 @@ if (
   contract.schema !== 'paravoxia.sceneAvRuntime.v1'
   || contract.source.contractVersion !== SIGNED_SCENE_AV_REVISION
   || contract.source.sha256 !== SIGNED_SCENE_AV_SHA256
-  || contract.anchors.length !== 66
+  || contract.anchors.length !== SIGNED_SCENE_AV_ANCHOR_COUNT
+  || contract.sources.length !== SIGNED_SCENE_AV_SOURCES.length
+  || SIGNED_SCENE_AV_SOURCES.some((expected, index) => (
+    contract.sources[index]?.sceneId !== expected.sceneId
+    || contract.sources[index]?.contractVersion !== expected.contractVersion
+    || contract.sources[index]?.sha256 !== expected.sha256
+  ))
 ) {
-  throw new Error('Generated scene AV runtime does not match the frozen intent-v1 contract.');
+  throw new Error('Generated scene AV runtime does not match its frozen signed contracts.');
 }
 
 const anchorsById = new Map(contract.anchors.map(anchor => [anchor.id, anchor]));
@@ -211,7 +250,10 @@ const SYMBOLIC_BEAT_BOUNDARY_ANCHORS: Readonly<Record<string, string>> = Object.
   'ch4-comply': 'anc.comply.fire-order',
   'ch4-defy': 'anc.defy.tree-order',
   'a4-exhale': 'anc.a4.held-stillness',
-  'ch5-maw': 'anc.a4.handback'
+  'ch5-maw': 'anc.a4.handback',
+  // ch10-cold's entry anchor IS the re-activation: the fault is noticed at the
+  // boundary itself, and nothing physical precedes it inside the beat.
+  'ch10-cold': 'anc.ch10.cold-noticed'
 });
 for (const [beat, anchorId] of Object.entries(SYMBOLIC_BEAT_BOUNDARY_ANCHORS)) {
   const entryAnchor = anchorsById.get(anchorId);
@@ -325,7 +367,7 @@ function createLensRail(shot: SignedShot, anchor: SignedAnchor): CompiledSceneAv
       from: shot.lens.startFovDeg,
       to: shot.lens.endFovDeg,
       easing: signedLensEasing(shot.lens.easing),
-      reducedMotion: { from: SANDBOX_FOV, to: SANDBOX_FOV }
+      reducedMotion: reducedMotionLensHold(shot)
     }]
   });
 }
@@ -342,11 +384,35 @@ function applyLens(): void {
     ? sampleSceneAvRail(activeLensRail, lensElapsedMs / 1000, { reducedMotion }).fov
     : null;
   appliedFovDeg = sampled?.amount
-    ?? (reducedMotion ? SANDBOX_FOV : lens.endFovDeg);
+    ?? (reducedMotion ? reducedMotionLensHold(activeShot).to : lens.endFovDeg);
   setStoryTargetFov(appliedFovDeg);
 }
 
+/**
+ * What reduced motion HOLDS instead of easing.
+ *
+ * Skipping a lens move is an accessibility promise about MOTION, not a licence
+ * to change what the frame contains. For a dramatic push the neutral sandbox
+ * FOV is right — the move was the effect, so not moving means not doing it.
+ * Chapter 10's transit FOV is not an effect: 70 is the vehicle's own state, the
+ * fact of sitting in a cockpit, and holding 75 there made MEDIUM with reduced
+ * motion frame the station differently from every other profile. Reduced motion
+ * still skips the EASE — from and to are equal, so nothing animates — it just
+ * skips it to the value the shot actually lands on.
+ *
+ * Scoped to ch10 deliberately: the shipped ch1-ch9 shots keep their existing
+ * reduced-motion behaviour byte-for-byte.
+ */
+function reducedMotionLensHold(shot: SignedShot): { from: number; to: number } {
+  if (!shot.beat.startsWith('ch10')) return { from: SANDBOX_FOV, to: SANDBOX_FOV };
+  return { from: shot.lens.endFovDeg, to: shot.lens.endFovDeg };
+}
+
 function scoreIntensityFor(anchor: SignedAnchor): number | null {
+  // Chapter 10 publishes its ladder explicitly rather than deriving one from
+  // anchor position: the contract pins a value per anchor and names this
+  // function as the single authority for every intensity claim it makes.
+  if (anchor.beat.startsWith('ch10')) return CH10_ANCHOR_INTENSITY[anchor.id] ?? null;
   // Chapter 7's score follows committed repair and boarding facts. Its signed
   // anchors still own camera/PostFX evidence, but may not manufacture a second
   // time/index-based intensity progression over the gameplay-derived mix.
@@ -715,6 +781,18 @@ export function enterSignedSceneAvBeat(
     publish();
   }
   hydrateSignedAnchorsFromProgression();
+}
+
+/**
+ * Activate a signed anchor by id from a runtime producer that already owns the
+ * fact. Ordering, one-shot latching and beat membership are enforced by
+ * `activateAnchor`, so a producer cannot fire an anchor out of sequence or
+ * twice — which is what makes the chapter-10 seam-before-resolve invariant
+ * executable rather than merely asserted.
+ */
+export function activateSignedSceneAnchorById(anchorId: string): boolean {
+  const anchor = anchorsById.get(anchorId);
+  return anchor ? activateAnchor(anchor, 'story-event') : false;
 }
 
 /** Future runtime producers can publish a frozen semantic key without coupling to AV. */

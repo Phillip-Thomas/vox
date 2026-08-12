@@ -4,6 +4,7 @@ import {
   markMilestone,
   type ActorProgressionState
 } from '../game/systems/progressionSystem.ts';
+import { storyChapterAtLeast, type StoryChapter } from './storyState.ts';
 import { STORY_COORDINATE } from './world/storyWorld.ts';
 
 /** The sole persistent capability that expands the authored Story system. */
@@ -63,15 +64,34 @@ export function resolveStoryResumeWorldId(
  * Late-story ownership is stronger than the last saved surface. A reload or
  * direct rehearsal at/after landfall must open on Tidegarden even when the
  * previous save still names the origin world.
+ *
+ * The ownership test is a CHAPTER-ORDER comparison, never an enumeration of
+ * chapter names. The enumeration this replaced (`ch9` or `complete`) silently
+ * excluded ch10 — the station chapter opens on Tidegarden's second hearth, so
+ * booting it on the origin world drew the sibling planet's own shell at the
+ * camera, let the ground under her feet resolve as a lockable system body, and
+ * ran both surface beats against the wrong terrain seed. Every chapter added
+ * after ch9 inherits the right answer from the ordering instead of waiting to
+ * be listed here.
+ *
+ * The one exception below is physical, not ordinal: a ship already in flight is
+ * owned by the world it left.
  */
 export function resolveStoryBootWorldId(
   _savedWorldId: string | null | undefined,
   routeOnline: boolean,
   point: { readonly chapter: string; readonly beat: string | null }
 ): string {
-  const tidegardenOwned = point.beat === 'ch8-landfall'
-    || point.chapter === 'ch9'
-    || point.chapter === 'complete';
+  // A crossing that is under way belongs to the world it LAUNCHED FROM, in
+  // whatever chapter it happens to live. Ch8's launch and crossing are excluded
+  // by the ordering below; ch10's transit is not, because chapter 10 flies back
+  // to the origin in `ch10-ask` (the relay is there and nowhere else) and lifts
+  // off from the wreck. Naming it here keeps the physical rule ahead of the
+  // ordinal one instead of letting a chapter number claim a ship in flight.
+  const crossingFromOrigin = point.beat === 'ch10-transit';
+  const tidegardenOwned = !crossingFromOrigin
+    && (point.beat === 'ch8-landfall'
+      || storyChapterAtLeast(point.chapter as StoryChapter, 'ch9'));
   // Opening the route exposes the sibling body; it does not move an unfinished
   // Story there. Ch7 reconstruction/boarding and Ch8 launch/crossing are still
   // physically owned by the origin, even when a previous free-play save or a
@@ -82,12 +102,30 @@ export function resolveStoryBootWorldId(
 }
 
 /**
- * Live Story routing differs from boot routing at exactly one physical seam:
- * the Chapter 8 midpoint has already transferred system-flight ownership to
- * Tidegarden, but the director remains on `ch8-crossing` until the destination
- * scene proves ready. Preserve that committed world during the readiness gap.
+ * The world each crossing beat is flying TO. Live routing differs from boot
+ * routing at exactly these physical seams: system-flight ownership has already
+ * transferred to the destination while the director still reports the crossing
+ * beat, and that committed world must survive until the destination scene
+ * proves ready.
+ *
+ * BOTH DIRECTIONS BELONG HERE. Only ch8's outbound leg was listed, so chapter
+ * 10's return crossing fell through to the boot resolver — which answers
+ * Tidegarden for `ch10-ask` — and the app swapped the world back and re-seated
+ * the player at the Tidegarden launch pose every time the scene re-resolved.
+ * The ship relaunched, crossed, was reclaimed, and relaunched again, eighteen
+ * times over, and `activePlanetId` could never leave the sibling: the boot
+ * answer was overwriting the crossing that was already under way.
+ */
+const CROSSING_DESTINATION_WORLD_ID: Readonly<Record<string, string>> = {
+  'ch8-crossing': TIDEGARDEN_WORLD_ID,
+  'ch10-ask': STORY_PRIMARY_WORLD_ID
+};
+
+/**
  * Reloads still use `resolveStoryBootWorldId` and therefore restart an
- * unfinished crossing from the origin instead of trusting partial runtime state.
+ * unfinished crossing from the world it launched from, instead of trusting
+ * partial runtime state. This resolver only protects a crossing the runtime and
+ * the system flight ALREADY AGREE on.
  */
 export function resolveStoryRuntimeWorldId(
   currentWorldId: string,
@@ -95,12 +133,15 @@ export function resolveStoryRuntimeWorldId(
   point: { readonly chapter: string; readonly beat: string | null },
   activePlanetId: string | null
 ): string {
-  const committedTidegardenCrossing = routeOnline
-    && point.beat === 'ch8-crossing'
-    && currentWorldId === TIDEGARDEN_WORLD_ID
-    && activePlanetId === TIDEGARDEN_WORLD_ID;
-  return committedTidegardenCrossing
-    ? TIDEGARDEN_WORLD_ID
+  const destination = point.beat === null
+    ? undefined
+    : CROSSING_DESTINATION_WORLD_ID[point.beat];
+  const committedCrossing = routeOnline
+    && destination !== undefined
+    && currentWorldId === destination
+    && activePlanetId === destination;
+  return committedCrossing
+    ? destination
     : resolveStoryBootWorldId(currentWorldId, routeOnline, point);
 }
 

@@ -1,0 +1,753 @@
+{
+  "deliverable": "evidence/score/carrier-legality.json",
+  "regeneratedAt": "2026-08-12T11:14:33.522Z",
+  "regeneratedBecause": "the carrier was re-pitched from scale degree 14 to degree 17 (pitch class 5, the suspended-fourth/eleventh colour) and its octave double from 26 to 29; this file and carrier-illegal-control_no-carrier.wav predated that change",
+  "moduleIdentity": {
+    "rule": "constants, moods and the mood override are all read from the storyScore instance offlineRender.ts itself imports, resolved out of the transformed renderer source",
+    "storyScoreSpecifier": "/src/story/storyScore.ts?t=1786533148558"
+  },
+  "carrierPitch": {
+    "carrierDegree": 17,
+    "carrierDegreeExpected": 17,
+    "carrierDegreeMatches": true,
+    "octaveDoubleDegree": 29,
+    "octaveDoubleExpected": 29,
+    "octaveDoubleMatches": true,
+    "octaveDoubleIsCarrierPlus12": true,
+    "carrierPitchClass": 5,
+    "carrierPitchClassExpected": 5,
+    "carrierPitchClassMatches": true,
+    "octaveDoublePitchClass": 5,
+    "octaveDoubleSamePitchClass": true,
+    "source": "storyScore.ts exports CH10_CARRIER_DEGREE / CH10_CARRIER_OCTAVE_DEGREE"
+  },
+  "chordMembership": {
+    "rule": "the carrier must be a chord tone of NEITHER home voicing, and the ninth it replaced must be a chord tone of BOTH — that is why the ninth was not new information at birth",
+    "carrierPitchClass": 5,
+    "replacedNinthDegree": 14,
+    "replacedNinthPitchClass": 2,
+    "homeChords": {
+      "ch9-hearth": {
+        "chord": [
+          0,
+          4,
+          7,
+          10,
+          14
+        ],
+        "pitchClasses": [
+          0,
+          2,
+          4,
+          7,
+          10
+        ]
+      },
+      "ch8-crossing": {
+        "chord": [
+          0,
+          3,
+          7,
+          9,
+          14
+        ],
+        "pitchClasses": [
+          0,
+          2,
+          3,
+          7,
+          9
+        ]
+      }
+    },
+    "carrierAbsentFromHearth": true,
+    "carrierAbsentFromCrossing": true,
+    "carrierAbsentFromBothHomeChords": true,
+    "replacedNinthPresentInHearth": true,
+    "replacedNinthPresentInCrossing": true,
+    "replacedNinthPresentInBothHomeChords": true,
+    "comparedAs": "pitch classes (degree mod 12), so octave placement cannot hide a membership"
+  },
+  "carrierLifespanByVariant": {
+    "rule": "every ch10 variant from relay-answer onward voices the carrier degree in its chord; no variant before it does",
+    "variantOrder": [
+      "cold-settled",
+      "fault-ledger",
+      "refused",
+      "crossing-back",
+      "relay-ask",
+      "relay-answer",
+      "bearing-claimed",
+      "transit-hold",
+      "seam-ebb",
+      "station-resolved"
+    ],
+    "carrierBornAtVariant": "relay-answer",
+    "firstVariantVoicingCarrier": "relay-answer",
+    "bornAtRelayAnswer": true,
+    "allFromAnswerOnwardVoiceCarrier": true,
+    "noneBeforeAnswerVoiceCarrier": true,
+    "perVariant": [
+      {
+        "variant": "cold-settled",
+        "chord": [
+          -2,
+          4,
+          7,
+          10,
+          14
+        ],
+        "progression": [
+          [
+            -2,
+            4,
+            7,
+            10
+          ],
+          [
+            -2,
+            7,
+            12
+          ]
+        ],
+        "melodyScale": [
+          0,
+          2,
+          4,
+          7,
+          9,
+          10,
+          12,
+          14
+        ],
+        "pattern": [
+          0,
+          null,
+          null,
+          null,
+          7,
+          null,
+          null,
+          null
+        ],
+        "voicesCarrier": false,
+        "inChord": false,
+        "inProgression": false,
+        "inMelodyScale": false,
+        "inPattern": false,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "fault-ledger",
+        "chord": [
+          -2,
+          4,
+          7,
+          10,
+          14
+        ],
+        "progression": [
+          [
+            -2,
+            4,
+            7,
+            10
+          ],
+          [
+            -2,
+            7,
+            12
+          ]
+        ],
+        "melodyScale": [
+          0,
+          7,
+          12
+        ],
+        "pattern": [
+          0,
+          null,
+          null,
+          null,
+          7,
+          null,
+          null,
+          null
+        ],
+        "voicesCarrier": false,
+        "inChord": false,
+        "inProgression": false,
+        "inMelodyScale": false,
+        "inPattern": false,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "refused",
+        "chord": [
+          -2,
+          7,
+          12
+        ],
+        "progression": null,
+        "melodyScale": null,
+        "pattern": [
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "voicesCarrier": false,
+        "inChord": false,
+        "inProgression": false,
+        "inMelodyScale": false,
+        "inPattern": false,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "crossing-back",
+        "chord": [
+          -2,
+          3,
+          7,
+          9,
+          14
+        ],
+        "progression": [
+          [
+            -2,
+            4,
+            7,
+            10
+          ],
+          [
+            0,
+            3,
+            7,
+            9
+          ],
+          [
+            5,
+            9,
+            12,
+            16
+          ]
+        ],
+        "melodyScale": [
+          0,
+          2,
+          3,
+          5,
+          7,
+          9,
+          10,
+          12,
+          14
+        ],
+        "pattern": [
+          0,
+          null,
+          7,
+          null,
+          9,
+          null,
+          14,
+          null
+        ],
+        "voicesCarrier": false,
+        "inChord": false,
+        "inProgression": false,
+        "inMelodyScale": false,
+        "inPattern": false,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "relay-ask",
+        "chord": [
+          -2,
+          3,
+          7,
+          9,
+          14
+        ],
+        "progression": [
+          [
+            0,
+            7
+          ],
+          [
+            0,
+            7,
+            12
+          ]
+        ],
+        "melodyScale": [
+          0,
+          7,
+          12
+        ],
+        "pattern": [
+          0,
+          null,
+          7,
+          null,
+          0,
+          null,
+          7,
+          null
+        ],
+        "voicesCarrier": false,
+        "inChord": false,
+        "inProgression": false,
+        "inMelodyScale": false,
+        "inPattern": false,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "relay-answer",
+        "chord": [
+          -2,
+          3,
+          7,
+          9,
+          17
+        ],
+        "progression": [
+          [
+            0,
+            7
+          ],
+          [
+            0,
+            7,
+            17
+          ]
+        ],
+        "melodyScale": [
+          0,
+          7,
+          12,
+          17
+        ],
+        "pattern": [
+          0,
+          null,
+          7,
+          null,
+          17,
+          null,
+          null,
+          null
+        ],
+        "voicesCarrier": true,
+        "inChord": true,
+        "inProgression": true,
+        "inMelodyScale": true,
+        "inPattern": true,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "bearing-claimed",
+        "chord": [
+          0,
+          5,
+          9,
+          17
+        ],
+        "progression": [
+          [
+            0,
+            5,
+            9,
+            17
+          ],
+          [
+            0,
+            7,
+            9,
+            17
+          ]
+        ],
+        "melodyScale": [
+          0,
+          2,
+          5,
+          7,
+          9,
+          12,
+          17
+        ],
+        "pattern": [
+          0,
+          null,
+          null,
+          9,
+          null,
+          null,
+          17,
+          null
+        ],
+        "voicesCarrier": true,
+        "inChord": true,
+        "inProgression": true,
+        "inMelodyScale": true,
+        "inPattern": true,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "transit-hold",
+        "chord": [
+          0,
+          5,
+          9,
+          17
+        ],
+        "progression": [
+          [
+            0,
+            5,
+            9,
+            17
+          ],
+          [
+            2,
+            7,
+            9,
+            17
+          ]
+        ],
+        "melodyScale": [
+          0,
+          2,
+          5,
+          7,
+          9,
+          12,
+          17
+        ],
+        "pattern": [
+          0,
+          null,
+          9,
+          null,
+          17,
+          null,
+          9,
+          null
+        ],
+        "voicesCarrier": true,
+        "inChord": true,
+        "inProgression": true,
+        "inMelodyScale": true,
+        "inPattern": true,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "seam-ebb",
+        "chord": [
+          0,
+          9,
+          17
+        ],
+        "progression": null,
+        "melodyScale": null,
+        "pattern": [
+          0,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null
+        ],
+        "voicesCarrier": true,
+        "inChord": true,
+        "inProgression": false,
+        "inMelodyScale": false,
+        "inPattern": false,
+        "voicesOctaveDouble": false
+      },
+      {
+        "variant": "station-resolved",
+        "chord": [
+          0,
+          7,
+          12,
+          17,
+          29
+        ],
+        "progression": [
+          [
+            0,
+            7,
+            12
+          ],
+          [
+            0,
+            9,
+            17,
+            29
+          ]
+        ],
+        "melodyScale": [
+          0,
+          7,
+          12,
+          17
+        ],
+        "pattern": [
+          0,
+          null,
+          null,
+          null,
+          17,
+          null,
+          null,
+          null
+        ],
+        "voicesCarrier": true,
+        "inChord": true,
+        "inProgression": true,
+        "inMelodyScale": true,
+        "inPattern": true,
+        "voicesOctaveDouble": true
+      }
+    ]
+  },
+  "anchorIntensity": {
+    "anc.ch10.cold-noticed": 0.24,
+    "anc.ch10.fault-read": 0.3,
+    "anc.ch10.fabrication-refused": 0.22,
+    "anc.ch10.relay-ask": 0.34,
+    "anc.ch10.relay-answer": 0.36,
+    "anc.ch10.bearing-claimed": 0.38,
+    "anc.ch10.transit-ignite": 0.42,
+    "anc.ch10.seam-of-light": 0.36,
+    "anc.ch10.station-resolved": 0.44,
+    "anc.ch10.threshold-handback": 0.28
+  },
+  "maxAnchorIntensity": 0.44,
+  "maxIntensityRule": "CH10_MAX_INTENSITY 0.44 is the run ceiling and is reported through scoreIntensityFor",
+  "maxIntensityExport": 0.44,
+  "maxAnchorIntensityIs044": true,
+  "ceilingRespected": true,
+  "carrierBirth": "anc.ch10.relay-answer",
+  "carrierDeath": "released at anc.ch10.threshold-handback via reset-score (releaseChapter10Score)",
+  "snapshotAtProbe": {
+    "variant": null,
+    "carrierAlive": false,
+    "intensity": null,
+    "maxIntensity": 0.44
+  },
+  "octaveDoubleRequiresCarrier": {
+    "rule": "getChapter10ScoreMood(station-resolved, carrierAlive=false) filters CH10_CARRIER_OCTAVE_DEGREE out of the chord",
+    "ruleHoldsAtTheEngine": true,
+    "chordWithCarrier": [
+      0,
+      7,
+      12,
+      17,
+      29
+    ],
+    "chordWithoutCarrier": [
+      0,
+      7,
+      12,
+      17
+    ],
+    "octaveDoubleFilteredOut": true,
+    "control": "evidence/score/carrier-illegal-control_no-carrier.wav — station-resolved, carrierAlive=false, ch10-transit, intensity 0.44, 16s, combined music bus",
+    "controlDurationSeconds": 16,
+    "controlDurationChangedFrom": 6,
+    "controlDurationChangeReason": "the octave double is voiced only in the SECOND progression chord [0, 9, 17, 29], and the engine turns the progression on a STEPS_PER_CHORD boundary of 2 bars = 7.06s at 68 bpm. The previous 6s control ended before that turn, so it could not contain the moment it existed to disprove — with and without the carrier were sample-equivalent for a reason that had nothing to do with the carrier. The control is now 16s, which contains the turn with margin.",
+    "matchedRenderNote": "withCarrierRmsDb / withoutCarrierRmsDb are a MATCHED pair: identical beat, intensity, era, legacy scene and duration (16s), differing only in carrierAlive. The 12s figure below is the same render settings as the pinned station-resolved_combined.wav and is kept so the historic number stays comparable.",
+    "withCarrierRmsDb": -21.46370955999529,
+    "withoutCarrierRmsDb": -21.551882664536972,
+    "deltaDb": 0.088173,
+    "withCarrierSteadyRmsDb": -20.44515133851677,
+    "withoutCarrierSteadyRmsDb": -20.58414739363513,
+    "steadyDeltaDb": 0.138996,
+    "steadyWindow": "8-16s of the 16s render, i.e. entirely past the 7.06s progression turn",
+    "maxAbsSampleDiff": 0.0222417414188385,
+    "firstAudibleDiffSec": 6.9793,
+    "withCarrier12sRmsDb": -21.261297523163076,
+    "withCarrier12sSteadyRmsDb": -19.231960102228218,
+    "rmsToleranceDb": 0.001,
+    "differs": true,
+    "withCarrierLouder": true,
+    "controlWavSha256": "d74ff25cf786b8f5bbe661dc81552c1f59f2bd077574dc644046e5f64cc8fa49",
+    "engine": {
+      "padVoiceCount": 4,
+      "staticChordVoicedWithCarrier": [
+        0,
+        7,
+        12,
+        17
+      ],
+      "staticChordVoicedWithoutCarrier": [
+        0,
+        7,
+        12,
+        17
+      ],
+      "progressionVoicedWithCarrier": [
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17,
+          29
+        ]
+      ],
+      "progressionVoicedWithoutCarrier": [
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17
+        ]
+      ],
+      "progressionIdenticalAcrossCarrierState": false
+    },
+    "pastProgressionTurn": {
+      "seconds": 16,
+      "withCarrierRmsDb": -21.46370955997849,
+      "withoutCarrierRmsDb": -21.55188266894694,
+      "handFilteredProgressionRmsDb": -21.55188267870578,
+      "handFilteredProgression": [
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17
+        ]
+      ],
+      "shippedProgressionWithoutCarrier": [
+        [
+          0,
+          7,
+          12
+        ],
+        [
+          0,
+          9,
+          17
+        ]
+      ],
+      "shippedPathDiff": {
+        "maxAbsSampleDiff": 0.0222417414188385,
+        "firstAudibleDiffSec": 6.9793
+      },
+      "handFilteredDiff": {
+        "maxAbsSampleDiff": 0.022241726517677307,
+        "firstAudibleDiffSec": 6.9793
+      },
+      "shippedVsHandFilteredDiff": {
+        "maxAbsSampleDiff": 2.384185791015625e-7,
+        "firstAudibleDiffSec": null
+      },
+      "repeatRenderDiff": {
+        "maxAbsSampleDiff": 0.000007838010787963867,
+        "firstAudibleDiffSec": null
+      },
+      "repeatRenderRmsDb": -21.4637095949817
+    },
+    "finding": {
+      "status": "PASS — carrierAlive=false audibly removes the octave double at the progression turn",
+      "shippedPathAudiblyDiffers": true,
+      "shippedPathMaxAbsSampleDiff": 0.0222417414188385,
+      "shippedPathFirstAudibleDiffSec": 6.9793,
+      "shippedPathDiffIsFloatNoiseOnly": false,
+      "octaveDoubleIsAudibleAtAll": true,
+      "octaveDoubleAudibleProof": "removing 29 from the PROGRESSION by hand changes the render: first audible sample difference at the 2-bar progression turn, and the overall RMS drops",
+      "handFilteredFirstAudibleDiffSec": 6.9793,
+      "handFilteredMaxAbsSampleDiff": 0.022241726517677307,
+      "shippedFilterEqualsHandFilter": {
+        "rule": "the shipped carrierAlive=false path should now produce exactly what removing 29 from the progression by hand produces",
+        "maxAbsSampleDiff": 2.384185791015625e-7,
+        "equivalent": true,
+        "shippedProgressionWithoutCarrier": [
+          [
+            0,
+            7,
+            12
+          ],
+          [
+            0,
+            9,
+            17
+          ]
+        ],
+        "handFilteredProgression": [
+          [
+            0,
+            7,
+            12
+          ],
+          [
+            0,
+            9,
+            17
+          ]
+        ]
+      },
+      "priorDefect": {
+        "foundAt": "the regeneration that preceded this one, against storyScore.ts before the progression filter was added",
+        "wasStatus": "FAIL — with- and without-carrier renders were sample-equivalent (max abs diff 2.38e-7, RMS equal to 8 decimal places at both 6s and 16s)",
+        "cause": [
+          "station-resolved publishes a `progression`, and scoreEngine plays `mood.progression[chordIndex]` on every 2-bar boundary; the static `chord` is only the no-progression fallback. getChapter10ScoreMood filtered CH10_CARRIER_OCTAVE_DEGREE out of `base.chord` ONLY, so the progression chord [0, 9, 17, 29] kept the octave double in both carrier states.",
+          "SCORE_PAD_VOICE_COUNT is 4 and station-resolved.chord is the 5-tone [0, 7, 12, 17, 29], so degree 29 was truncated out of the static-chord voicing anyway — the filter removed a degree the pad never voiced."
+        ],
+        "fix": "getChapter10ScoreMood now filters CH10_CARRIER_OCTAVE_DEGREE out of `chord` AND every entry of `progression`",
+        "secondDefect": "the control was 6s and the progression turn is at 7.06s, so the artifact could not have detected the defect at any code revision; the control is now 16s"
+      }
+    }
+  },
+  "renderDeterminism": {
+    "caveat": "THIS WAV SHA WILL NOT RE-VERIFY. Identical probe invocations do not produce identical PCM.",
+    "sameMoodRepeatMaxAbsSampleDiff": 0.000007838010787963867,
+    "sameMoodRepeatRmsDb": [
+      -21.46370955997849,
+      -21.4637095949817
+    ],
+    "observedCrossSessionShas": {
+      "note": "two earlier invocations of this probe with byte-identical parameters produced different SHA-256 for carrier-illegal-control_no-carrier.wav at the same 1058444 bytes",
+      "shas": [
+        "6df48c882bcd72cf… (6s revision, run 1)",
+        "74d1d3c79f9a3be3b1adb8890be8a87984f775b0ee2ccb5b1013319e5b90d676 (6s revision, run 2)"
+      ]
+    },
+    "magnitude": "per-sample float divergence of order 1e-7, which crosses PCM16 quantization boundaries (1/32768 = 3.05e-5) on a small fraction of samples",
+    "consequence": "a registry that pins this WAV by SHA-256 will report a mismatch on any re-render. Pin the measurements in this file, or re-pin the SHA whenever the WAV is regenerated.",
+    "doesNotAffect": "the carrier A/B: the shipped-path difference is reported above alongside this noise floor, and is orders of magnitude larger"
+  },
+  "assertions": {
+    "carrierDegreeIs17": true,
+    "octaveDoubleIs29": true,
+    "carrierPitchClassIs5": true,
+    "carrierAbsentFromBothHomeChords": true,
+    "replacedNinthPresentInBothHomeChords": true,
+    "allFromRelayAnswerOnwardVoiceCarrier": true,
+    "noVariantBeforeRelayAnswerVoicesCarrier": true,
+    "octaveDoubleFilteredFromStaticChordWithoutCarrier": true,
+    "octaveDoubleCannotSoundWithoutCarrier": true,
+    "maxAnchorIntensityIs044": true
+  },
+  "allAssertionsPass": true
+}

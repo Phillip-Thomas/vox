@@ -1,0 +1,2946 @@
+{
+ "schema": "paravoxia.objectiveLifecycleEvidence.v1",
+ "runId": "2026-08-11-ch10-station-introduction",
+ "contractVersion": "draft-v6",
+ "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+ "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+ "workingTree": "uncommitted ch10 working tree, stamp pass, post D-13 / D-6-remnant / RM-FOV repair round",
+ "capturedAt": "2026-08-12T10:38:37.689379Z",
+ "lane": "deep-link rehearsal through the exported commit receipts (ch10-lifecycle-trace.json), movie-lane objective events from three cold runs (ch10-flow2-trace.json), and the per-anchor variant matrix (ch10-variant-anchor-trace.json)",
+ "transitions": [
+  {
+   "scenario": "ch10-cold deep link",
+   "step": "entry",
+   "beat": "ch10-cold",
+   "objectiveId": "station:fault-read",
+   "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+   "markerChip": "habitat core \u00b7 read the fault \u00b7 46m",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+   "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+   "anchorId": "anc.ch10.cold-noticed",
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-cold deep link",
+   "step": "after-refused-out-of-order-fabrication",
+   "beat": "ch10-cold",
+   "objectiveId": "station:fault-read",
+   "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+   "markerChip": "habitat core \u00b7 read the fault \u00b7 46m",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+   "caption": "(the hum has dropped a step. cold is coming through a wall you sealed yourself.)",
+   "anchorId": "anc.ch10.cold-noticed",
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-cold deep link",
+   "step": "after-fault-read",
+   "beat": "ch10-cold",
+   "objectiveId": "station:fabrication-attempt",
+   "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+   "markerChip": "kestrel fabricator \u00b7 attempt replacement \u00b7 1m",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+   "caption": null,
+   "anchorId": "anc.ch10.fault-read",
+   "cueCount": 1,
+   "cueTypes": [
+    "objective-enter"
+   ],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-cold deep link",
+   "step": "after-fabrication-refused",
+   "beat": "ch10-ask",
+   "objectiveId": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "markerChip": "kestrel hatch \u00b7 reboard \u00b7 1m",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+   "caption": "(the channel at the wreck never closed. askin",
+   "anchorId": null,
+   "cueCount": 2,
+   "cueTypes": [
+    "objective-enter",
+    "objective-enter"
+   ],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-cold deep link",
+   "step": "beat-exit",
+   "beat": "ch10-ask",
+   "objectiveId": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "markerChip": "kestrel hatch \u00b7 reboard \u00b7 1m",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+   "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+   "anchorId": null,
+   "cueCount": 2,
+   "cueTypes": [
+    "objective-enter",
+    "objective-enter"
+   ],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-ask deep link",
+   "step": "entry",
+   "beat": "ch10-ask",
+   "objectiveId": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "markerChip": "kestrel hatch \u00b7 reboard \u00b7 1m",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+   "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+   "anchorId": null,
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-ask deep link",
+   "step": "after-relay-request",
+   "beat": "ch10-ask",
+   "objectiveId": "station:bearing-claim",
+   "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+   "markerChip": "kestrel hatch \u00b7 reboard \u00b7 1m",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "caption": null,
+   "anchorId": "anc.ch10.relay-answer",
+   "cueCount": 1,
+   "cueTypes": [
+    "objective-enter"
+   ],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-ask deep link",
+   "step": "after-relay-answer",
+   "beat": "ch10-ask",
+   "objectiveId": "station:bearing-claim",
+   "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+   "markerChip": "kestrel hatch \u00b7 reboard \u00b7 1m",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "caption": "(the answer came back before the asking finished.)",
+   "anchorId": "anc.ch10.relay-answer",
+   "cueCount": 1,
+   "cueTypes": [
+    "objective-enter"
+   ],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-ask deep link",
+   "step": "after-bearing-claim",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": "kestrel hatch \u00b7 reboard \u00b7 1m",
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": "(issued, not offered. the going is still yours.)",
+   "anchorId": null,
+   "cueCount": 2,
+   "cueTypes": [
+    "objective-enter",
+    "objective-enter"
+   ],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-ask deep link",
+   "step": "post-claim-marker-state",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": "kestrel hatch \u00b7 reboard \u00b7 1m",
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": "(issued, not offered. the going is still yours.)",
+   "anchorId": null,
+   "cueCount": 2,
+   "cueTypes": [
+    "objective-enter",
+    "objective-enter"
+   ],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-transit deep link",
+   "step": "entry-T1-ignite",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": null,
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": null,
+   "anchorId": null,
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-transit deep link",
+   "step": "after-30s-standing",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": null,
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": null,
+   "anchorId": null,
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-transit deep link",
+   "step": "after-60s-standing",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": null,
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": null,
+   "anchorId": null,
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-transit movie lane",
+   "step": "entry-T1-ignite",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": null,
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": null,
+   "anchorId": null,
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-transit movie lane",
+   "step": "after-60s-movie",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": null,
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": null,
+   "anchorId": null,
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  },
+  {
+   "scenario": "ch10-transit movie lane",
+   "step": "after-120s-movie",
+   "beat": "ch10-transit",
+   "objectiveId": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "markerChip": null,
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": null,
+   "anchorId": null,
+   "cueCount": 0,
+   "cueTypes": [],
+   "commitError": null
+  }
+ ],
+ "movieLaneObjectiveEvents": [
+  {
+   "run": 1,
+   "t": 0,
+   "beat": "ch9-settle",
+   "from": null,
+   "to": "settle:scan-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 SCAN",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "cumulativeCues": 0
+  },
+  {
+   "run": 1,
+   "t": 5.95,
+   "beat": "ch9-settle",
+   "from": "settle:scan-waterline",
+   "to": "settle:attend-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 ATTEND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+   "cumulativeCues": 1
+  },
+  {
+   "run": 1,
+   "t": 6.96,
+   "beat": "ch9-settle",
+   "from": "settle:attend-waterline",
+   "to": "settle:choose-site",
+   "markerLabel": "RECOMMENDED HABITAT SITE \u00b7 CHOOSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE \u00b7 CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+   "cumulativeCues": 2
+  },
+  {
+   "run": 1,
+   "t": 12.05,
+   "beat": "ch9-settle",
+   "from": "settle:choose-site",
+   "to": "settle:craft-core",
+   "markerLabel": "KESTREL FABRICATOR \u00b7 CRAFT HABITAT CORE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 CRAFT HABITAT CORE | RETURN TO THE FLIGHT-READY KESTREL FABRICATOR. | [C] CRAFT HABITAT CORE.",
+   "cumulativeCues": 3
+  },
+  {
+   "run": 1,
+   "t": 13.13,
+   "beat": "ch9-settle",
+   "from": "settle:craft-core",
+   "to": "settle:wait-night",
+   "markerLabel": "SECOND HEARTH \u00b7 WAIT FOR NIGHT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+   "cumulativeCues": 5
+  },
+  {
+   "run": 1,
+   "t": 123.96,
+   "beat": "ch9-hearth",
+   "from": "settle:wait-night",
+   "to": "settle:second-hearth-settling",
+   "markerLabel": "SECOND HEARTH \u00b7 SETTLING",
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+   "cumulativeCues": 7
+  },
+  {
+   "run": 1,
+   "t": 128.99,
+   "beat": "done",
+   "from": "settle:second-hearth-settling",
+   "to": null,
+   "markerLabel": null,
+   "health": null,
+   "requiresMarker": null,
+   "workOrder": null,
+   "cumulativeCues": 7
+  },
+  {
+   "run": 1,
+   "t": 364.32,
+   "beat": "ch10-cold",
+   "from": null,
+   "to": "station:fault-read",
+   "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+   "cumulativeCues": 8
+  },
+  {
+   "run": 1,
+   "t": 365.33,
+   "beat": "ch10-cold",
+   "from": "station:fault-read",
+   "to": "station:fabrication-attempt",
+   "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+   "cumulativeCues": 9
+  },
+  {
+   "run": 1,
+   "t": 372.42,
+   "beat": "ch10-ask",
+   "from": "station:fabrication-attempt",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "cumulativeCues": 11
+  },
+  {
+   "run": 2,
+   "t": 0,
+   "beat": "ch9-settle",
+   "from": null,
+   "to": "settle:scan-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 SCAN",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "cumulativeCues": 0
+  },
+  {
+   "run": 2,
+   "t": 4.9,
+   "beat": "ch9-settle",
+   "from": "settle:scan-waterline",
+   "to": "settle:attend-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 ATTEND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+   "cumulativeCues": 1
+  },
+  {
+   "run": 2,
+   "t": 7.02,
+   "beat": "ch9-settle",
+   "from": "settle:attend-waterline",
+   "to": "settle:choose-site",
+   "markerLabel": "RECOMMENDED HABITAT SITE \u00b7 CHOOSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE \u00b7 CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+   "cumulativeCues": 2
+  },
+  {
+   "run": 2,
+   "t": 13.11,
+   "beat": "ch9-settle",
+   "from": "settle:choose-site",
+   "to": "settle:wait-night",
+   "markerLabel": "SECOND HEARTH \u00b7 WAIT FOR NIGHT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+   "cumulativeCues": 5
+  },
+  {
+   "run": 2,
+   "t": 123.91,
+   "beat": "ch9-hearth",
+   "from": "settle:wait-night",
+   "to": "settle:second-hearth-settling",
+   "markerLabel": "SECOND HEARTH \u00b7 SETTLING",
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+   "cumulativeCues": 7
+  },
+  {
+   "run": 2,
+   "t": 128.95,
+   "beat": "done",
+   "from": "settle:second-hearth-settling",
+   "to": null,
+   "markerLabel": null,
+   "health": null,
+   "requiresMarker": null,
+   "workOrder": null,
+   "cumulativeCues": 7
+  },
+  {
+   "run": 2,
+   "t": 363.41,
+   "beat": "ch10-cold",
+   "from": null,
+   "to": "station:fault-read",
+   "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+   "cumulativeCues": 8
+  },
+  {
+   "run": 2,
+   "t": 364.45,
+   "beat": "ch10-cold",
+   "from": "station:fault-read",
+   "to": "station:fabrication-attempt",
+   "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+   "cumulativeCues": 9
+  },
+  {
+   "run": 2,
+   "t": 372.51,
+   "beat": "ch10-ask",
+   "from": "station:fabrication-attempt",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "cumulativeCues": 11
+  },
+  {
+   "run": 3,
+   "t": 0,
+   "beat": "ch9-settle",
+   "from": null,
+   "to": "settle:scan-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 SCAN",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "cumulativeCues": 0
+  },
+  {
+   "run": 3,
+   "t": 4.98,
+   "beat": "ch9-settle",
+   "from": "settle:scan-waterline",
+   "to": "settle:attend-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 ATTEND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+   "cumulativeCues": 1
+  },
+  {
+   "run": 3,
+   "t": 6.99,
+   "beat": "ch9-settle",
+   "from": "settle:attend-waterline",
+   "to": "settle:choose-site",
+   "markerLabel": "RECOMMENDED HABITAT SITE \u00b7 CHOOSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE \u00b7 CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+   "cumulativeCues": 2
+  },
+  {
+   "run": 3,
+   "t": 13.05,
+   "beat": "ch9-settle",
+   "from": "settle:choose-site",
+   "to": "settle:wait-night",
+   "markerLabel": "SECOND HEARTH \u00b7 WAIT FOR NIGHT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+   "cumulativeCues": 5
+  },
+  {
+   "run": 3,
+   "t": 123.9,
+   "beat": "ch9-hearth",
+   "from": "settle:wait-night",
+   "to": "settle:second-hearth-settling",
+   "markerLabel": "SECOND HEARTH \u00b7 SETTLING",
+   "health": "ready",
+   "requiresMarker": "false",
+   "workOrder": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+   "cumulativeCues": 7
+  },
+  {
+   "run": 3,
+   "t": 129.94,
+   "beat": "done",
+   "from": "settle:second-hearth-settling",
+   "to": null,
+   "markerLabel": null,
+   "health": null,
+   "requiresMarker": null,
+   "workOrder": null,
+   "cumulativeCues": 7
+  },
+  {
+   "run": 3,
+   "t": 363.6,
+   "beat": "ch10-cold",
+   "from": null,
+   "to": "station:fault-read",
+   "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+   "cumulativeCues": 8
+  },
+  {
+   "run": 3,
+   "t": 364.6,
+   "beat": "ch10-cold",
+   "from": "station:fault-read",
+   "to": "station:fabrication-attempt",
+   "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+   "cumulativeCues": 9
+  },
+  {
+   "run": 3,
+   "t": 372.67,
+   "beat": "ch10-ask",
+   "from": "station:fabrication-attempt",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "workOrder": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "cumulativeCues": 11
+  }
+ ],
+ "perVariantByAnchor": {
+  "desktop-high": {
+   "profile": "HIGH",
+   "reducedMotion": false,
+   "isMobile": false,
+   "byAnchor": {
+    "anc.ch10.cold-noticed": {
+     "objectiveId": "station:fault-read",
+     "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT."
+    },
+    "anc.ch10.fault-read": {
+     "objectiveId": "station:fabrication-attempt",
+     "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL."
+    },
+    "anc.ch10.fabrication-refused": {
+     "objectiveId": "station:fabrication-attempt",
+     "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL."
+    },
+    "anc.ch10.relay-ask": {
+     "objectiveId": "station:return:reboard",
+     "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD."
+    },
+    "anc.ch10.relay-answer": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE"
+    },
+    "anc.ch10.bearing-claimed": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE"
+    }
+   },
+   "missingAnchors": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ]
+  },
+  "desktop-medium-reduced-motion": {
+   "profile": "MEDIUM",
+   "reducedMotion": true,
+   "isMobile": false,
+   "byAnchor": {
+    "anc.ch10.cold-noticed": {
+     "objectiveId": "station:fault-read",
+     "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT."
+    },
+    "anc.ch10.fault-read": {
+     "objectiveId": "station:fabrication-attempt",
+     "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL."
+    },
+    "anc.ch10.fabrication-refused": {
+     "objectiveId": "station:fabrication-attempt",
+     "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL."
+    },
+    "anc.ch10.relay-ask": {
+     "objectiveId": "station:return:reboard",
+     "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD."
+    },
+    "anc.ch10.relay-answer": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE"
+    },
+    "anc.ch10.bearing-claimed": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE"
+    }
+   },
+   "missingAnchors": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ]
+  },
+  "desktop-low": {
+   "profile": "LOW",
+   "reducedMotion": false,
+   "isMobile": false,
+   "byAnchor": {
+    "anc.ch10.cold-noticed": {
+     "objectiveId": "station:fault-read",
+     "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT."
+    },
+    "anc.ch10.fault-read": {
+     "objectiveId": "station:fault-read",
+     "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT."
+    },
+    "anc.ch10.fabrication-refused": {
+     "objectiveId": "station:fabrication-attempt",
+     "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL."
+    },
+    "anc.ch10.relay-ask": {
+     "objectiveId": "station:return:reboard",
+     "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD."
+    },
+    "anc.ch10.relay-answer": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE"
+    },
+    "anc.ch10.bearing-claimed": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE"
+    }
+   },
+   "missingAnchors": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ]
+  },
+  "mobile-potato": {
+   "profile": "POTATO",
+   "reducedMotion": false,
+   "isMobile": true,
+   "byAnchor": {
+    "anc.ch10.cold-noticed": {
+     "objectiveId": "station:fault-read",
+     "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "JOURNAL"
+    },
+    "anc.ch10.fault-read": {
+     "objectiveId": "station:fabrication-attempt",
+     "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "JOURNAL"
+    },
+    "anc.ch10.fabrication-refused": {
+     "objectiveId": "station:fabrication-attempt",
+     "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "JOURNAL"
+    },
+    "anc.ch10.relay-ask": {
+     "objectiveId": "station:return:reboard",
+     "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "JOURNAL"
+    },
+    "anc.ch10.relay-answer": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "JOURNAL"
+    },
+    "anc.ch10.bearing-claimed": {
+     "objectiveId": "station:bearing-claim",
+     "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "health": "missing-marker",
+     "requiresMarker": "true",
+     "workOrder": "JOURNAL"
+    }
+   },
+   "missingAnchors": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ]
+  }
+ },
+ "transitRungObservation": {
+  "objectiveEvents": [
+   {
+    "t": 0,
+    "beat": "ch10-transit",
+    "from": null,
+    "to": "station:transit:ignite",
+    "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+    "health": "ready",
+    "requiresMarker": "false",
+    "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+    "caption": null,
+    "cueCount": 0
+   }
+  ],
+  "handbackAt": null,
+  "feedbackLog": [],
+  "trace": [
+   {
+    "t": 0,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:ignite",
+    "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+    "requiresMarker": "false",
+    "health": "ready",
+    "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+    "caption": null,
+    "anchor": null
+   },
+   {
+    "t": 0.5,
+    "beat": "ch10-transit",
+    "objectiveId": "station:transit:ignite",
+    "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+    "requiresMarker": "false",
+    "health": "ready",
+    "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+    "caption": null,
+    "anchor": null
+   }
+  ]
+ },
+ "transitRungObservationPostRepair": [
+  {
+   "t": 0.03,
+   "beatClock": null,
+   "beat": "ch10-transit",
+   "from": null,
+   "to": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "t": 5.25,
+   "beatClock": 2,
+   "beat": "ch10-transit",
+   "from": "station:transit:ignite",
+   "to": "station:transit:hold",
+   "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ISSUED BEARING \u00b7 HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "caption": null,
+   "cues": 1
+  },
+  {
+   "t": 12.54,
+   "beatClock": 9.2,
+   "beat": "ch10-transit",
+   "from": "station:transit:hold",
+   "to": "station:transit:resolve",
+   "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+   "caption": null,
+   "cues": 2
+  }
+ ],
+ "askLaneObjectiveEventsPostRepair": [
+  {
+   "t": 0.02,
+   "beatClock": null,
+   "beat": "ch10-ask",
+   "from": null,
+   "to": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "cues": 0
+  },
+  {
+   "t": 4.38,
+   "beatClock": 1,
+   "beat": "ch10-ask",
+   "from": "station:return:reboard",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "cues": 1
+  },
+  {
+   "t": 3.56,
+   "beatClock": null,
+   "beat": "ch10-ask",
+   "from": null,
+   "to": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "cues": 0
+  },
+  {
+   "t": 4.26,
+   "beatClock": 1,
+   "beat": "ch10-ask",
+   "from": "station:return:reboard",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "cues": 1
+  },
+  {
+   "t": 601.5,
+   "beatClock": 595.2,
+   "beat": "ch10-ask",
+   "from": "station:return:crossing",
+   "to": "station:return:landfall",
+   "markerLabel": "WRECK SITE \u00b7 LAND",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK SITE \u00b7 LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "cues": 88
+  },
+  {
+   "t": 602.21,
+   "beatClock": 596.4,
+   "beat": "ch10-ask",
+   "from": "station:return:landfall",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "cues": 89
+  },
+  {
+   "t": 0.02,
+   "beatClock": null,
+   "beat": "ch10-ask",
+   "from": null,
+   "to": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "cues": 0
+  },
+  {
+   "t": 3.99,
+   "beatClock": 1,
+   "beat": "ch10-ask",
+   "from": "station:return:reboard",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "cues": 1
+  }
+ ],
+ "askLaneObjectiveEventsFinalProof": [
+  {
+   "run": "ask-cold-1",
+   "t": 3.811,
+   "beatClock": 0.3,
+   "beat": "ch10-ask",
+   "from": null,
+   "to": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "caption": "(the channe",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-1",
+   "t": 4.524,
+   "beatClock": 1,
+   "beat": "ch10-ask",
+   "from": "station:return:reboard",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-1",
+   "t": 18.158,
+   "beatClock": 14.4,
+   "beat": "ch10-ask",
+   "from": "station:return:crossing",
+   "to": "station:return:landfall",
+   "markerLabel": "WRECK SITE \u00b7 LAND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK SITE \u00b7 LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-1",
+   "t": 24.958,
+   "beatClock": 21.1,
+   "beat": "ch10-ask",
+   "from": "station:return:landfall",
+   "to": "station:relay-query",
+   "markerLabel": "WRECK RELAY \u00b7 REQUEST A SOURCE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-1",
+   "t": 35.753,
+   "beatClock": 31.8,
+   "beat": "ch10-ask",
+   "from": "station:relay-query",
+   "to": "station:bearing-claim",
+   "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING.",
+   "caption": "(issue",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-1",
+   "t": 37.315,
+   "beatClock": 0.1,
+   "beat": "ch10-transit",
+   "from": "station:bearing-claim",
+   "to": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": "(issued, not offered. the going is still yours.)",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-2",
+   "t": 0.333,
+   "beatClock": 0.3,
+   "beat": "ch10-ask",
+   "from": null,
+   "to": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+   "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-2",
+   "t": 1.039,
+   "beatClock": 1,
+   "beat": "ch10-ask",
+   "from": "station:return:reboard",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-2",
+   "t": 14.668,
+   "beatClock": 14.4,
+   "beat": "ch10-ask",
+   "from": "station:return:crossing",
+   "to": "station:return:landfall",
+   "markerLabel": "WRECK SITE \u00b7 LAND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK SITE \u00b7 LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-2",
+   "t": 20.836,
+   "beatClock": 20.4,
+   "beat": "ch10-ask",
+   "from": "station:return:landfall",
+   "to": "station:relay-query",
+   "markerLabel": "WRECK RELAY \u00b7 REQUEST A SOURCE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-2",
+   "t": 45.815,
+   "beatClock": 45.3,
+   "beat": "ch10-ask",
+   "from": "station:relay-query",
+   "to": "station:bearing-claim",
+   "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING.",
+   "caption": "(issued, not",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-2",
+   "t": 47.103,
+   "beatClock": 0.1,
+   "beat": "ch10-transit",
+   "from": "station:bearing-claim",
+   "to": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": "(issued, not offered. the going is still yours.)",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-3",
+   "t": 0.961,
+   "beatClock": 0.3,
+   "beat": "ch10-ask",
+   "from": null,
+   "to": "station:return:reboard",
+   "markerLabel": "KESTREL HATCH \u00b7 REBOARD",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | KESTREL HATCH \u00b7 REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "caption": "(the channel at the wreck never closed. asking is still a thing that can be don",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-3",
+   "t": 1.67,
+   "beatClock": 1,
+   "beat": "ch10-ask",
+   "from": "station:return:reboard",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-3",
+   "t": 15.274,
+   "beatClock": 14.4,
+   "beat": "ch10-ask",
+   "from": "station:return:crossing",
+   "to": "station:return:landfall",
+   "markerLabel": "WRECK SITE \u00b7 LAND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK SITE \u00b7 LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-3",
+   "t": 23.093,
+   "beatClock": 22,
+   "beat": "ch10-ask",
+   "from": "station:return:landfall",
+   "to": "station:relay-query",
+   "markerLabel": "WRECK RELAY \u00b7 REQUEST A SOURCE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-3",
+   "t": 28.06,
+   "beatClock": 27,
+   "beat": "ch10-ask",
+   "from": "station:relay-query",
+   "to": "station:bearing-claim",
+   "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING.",
+   "caption": "(issued,",
+   "cues": 0
+  },
+  {
+   "run": "ask-cold-3",
+   "t": 29.619,
+   "beatClock": 0.2,
+   "beat": "ch10-transit",
+   "from": "station:bearing-claim",
+   "to": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": "(issued, not offered. the going is still yours.)",
+   "cues": 0
+  }
+ ],
+ "endToEndObjectiveEvents": [
+  {
+   "t": 1.452,
+   "beatClock": 0.2,
+   "beat": "ch9-settle",
+   "from": null,
+   "to": "settle:scan-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 SCAN",
+   "health": "missing-marker",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 SCAN | FOLLOW THE LIVING WATERLINE MARKER. | READ THE SIGNAL FIELD. | ROUTE RECALIBRATING \u00b7 OBJECTIVE REMAINS ACTIVE",
+   "caption": "(abundance is not permission. it is a question with many answe",
+   "cues": 0
+  },
+  {
+   "t": 2.869,
+   "beatClock": 1.6,
+   "beat": "ch9-settle",
+   "from": "settle:scan-waterline",
+   "to": "settle:attend-waterline",
+   "markerLabel": "LIVING WATERLINE \u00b7 ATTEND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | LIVING WATERLINE \u00b7 ATTEND | FOLLOW THE LIVING WATERLINE MARKER. | [F] ATTEND THE RELATIONSHIP.",
+   "caption": "(abundance is not permission. it is a question with many answers.)",
+   "cues": 0
+  },
+  {
+   "t": 4.287,
+   "beatClock": 3,
+   "beat": "ch9-settle",
+   "from": "settle:attend-waterline",
+   "to": "settle:choose-site",
+   "markerLabel": "RECOMMENDED HABITAT SITE \u00b7 CHOOSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | RECOMMENDED HABITAT SITE \u00b7 CHOOSE | FOLLOW THE HABITAT SITE MARKER. | [F] CHOOSE THIS DRY, LEVEL SITE.",
+   "caption": "(roots hold the",
+   "cues": 0
+  },
+  {
+   "t": 9.992,
+   "beatClock": 8.7,
+   "beat": "ch9-settle",
+   "from": "settle:choose-site",
+   "to": "settle:wait-night",
+   "markerLabel": "SECOND HEARTH \u00b7 WAIT FOR NIGHT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 WAIT FOR NIGHT | RETURN TO THE SECOND HEARTH. | REST BECOMES AVAILABLE AT NIGHT.",
+   "caption": "(not",
+   "cues": 0
+  },
+  {
+   "t": 121.478,
+   "beatClock": 109,
+   "beat": "ch9-hearth",
+   "from": "settle:wait-night",
+   "to": "settle:second-hearth-settling",
+   "markerLabel": "SECOND HEARTH \u00b7 SETTLING",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | SECOND HEARTH \u00b7 SETTLING | THE SECOND HEARTH IS SAFE. | LET THE TWO-WORLD HANDOFF SETTLE.",
+   "caption": "(on",
+   "cues": 0
+  },
+  {
+   "t": 127.255,
+   "beatClock": 114.3,
+   "beat": "done",
+   "from": "settle:second-hearth-settling",
+   "to": null,
+   "markerLabel": null,
+   "health": null,
+   "requiresMarker": null,
+   "hudText": null,
+   "caption": "(one fire behind you. one fire here. home is the distance you can keep alive.)",
+   "cues": 0
+  },
+  {
+   "t": 361.504,
+   "beatClock": 0.2,
+   "beat": "ch10-cold",
+   "from": null,
+   "to": "station:fault-read",
+   "markerLabel": "HABITAT CORE \u00b7 READ THE FAULT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | HABITAT CORE \u00b7 READ THE FAULT | STAND AT THE SECOND HEARTH CORE. | [F] READ THE HEARTH FAULT.",
+   "caption": "(the h",
+   "cues": 0
+  },
+  {
+   "t": 362.92,
+   "beatClock": 1.6,
+   "beat": "ch10-cold",
+   "from": "station:fault-read",
+   "to": "station:fabrication-attempt",
+   "markerLabel": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT | TAKE THE FAULT RECORD TO THE KESTREL FABRICATOR. | [F] ATTEMPT TO FABRICATE A REPLACEMENT CELL.",
+   "caption": "(the hum has dropped a step. cold is coming thro",
+   "cues": 0
+  },
+  {
+   "t": 370.062,
+   "beatClock": 0.2,
+   "beat": "ch10-ask",
+   "from": "station:fabrication-attempt",
+   "to": "station:return:crossing",
+   "markerLabel": "ORIGIN WORLD \u00b7 COURSE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD \u00b7 COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+   "caption": "(the chann",
+   "cues": 0
+  },
+  {
+   "t": 384.407,
+   "beatClock": 14.3,
+   "beat": "ch10-ask",
+   "from": "station:return:crossing",
+   "to": "station:return:landfall",
+   "markerLabel": "WRECK SITE \u00b7 LAND",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK SITE \u00b7 LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "t": 391.093,
+   "beatClock": 20.9,
+   "beat": "ch10-ask",
+   "from": "station:return:landfall",
+   "to": "station:relay-query",
+   "markerLabel": "WRECK RELAY \u00b7 REQUEST A SOURCE",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 REQUEST A SOURCE | FOLLOW THE WRECK RELAY MARKER. | [F] REQUEST A SOURCE FOR A BONDED CELL.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "t": 401.761,
+   "beatClock": 31.5,
+   "beat": "ch10-ask",
+   "from": "station:relay-query",
+   "to": "station:bearing-claim",
+   "markerLabel": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | WRECK RELAY \u00b7 CLAIM THE BEARING | A BEARING IS ATTACHED (ADVISORY). | [F] CLAIM THE BEARING.",
+   "caption": "",
+   "cues": 0
+  },
+  {
+   "t": 403.575,
+   "beatClock": 0.2,
+   "beat": "ch10-transit",
+   "from": "station:bearing-claim",
+   "to": "station:transit:ignite",
+   "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS \u00b7 IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+   "caption": "(issued, not offered. the going is still yours.)",
+   "cues": 0
+  },
+  {
+   "t": 405.476,
+   "beatClock": 2.1,
+   "beat": "ch10-transit",
+   "from": "station:transit:ignite",
+   "to": "station:transit:hold",
+   "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+   "health": "ready",
+   "requiresMarker": "true",
+   "hudText": "CURRENT OBJECTIVE | ISSUED BEARING \u00b7 HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+   "caption": "(issued, not offered. the going is still yours.)",
+   "cues": 0
+  },
+  {
+   "t": 412.274,
+   "beatClock": 8.9,
+   "beat": "ch10-transit",
+   "from": "station:transit:hold",
+   "to": "station:transit:resolve",
+   "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+   "health": "ready",
+   "requiresMarker": "false",
+   "hudText": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+   "caption": null,
+   "cues": 0
+  },
+  {
+   "t": 428.817,
+   "beatClock": 25.3,
+   "beat": "done",
+   "from": "station:transit:resolve",
+   "to": null,
+   "markerLabel": null,
+   "health": null,
+   "requiresMarker": null,
+   "hudText": null,
+   "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+   "cues": 0
+  }
+ ],
+ "markerInvariantMutationTrace": {
+  "deep-link-ch10-ask": {
+   "url": "?story=ch10-ask&movie=1&profile=LOW",
+   "reachedBearingClaim": true,
+   "mandatoryRungs": [
+    "station:return:reboard",
+    "station:return:crossing",
+    "station:return:landfall",
+    "station:relay-query",
+    "station:bearing-claim"
+   ],
+   "violationCount": 2,
+   "worstViolationDwellMs": 3400.8,
+   "events": [
+    {
+     "at": 458.5,
+     "why": "mounted",
+     "beat": "ch10-ask",
+     "id": "station:return:reboard",
+     "health": "missing-marker",
+     "requires-marker": "true",
+     "marker-label": "KESTREL HATCH \u00b7 REBOARD",
+     "dwellMs": 3400.8
+    },
+    {
+     "at": 3859.3,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:return:reboard",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "KESTREL HATCH \u00b7 REBOARD",
+     "dwellMs": 323.2
+    },
+    {
+     "at": 4182.5,
+     "why": "attr",
+     "beat": "ch10-ask",
+     "id": "station:return:crossing",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "ORIGIN WORLD \u00b7 COURSE",
+     "dwellMs": 14038.7
+    },
+    {
+     "at": 18221.2,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:return:landfall",
+     "health": "missing-marker",
+     "requires-marker": "true",
+     "marker-label": "WRECK SITE \u00b7 LAND",
+     "dwellMs": 264.6
+    },
+    {
+     "at": 18485.8,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:return:landfall",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "WRECK SITE \u00b7 LAND",
+     "dwellMs": 4367.1
+    },
+    {
+     "at": 22852.9,
+     "why": "attr",
+     "beat": "ch10-ask",
+     "id": "station:relay-query",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "WRECK RELAY \u00b7 REQUEST A SOURCE",
+     "dwellMs": 30103.7
+    },
+    {
+     "at": 52956.6,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:bearing-claim",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "dwellMs": 1644
+    },
+    {
+     "at": 54600.6,
+     "why": "poll",
+     "beat": "ch10-transit",
+     "id": "station:transit:ignite",
+     "health": "ready",
+     "requires-marker": "false",
+     "marker-label": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+     "dwellMs": null
+    }
+   ]
+  },
+  "flow-ch10-cold-to-ask": {
+   "url": "?story=ch10-cold&movie=1&profile=LOW",
+   "reachedBearingClaim": true,
+   "mandatoryRungs": [
+    "station:fault-read",
+    "station:fabrication-attempt",
+    "station:return:reboard",
+    "station:return:crossing",
+    "station:return:landfall",
+    "station:relay-query",
+    "station:bearing-claim"
+   ],
+   "violationCount": 1,
+   "worstViolationDwellMs": 273.6,
+   "events": [
+    {
+     "at": 382.2,
+     "why": "mounted",
+     "beat": "ch10-cold",
+     "id": "station:fault-read",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "HABITAT CORE \u00b7 READ THE FAULT",
+     "dwellMs": 7650.8
+    },
+    {
+     "at": 8033,
+     "why": "poll",
+     "beat": "ch10-cold",
+     "id": "station:fabrication-attempt",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+     "dwellMs": 3604
+    },
+    {
+     "at": 11637,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:return:reboard",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "KESTREL HATCH \u00b7 REBOARD",
+     "dwellMs": 166.5
+    },
+    {
+     "at": 11803.5,
+     "why": "attr",
+     "beat": "ch10-ask",
+     "id": "station:return:crossing",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "ORIGIN WORLD \u00b7 COURSE",
+     "dwellMs": 14049.2
+    },
+    {
+     "at": 25852.7,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:return:landfall",
+     "health": "missing-marker",
+     "requires-marker": "true",
+     "marker-label": "WRECK SITE \u00b7 LAND",
+     "dwellMs": 273.6
+    },
+    {
+     "at": 26126.3,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:return:landfall",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "WRECK SITE \u00b7 LAND",
+     "dwellMs": 5936.8
+    },
+    {
+     "at": 32063.1,
+     "why": "attr",
+     "beat": "ch10-ask",
+     "id": "station:relay-query",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "WRECK RELAY \u00b7 REQUEST A SOURCE",
+     "dwellMs": 20273.6
+    },
+    {
+     "at": 52336.7,
+     "why": "poll",
+     "beat": "ch10-ask",
+     "id": "station:bearing-claim",
+     "health": "ready",
+     "requires-marker": "true",
+     "marker-label": "WRECK RELAY \u00b7 CLAIM THE BEARING",
+     "dwellMs": 1654.3
+    },
+    {
+     "at": 53991,
+     "why": "attr",
+     "beat": "ch10-transit",
+     "id": "station:transit:ignite",
+     "health": "ready",
+     "requires-marker": "false",
+     "marker-label": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+     "dwellMs": null
+    }
+   ]
+  }
+ },
+ "markerInvariantMutationTraceUnderLoad": {
+  "deep-link-ch10-ask": {
+   "violationCount": 2,
+   "worstViolationDwellMs": 3366.9
+  },
+  "flow-ch10-cold-to-ask": {
+   "violationCount": 1,
+   "worstViolationDwellMs": 266
+  }
+ },
+ "markerInvariantStampPass": {
+  "summary": {
+   "totalViolations": 0,
+   "pathsClean": 4,
+   "pathCount": 4
+  },
+  "paths": {
+   "deep-link-ch10-cold": {
+    "url": "?story=ch10-cold&movie=1&profile=LOW",
+    "reachedTerminal": true,
+    "beatsSeen": [
+     "ch10-cold",
+     "ch10-ask"
+    ],
+    "eventCount": 3764,
+    "observerErrors": [],
+    "pageErrors": [],
+    "mandatoryRungs": [
+     "station:fault-read",
+     "station:fabrication-attempt",
+     "station:return:reboard",
+     "station:return:crossing"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolationCount": 0,
+    "worstViolationDwellMs": 0,
+    "stateRuns": {
+     "hud": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 397.8,
+       "untilMs": 398.8,
+       "dwellMs": 1.0
+      },
+      {
+       "state": [
+        "station:fault-read",
+        "ready",
+        "true",
+        "HABITAT CORE \u00b7 READ THE FAULT",
+        "ch10-cold"
+       ],
+       "fromMs": 464.1,
+       "untilMs": 8304.3,
+       "dwellMs": 7840.2
+      },
+      {
+       "state": [
+        "station:fabrication-attempt",
+        "ready",
+        "true",
+        "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+        "ch10-cold"
+       ],
+       "fromMs": 8308.6,
+       "untilMs": 11887.6,
+       "dwellMs": 3579.0
+      },
+      {
+       "state": [
+        "station:return:reboard",
+        "ready",
+        "true",
+        "KESTREL HATCH \u00b7 REBOARD",
+        "ch10-ask"
+       ],
+       "fromMs": 11893.6,
+       "untilMs": 11939.9,
+       "dwellMs": 46.3
+      },
+      {
+       "state": [
+        "station:return:crossing",
+        "ready",
+        "true",
+        "ORIGIN WORLD \u00b7 COURSE",
+        "ch10-ask"
+       ],
+       "fromMs": 12132.6,
+       "untilMs": 14171.7,
+       "dwellMs": 2039.1
+      }
+     ],
+     "feed": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 397.9,
+       "untilMs": 398.8,
+       "dwellMs": 0.9
+      },
+      {
+       "state": [
+        "station:fault-read",
+        "ready",
+        "true",
+        "HABITAT CORE \u00b7 READ THE FAULT",
+        "ch10-cold"
+       ],
+       "fromMs": 464.1,
+       "untilMs": 8304.3,
+       "dwellMs": 7840.2
+      },
+      {
+       "state": [
+        "station:fabrication-attempt",
+        "ready",
+        "true",
+        "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+        "ch10-cold"
+       ],
+       "fromMs": 8308.6,
+       "untilMs": 11887.6,
+       "dwellMs": 3579.0
+      },
+      {
+       "state": [
+        "station:return:reboard",
+        "ready",
+        "true",
+        "KESTREL HATCH \u00b7 REBOARD",
+        "ch10-ask"
+       ],
+       "fromMs": 11893.6,
+       "untilMs": 11939.9,
+       "dwellMs": 46.3
+      },
+      {
+       "state": [
+        "station:return:crossing",
+        "ready",
+        "true",
+        "ORIGIN WORLD \u00b7 COURSE",
+        "ch10-ask"
+       ],
+       "fromMs": 12132.8,
+       "untilMs": 14171.7,
+       "dwellMs": 2038.9
+      }
+     ]
+    }
+   },
+   "deep-link-ch10-ask": {
+    "url": "?story=ch10-ask&movie=1&profile=LOW",
+    "reachedTerminal": true,
+    "beatsSeen": [
+     "ch10-ask",
+     "ch10-transit"
+    ],
+    "eventCount": 12358,
+    "observerErrors": [],
+    "pageErrors": [],
+    "mandatoryRungs": [
+     "station:return:reboard",
+     "station:return:crossing",
+     "station:return:landfall",
+     "station:relay-query",
+     "station:bearing-claim",
+     "station:transit:hold"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolationCount": 0,
+    "worstViolationDwellMs": 0,
+    "stateRuns": {
+     "hud": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 93.4,
+       "untilMs": 345.2,
+       "dwellMs": 251.8
+      },
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        "ch10-ask"
+       ],
+       "fromMs": 371.2,
+       "untilMs": 3239.4,
+       "dwellMs": 2868.2
+      },
+      {
+       "state": [
+        "station:return:reboard",
+        "ready",
+        "true",
+        "KESTREL HATCH \u00b7 REBOARD",
+        "ch10-ask"
+       ],
+       "fromMs": 3499.9,
+       "untilMs": 3643,
+       "dwellMs": 143.1
+      },
+      {
+       "state": [
+        "station:return:crossing",
+        "ready",
+        "true",
+        "ORIGIN WORLD \u00b7 COURSE",
+        "ch10-ask"
+       ],
+       "fromMs": 3850.6,
+       "untilMs": 18164.2,
+       "dwellMs": 14313.6
+      },
+      {
+       "state": [
+        "station:return:landfall",
+        "ready",
+        "true",
+        "WRECK SITE \u00b7 LAND",
+        "ch10-ask"
+       ],
+       "fromMs": 18194.1,
+       "untilMs": 24251.4,
+       "dwellMs": 6057.3
+      },
+      {
+       "state": [
+        "station:relay-query",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 REQUEST A SOURCE",
+        "ch10-ask"
+       ],
+       "fromMs": 24324.8,
+       "untilMs": 49012.4,
+       "dwellMs": 24687.6
+      },
+      {
+       "state": [
+        "station:bearing-claim",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 CLAIM THE BEARING",
+        "ch10-ask"
+       ],
+       "fromMs": 49016.9,
+       "untilMs": 50664.3,
+       "dwellMs": 1647.4
+      },
+      {
+       "state": [
+        "station:transit:ignite",
+        "ready",
+        "false",
+        "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+        "ch10-transit"
+       ],
+       "fromMs": 50670.9,
+       "untilMs": 52661.9,
+       "dwellMs": 1991.0
+      },
+      {
+       "state": [
+        "station:transit:hold",
+        "ready",
+        "true",
+        "ISSUED BEARING \u00b7 HOLD",
+        "ch10-transit"
+       ],
+       "fromMs": 52759.4,
+       "untilMs": 53016,
+       "dwellMs": 256.6
+      }
+     ],
+     "feed": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 93.4,
+       "untilMs": 345.2,
+       "dwellMs": 251.8
+      },
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        "ch10-ask"
+       ],
+       "fromMs": 371.2,
+       "untilMs": 3239.4,
+       "dwellMs": 2868.2
+      },
+      {
+       "state": [
+        "station:return:reboard",
+        "ready",
+        "true",
+        "KESTREL HATCH \u00b7 REBOARD",
+        "ch10-ask"
+       ],
+       "fromMs": 3500,
+       "untilMs": 3643,
+       "dwellMs": 143
+      },
+      {
+       "state": [
+        "station:return:crossing",
+        "ready",
+        "true",
+        "ORIGIN WORLD \u00b7 COURSE",
+        "ch10-ask"
+       ],
+       "fromMs": 3908,
+       "untilMs": 18164.2,
+       "dwellMs": 14256.2
+      },
+      {
+       "state": [
+        "station:return:landfall",
+        "ready",
+        "true",
+        "WRECK SITE \u00b7 LAND",
+        "ch10-ask"
+       ],
+       "fromMs": 18204.8,
+       "untilMs": 24251.4,
+       "dwellMs": 6046.6
+      },
+      {
+       "state": [
+        "station:relay-query",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 REQUEST A SOURCE",
+        "ch10-ask"
+       ],
+       "fromMs": 24325.1,
+       "untilMs": 49012.5,
+       "dwellMs": 24687.4
+      },
+      {
+       "state": [
+        "station:bearing-claim",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 CLAIM THE BEARING",
+        "ch10-ask"
+       ],
+       "fromMs": 49016.9,
+       "untilMs": 50664.3,
+       "dwellMs": 1647.4
+      },
+      {
+       "state": [
+        "station:transit:ignite",
+        "ready",
+        "false",
+        "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+        "ch10-transit"
+       ],
+       "fromMs": 50671,
+       "untilMs": 52661.9,
+       "dwellMs": 1990.9
+      },
+      {
+       "state": [
+        "station:transit:hold",
+        "ready",
+        "true",
+        "ISSUED BEARING \u00b7 HOLD",
+        "ch10-transit"
+       ],
+       "fromMs": 52759.5,
+       "untilMs": 53016,
+       "dwellMs": 256.5
+      }
+     ]
+    }
+   },
+   "deep-link-ch10-transit": {
+    "url": "?story=ch10-transit&movie=1&profile=LOW",
+    "reachedTerminal": true,
+    "beatsSeen": [
+     "ch10-transit",
+     "done"
+    ],
+    "eventCount": 4580,
+    "observerErrors": [],
+    "pageErrors": [],
+    "mandatoryRungs": [
+     "station:transit:hold"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolationCount": 0,
+    "worstViolationDwellMs": 0,
+    "stateRuns": {
+     "hud": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 157.7,
+       "untilMs": 366,
+       "dwellMs": 208.3
+      },
+      {
+       "state": [
+        "station:transit:ignite",
+        "ready",
+        "false",
+        "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+        "ch10-transit"
+       ],
+       "fromMs": 394.8,
+       "untilMs": 5309.5,
+       "dwellMs": 4914.7
+      },
+      {
+       "state": [
+        "station:transit:hold",
+        "ready",
+        "true",
+        "ISSUED BEARING \u00b7 HOLD",
+        "ch10-transit"
+       ],
+       "fromMs": 5321.5,
+       "untilMs": 11903.9,
+       "dwellMs": 6582.4
+      },
+      {
+       "state": [
+        "station:transit:resolve",
+        "ready",
+        "false",
+        "ISSUING STATION \u00b7 RESOLVING",
+        "ch10-transit"
+       ],
+       "fromMs": 11906,
+       "untilMs": 28319.4,
+       "dwellMs": 16413.4
+      },
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        "done"
+       ],
+       "fromMs": 28325.8,
+       "untilMs": 30704.7,
+       "dwellMs": 2378.9
+      }
+     ],
+     "feed": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 157.7,
+       "untilMs": 366,
+       "dwellMs": 208.3
+      },
+      {
+       "state": [
+        "station:transit:ignite",
+        "ready",
+        "false",
+        "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+        "ch10-transit"
+       ],
+       "fromMs": 395,
+       "untilMs": 5309.5,
+       "dwellMs": 4914.5
+      },
+      {
+       "state": [
+        "station:transit:hold",
+        "ready",
+        "true",
+        "ISSUED BEARING \u00b7 HOLD",
+        "ch10-transit"
+       ],
+       "fromMs": 5326.8,
+       "untilMs": 11903.9,
+       "dwellMs": 6577.1
+      },
+      {
+       "state": [
+        "station:transit:resolve",
+        "ready",
+        "false",
+        "ISSUING STATION \u00b7 RESOLVING",
+        "ch10-transit"
+       ],
+       "fromMs": 11920.1,
+       "untilMs": 28319.4,
+       "dwellMs": 16399.3
+      },
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        "done"
+       ],
+       "fromMs": 28325.8,
+       "untilMs": 30704.7,
+       "dwellMs": 2378.9
+      }
+     ]
+    }
+   },
+   "flow-ch10-cold-through-transit": {
+    "url": "?story=ch10-cold&movie=1&profile=LOW",
+    "reachedTerminal": true,
+    "beatsSeen": [
+     "ch10-cold",
+     "ch10-ask",
+     "ch10-transit",
+     "done"
+    ],
+    "eventCount": 22184,
+    "observerErrors": [],
+    "pageErrors": [],
+    "mandatoryRungs": [
+     "station:fault-read",
+     "station:fabrication-attempt",
+     "station:return:reboard",
+     "station:return:crossing",
+     "station:return:landfall",
+     "station:relay-query",
+     "station:bearing-claim",
+     "station:transit:hold"
+    ],
+    "healthStatesObserved": [
+     "ready"
+    ],
+    "missingMarkerViolationCount": 0,
+    "worstViolationDwellMs": 0,
+    "stateRuns": {
+     "hud": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 100.3,
+       "untilMs": 371.4,
+       "dwellMs": 271.1
+      },
+      {
+       "state": [
+        "station:fault-read",
+        "ready",
+        "true",
+        "HABITAT CORE \u00b7 READ THE FAULT",
+        "ch10-cold"
+       ],
+       "fromMs": 401.5,
+       "untilMs": 7929.2,
+       "dwellMs": 7527.7
+      },
+      {
+       "state": [
+        "station:fabrication-attempt",
+        "ready",
+        "true",
+        "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+        "ch10-cold"
+       ],
+       "fromMs": 7933.8,
+       "untilMs": 11519.7,
+       "dwellMs": 3585.9
+      },
+      {
+       "state": [
+        "station:return:reboard",
+        "ready",
+        "true",
+        "KESTREL HATCH \u00b7 REBOARD",
+        "ch10-ask"
+       ],
+       "fromMs": 11525.7,
+       "untilMs": 11571.6,
+       "dwellMs": 45.9
+      },
+      {
+       "state": [
+        "station:return:crossing",
+        "ready",
+        "true",
+        "ORIGIN WORLD \u00b7 COURSE",
+        "ch10-ask"
+       ],
+       "fromMs": 11695.8,
+       "untilMs": 25966.1,
+       "dwellMs": 14270.3
+      },
+      {
+       "state": [
+        "station:return:landfall",
+        "ready",
+        "true",
+        "WRECK SITE \u00b7 LAND",
+        "ch10-ask"
+       ],
+       "fromMs": 25995.9,
+       "untilMs": 32016.8,
+       "dwellMs": 6020.9
+      },
+      {
+       "state": [
+        "station:relay-query",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 REQUEST A SOURCE",
+        "ch10-ask"
+       ],
+       "fromMs": 32124.2,
+       "untilMs": 51250,
+       "dwellMs": 19125.8
+      },
+      {
+       "state": [
+        "station:bearing-claim",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 CLAIM THE BEARING",
+        "ch10-ask"
+       ],
+       "fromMs": 51255,
+       "untilMs": 52900.9,
+       "dwellMs": 1645.9
+      },
+      {
+       "state": [
+        "station:transit:ignite",
+        "ready",
+        "false",
+        "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+        "ch10-transit"
+       ],
+       "fromMs": 52908.6,
+       "untilMs": 54941,
+       "dwellMs": 2032.4
+      },
+      {
+       "state": [
+        "station:transit:hold",
+        "ready",
+        "true",
+        "ISSUED BEARING \u00b7 HOLD",
+        "ch10-transit"
+       ],
+       "fromMs": 55026.8,
+       "untilMs": 62222.8,
+       "dwellMs": 7196.0
+      },
+      {
+       "state": [
+        "station:transit:resolve",
+        "ready",
+        "false",
+        "ISSUING STATION \u00b7 RESOLVING",
+        "ch10-transit"
+       ],
+       "fromMs": 62226.1,
+       "untilMs": 78582.6,
+       "dwellMs": 16356.5
+      },
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        "done"
+       ],
+       "fromMs": 78589,
+       "untilMs": 80836.2,
+       "dwellMs": 2247.2
+      }
+     ],
+     "feed": [
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        null
+       ],
+       "fromMs": 100.4,
+       "untilMs": 371.4,
+       "dwellMs": 271.0
+      },
+      {
+       "state": [
+        "station:fault-read",
+        "ready",
+        "true",
+        "HABITAT CORE \u00b7 READ THE FAULT",
+        "ch10-cold"
+       ],
+       "fromMs": 401.6,
+       "untilMs": 7929.2,
+       "dwellMs": 7527.6
+      },
+      {
+       "state": [
+        "station:fabrication-attempt",
+        "ready",
+        "true",
+        "KESTREL FABRICATOR \u00b7 ATTEMPT REPLACEMENT",
+        "ch10-cold"
+       ],
+       "fromMs": 7933.8,
+       "untilMs": 11519.7,
+       "dwellMs": 3585.9
+      },
+      {
+       "state": [
+        "station:return:reboard",
+        "ready",
+        "true",
+        "KESTREL HATCH \u00b7 REBOARD",
+        "ch10-ask"
+       ],
+       "fromMs": 11525.7,
+       "untilMs": 11571.6,
+       "dwellMs": 45.9
+      },
+      {
+       "state": [
+        "station:return:crossing",
+        "ready",
+        "true",
+        "ORIGIN WORLD \u00b7 COURSE",
+        "ch10-ask"
+       ],
+       "fromMs": 11695.9,
+       "untilMs": 25966.1,
+       "dwellMs": 14270.2
+      },
+      {
+       "state": [
+        "station:return:landfall",
+        "ready",
+        "true",
+        "WRECK SITE \u00b7 LAND",
+        "ch10-ask"
+       ],
+       "fromMs": 26011.9,
+       "untilMs": 32016.8,
+       "dwellMs": 6004.9
+      },
+      {
+       "state": [
+        "station:relay-query",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 REQUEST A SOURCE",
+        "ch10-ask"
+       ],
+       "fromMs": 32124.5,
+       "untilMs": 51250,
+       "dwellMs": 19125.5
+      },
+      {
+       "state": [
+        "station:bearing-claim",
+        "ready",
+        "true",
+        "WRECK RELAY \u00b7 CLAIM THE BEARING",
+        "ch10-ask"
+       ],
+       "fromMs": 51255,
+       "untilMs": 52900.9,
+       "dwellMs": 1645.9
+      },
+      {
+       "state": [
+        "station:transit:ignite",
+        "ready",
+        "false",
+        "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+        "ch10-transit"
+       ],
+       "fromMs": 52908.8,
+       "untilMs": 54941,
+       "dwellMs": 2032.2
+      },
+      {
+       "state": [
+        "station:transit:hold",
+        "ready",
+        "true",
+        "ISSUED BEARING \u00b7 HOLD",
+        "ch10-transit"
+       ],
+       "fromMs": 55026.8,
+       "untilMs": 62222.8,
+       "dwellMs": 7196.0
+      },
+      {
+       "state": [
+        "station:transit:resolve",
+        "ready",
+        "false",
+        "ISSUING STATION \u00b7 RESOLVING",
+        "ch10-transit"
+       ],
+       "fromMs": 62233.6,
+       "untilMs": 78582.6,
+       "dwellMs": 16349.0
+      },
+      {
+       "state": [
+        null,
+        null,
+        null,
+        null,
+        "done"
+       ],
+       "fromMs": 78589,
+       "untilMs": 80836.2,
+       "dwellMs": 2247.2
+      }
+     ]
+    }
+   }
+  }
+ },
+ "endToEndStampPassLegs": {
+  "full-cold-run": {
+   "durationSeconds": 449.1,
+   "completed": true,
+   "legs": {
+    "beat-ch9-hearth": 12.825,
+    "beat-done": 127.255,
+    "beat-ch10-cold": 361.504,
+    "beat-ch10-ask": 370.062,
+    "left-atmosphere": 373.69,
+    "target-acquired": 374.403,
+    "world-handoff-to-origin": 384.407,
+    "descent-to-origin": 384.407,
+    "relay-handle-resolved": 384.407,
+    "bearing-attitude-published": 384.407,
+    "landfall-origin": 391.093,
+    "relay-query-rung": 391.093,
+    "anchor-relay-ask": 400.344,
+    "anchor-relay-answer": 401.761,
+    "bearing-claim-rung": 401.761,
+    "anchor-bearing-claimed": 401.761,
+    "beat-ch10-transit": 403.575,
+    "transit-entered-on-foot": 403.575,
+    "transit-boarded": 404.094,
+    "ignited": 405.476,
+    "anchor-transit-ignite": 405.476,
+    "seam-milestone": 412.274,
+    "anchor-seam-of-light": 412.274,
+    "T3-resolving-rung": 412.274,
+    "standoff-reached": 426.503,
+    "station-resolved-milestone": 426.503,
+    "anchor-station-resolved": 426.503,
+    "k11-painted": 427.02,
+    "anchor-threshold-handback": 428.817,
+    "guidance-cleared": 428.817
+   },
+   "legBeatClock": {
+    "beat-ch9-hearth": 0.6,
+    "beat-done": 114.3,
+    "beat-ch10-cold": 0.2,
+    "beat-ch10-ask": 0.2,
+    "left-atmosphere": 3.8,
+    "target-acquired": 4.5,
+    "world-handoff-to-origin": 14.3,
+    "descent-to-origin": 14.3,
+    "relay-handle-resolved": 14.3,
+    "bearing-attitude-published": 14.3,
+    "landfall-origin": 20.9,
+    "relay-query-rung": 20.9,
+    "anchor-relay-ask": 30.1,
+    "anchor-relay-answer": 31.5,
+    "bearing-claim-rung": 31.5,
+    "anchor-bearing-claimed": 31.5,
+    "beat-ch10-transit": 0.2,
+    "transit-entered-on-foot": 0.2,
+    "transit-boarded": 0.7,
+    "ignited": 2.1,
+    "anchor-transit-ignite": 2.1,
+    "seam-milestone": 8.9,
+    "anchor-seam-of-light": 8.9,
+    "T3-resolving-rung": 8.9,
+    "standoff-reached": 23.1,
+    "station-resolved-milestone": 23.1,
+    "anchor-station-resolved": 23.1,
+    "k11-painted": 23.6,
+    "anchor-threshold-handback": 25.3,
+    "guidance-cleared": 25.3
+   },
+   "pageErrors": [],
+   "holdMeasuredMs": 2316,
+   "standoffAtResolve": 1428
+  }
+ },
+ "transitAnchorsByVariantFinalProof": {
+  "desktop-high": {
+   "profile": "HIGH",
+   "reducedMotion": false,
+   "isMobile": false,
+   "order": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ],
+   "seamStrictlyBeforeResolved": true,
+   "missingAnchors": [],
+   "byAnchor": {
+    "anc.ch10.transit-ignite": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.station-resolved"
+     },
+     "reset": null
+    },
+    "anc.ch10.seam-of-light": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.station-resolved"
+     },
+     "reset": null
+    },
+    "anc.ch10.station-resolved": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "blended",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.threshold-handback"
+     },
+     "reset": null
+    },
+    "anc.ch10.threshold-handback": {
+     "objectiveId": null,
+     "markerLabel": null,
+     "health": null,
+     "requiresMarker": null,
+     "workOrder": null,
+     "authority": null,
+     "fov": null,
+     "agency": null,
+     "reset": "completion"
+    }
+   }
+  },
+  "desktop-medium-reduced-motion": {
+   "profile": "MEDIUM",
+   "reducedMotion": true,
+   "isMobile": false,
+   "order": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ],
+   "seamStrictlyBeforeResolved": true,
+   "missingAnchors": [],
+   "byAnchor": {
+    "anc.ch10.transit-ignite": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.station-resolved"
+     },
+     "reset": null
+    },
+    "anc.ch10.seam-of-light": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.station-resolved"
+     },
+     "reset": null
+    },
+    "anc.ch10.station-resolved": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "blended",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.threshold-handback"
+     },
+     "reset": null
+    },
+    "anc.ch10.threshold-handback": {
+     "objectiveId": null,
+     "markerLabel": null,
+     "health": null,
+     "requiresMarker": null,
+     "workOrder": null,
+     "authority": null,
+     "fov": null,
+     "agency": null,
+     "reset": "completion"
+    }
+   }
+  },
+  "desktop-low": {
+   "profile": "LOW",
+   "reducedMotion": false,
+   "isMobile": false,
+   "order": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ],
+   "seamStrictlyBeforeResolved": true,
+   "missingAnchors": [],
+   "byAnchor": {
+    "anc.ch10.transit-ignite": {
+     "objectiveId": "station:transit:hold",
+     "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "CURRENT OBJECTIVE | ISSUED BEARING \u00b7 HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.transit-ignite"
+     },
+     "reset": null
+    },
+    "anc.ch10.seam-of-light": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.station-resolved"
+     },
+     "reset": null
+    },
+    "anc.ch10.station-resolved": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "CURRENT OBJECTIVE | ISSUING STATION \u00b7 RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "blended",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.threshold-handback"
+     },
+     "reset": null
+    },
+    "anc.ch10.threshold-handback": {
+     "objectiveId": null,
+     "markerLabel": null,
+     "health": null,
+     "requiresMarker": null,
+     "workOrder": null,
+     "authority": null,
+     "fov": null,
+     "agency": null,
+     "reset": "completion"
+    }
+   }
+  },
+  "mobile-potato": {
+   "profile": "POTATO",
+   "reducedMotion": false,
+   "isMobile": true,
+   "order": [
+    "anc.ch10.transit-ignite",
+    "anc.ch10.seam-of-light",
+    "anc.ch10.station-resolved",
+    "anc.ch10.threshold-handback"
+   ],
+   "seamStrictlyBeforeResolved": true,
+   "missingAnchors": [],
+   "byAnchor": {
+    "anc.ch10.transit-ignite": {
+     "objectiveId": "station:transit:hold",
+     "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+     "health": "ready",
+     "requiresMarker": "true",
+     "workOrder": "JOURNAL",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.transit-ignite"
+     },
+     "reset": null
+    },
+    "anc.ch10.seam-of-light": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "JOURNAL",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "player",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.station-resolved"
+     },
+     "reset": null
+    },
+    "anc.ch10.station-resolved": {
+     "objectiveId": "station:transit:resolve",
+     "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+     "health": "ready",
+     "requiresMarker": "false",
+     "workOrder": "JOURNAL",
+     "authority": "player-camera",
+     "fov": 70,
+     "agency": {
+      "movement": "blended",
+      "look": "player",
+      "interaction": "player",
+      "handBackAnchorRef": "anc.ch10.threshold-handback"
+     },
+     "reset": null
+    },
+    "anc.ch10.threshold-handback": {
+     "objectiveId": null,
+     "markerLabel": null,
+     "health": null,
+     "requiresMarker": null,
+     "workOrder": null,
+     "authority": null,
+     "fov": null,
+     "agency": null,
+     "reset": "completion"
+    }
+   }
+  }
+ }
+}

@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import {
   beginStory,
@@ -10,7 +13,10 @@ import {
   initStoryFromSave,
   restartStory,
   STORY_BEAT_ORDER,
+  STORY_CHAPTER_ORDER,
   STORY_MILESTONES,
+  storyChapterAtLeast,
+  storyFirstDayOrLater,
   storyEntryPoint,
   type StoryBeat
 } from './storyState.ts';
@@ -51,6 +57,7 @@ import {
   isTidegardenRouteOnline,
   resolveStoryBootWorldId,
   resolveStoryResumeWorldId,
+  resolveStoryRuntimeWorldId,
   STORY_PRIMARY_WORLD_ID,
   TIDEGARDEN_ROUTE_MILESTONE,
   TIDEGARDEN_WORLD_ID
@@ -60,6 +67,20 @@ import {
   PHYSICAL_BOARDING_SEALED_MILESTONE
 } from './physicalBoardingReceipts.ts';
 import { STORY_COORDINATE } from './world/storyWorld.ts';
+
+const SRC_ROOT = fileURLToPath(new URL('..', import.meta.url));
+
+function walkClientSources(directory: string, found: string[] = []): string[] {
+  for (const entry of readdirSync(directory, { withFileTypes: true })) {
+    const path = join(directory, entry.name);
+    if (entry.isDirectory()) {
+      walkClientSources(path, found);
+      continue;
+    }
+    if (/\.(ts|tsx)$/.test(entry.name) && !/\.test\.tsx?$/.test(entry.name)) found.push(path);
+  }
+  return found;
+}
 
 describe('storyState — beat order (drives debug jumps + seeding)', () => {
   beforeEach(() => {
@@ -106,7 +127,8 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
       ch7: 7,
       ch8: 8,
       ch9: 9,
-      complete: 10,
+      ch10: 10,
+      complete: 11,
       none: -1
     } as const;
     let last = -1;
@@ -115,7 +137,25 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
       expect(rank).toBeGreaterThanOrEqual(last);
       last = rank;
     }
-    expect(last).toBe(10); // ends at 'done'
+    expect(last).toBe(11); // ends at 'done'
+  });
+
+  it('reads the station chapter as ch10 and never as the monochrome ladder', () => {
+    // `'ch10-cold'.startsWith('ch1')` is true; the chapter resolver must not be
+    // fooled by the prefix it shares with chapter one.
+    expect(chapterForBeat('ch10-cold')).toBe('ch10');
+    expect(chapterForBeat('ch10-ask')).toBe('ch10');
+    expect(chapterForBeat('ch10-transit')).toBe('ch10');
+    expect(chapterForBeat('ch1-fixed')).toBe('ch1');
+  });
+
+  it('keeps `done` as the runtime terminal with chapter 10 ordered before it', () => {
+    const at = (beat: StoryBeat) => STORY_BEAT_ORDER.indexOf(beat);
+    expect(STORY_BEAT_ORDER[STORY_BEAT_ORDER.length - 1]).toBe('done');
+    expect(at('ch9-hearth')).toBeLessThan(at('ch10-cold'));
+    expect(at('ch10-cold')).toBeLessThan(at('ch10-ask'));
+    expect(at('ch10-ask')).toBeLessThan(at('ch10-transit'));
+    expect(at('ch10-transit')).toBeLessThan(at('done'));
   });
 
   it('the monochrome ladder climbs the history of perspectives in order', () => {
@@ -290,6 +330,194 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     expect(storyEntryPoint()).toEqual({ chapter: 'complete', beat: 'done' });
     expect(hasCompletedStory()).toBe(true);
     expect(canContinueStory()).toBe(false);
+  });
+
+  it('resumes chapter 10 out of done free play and hands it back at the threshold', () => {
+    const ladder: Array<[string, { chapter: string; beat: StoryBeat }]> = [
+      [STORY_MILESTONES.ch10ColdNoticed, { chapter: 'ch10', beat: 'ch10-cold' }],
+      [STORY_MILESTONES.ch10FabricationRefused, { chapter: 'ch10', beat: 'ch10-ask' }],
+      [STORY_MILESTONES.ch10BearingClaimed, { chapter: 'ch10', beat: 'ch10-transit' }]
+    ];
+    for (const [milestone, entry] of ladder) {
+      resetProgression();
+      markMilestone(STORY_MILESTONES.started);
+      // The two-world arc stays finished throughout chapter 10.
+      markMilestone(STORY_MILESTONES.ch9Hearth);
+      markMilestone(milestone);
+      expect(storyEntryPoint(), milestone).toEqual(entry);
+      expect(hasCompletedStory(), milestone).toBe(true);
+      expect(canContinueStory(), milestone).toBe(true);
+    }
+
+    markMilestone(STORY_MILESTONES.ch10Complete);
+    expect(storyEntryPoint()).toEqual({ chapter: 'complete', beat: 'done' });
+    expect(canContinueStory()).toBe(false);
+  });
+
+  it('keeps every ch5 through ch9 world-prop decision byte-identical to the retired regex', () => {
+    // The predicate this replaced was /^ch[5-9]$/ plus ch4, done and three ch3
+    // tail beats. Table-driven against that exact shipped truth, chapter by
+    // chapter and beat by beat, so the repair cannot have moved anything but
+    // the case it was for.
+    const shippedFirstDayOrLater = (chapter: string, beat: StoryBeat | null): boolean =>
+      chapter === 'ch4'
+        || chapter === 'complete'
+        || /^ch[5-9]$/.test(chapter)
+        || beat === 'ch3-thirst' || beat === 'ch3-forage' || beat === 'ch3-signal';
+
+    for (const beat of STORY_BEAT_ORDER) {
+      const chapter = chapterForBeat(beat);
+      const snapshot = { active: true, chapter, beat, runId: 0 } as const;
+      // ch10 is the ONE intended difference: it is chapter five or later and
+      // the retired regex said otherwise.
+      const expected = chapter === 'ch10' ? true : shippedFirstDayOrLater(chapter, beat);
+      expect(storyFirstDayOrLater(snapshot), beat).toBe(expected);
+    }
+
+    // And the field-pack source's own gate moves with it, for the same reason.
+    for (const chapter of ['ch1', 'ch2', 'ch3', 'ch4'] as const) {
+      expect(storyChapterAtLeast(chapter, 'ch5'), chapter).toBe(false);
+    }
+    for (const chapter of ['ch5', 'ch6', 'ch7', 'ch8', 'ch9', 'ch10', 'complete'] as const) {
+      expect(storyChapterAtLeast(chapter, 'ch5'), chapter).toBe(true);
+    }
+    expect(storyChapterAtLeast('none', 'ch5')).toBe(false);
+    expect(storyChapterAtLeast('prologue', 'ch5')).toBe(false);
+  });
+
+  it('renders the wreck relay through the whole ask beat', () => {
+    // The relay is the channel chapter 10 exists to ask down. Its scenery and
+    // its live lamp must be present for every ch10 beat, not merely its marker.
+    for (const beat of ['ch10-cold', 'ch10-ask', 'ch10-transit'] as const) {
+      expect(storyFirstDayOrLater({
+        active: true, chapter: chapterForBeat(beat), beat, runId: 0
+      }), beat).toBe(true);
+    }
+  });
+
+  it('keeps every ch1 through ch9 boot-world decision byte-identical, and gives ch10 to Tidegarden', () => {
+    // The owner-reported ch10 defects (a full-size sibling shell drawn at the
+    // camera, the ground itself becoming a lockable system body, and both
+    // surface beats running on the origin's terrain seed) all reduce to ONE
+    // cause: the boot-world predicate enumerated ch9 and complete and stopped.
+    // Table-driven against the retired enumeration's exact shipped truth, beat
+    // by beat, so the repair cannot have moved anything but the case it is for.
+    const retiredTidegardenOwned = (chapter: string, beat: StoryBeat | null): boolean =>
+      beat === 'ch8-landfall' || chapter === 'ch9' || chapter === 'complete';
+
+    for (const beat of STORY_BEAT_ORDER) {
+      const chapter = chapterForBeat(beat);
+      // The two surface beats are the intended difference: the station chapter
+      // opens at the second hearth, which is on Tidegarden. `ch10-transit` is
+      // NOT, and must keep the retired answer — chapter 10 flies back to the
+      // origin during the ask (the relay is there) and lifts off from the
+      // wreck, so a reload restarts the transit where the ship actually is.
+      const owned = beat === 'ch10-cold' || beat === 'ch10-ask'
+        ? true
+        : retiredTidegardenOwned(chapter, beat);
+      expect(resolveStoryBootWorldId(STORY_PRIMARY_WORLD_ID, true, { chapter, beat }), beat)
+        .toBe(owned ? TIDEGARDEN_WORLD_ID : STORY_PRIMARY_WORLD_ID);
+      // The route capability still gates everything: with it closed, the
+      // authored system is one body and every beat boots on the origin.
+      expect(resolveStoryBootWorldId(TIDEGARDEN_WORLD_ID, false, { chapter, beat }), beat)
+        .toBe(STORY_PRIMARY_WORLD_ID);
+    }
+
+    // Named restatement, because these three beats are the defect.
+    for (const beat of ['ch10-cold', 'ch10-ask'] as const) {
+      expect(resolveStoryBootWorldId(STORY_PRIMARY_WORLD_ID, true, {
+        chapter: chapterForBeat(beat), beat
+      }), beat).toBe(TIDEGARDEN_WORLD_ID);
+    }
+    // The transit is a crossing in progress and belongs to the world it left,
+    // exactly as ch8-launch and ch8-crossing do. A saved Tidegarden surface
+    // does not reclaim a ship that is already in space.
+    expect(resolveStoryBootWorldId(TIDEGARDEN_WORLD_ID, true, {
+      chapter: 'ch10', beat: 'ch10-transit'
+    })).toBe(STORY_PRIMARY_WORLD_ID);
+    // A chapter the ordering does not know is nowhere in the story and owns
+    // nothing — the predicate fails closed rather than to the sibling.
+    expect(resolveStoryBootWorldId(TIDEGARDEN_WORLD_ID, true, { chapter: 'none', beat: null }))
+      .toBe(STORY_PRIMARY_WORLD_ID);
+  });
+
+  it('protects a committed crossing in BOTH directions so the world cannot reclaim the ship', () => {
+    // The movie lane's ch10 return crossing looped forever on this: the runtime
+    // resolver knew only ch8's outbound seam, so once the system flight had
+    // committed the origin world the boot answer (Tidegarden, correct for a
+    // RELOAD) kept winning, the app swapped the scene back, and the player was
+    // re-seated at the Tidegarden launch pose every time — eighteen identical
+    // launch/reclaim cycles with activePlanetId never leaving the sibling.
+    const outbound = { chapter: 'ch8', beat: 'ch8-crossing' };
+    const inbound = { chapter: 'ch10', beat: 'ch10-ask' };
+
+    // Outbound, unchanged: committed Tidegarden survives the readiness gap.
+    expect(resolveStoryRuntimeWorldId(TIDEGARDEN_WORLD_ID, true, outbound, TIDEGARDEN_WORLD_ID))
+      .toBe(TIDEGARDEN_WORLD_ID);
+    // Inbound: a committed origin must survive it too.
+    expect(resolveStoryRuntimeWorldId(STORY_PRIMARY_WORLD_ID, true, inbound, STORY_PRIMARY_WORLD_ID))
+      .toBe(STORY_PRIMARY_WORLD_ID);
+
+    // Neither direction may promote a crossing the system flight has NOT
+    // committed — an uncommitted destination render is not ownership.
+    expect(resolveStoryRuntimeWorldId(STORY_PRIMARY_WORLD_ID, true, inbound, TIDEGARDEN_WORLD_ID))
+      .toBe(TIDEGARDEN_WORLD_ID);
+    expect(resolveStoryRuntimeWorldId(TIDEGARDEN_WORLD_ID, true, inbound, TIDEGARDEN_WORLD_ID))
+      .toBe(TIDEGARDEN_WORLD_ID);
+    // And a reload still restarts the leg from the world it launched from.
+    expect(resolveStoryBootWorldId(STORY_PRIMARY_WORLD_ID, true, inbound))
+      .toBe(TIDEGARDEN_WORLD_ID);
+    // Route closed: one body, origin only, in every direction.
+    expect(resolveStoryRuntimeWorldId(STORY_PRIMARY_WORLD_ID, false, inbound, STORY_PRIMARY_WORLD_ID))
+      .toBe(STORY_PRIMARY_WORLD_ID);
+    // A beat with no crossing of its own is untouched by the table.
+    expect(resolveStoryRuntimeWorldId(STORY_PRIMARY_WORLD_ID, true,
+      { chapter: 'ch10', beat: 'ch10-transit' }, STORY_PRIMARY_WORLD_ID))
+      .toBe(STORY_PRIMARY_WORLD_ID);
+  });
+
+  it('orders chapters from the beat order rather than from a second list', () => {
+    expect(STORY_CHAPTER_ORDER.indexOf('ch9')).toBeLessThan(STORY_CHAPTER_ORDER.indexOf('ch10'));
+    expect(STORY_CHAPTER_ORDER.indexOf('ch10')).toBeLessThan(STORY_CHAPTER_ORDER.indexOf('complete'));
+    expect(STORY_CHAPTER_ORDER[0]).toBe('prologue');
+  });
+
+  it('seeds a done rehearsal with the receipts a real arrival carries', () => {
+    // ?story=done must be the free play a real player reaches, not a lookalike:
+    // the two-world handoff is half of ST-0's render predicate, so a rehearsal
+    // without it has a sky no real save has.
+    vi.stubGlobal('window', { location: { search: '?story=done' } });
+    initStoryFromSave();
+
+    expect(getStoryStateSnapshot()).toMatchObject({
+      active: false,
+      chapter: 'complete',
+      beat: 'done'
+    });
+    expect(hasMilestone(STORY_MILESTONES.complete)).toBe(true);
+    expect(hasMilestone(STORY_MILESTONES.ch9Hearth)).toBe(true);
+    expect(hasMilestone('story:tidegarden:two-world-handoff')).toBe(true);
+    expect(hasMilestone('story:tidegarden:safe-rest-completed')).toBe(true);
+    expect(hasMilestone('story:tidegarden:shelter-certified')).toBe(true);
+    // And it is still free play, not chapter 10: nothing has been noticed yet.
+    expect(hasMilestone(STORY_MILESTONES.ch10ColdNoticed)).toBe(false);
+    expect(storyEntryPoint()).toEqual({ chapter: 'complete', beat: 'done' });
+  });
+
+  it('defines the docking authorization milestone and grants it nowhere', () => {
+    // Run one DEFINES the predicate and sets it for no one: run two's owner
+    // docking packet owns when it becomes true. Proven by scanning the shipped
+    // client for any producer that would mark it.
+    expect(STORY_MILESTONES.stationDockingAuthorized).toBe('story:station-docking-authorized');
+    const offenders: string[] = [];
+    for (const path of walkClientSources(SRC_ROOT)) {
+      const source = readFileSync(path, 'utf8');
+      if (
+        /markMilestone\(\s*STORY_MILESTONES\.stationDockingAuthorized/.test(source)
+        || /markMilestone\(\s*'story:station-docking-authorized'/.test(source)
+      ) offenders.push(path);
+    }
+    expect(offenders).toEqual([]);
   });
 
   it('reconstructs the Keel and flight-ready prerequisites for late debug rehearsals', () => {

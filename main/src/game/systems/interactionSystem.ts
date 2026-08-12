@@ -17,7 +17,10 @@ export type InteractionId =
   | 'story-audit-fire' | 'story-audit-life' | 'story-audit-tree'
   | 'story-comply-fire' | 'story-comply-organics' | 'story-refuse-tree'
   | 'story-tidegarden-attend' | 'story-tidegarden-record' | 'story-tidegarden-choose-site'
-  | 'story-habitat-core' | 'story-habitat-certify' | 'story-habitat-rest';
+  | 'story-habitat-core' | 'story-habitat-certify' | 'story-habitat-rest'
+  // chapter 10: diagnose, attempt, ask, claim
+  | 'story-ch10-fault-read' | 'story-ch10-fabrication-attempt'
+  | 'story-ch10-relay-query' | 'story-ch10-bearing-claim';
 
 export interface ActiveInteraction {
   id: InteractionId;

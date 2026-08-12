@@ -1,0 +1,1029 @@
+{
+  "capturedAt": "2026-08-12T03:22:38.914Z",
+  "base": "http://localhost:5176",
+  "note": "milestones are marked through the shipped progression system because the movie lane cannot fly the transit (see ch10-launch-stall.json)",
+  "checkpoints": [
+    {
+      "id": "transit-hold-entry",
+      "marked": [],
+      "uninterrupted": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": false,
+          "stationResolved": false
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "transit-hold",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        }
+      },
+      "afterReload": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": false,
+          "stationResolved": false
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "transit-hold",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        }
+      },
+      "milestonesSurvived": true,
+      "variantIdentical": true,
+      "carrierIdentical": true,
+      "liveVariantIdentical": true,
+      "liveCarrierIdentical": true,
+      "liveIntensityIdentical": true,
+      "moodIdentical": true,
+      "liveAgreesWithPureBefore": true,
+      "liveAgreesWithPureAfter": true
+    },
+    {
+      "id": "mid-transit-after-ignite",
+      "marked": [
+        "ch10TransitIgnited"
+      ],
+      "uninterrupted": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": false,
+          "stationResolved": false
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "transit-hold",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        }
+      },
+      "afterReload": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": false,
+          "stationResolved": false
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "transit-hold",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        }
+      },
+      "milestonesSurvived": true,
+      "variantIdentical": true,
+      "carrierIdentical": true,
+      "liveVariantIdentical": true,
+      "liveCarrierIdentical": true,
+      "liveIntensityIdentical": true,
+      "moodIdentical": true,
+      "liveAgreesWithPureBefore": true,
+      "liveAgreesWithPureAfter": true
+    },
+    {
+      "id": "mid-transit-after-seam",
+      "marked": [
+        "ch10SeamPassed"
+      ],
+      "uninterrupted": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": true,
+          "stationResolved": false
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "seam-ebb",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            9,
+            17
+          ],
+          "pattern": [
+            0,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.18,
+          "sub": 0.13,
+          "ost": 0,
+          "riser": 0.04,
+          "baseline": 0.36,
+          "octave": 12
+        }
+      },
+      "afterReload": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": false,
+          "stationResolved": false
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "transit-hold",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        }
+      },
+      "milestonesSurvived": false,
+      "variantIdentical": false,
+      "carrierIdentical": true,
+      "liveVariantIdentical": true,
+      "liveCarrierIdentical": true,
+      "liveIntensityIdentical": true,
+      "moodIdentical": true,
+      "liveAgreesWithPureBefore": false,
+      "liveAgreesWithPureAfter": true
+    },
+    {
+      "id": "at-station-resolved",
+      "marked": [
+        "ch10StationResolved"
+      ],
+      "uninterrupted": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": false,
+          "stationResolved": true
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "station-resolved",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            7,
+            12,
+            17,
+            29
+          ],
+          "progression": [
+            [
+              0,
+              7,
+              12
+            ],
+            [
+              0,
+              9,
+              17,
+              29
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              7,
+              12,
+              17
+            ],
+            "density": 0.1
+          },
+          "pattern": [
+            0,
+            null,
+            null,
+            null,
+            17,
+            null,
+            null,
+            null
+          ],
+          "tempo": 68,
+          "wave": "triangle",
+          "pad": 0.17,
+          "sub": 0.1,
+          "ost": 0,
+          "riser": 0.04,
+          "baseline": 0.44,
+          "octave": 12
+        }
+      },
+      "afterReload": {
+        "beat": "ch10-transit",
+        "milestones": {
+          "faultRead": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "seamPassed": false,
+          "stationResolved": false
+        },
+        "live": {
+          "variant": "transit-hold",
+          "carrierAlive": true,
+          "intensity": 0.42,
+          "maxIntensity": 0.44
+        },
+        "pure": {
+          "variant": "transit-hold",
+          "carrierAlive": true
+        },
+        "mood": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        },
+        "moodForPure": {
+          "chord": [
+            0,
+            5,
+            9,
+            17
+          ],
+          "progression": [
+            [
+              0,
+              5,
+              9,
+              17
+            ],
+            [
+              2,
+              7,
+              9,
+              17
+            ]
+          ],
+          "melody": {
+            "scale": [
+              0,
+              2,
+              5,
+              7,
+              9,
+              12,
+              17
+            ],
+            "density": 0.22
+          },
+          "pattern": [
+            0,
+            null,
+            9,
+            null,
+            17,
+            null,
+            9,
+            null
+          ],
+          "tempo": 68,
+          "wave": "sawtooth",
+          "pad": 0.16,
+          "sub": 0.13,
+          "ost": 0.05,
+          "riser": 0.04,
+          "baseline": 0.42,
+          "octave": 12
+        }
+      },
+      "milestonesSurvived": false,
+      "variantIdentical": false,
+      "carrierIdentical": true,
+      "liveVariantIdentical": true,
+      "liveCarrierIdentical": true,
+      "liveIntensityIdentical": true,
+      "moodIdentical": true,
+      "liveAgreesWithPureBefore": false,
+      "liveAgreesWithPureAfter": true
+    }
+  ],
+  "pageErrors": [],
+  "allIdentical": true
+}

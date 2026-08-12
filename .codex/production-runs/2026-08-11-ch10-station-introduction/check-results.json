@@ -1,0 +1,234 @@
+{
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v6",
+  "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+  "supersedesContractVersion": "draft-v5",
+  "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+  "phase": "implementation",
+  "iteration": 43,
+  "route": "review-wave-repairs",
+  "recordedBy": "integration-engineer",
+  "recordedAt": "2026-08-12T08:30:00-04:00",
+  "productionScope": {
+    "status": "pass",
+    "summary": "38 changed files, all inside allowedPaths at lock R7; zero protected-path bytes. Re-pinned to draft-v6 (4202e38b) after the contract moved again mid-round \u2014 verify caught it as a scene-contract SHA drift, not a summary. v6 is tri-signed and changes four leaves: the cut-line hero-still criterion, the version fields, and the production-lock authorityRef, which now cites the live d370b9da and so CLOSES the lock-metadata drift I reported last round. Nothing in v6 touches guidance, autopilot or lens, so all three repairs stand as written.",
+    "evidenceRefs": [
+      "implementation.diff",
+      "production-lock.md",
+      "evidence/implementation/production-scope.log"
+    ]
+  },
+  "creativeContract": {
+    "status": "pass",
+    "summary": "Draft-v4's ten replacement sites are implemented byte-exactly and the two blocking score defects are closed. Copy: marker 'ORIGIN WORLD \u00b7 COURSE' with work order 'FIND THE ORIGIN WORLD.' and the draft-v2 final line 'CENTER IT AND CROSS.' untouched; 'STAND AT THE SECOND HEARTH CORE.'; K5 painting under a new KESTREL FABRICATOR header with its text unchanged. Score: variant AND carrier now resolve from durable milestones in enterEmergentScoreBeat (the edge machine is gone, and the reported intensity is derived from the variant so the whole snapshot is milestone-pure); a fourth ch10-ask variant 'relay-ask' realizes the contract's own two-bar square-fifth question figure, with relay-answer entering at +2 beats inside it and both variants publishing the [0,7] REGULATION cell so the question sounds across the boundary; the carrier is re-pitched to degree 17 (pitch-class 5, the suspended-fourth/eleventh colour) with its octave double at 29, per the amended SCORE FREEZE clause; station-resolved pad 0.19 to 0.17 and sub 0.12 to 0.10; the riser is one flat value (0.04) across all three transit variants and the resolve's ostinato is 0, so the pulse the seam ebbed away never returns inside the chapter; the dead CH10_SEAM_EBB_SLEW_SECONDS export is deleted in favour of the engine-owned SCORE_OST_GAIN_SLEW_S the ebb actually takes; the machine-time claim now names mechanisms that exist. Signed-rail pins (signedSceneAvRuntime.ts, generatedSceneAvRuntime.json, chapter-registry.json, generate-scene-av-runtime.mjs) are re-bound to the current signed contract (now draft-v6 4202e38b) and regeneration is byte-stable. Repair cycle three (verifier D-5/D-6 plus the relay-lifecycle framing fail): the autopilot's flight directive is a beat SET rather than a chain of beat literals, so ch10-ask and ch10-transit now fly; the ask beat's return crossing holds the origin world's bearing until the origin is the enclosing world and then releases it for the descent; the transit cuts thrust at arrivalStandoff(body, 1,500) and holds there rather than entering CORRIDOR_RANGE 1,400; the ask ladder reads the WORLD before the receipt, so no relay rung can publish against a relay that exists only on the origin world; and chapter 10 owns its marker band outright, so a rung that wants no marker empties the band instead of inheriting the free-play chevron under it.",
+    "evidenceRefs": [
+      "scene-contract.json",
+      "snapshots/scene-contract.draft-v5.json",
+      "chapter-repair-direction.json",
+      "score-repair-direction.json",
+      "evidence/score/relay-answer_onsets.json",
+      "evidence/score/resolved_vs_a4_rms.json",
+      "evidence/score/regression_ch1-ch9_moods.json",
+      "evidence/verification/ch10-launch-stall.json"
+    ]
+  },
+  "ownerReportedDefect": {
+    "status": "pass",
+    "summary": "Chapter 10 booted on the ORIGIN world because resolveStoryBootWorldId computed ownership from an enumeration that stopped at ch9. The predicate is now chapter-ORDER aware via storyChapterAtLeast(chapter, 'ch9'), with one physical exception recorded in the source: ch10-transit stays origin-owned, because chapter 10 crosses back to the first world during the ask (the relay is there and nowhere else) and the transit lifts off from the wreck \u2014 a ship already in flight belongs to the world it left, exactly as ch8-launch and ch8-crossing do. Verified live at ?story=ch10-cold, ch10-ask and ch10-transit plus ch9-hearth and ch8-crossing regressions: the two surface beats now boot and mount Tidegarden (-1,-1:p1) on terrain seed 1600321158 with renderOrigin at Tidegarden's system position, the origin world appears only as a distant sky surrogate at scale 2.51 (identical to ch9-hearth's 2.5148), no companion body renders within a metre of the camera, and no LOCAL LOCK or FLIGHT CORRIDOR chip appears anywhere on foot. ch8-crossing is byte-identical to before (origin, seed 3215739679). A table-driven test walks every beat in STORY_BEAT_ORDER against the retired enumeration's exact truth. SystemCompanionBodies.tsx gained a one-metre collapse guard so a future ownership mismatch degrades to nothing rather than to a ghost planet at the eye; the threshold is metres and not radii, because arriving at a body in physical space legitimately puts the camera inside its bound sphere.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-boot-world-trace.json",
+      "ch10-boot-world-probe.mjs",
+      "production-lock.md",
+      "evidence/implementation/tests.log"
+    ]
+  },
+  "typecheck": {
+    "status": "pass",
+    "summary": "tsc --noEmit over tsconfig.json and tsconfig.node.json. Zero diagnostics.",
+    "evidenceRefs": [
+      "evidence/implementation/typecheck.log"
+    ]
+  },
+  "tests": {
+    "status": "pass",
+    "summary": "277 test files, 2252 tests, all passing (2241 before this cycle: 11 new cases). New coverage: the table-driven boot-world regression over every beat in STORY_BEAT_ORDER, and a ten-case chapter-10 score suite exercising getChapter10ScoreMood / noteChapter10ScoreAnchor / releaseChapter10Score against the real mood table \u2014 the full (beat x milestone) resolver matrix, the mid-transit reload property (the reloaded snapshot and the installed mood are equal to the continuous run's, ostinato still 0 and the octave double still present), carrier bounds in both directions, the chord-membership legality check the original carrier pass lacked, the ask-figure/answer relationship, the D3 ceiling and D7 flat rail, and shipped ch1-ch9 moods asserted untouched.",
+    "evidenceRefs": [
+      "evidence/implementation/tests.log"
+    ]
+  },
+  "build": {
+    "status": "pass",
+    "summary": "vite build succeeds inside a memory-capped systemd scope (MemoryMax=12G, MemorySwapMax=0). Built in 5.69s.",
+    "evidenceRefs": [
+      "evidence/implementation/build.log",
+      "evidence/implementation/verify.log"
+    ]
+  },
+  "routedNotTaken": {
+    "status": "routed",
+    "summary": "Story-audit F8's second half \u2014 repointing main/story-authority.json activeProduction and dynamicSources.ownerApprovedSceneContract.activePath at this run \u2014 is STOPPED and routed to the orchestrator. The manifest is not the blocker; the gate is. main/tools/story-authority-gate.mjs pins the active production identity as frozen literals in five coupled places (the activePath string in manifest.dynamic-scene-contract, the expectedActiveProduction object, EXPECTED_PRODUCTION_BEATS used by production.contract-beats AND production.locked-beats AND the per-anchor coverage loops, the copyChangeDecisionRefs assertion requiring 'owner-instruction-2026-07-13-implement-all' which this run's lock does not and should not carry, and EXPECTED_OPEN_RELEASE_GATES which production.release-gates mirrors against the ACTIVE lock's openGateRefs). Retargeting would (a) drop the signed A4-to-ch9 contract out of gate coverage entirely, since its 66 anchors and 13 beats are exactly what those loops walk, (b) require rewriting a self-test-protected release-gate literal, (c) require weakening the owner copy-change-decision assertion, and (d) change the gate's check count from 1088 to roughly 966, so the stated acceptance ('1088/1088 still') cannot hold under any retarget. R2 authorized this gate for one thing \u2014 teaching the ceiling check its new value \u2014 and this is not that. The coherent fix is a SECOND registered production rather than a swapped one, which needs a schema shape, a gate design and a lock revision the orchestrator owns. Meanwhile the ch10 contract IS registered and gated: chapter-registry.json carries it as ch10-station-introduction@draft-v6 with its exact bytes (3817 checks), and the signed AV rail compiles from it (76 anchors from two signed contracts, byte-stable).",
+    "evidenceRefs": [
+      "story-audit.md",
+      "chapter-repair-direction.json",
+      "evidence/implementation/story-authority.log",
+      "evidence/implementation/chapter-registry-check.log"
+    ]
+  },
+  "commands": [
+    {
+      "command": "npm --prefix main run typecheck",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/typecheck.log",
+      "summary": "Zero diagnostics across both project configs."
+    },
+    {
+      "command": "npx vitest run",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/tests.log",
+      "summary": "277 files, 2252 tests passed."
+    },
+    {
+      "command": "npm --prefix main run story:authority",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/story-authority.log",
+      "summary": "1088 of 1088 checks pass; the smoke self-test also passes."
+    },
+    {
+      "command": "npm --prefix main run chapter:registry:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/chapter-registry-check.log",
+      "summary": "3817 checks passed with the ch10 chapter registered at draft-v6 and its contract hash bound."
+    },
+    {
+      "command": "npm --prefix main run chapter:journey:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/chapter-journey-check.log",
+      "summary": "11 chapters, 31 objectives, zero issues."
+    },
+    {
+      "command": "npm --prefix main run story:ux:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/story-ux-check.log",
+      "summary": "6 files, 54 tests passed."
+    },
+    {
+      "command": "npm --prefix main run catalog:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/catalog-check.log",
+      "summary": "Economy catalog unchanged."
+    },
+    {
+      "command": "npm --prefix main run scene:av:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/scene-av-check.log",
+      "summary": "76 anchors from 2 signed contracts (3367b94f9f0f, 4202e38b3a59), current \u2014 regeneration is byte-identical to the checked-in runtime at draft-v6."
+    },
+    {
+      "command": "npm --prefix main run creative:workflow:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/scene-av-check.log",
+      "summary": "185 checks passed."
+    },
+    {
+      "command": "npm --prefix main run verify",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/verify.log",
+      "summary": "All nine steps green end to end after the repair cycle."
+    },
+    {
+      "command": "node .codex/production-runs/2026-08-11-ch10-station-introduction/ch10-boot-world-probe.mjs",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/verification/ch10-boot-world-trace.json",
+      "summary": "Five live deep links; every boot-world, resident-world, terrain-seed, render-origin, companion-placement and lock-chip assertion passes."
+    },
+    {
+      "command": "node .codex/production-runs/2026-08-11-ch10-station-introduction/ch10-score-repair-probe.mjs",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/score/ch10-score-repair-report.json",
+      "summary": "Seven deterministic offline renders: the real ask-through-answer transition with onsets, the ch5-maw reference, the steady-window resolve against a4-exhale at its authored baseline, and the real transit-hold to seam-ebb transition."
+    },
+    {
+      "command": "node .codex/production-runs/2026-08-11-ch10-station-introduction/mood-regression.mjs",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/score/regression_ch1-ch9_moods.json",
+      "summary": "The frozen MOODS table is byte-identical to the pinned revision: 40 shipped beats, zero changed."
+    }
+  ],
+  "verifierDefectRepair": {
+    "status": "pass",
+    "summary": "D-13 CLOSED AND PROVEN. autopilot.ts case 'ch10-transit' gated everything on controlMode === 'flight' and had no boarding step, but the FLOW enters the beat on foot at the relay \u2014 she has just claimed the bearing standing beside it \u2014 while the deep link seeds the pilot already in flight, which is exactly why the deep-link tail passed 12/12 and the flow stood 2,577s against a 260s backstop. Added the on-foot leg using the ask beat's own boarding grammar (walk to the Kestrel's derivable pose, board), after which the existing flight legs take over. Proven live in one flow run: enteredTransitOnFoot true, boardedInTransit true, ignited true, seamPassed true, and the ladder walked the full arc \u2014 crossing, landfall, relay-query, bearing-claim, transit:ignite, transit:hold, transit:resolve. D-6 REMNANT CLOSED. Same-frame resolution only covered publication where the handle already existed; on the deep link station:return:reboard published while the ship was still mounting. The ladder now DEFERS publication until a marker-requiring ch10 rung's target resolves, so an unfindable rung is never published at all \u2014 health reads idle, which is true, instead of missing-marker, which is a lie. Same mechanism kills the 270ms landfall hold. Three existing tests encoded the superseded behaviour and were updated; the deadlock detector's own coverage is preserved by asserting missing-marker still reports when an objective is forced active without a target. FOV PARITY CLOSED. The reduced-motion lens rail parked at SANDBOX_FOV 75 rather than the shot's end value. Correct for a dramatic push \u2014 the move IS the effect \u2014 but ch10's transit FOV is the vehicle's own state, and every ch10 lens is durationMs 0 with no authored motion, so there was no ease to skip. Reduced motion now holds the shot's end value for ch10 shots (from equals to, so nothing animates); shipped ch1-ch9 keep parking at 75 byte-for-byte.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-ask-leg-trace.json",
+      "evidence/implementation/tests.log",
+      "implementation.diff"
+    ]
+  },
+  "shipControllerHeadingGap": {
+    "status": "implemented-proven",
+    "summary": "R7's bounded shape is in and now demonstrated. autopilot.ts publishes targetSystemPosition resolved from the DURABLE claim; ShipController consumes it in one else-if beside targetWorldId, sharing the same slerp, reference-up choice and atmosphere pitch clamp. Null for every shipped beat and every ch1-ch9 movie path. The live attitude probe shows it non-null throughout the transit and the beat reaching its resolve.",
+    "evidenceRefs": [
+      "evidence/implementation/tests.log",
+      "evidence/implementation/typecheck.log",
+      "production-lock.md"
+    ]
+  },
+  "d12Characterization": {
+    "status": "repaired-post-fix-4-of-4",
+    "summary": "REPRODUCED, then repaired, then measured \u2014 with one correction to my own record. PRE-FIX: a four-run batch reproduced the hang exactly as the verifier described it \u2014 run 1 held station:return:landfall from 7.0s to 89.4s and never completed, runs 2 and 3 landed in 11.1s and 9.1s, run 4 landed without reaching the relay. 3 of 4 landfalls completed, one hung indefinitely. CORRECTION: I intended to preserve that batch as ch10-ask-leg-prefix-baseline.json and failed \u2014 the trace file had already been overwritten by a later run when I copied it, so the file I wrote held post-fix data under a pre-fix name. I have DELETED it rather than leave a mislabelled artifact in the run. The pre-fix numbers above are from the probe's own recorded output during that batch, and the independent pre-fix rate is the verifier's own (2 of 4 crossing attempts hanging, one standing 1,717s) in verification-report.json. REPAIR (authorized, in-lock, autopilot.ts): the origin-side descent aims at the WRECK SITE \u2014 derivable from the world's size and seed, the same purity rule as the station bearing \u2014 instead of holding the planet-centre crossing heading. requestLanding() refuses silently unless the ship is essentially directly over a valid egress site (findValidSpawnSite, maxSearchRadius 0, requirePlayerEgress true), so completion was a function of arrival position; aiming at the site the beat lands at removes the lottery. Null until the origin encloses the ship and null once down or on foot, so the crossing keeps the heading it needs and nothing steers a grounded ship. Movie-lane only; manual descent and ch8-landfall untouched. POST-FIX, FOUR RUNS, PRESERVED IN evidence/verification/ch10-ask-leg-trace.json: 4 of 4 reached the origin world, landed and got out on foot \u2014 the landfall leg completed in EVERY run, in 5.1s, 5.2s, 6.1s and 7.1s. Both more reliable and faster than the pre-fix completions (11.1s, 9.1s), which is what aiming at the site rather than drifting onto it should produce. Run 2 reached station:relay-query and its 70s watch expired before the relay walk finished; that is watch budget, not a landfall hang. No run hung.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-ask-leg-trace.json",
+      "verification-report.json",
+      "ch10-ask-leg-probe.mjs"
+    ]
+  },
+  "reviewWaveRepairs": {
+    "status": "partial-blocked-on-signatures",
+    "summary": "D-A8 CLOSED: ST-0 drew THROUGH terrain because its material had depthTest false and the only occluder was the analytic horizon gate \u2014 a sphere test that knows where the planet's horizon is, not where this world's ridges are. It now depth-tests: the terrain has already written depth, the sky has not, and ST-0 still writes none of its own, so occlusion is honest at ZERO extra draw calls and the <=1 draw-call term is untouched. ST0_MAX_PIXELS is NOT dead \u2014 it is consumed by st0ClampedPixels, which the component imports and the model test already covers; nothing to delete or wire. D-A6 CLOSED: the 2.5s hold did not hold in manual flight. The director freezes movement at the resolve anchor and releases it at the hand-back, but nothing in the flight path consumed that, so a manual pilot could fly straight through the shot the closing frame is built on. Thrust is now suppressed while the hold is in force \u2014 attitude and look stay live, because the hold is about not travelling, not about taking the camera away \u2014 and the throttle readout goes to zero so the hold is audible as well as visible. Scoped to ch10-transit rather than to the move scale alone: several shipped ch1-ch9 sequences freeze movement, and rather than rely on the claim that none can coincide with a flight frame, this cannot reach them by construction. D-A3 CLOSED to Cinematography's exact terms: weight 0.35, +25 degree pitch cap, glances 1.5-3.0s with the 1.5s floor ENFORCED rather than assumed, 0.5s release on a goal-critical demand, 10s cooldown, walk phases of ch10-cold only, movie lane only behind isAutopilotDriving(). Route and velocity are untouched and the borrowed look weight is restored at exactly the strength it had. ST-0's live apparent direction is published as a read-only handle from the component rather than recomputed in a second place. CARRIER CONTROL DEFECT, found by the re-render and FIXED: getChapter10ScoreMood filtered the octave double out of `chord` only, but station-resolved publishes a `progression` and the engine plays progression[chordIndex] per bar, falling back to `chord` only when there is none \u2014 so degree 29 kept sounding in BOTH carrier states and the 'illegal' control render was sample-identical to the real resolve. My own test had asserted the wrong surface. Both surfaces are now filtered, and the test asserts every degree the engine can play from, verified to fail against the chord-only filter.",
+    "evidenceRefs": [
+      "evidence/score/carrier-legality.json",
+      "evidence/implementation/tests.log",
+      "implementation.diff"
+    ]
+  },
+  "berthRingEnumeration": {
+    "status": "outside-lock-holding",
+    "summary": "D-A5's cyan hexagonal berth ring is built and rendered entirely OUTSIDE this run's allowedPaths, so it is enumerated and untouched. The geometry is berthStructure() in main/src/game/spaceStation/spaceStationExterior.ts \u2014 four guide arms splayed at 45 degrees around the berth mouth, which read as a hexagonal ring head-on \u2014 plus the jamb frame around the opening. It is rendered by main/src/components/spaceStation/SpaceStationExterior.tsx, whose LIGHT_TONES dockWhite (0xd8e6ff) and officeBlue (0x9fc4e8) are the cyan under bloom. The mount is main/src/components/SystemSpaceStations.tsx. None of the three is in allowedPaths; no bytes were changed. Note that draft-v7 adds a BERTH-RING SUPPRESSION term keyed on the docking-authorization milestone, which is the right shape \u2014 but v7 is not yet signed, so nothing is implemented from it.",
+    "evidenceRefs": [
+      "production-lock.json",
+      "cinematography-audit.md"
+    ]
+  },
+  "blockedOnSignatures": {
+    "status": "blocked",
+    "summary": "scene-contract.json is draft-v7 (32122245) but only CHAPTER has signed it. score-contract-signoff.json and cinematography-contract-signoff.json both still bind draft-v6 (4202e38b), and the compiled director-signoffs.json still reads draft-v6. The contract-phase gate fails on exactly those signatures. v7 carries score terms (the machine-time law, cue-1 phrase intent) and cinematography terms (shot-11 blocking and occupancy, two capture criteria, the berth-ring suppression term), so both lanes genuinely owe a signature. I did NOT re-pin the runtime to an unsigned contract. The whole run's discipline is that the runtime binds the SIGNED authority, and re-pinning would have made the registry and the AV rail cite bytes no one has approved. Consequence: scene:av:check and chapter:registry:check are red on the version mismatch and npm run verify cannot go green until v7 is signed or reverted. Everything that does not depend on the pin is green: typecheck clean, 2261 tests, story authority 1088, chapter journey zero issues, story ux 54. UX-1's new station:transit:reboard rung lands in v7 and is deliberately NOT implemented yet.",
+    "evidenceRefs": [
+      "director-signoffs.json",
+      "scene-contract.json",
+      "snapshots/scene-contract.draft-v7.json"
+    ]
+  },
+  "lensDivergenceD_A1": {
+    "status": "measured-no-fix-warranted-stale-evidence",
+    "summary": "D-A1 AS FILED DOES NOT EXIST. Instrumented all four quality profiles at matched story moments and every sampled quantity is bit-identical across LOW, MEDIUM with reduced motion, HIGH and POTATO: camera.fov, aspect, near/far, gl.getSize [1280,720], gl.getPixelRatio 1, devicePixelRatio 1, canvas attribute size equal to client size, one PerspectiveCamera and one cockpit rig parented to it. getShipFlightFeedback().fov tracked camera.fov exactly at every sample. The visible canopy aperture measured ~690px in all four freshly captured profile PNGs. There is no lens to reconcile between LOW and HIGH, so the instructed fix \u2014 'fix so LOW and HIGH share one lens' \u2014 has nothing to act on. I already ruled out the capture-resolution explanation separately: every PNG is 1280x720. WHAT IS REAL: 12 of 24 flight frames in the SHIPPED ch10 transit LOW strips render the cockpit as a shrunken island with open space around it, worst case ~310px aperture against ~690px nominal \u2014 factor 2.2, matching the auditor's 705/300 within read error. The shrink is uniform and centred and preserves relative proportions, which is a whole-rig apparent-scale change rather than a crop. Every failing frame is stamped beat=ch10-transit; every frame stamped done fills the frame. IT DOES NOT REPRODUCE ON THE CURRENT TREE: a probe replaying the exact strip-transit-a and strip-transit-b plans returned one camera, one cockpit, one pressure shell and canopy 1094.8-1102.4px on 16 of 16 frames. MOST LIKELY EXPLANATION, and it is the one the coordinator already anticipated: the strips are STALE. capture-manifest.json records capturedAt 2026-08-12T01:20:06Z, while ShipController.tsx and autopilot.ts were both edited hours later for the D-10 bearing and D-13 boarding repairs. The pre-D-10 transit leg flew with no committed bearing at all and therefore flew far longer \u2014 the fresh runs reach `done` in ~17s where the defect window spans 19-44s of flight \u2014 so the strips were shot against materially different code on a materially different flight path. The verifier's already-planned strip purge and regeneration is the resolution; re-measure after it. UNDETERMINED AND NOT GUESSED AT: the failing frames' geometry is consistent with an effective FOV around 114-123 degrees while the cockpit rig's fovScale compensation was computed for 70-79 (SHIP_BOOST_FOV caps at 79). No constant in main/src writes an FOV that wide and there is no setViewOffset or camera.zoom writer, so the source of the widening is not identified. No fix is warranted against evidence that does not reproduce. CH8 IS CLEAN \u2014 this is NOT a shipped defect: 14 of 14 applicable ch8 flight frames across the 2026-08-10 run's LOW and hi-res sets render the cockpit filling the frame edge to edge, identical to the ch10 HIGH stills and to every fresh capture. The single non-filling ch8 frame is fully black with no cockpit rendered at all \u2014 an unrelated blank-frame defect in that run's evidence. MEASUREMENT CAVEAT, recorded honestly: main/src was being edited by me while the sweep ran, and two samples lost their injected hook to a page reload. Any re-measurement should be taken against a quiesced tree. LATENT FINDING worth a look: getStoryInputPolicy().targetFov reads 75 at every sample \u2014 a second independent writer of camera.fov contending with ShipController, which won every sample, so contention never exceeded 7%.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-lens-divergence.json",
+      "evidence/capture/lens-divergence/",
+      "ch10-lens-divergence-probe.mjs",
+      "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png"
+    ]
+  }
+}

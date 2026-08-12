@@ -1,0 +1,133 @@
+{
+  "schema": "paravoxia.productionLock.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "mode": "chapter",
+  "status": "locked",
+  "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+  "runProfileRef": "paravoxia-creative-chapter@v1",
+  "releaseCandidate": false,
+  "authority": [
+    {
+      "path": "PARAVOXIA_DEMO_FOUNDATION_PLAN.md",
+      "section": "Owner Gate Lift 2026-07-28 (post-arrival story authorized incl. the space-station chapter direction); Owner Lane Override 2026-07-13; demo release surface unchanged at ch4-arrival",
+      "sha256": "88f85610c81eb3deae605ea01c0d2f53994487048e0d6029fb3240b1d51909de"
+    },
+    {
+      "path": "PARAVOXIA_CREATIVE_COUNCIL.md",
+      "section": "Creative Triad authority, note passing, and cohesion review",
+      "sha256": "789aaa8c05c6bae27b77a01afc888f74e3142599addbd14a9340e8f5b67579fe"
+    },
+    {
+      "path": "PARAVOXIA_STATION_FEATURE_PLAN.md",
+      "section": "Register lock (REGULATION voice only) and blindness prompt boundary, activated by this run creating station canon; frozen seed namespace and worldId grammar",
+      "sha256": "2157f308127ed9ba5217af8052907744a117f60e76fc65704032d8d417728786"
+    },
+    {
+      "path": ".codex/design-runs/2026-07-27-station-in-the-plot/chapter-treatment.md",
+      "section": "Unsigned chapter-lane direction candidate: six-beat ch10 shape; this run takes ch10-cold, ch10-ask, ch10-transit only",
+      "sha256": "ec0e902f8b1d1d20b7c7f9e6857a8494bcd868292bce624db2aafb805405350d"
+    },
+    {
+      "path": ".codex/design-runs/2026-07-27-station-in-the-plot/score-treatment.md",
+      "section": "Unsigned score-lane direction candidate; continuous-pedal thesis deferred to its own packet",
+      "sha256": "45558d0681b5e845cd7dd77db667b67874bf37b163187890cc0b6af7d983b50f"
+    },
+    {
+      "path": ".codex/design-runs/2026-07-27-station-in-the-plot/cinematography-treatment.md",
+      "section": "Unsigned cinematography-lane direction candidate; ST-0 sky point in scope, ST-3 and later deferred",
+      "sha256": "258bc3c8273afedb6cc37b6502336e2cc216535ba1653e4d01c43fad10fd7410"
+    },
+    {
+      "path": ".codex/design-runs/2026-07-27-station-in-the-plot/INPUT-PACKET.md",
+      "section": "Council input packet; both owner hooks rejected as written by all three lanes",
+      "sha256": "7d5ee883716f8c758738a856d968117a0a82b5d9a0a606f81de0a977406fdf17"
+    },
+    {
+      "path": ".codex/design-runs/2026-07-27-station-in-the-plot/SCOPE-NOTE.md",
+      "section": "Council scope note: direction candidate only, no authority to mutate",
+      "sha256": "23984947630d043e13ad438a2387074c964c07b059e8077044692d6374f1315e"
+    },
+    {
+      "path": ".codex/production-runs/2026-07-13-distance-between-fires/scene-contract.json",
+      "section": "Signed A4 through Chapter 9 physical story contract, continuity baseline; ch10 opens from done free play after ch9-hearth",
+      "sha256": "3367b94f9f0fcef14b6158f61e5cd3e3262afa3ae86b4b9574803e3ac48bb47e"
+    },
+    {
+      "path": "main/src/story/ux/README.md",
+      "section": "Executable player-guidance context contract",
+      "sha256": "84851ca01ab09bae0210eaf8ff898e04d5f42a997067237d9115feb79dd3f477"
+    }
+  ],
+  "mutationBoundary": "bounded-runtime",
+  "allowedPaths": [
+    ".codex/production-runs/2026-08-11-ch10-station-introduction/",
+    "main/src/story/storyState.ts",
+    "main/src/story/storyState.test.ts",
+    "main/story-authority.json",
+    "main/chapter-registry.json",
+    "main/chapter-journey-contract.json",
+    "main/tools/chapter-registry-gate.mjs",
+    "main/tools/creative-triad-gate.mjs",
+    "main/src/story/emergentStoryDirector.ts",
+    "main/src/story/emergentStoryDirector.test.ts",
+    "main/src/story/storyObjectiveGuidance.ts",
+    "main/src/story/signedSceneAvRuntime.ts",
+    "main/src/story/generatedSceneAvRuntime.json",
+    "main/src/story/emergentScoreDirector.ts",
+    "main/src/story/autopilot.ts",
+    "main/src/story/emergentMovieRuntime.ts",
+    "main/src/story/storyBoundaryTelemetry.ts",
+    "main/src/story/storyBoundaryTelemetry.test.ts",
+    "main/src/story/storyText.ts",
+    "main/src/story/storyText.test.ts",
+    "main/src/components/systemCompanionBodiesModel.ts",
+    "main/src/components/systemCompanionBodiesModel.test.ts",
+    "main/src/components/SystemCompanionBodies.tsx",
+    "main/src/game/spaceStation/spaceStationDevFlag.ts",
+    "main/src/state/systemFlight.ts",
+    "main/src/components/SpaceStationApproachDriver.tsx",
+    "main/src/story/StoryDebugPanel.tsx",
+    "main/src/story/storyScore.ts",
+    "main/src/story/signedSceneAvRuntime.test.ts",
+    "main/src/story/storyObjectiveGuidance.test.ts",
+    "main/tools/story-authority-gate.mjs",
+    "docs/architecture/workflow-orchestration/schemas/paravoxia-story-authority.schema.json",
+    "main/src/story/StoryDirectorDriver.tsx",
+    "main/src/game/systems/interactionSystem.ts",
+    "main/src/story/storyInteractions.ts",
+    "main/src/game/data/recipes.ts",
+    "main/src/story/tidegardenLandfallBootstrap.ts",
+    "main/tools/generate-scene-av-runtime.mjs",
+    "main/src/story/world/StoryWorldProps.tsx",
+    "main/src/story/tidegardenRoute.ts",
+    "main/src/components/ShipController.tsx"
+  ],
+  "protectedPaths": [
+    "main/public/audio/",
+    "main/src/audio/",
+    "main/src/components/audio/",
+    "firebase.json",
+    ".firebaserc"
+  ],
+  "lockedBeats": ["ch10-cold", "ch10-ask", "ch10-transit"],
+  "currentRestrictions": {
+    "storyCeiling": "ch4-arrival",
+    "postArrivalStoryMutationAllowed": true,
+    "copyChangeDecisionRefs": [],
+    "protectedAudioPaths": [
+      "main/public/audio/",
+      "main/src/audio/",
+      "main/src/components/audio/"
+    ],
+    "openGateRefs": [
+      "ch10-docking-architecture-owner-packet",
+      "score-continuous-pedal-packet",
+      "st3-fov-owner-taste",
+      "headed-taste-final",
+      "ch7-ch8-run-owner-residuals"
+    ]
+  },
+  "canonicalPreviewUrl": "http://localhost:5176",
+  "publishAllowed": false,
+  "frozenAt": "2026-08-11T17:06:29-04:00"
+}

@@ -52,8 +52,23 @@ import {
   type CompanionSystemMotionProfile,
   EXACT_TERRAIN_BATCH_SIZE,
   EXACT_WATER_BATCH_SIZE,
-  SURFACE_SKY_INNER_RADIUS
+  SURFACE_SKY_INNER_RADIUS,
+  st0ClampedPixels,
+  st0NightVisibility,
+  st0QuadScale,
+  st0RenderPredicate,
+  st0SystemMotionProfile,
+  ST0_COLOR,
+  ST0_MIN_PIXELS
 } from './systemCompanionBodiesModel.ts';
+import { systemSpaceStations } from '../game/spaceStation/spaceStationBody.ts';
+import { isSpaceStationSandbox } from '../game/spaceStation/spaceStationDevFlag.ts';
+import { buildStarSystemManifest as buildSt0SystemManifest } from '../game/starSystem.ts';
+import { hasMilestone } from '../game/systems/progressionSystem.ts';
+import { STORY_MILESTONES } from '../story/storyState.ts';
+import { STORY_PRIMARY_WORLD_ID, TIDEGARDEN_WORLD_ID } from '../story/tidegardenRoute.ts';
+import { getCurrentDayPhase } from '../game/worldClock.ts';
+import { daylightFromDayPhase } from '../utils/nightState.ts';
 
 interface SystemCompanionBodiesProps {
   currentCoordinate: SystemCoordinate;
@@ -133,11 +148,33 @@ interface BodyRuntime {
   exactShell: ExactShellRuntime | null;
 }
 
+/**
+ * ST-0's live apparent direction, for the MOVIE LANE ONLY.
+ *
+ * The autopilot's idle-gaze bias needs to know where the dot actually is and
+ * whether it is up yet; the alternative was recomputing the bearing from the
+ * motion profile in a second place, which is how two sources of one fact start
+ * disagreeing. Published, never consumed by rendering, and read by nothing in
+ * manual play — ST-0 acquiring a forced look would be ST-0 acquiring a cue, and
+ * the no-cue law is absolute.
+ */
+export const st0GazeHandle: {
+  direction: THREE.Vector3 | null;
+  aboveHorizon: boolean;
+} = { direction: null, aboveHorizon: false };
+const _st0GazeDirection = new THREE.Vector3();
+
 const CLOUD_SCALE = 1.024;
 const COMPANION_PROGRAM_KEY = 'system-companion-unified-v2';
 const EXACT_COMPANION_PROGRAM_KEY = 'system-companion-exact-v2';
 const EXACT_FACE_COMPANION_PROGRAM_KEY = 'system-companion-exact-face-v2';
 const EXACT_SHELL_PROMOTION_SECONDS = 0.45;
+/**
+ * A companion centre this close to the camera is a mismatch, not a place: no
+ * flight path ends at the exact centre of a body. Metres, deliberately — the
+ * bound radius is a legitimate arrival distance and may not be used here.
+ */
+const COMPANION_CAMERA_COLLAPSE_METRES = 1;
 const exactInstanceMatrix = new THREE.Matrix4();
 const exactInstancePosition = new THREE.Vector3();
 const exactWaterPlacement = createWaterFacePlacementScratch();
@@ -826,6 +863,38 @@ export default function SystemCompanionBodies({
   useEffect(() => () => ringGeometry.dispose(), [ringGeometry]);
   useEffect(() => () => exactWaterGeometry.dispose(), [exactWaterGeometry]);
 
+  // --- ST-0: the point that keeps time ---------------------------------------
+  //
+  // World state inside `done` free play, on the true bearing to the issuing
+  // station. One billboard quad, no new shader, at most one extra draw call. It
+  // is never marked, cued, captioned or named, and it never responds to a look.
+  const st0Ref = useRef<THREE.Mesh>(null);
+  const st0Bearing = useMemo(() => {
+    const manifest = buildSt0SystemManifest(currentCoordinate);
+    const station = systemSpaceStations(currentCoordinate, manifest.systemSeed, 0)[0];
+    if (!station) return null;
+    const relative: Vec3Tuple = [
+      station.systemPosition[0] - activePlanetSystemPosition[0],
+      station.systemPosition[1] - activePlanetSystemPosition[1],
+      station.systemPosition[2] - activePlanetSystemPosition[2]
+    ];
+    const distance = Math.hypot(relative[0], relative[1], relative[2]);
+    if (!Number.isFinite(distance) || distance <= 1) return null;
+    return { relative, distance, motion: st0SystemMotionProfile(relative) };
+  }, [activePlanetSystemPosition, currentCoordinate]);
+  const st0Scratch = useRef({
+    apparent: new THREE.Vector3(),
+    direction: new THREE.Vector3(),
+    placementInput: {
+      physicalDistance: 0,
+      skyExitDistance: 0,
+      spaceBlend: 0,
+      nominalFaceRadius: 1,
+      horizonExtinction: 1
+    },
+    placement: { centerDistance: 0, scale: 0, visibility: 0 }
+  });
+
   useFrame(({ camera, gl, clock }) => {
     const spaceFlight = getSpaceFlightSnapshot();
     const phase = spaceFlight.phase;
@@ -914,6 +983,19 @@ export default function SystemCompanionBodies({
       runtime.targetHandle.publish(work.bodyRenderPosition);
 
       if (physicalSpace) {
+        work.toBody.copy(work.bodyRenderPosition).sub(work.cameraPosition);
+        const centerDistance = work.toBody.length();
+        // Degrade to nothing rather than to a ghost planet. A companion whose
+        // render position has collapsed ONTO the camera is never a place the
+        // player flew to — it is a world-ownership mismatch upstream (the ch10
+        // boot-world defect resolved the sibling's own centre to the origin and
+        // drew its full-size shell around the player's head). The threshold is
+        // metres, not radii: arriving at a body in physical space legitimately
+        // puts the camera inside its bound sphere, and that must keep drawing.
+        if (centerDistance <= COMPANION_CAMERA_COLLAPSE_METRES) {
+          group.visible = false;
+          continue;
+        }
         const exactShell = canOwnExactShell
           ? ensureExactTerrainShell(
             runtime,
@@ -921,8 +1003,6 @@ export default function SystemCompanionBodies({
             exactWaterGeometry
           )
           : runtime.exactShell;
-        work.toBody.copy(work.bodyRenderPosition).sub(work.cameraPosition);
-        const centerDistance = work.toBody.length();
         const desiredExactBlend = exactShell?.ready && canOwnExactShell
           ? companionExactShellBlend(centerDistance)
           : 0;
@@ -990,6 +1070,79 @@ export default function SystemCompanionBodies({
       setMaterialVisibility(runtime.surfaceMaterial, placement.visibility);
       setMaterialVisibility(runtime.cloudMaterial, placement.visibility);
       setMaterialVisibility(runtime.ringMaterial, placement.visibility);
+    }
+
+    // ST-0. Deliberately AFTER the companion loop and outside it: it is not a
+    // companion body, it owns no terrain, and it must never inherit their
+    // targeting, exact-shell or spin machinery.
+    const st0 = st0Ref.current;
+    st0GazeHandle.aboveHorizon = false;
+    if (st0) {
+      const st0Visible = st0Bearing !== null
+        && phase === 'surface'
+        && st0RenderPredicate({
+          storyWorld: systemFlight.activePlanetId === STORY_PRIMARY_WORLD_ID
+            || systemFlight.activePlanetId === TIDEGARDEN_WORLD_ID,
+          storyComplete: hasMilestone(STORY_MILESTONES.complete),
+          twoWorldHandoff: hasMilestone('story:tidegarden:two-world-handoff'),
+          sandbox: isSpaceStationSandbox()
+        });
+      const nightVisibility = st0Visible
+        ? st0NightVisibility(daylightFromDayPhase(getCurrentDayPhase()))
+        : 0;
+      if (!st0Visible || nightVisibility <= 0.002 || !st0Bearing) {
+        st0.visible = false;
+      } else {
+        const work0 = st0Scratch.current;
+        // The ellipse rides the shipped invariant-angular-size machinery, so the
+        // ground track and the flown bearing are the same fact by construction.
+        companionApparentRelativePosition(
+          st0Bearing.relative,
+          st0Bearing.motion,
+          motionSeconds,
+          spaceBlend,
+          canonicalTargetingActive,
+          work0.apparent
+        );
+        work0.direction.copy(work0.apparent).normalize();
+        const horizon = work0.direction.dot(work.effectiveUp);
+        if (horizon <= 0) {
+          st0.visible = false;
+        } else {
+          const input = work0.placementInput;
+          input.physicalDistance = st0Bearing.distance;
+          input.skyExitDistance = rayExitDistance(
+            work.planetLocalCamera,
+            work0.direction,
+            SURFACE_SKY_INNER_RADIUS
+          );
+          input.spaceBlend = spaceBlend;
+          input.nominalFaceRadius = 1;
+          input.horizonExtinction = smoothstep(-0.02, 0.12, horizon);
+          const placement = companionCelestialPlacement(input, work0.placement);
+          const perspective = camera as THREE.PerspectiveCamera;
+          const drawingHeight = gl.getDrawingBufferSize(work.framebufferSize).y;
+          const scale = st0QuadScale(
+            placement.centerDistance,
+            THREE.MathUtils.degToRad(perspective.fov),
+            drawingHeight,
+            1,
+            st0ClampedPixels(ST0_MIN_PIXELS)
+          );
+          st0.position
+            .copy(work.cameraPosition)
+            .addScaledVector(work0.direction, placement.centerDistance);
+          st0.scale.setScalar(scale);
+          st0.quaternion.copy(camera.quaternion);
+          const material = st0.material as THREE.MeshBasicMaterial;
+          // Constant luminance while it is up: the only modulation is the
+          // world's own darkness and the horizon it rises over.
+          material.opacity = nightVisibility * placement.visibility;
+          st0.visible = material.opacity > 0.002;
+          st0GazeHandle.direction = _st0GazeDirection.copy(work0.direction);
+          st0GazeHandle.aboveHorizon = st0.visible;
+        }
+      }
     }
 
     if (projectionProbeEnabled) {
@@ -1101,6 +1254,31 @@ export default function SystemCompanionBodies({
           )}
         </group>
       ))}
+      <mesh
+        ref={st0Ref}
+        name="system-st0-station-light"
+        visible={false}
+        frustumCulled={false}
+        renderOrder={2}
+        userData={{ st0: true, marker: false, cue: false, named: false }}
+      >
+        <planeGeometry args={[1, 1]} />
+        <meshBasicMaterial
+          color={ST0_COLOR}
+          toneMapped={false}
+          transparent
+          opacity={0}
+          depthWrite={false}
+          // D-A8: ST-0 drew THROUGH terrain. The analytic horizon gate above is
+          // a sphere test — it knows where the planet's horizon is, not where
+          // this world's ridges are — so a dot below a ridge line still painted
+          // over it. Depth testing is the honest occluder and costs nothing:
+          // the terrain has already written depth, the sky has not, and this
+          // still writes none of its own. Zero extra draw calls, so the <=1
+          // draw-call term is untouched.
+          depthTest
+        />
+      </mesh>
     </group>
   );
 }

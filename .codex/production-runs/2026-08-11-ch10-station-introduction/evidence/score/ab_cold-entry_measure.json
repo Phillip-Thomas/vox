@@ -1,0 +1,12 @@
+{
+  "deliverable": "evidence/score/ab_cold-entry_measure.json",
+  "aSubPeakHz": 56,
+  "bSubPeakHz": 51,
+  "subFundamentalRatio": 0.9107,
+  "targetRatio": 0.891,
+  "wholeStepDown": true,
+  "toleranceNote": "a whole step down is a frequency ratio of 2^(-2/12) = 0.8909; the Goertzel sweep resolves 1 Hz, so the measured ratio is quantized to the sub band grid.",
+  "ambientLoopAtCorePosition": "none: no diegetic core hum SFX exists in the build; the offline mirror renders the combined music bus with the legacy deepSpace scene, whose streamed stems are silent offline.",
+  "aRmsDb": -22.404435382159,
+  "bRmsDb": -21.92594798497678
+}

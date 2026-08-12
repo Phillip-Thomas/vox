@@ -42,7 +42,13 @@ const SUPPORTED_STATE_REF_PATTERNS = Object.freeze([
   /^state:camera\/(?:embodied|free-look)$/,
   /^state:maw\/repaired$/,
   /^state:item\/kestrel-keel-memory-banked$/,
-  /^state:free-play\/two-world-handoff$/
+  /^state:free-play\/two-world-handoff$/,
+  // Chapter 10's durable station facts. Producers land with the patterns
+  // (storyBoundaryTelemetry#deriveStoryBoundaryState): the claimed bearing is
+  // the targeting fence, the seam is a one-shot latch with two trigger paths,
+  // and the docking authorization is DEFINED but granted by nothing this run.
+  /^state:story\/ch10-(?:bearing-claimed|seam-passed)$/,
+  /^state:station\/docking-authorized$/
 ]);
 
 class Audit {

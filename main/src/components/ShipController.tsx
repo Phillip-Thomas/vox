@@ -68,6 +68,7 @@ import { landingHitMatchesValidatedTerrain } from '../utils/shipLandingValidatio
 import { persistShipFlightLocation } from '../state/shipFlightContinuity.ts';
 import { getAutopilotFlightDirective } from '../story/autopilot.ts';
 import { getStoryStateSnapshot } from '../story/storyState.ts';
+import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import {
   VEHICLE_SCENE_AV_EVENTS,
   activateLaunchIgnitionFromCreatedSequence,
@@ -803,6 +804,19 @@ export default function ShipController({
             descriptor.systemPosition[2] - systemPose[2]
           ).normalize();
         }
+      } else if (movieFlight.targetSystemPosition) {
+        // A destination that is not a world. `targetWorldId` can only name
+        // bodies in the planet manifest, and chapter 10 flies at a station —
+        // the one destination in the game with no world id, which is why that
+        // leg thrusted with no bearing at all. Same slerp, same clamps, same
+        // everything else; this branch only supplies the point. Null on every
+        // shipped beat, so no manual or ch1-ch9 movie frame can reach it.
+        const systemPose = getSystemFlightSnapshot().pose.position;
+        desiredDirection.set(
+          movieFlight.targetSystemPosition[0] - systemPose[0],
+          movieFlight.targetSystemPosition[1] - systemPose[1],
+          movieFlight.targetSystemPosition[2] - systemPose[2]
+        ).normalize();
       }
       if (desiredDirection.lengthSq() > 0.5) {
         const referenceUp = Math.abs(desiredDirection.y) < 0.88
@@ -852,9 +866,26 @@ export default function ShipController({
       controls.forward
     );
     const boost = boostActive ? BOOST_MULTIPLIER : 1;
+    // D-A6: THE HOLD MUST HOLD, in manual flight as much as in the movie lane.
+    // The director already freezes movement at the resolve anchor and releases
+    // it exactly at the hand-back, but in flight nothing consumed that freeze —
+    // so a manual pilot could fly straight through the 2.5s hold the closing
+    // shot is built on. THRUST ONLY: attitude and look stay live, because the
+    // hold is about not travelling, not about taking the camera away.
+    //
+    // Scoped to ch10-transit rather than to the move scale alone. Several
+    // shipped ch1-ch9 sequences freeze movement, and rather than rely on the
+    // claim that none of them can coincide with a flight frame, this cannot
+    // reach them by construction.
+    const storyNow = getStoryStateSnapshot();
+    const thrustHeld = storyNow.active
+      && storyNow.beat === 'ch10-transit'
+      && getStoryInputPolicy().moveSpeedScale === 0;
     let accel = 0;
-    if (controls.forward) accel += THRUST_ACCEL * boost;
-    if (controls.backward) accel -= THRUST_ACCEL;
+    if (!thrustHeld) {
+      if (controls.forward) accel += THRUST_ACCEL * boost;
+      if (controls.backward) accel -= THRUST_ACCEL;
+    }
     if (accel !== 0) {
       velocity.current.addScaledVector(localForward, accel * dt);
     }
@@ -972,7 +1003,11 @@ export default function ShipController({
     cam.position.copy(position.current);
     displayQuat.current.slerp(quat, 1 - Math.exp(-CAM_SMOOTH * dt));
     cam.quaternion.copy(displayQuat.current);
-    const throttle = controls.forward ? (boostActive ? 1 : 0.58) : controls.backward ? -0.34 : 0;
+    // The engine reads what the ship is actually doing: held means no throttle,
+    // so the hold is heard as well as seen.
+    const throttle = thrustHeld
+      ? 0
+      : controls.forward ? (boostActive ? 1 : 0.58) : controls.backward ? -0.34 : 0;
     syncFlightFeedback(
       throttle,
       boostActive,

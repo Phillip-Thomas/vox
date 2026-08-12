@@ -1,0 +1,696 @@
+{
+  "schema": "paravoxia.shippedVisualBaseline.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "sceneId": "ch10-station-introduction",
+  "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+  "sourceRevisionShort": "929e3d0",
+  "workingTreeClean": "yes for main/ and all authority docs; only this run directory is untracked",
+  "capturedAt": "2026-08-11T21:29:49.991Z",
+  "captureAuthority": "current shipped runtime before this run's implementation (Stage 1 grounding)",
+  "capturedBy": "story-verifier (mechanical, read-only). No game source was modified.",
+  "previewServer": {
+    "url": "http://localhost:5176",
+    "pid": 1814542,
+    "startedBy": "pre-existing vite dev server (inherited, per production-lock previewServer.owner)",
+    "startedByThisProbe": false,
+    "command": "node main/node_modules/.bin/vite --port 5176 --strictPort"
+  },
+  "evidenceBudgetCompliance": {
+    "frameStripTier": "LOW only",
+    "frameCount": 8,
+    "frameCap": 8,
+    "webmOrMovieRenders": 0,
+    "hiResStills": 0,
+    "note": "movie-lane traversal proven by state trace at LOW with zero timeout rescues; no video written"
+  },
+  "viewport": "1280x720",
+  "devicePixelRatio": 1,
+  "qualityTier": "LOW",
+  "qualityFlagsAtLow": {
+    "colorGrade": false,
+    "postProcess": false,
+    "outline": false,
+    "painterly": false,
+    "contactAO": false,
+    "skyClouds": false,
+    "waterReflections": "fresnel"
+  },
+  "realityStage": "alive",
+  "routes": {
+    "hearthCloseAndFreePlaySeam": {
+      "url": "http://localhost:5176/?story=base&movie=1&profile=LOW",
+      "reason": "ch9-settle is the only honest entry that builds the habitat the second hearth needs; a direct ?story=ch9-hearth&movie=1 jump stalls (see mechanicalFindings MF-2)",
+      "probe": ".codex/production-runs/2026-08-11-ch10-station-introduction/baseline-probe.mjs"
+    },
+    "outdoorNightSky": {
+      "url": "http://localhost:5176/?story=ch9-hearth&profile=LOW",
+      "reason": "the movie lane completes rest INSIDE a sealed shelter, so the zenith is roofed at the done seam; the shipped sky above the second hearth is captured from the outdoor pre-rest state at deep night",
+      "probe": ".codex/production-runs/2026-08-11-ch10-station-introduction/sky-baseline-probe.mjs"
+    }
+  },
+  "captures": [
+    {
+      "path": "evidence/baseline/00_015s_ch9-hearth_hearth-enter.png",
+      "sha256": "3de4af5ff0b3cf8904fbf4776a2b98c2953aab055f35510c068f62b0234e9867",
+      "beat": "ch9-hearth",
+      "tSeconds": 14.9,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "objectiveId": "settle:wait-night",
+      "markerLabel": "SECOND HEARTH · WAIT FOR NIGHT",
+      "dayPhase": 0.05163625000019878,
+      "description": "ch9-hearth entry; wait-for-night hold. Subject is the sealed shelter interior.",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: the same place and time of day the anchor stages (second hearth, night), sampled at ch9-hearth entry while the shipped wait-for-night objective stands.",
+      "observedRuntimeAnchor": "anc.settle.shelter-certified",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    },
+    {
+      "path": "evidence/baseline/01_124s_ch9-hearth_hearth-closing.png",
+      "sha256": "de83dd5149d8b1e4a43ef06d0e220eec1c1787c9493243a9c79074929af4be92",
+      "beat": "ch9-hearth",
+      "tSeconds": 123.9,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "objectiveId": "settle:second-hearth-settling",
+      "markerLabel": "SECOND HEARTH · SETTLING",
+      "dayPhase": 0.5059220833331131,
+      "description": "first frame of the authored ~5.5s closing settle, before the closing caption paints.",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: first frame of the authored ch9-hearth closing hold, the last guided state before the free play the anchor re-activates from.",
+      "observedRuntimeAnchor": "anc.hearth.freeplay-handback",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    },
+    {
+      "path": "evidence/baseline/02_127s_ch9-hearth_hearth-closing-late.png",
+      "sha256": "109f08cd4b194432accd81b582b5cc6a1ae489f7aaaeafe643fe2ac61fca6c95",
+      "beat": "ch9-hearth",
+      "tSeconds": 127,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "objectiveId": "settle:second-hearth-settling",
+      "description": "closing caption fully painted: \"(one fire behind you. one fire here. home is the distance you can keep alive.)\"",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: the closing caption fully painted, 2.7s before the story goes inactive.",
+      "observedRuntimeAnchor": "anc.hearth.freeplay-handback",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    },
+    {
+      "path": "evidence/baseline/03_130s_done_freeplay-seam.png",
+      "sha256": "8655aca3dedbfd1c8693ba53601eaf3534ff7dc980d9bfeede14807f3d24ac6c",
+      "beat": "done",
+      "tSeconds": 130,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "objectiveId": null,
+      "description": "first sampled frame after completeStory(): guidance HUD cleared, sandbox ORBITAL SCAN and SHELTERED thermal chip mounted, closing caption still on screen.",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: the exact free-play entry seam the anchor re-activates from (first sampled frame after completeStory).",
+      "observedRuntimeAnchor": "free-play-entry-seam",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    },
+    {
+      "path": "evidence/baseline/04_138s_done_freeplay-settled.png",
+      "sha256": "d7fc5e6178c9ce18a5475066679179a8363a43f2c6da5d23d31e1d3c4c8ed1a2",
+      "beat": "done",
+      "tSeconds": 138,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "objectiveId": null,
+      "description": "free play ~8s after the seam; caption expired, no objective, no marker.",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: settled free play at the hearth, caption expired, no guidance surface standing.",
+      "observedRuntimeAnchor": "free-play-settled",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    },
+    {
+      "path": "evidence/baseline/06_185s_done_sky-zenith.png",
+      "sha256": "c88d268967f2ac4038b7f1d3048b18479a18ad838dbdfd082dae5f769648d6d6",
+      "beat": "done",
+      "tSeconds": 185,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "description": "zenith look from the movie lane's own done state: the shelter ceiling, not sky. Evidence for mechanicalFindings MF-1.",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: zenith look from the movie-lane free-play seam, proving the roofed sky described in mechanicalFindings MF-1.",
+      "observedRuntimeAnchor": "free-play-zenith-occluded",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    },
+    {
+      "path": "evidence/baseline/sky_161s_ch9-hearth_outdoor-sky-mid.png",
+      "sha256": "9d5abe2f881f7fa99ea10242663051f6464debd1c785792e798db5e80b37fdb1",
+      "beat": "ch9-hearth",
+      "tSeconds": 161,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "dayPhase": 0.6611062499999523,
+      "description": "SHIPPED NIGHT SKY ABOVE THE SECOND HEARTH (ST-0 reference frame 1): horizon + moon + nebula banding + star field, outdoor, deep night.",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: the shipped outdoor night sky above the second hearth at deep night, horizon included.",
+      "observedRuntimeAnchor": "second-hearth-night-sky",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    },
+    {
+      "path": "evidence/baseline/sky_163s_ch9-hearth_outdoor-sky-zenith.png",
+      "sha256": "d7118a927763c5c1160eb6c6c140adc8d6053b63530b955c664c970e1bc37329",
+      "beat": "ch9-hearth",
+      "tSeconds": 163,
+      "viewport": "1280x720",
+      "qualityTier": "LOW",
+      "dayPhase": 0.6686041666666178,
+      "description": "SHIPPED NIGHT SKY ABOVE THE SECOND HEARTH (ST-0 reference frame 2): full zenith, moon + nebula + stars, no horizon.",
+      "anchor": "anc.ch10.cold-noticed",
+      "anchorBinding": "predecessor-state",
+      "anchorBindingBasis": "Predecessor state of anc.ch10.cold-noticed: the shipped outdoor night zenith above the second hearth at deep night.",
+      "observedRuntimeAnchor": "second-hearth-night-zenith",
+      "probe": {
+        "formatName": "png_pipe",
+        "durationSeconds": 0,
+        "video": {
+          "codec": "png",
+          "width": 1280,
+          "height": 720
+        },
+        "audio": null
+      },
+      "kind": "still-frame"
+    }
+  ],
+  "cameraStates": [
+    {
+      "anchor": "anc.ch10.cold-noticed",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "lookMode": "free",
+      "dpr": null,
+      "beat": "ch9-hearth",
+      "shotId": "anc.hearth.freeplay-handback (shipped ch9 rail; no ch10 shot exists at this revision)",
+      "signedRailActive": true,
+      "realityStage": "alive",
+      "observedAt": "baseline-trace.json anchors.ch9HearthClosing, t=123.92s",
+      "measurement": "getSignedSceneAvDebugSnapshot().shot.cameraAuthority = player-camera; lens start/end/applied FOV all 75",
+      "sourceRef": "main/src/story/signedSceneAvRuntime.ts getSignedSceneAvDebugSnapshot"
+    },
+    {
+      "anchor": "anc.ch10.cold-noticed",
+      "authority": "player-camera",
+      "fovDeg": 75,
+      "lookMode": "free",
+      "dpr": null,
+      "beat": "done",
+      "signedRailActive": false,
+      "signedRailAuthority": null,
+      "signedRailLastResetReason": "completion",
+      "realityStage": "alive",
+      "observedAt": "baseline-trace.json anchors.doneEnter, t=129.65s",
+      "measurement": "the signed rail releases at completion (active=false, shot=null), leaving the player-owned sandbox camera: boundary telemetry runtime.camera = perspective true, fov 75, lookMode free, externalCameraMix 0, signedAuthority null. Authority is recorded as player-camera because that is the runtime owner of the frame; the null is the released rail, not an absent camera.",
+      "sourceRef": "main/src/story/storyBoundaryTelemetry.ts readStoryBoundaryRuntime and main/src/story/storyInputPolicy.ts SANDBOX_FOV"
+    }
+  ],
+  "paletteStates": [
+    {
+      "anchor": "anc.ch10.cold-noticed",
+      "family": "planet-derived",
+      "paletteRef": "palette.tidegarden-night-planet-derived",
+      "realityStage": "alive",
+      "tier": "LOW",
+      "gradeOwner": "no post color grade is applied at the LOW tier: QUALITY_PROFILES.LOW sets postProcess false and colorGrade false, so PostFX never mounts ColorGrade and getColorGrade() returns null at every sampled anchor.",
+      "declaredPostFxAtSampledAnchors": [
+        "fx.hearth.01-living-night",
+        "fx.hearth.04-the-line-remains-open"
+      ],
+      "declaredPostFxRendered": false,
+      "lighting": "world day cycle only; dayPhase 0.506 at the ch9-hearth closing sample and 0.530 at the free-play seam, both inside the shipped night window that opens at 0.505.",
+      "observedAt": "baseline-trace.json anchors.ch9HearthClosing and anchors.doneEnter deep reads",
+      "sourceRefs": [
+        "main/src/config/graphicsSettings.ts QUALITY_PROFILES.LOW",
+        "main/src/components/effects/PostFX.tsx",
+        "main/src/components/effects/ColorGradeEffect.ts getColorGrade",
+        "main/src/utils/planetArtDirection.ts",
+        "main/src/utils/planetVisualProfile.ts",
+        "main/src/game/systems/realityRenderSystem.ts"
+      ]
+    },
+    {
+      "anchor": "anc.ch10.cold-noticed",
+      "family": "planet-derived",
+      "paletteRef": "palette.tidegarden-night-sky",
+      "realityStage": "alive",
+      "tier": "LOW",
+      "gradeOwner": "same LOW-tier rule: no post grade. The night sky reads as shipped sky material only.",
+      "lighting": "deep night, dayPhase 0.661 and 0.669; moon disc, nebula banding and star field are the shipped sky, ungraded.",
+      "observedAt": "sky-baseline-trace.json shots[0] and shots[1]",
+      "sourceRefs": [
+        "main/src/config/graphicsSettings.ts QUALITY_PROFILES.LOW",
+        "main/src/utils/nightState.ts isNightPhase",
+        "main/src/components/SystemCompanionBodies.tsx",
+        "main/src/components/systemCompanionBodiesModel.ts"
+      ]
+    }
+  ],
+  "scoreStates": [
+    {
+      "beat": "ch9-hearth",
+      "anchor": "anc.settle.shelter-certified",
+      "cueRefs": [
+        "sc.settle.abundance-choice"
+      ],
+      "intensity": 0.38
+    },
+    {
+      "beat": "ch9-hearth",
+      "anchor": "anc.hearth.freeplay-handback",
+      "cueRefs": [
+        "sc.hearth.between-fires"
+      ],
+      "intensity": 0.28
+    },
+    {
+      "beat": "done",
+      "anchor": "free-play-entry-seam",
+      "cueRefs": [],
+      "intensity": 0.28,
+      "note": "score overlay released with the rail; intensity left at the hearth value 0.28"
+    }
+  ],
+  "doneFreePlayStateTrace": {
+    "storySnapshot": {
+      "active": false,
+      "chapter": "complete",
+      "beat": "done",
+      "runId": 1
+    },
+    "realityStage": "alive",
+    "inputPolicy": {
+      "lookMode": "free",
+      "targetFov": 75,
+      "targetDpr": null,
+      "moveSpeedScale": 1,
+      "allowBuild": true,
+      "allowCraft": true,
+      "feedBlend": 1,
+      "sideBlend": 1
+    },
+    "signedAv": {
+      "active": false,
+      "suspended": false,
+      "beat": null,
+      "anchorId": null,
+      "cameraAuthority": null,
+      "appliedFovDeg": null,
+      "startFovDeg": null,
+      "endFovDeg": null,
+      "postFx": [],
+      "score": {
+        "cueRefs": [],
+        "intensity": 0.28,
+        "hit": null
+      },
+      "lastResetReason": "completion"
+    },
+    "boundaryTelemetry": {
+      "schema": "paravoxia.storyBoundaryState.v1",
+      "verified": true,
+      "sampledAt": 1786483919663,
+      "stateRefs": [
+        "state:camera/embodied",
+        "state:camera/free-look",
+        "state:control/on-foot",
+        "state:free-play/two-world-handoff",
+        "state:item/kestrel-keel-memory-banked",
+        "state:maw/repaired",
+        "state:reality/alive",
+        "state:ship-restoration/flight_ready",
+        "state:space-flight/control-mode=fps",
+        "state:space-flight/phase!=deep_space",
+        "state:space-flight/phase=surface",
+        "state:story/complete",
+        "state:system-flight/active-planet=-1,-1:p1",
+        "state:world/tidegarden"
+      ],
+      "runtime": {
+        "story": {
+          "active": false,
+          "chapter": "complete",
+          "beat": "done",
+          "runId": 1
+        },
+        "app": {
+          "phase": "playing",
+          "sceneReady": true
+        },
+        "world": {
+          "systemId": "-1,-1",
+          "activePlanetId": "-1,-1:p1",
+          "spaceStationTargetId": null
+        },
+        "reality": {
+          "stage": "alive"
+        },
+        "control": {
+          "mode": "fps",
+          "phase": "surface"
+        },
+        "shipRestoration": {
+          "repairStage": "flight_ready"
+        },
+        "camera": {
+          "perspective": true,
+          "fov": 75,
+          "lookMode": "free",
+          "feedBlend": 1,
+          "sideBlend": 1,
+          "externalCameraMix": 0,
+          "signedAuthority": null
+        },
+        "maw": {
+          "repaired": true,
+          "ritualPhase": "idle"
+        },
+        "durable": {
+          "storyComplete": true,
+          "keelMemoryBanked": true,
+          "twoWorldHandoff": true
+        }
+      }
+    },
+    "activeObjective": null,
+    "objectiveHealth": "idle",
+    "hudPresent": {
+      "guidanceHud": false,
+      "suitHud": true,
+      "inventoryChip": true,
+      "caption": true
+    },
+    "hudInventory": [
+      "SUIT HUD vitals panel (HEALTH/FOOD/WATER/TEMP/STAM/OXY) + thermal chip \"◆ SHELTERED\"",
+      "INV · 27 chip",
+      "B / C / M sandbox buttons + journal flag button",
+      "ORBITAL SCAN minimap (mounts at the done seam; absent during ch9-hearth)",
+      "centre crosshair",
+      "story caption (authored 6.5s closing line, expires in free play)"
+    ],
+    "viewport": {
+      "width": 1280,
+      "height": 720,
+      "dpr": 1
+    },
+    "qualityTier": "LOW",
+    "dayPhaseAtSeam": 0.5298824999997767
+  },
+  "timings": {
+    "hearthEnterSeconds": 14.9,
+    "closingStateSeconds": 123.92,
+    "doneSeconds": 129.7,
+    "hearthToDoneSeconds": 114.8,
+    "coldRunVariance": [
+      {
+        "run": 1,
+        "hearth": 15.1,
+        "done": 129.4
+      },
+      {
+        "run": 2,
+        "hearth": 14.9,
+        "done": 129.7
+      },
+      {
+        "run": 3,
+        "hearth": 14.9,
+        "done": 129.7,
+        "kept": true
+      }
+    ],
+    "varianceSeconds": {
+      "hearth": 0.2,
+      "done": 0.3
+    },
+    "timeoutRescues": 0,
+    "probeWallClockSeconds": {
+      "baselineProbe": 185,
+      "skyProbe": 163
+    }
+  },
+  "adoptedBaselineRefs": {
+    "note": "ch8 flight grammar is reused unchanged for ch10-transit; no recapture. Adopted by path+sha256 from the closed 2026-08-10 run; every hash below was re-verified against the files on disk at 2026-08-11.",
+    "sourceRun": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair",
+    "verifiedAt": "2026-08-11T21:40:08.854Z",
+    "refs": [
+      {
+        "ref": "trace:verification-ch8-captures-desktop-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-desktop.json",
+        "sha256": "62d928a0eaf9add0e6aaa1296a3020b8cf99443e43727885eea34ba5156cd597",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Sidecar for the ch8 hold-cadence strip at 1280x720 LOW."
+      },
+      {
+        "ref": "frame:verification-ch8-captures-desktop-off_15p2s_ch8-launch-png",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-desktop/off_15p2s_ch8-launch.png",
+        "sha256": "1df259f5cd4bd191bafc11f77a100897efd9c3550351e7e19ac92af85eb8b817",
+        "kind": "frame",
+        "hashVerified": true,
+        "description": "Stage 6 mechanical-proof artifact: off_15p2s_ch8-launch.png."
+      },
+      {
+        "ref": "frame:verification-ch8-captures-desktop-off_18p0s_ch8-crossing-png",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-desktop/off_18p0s_ch8-crossing.png",
+        "sha256": "c4ad14983ba99c8ab53202f58ec7a27972cba583fc098981ff0f3bd2ff6a8105",
+        "kind": "frame",
+        "hashVerified": true,
+        "description": "Stage 6 mechanical-proof artifact: off_18p0s_ch8-crossing.png."
+      },
+      {
+        "ref": "frame:verification-ch8-captures-desktop-off_2p0s_ch8-launch-png",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-desktop/off_2p0s_ch8-launch.png",
+        "sha256": "ef52bc141eaaaace7f6a72fb604732296fba298eb8cb54d64f85445576add556",
+        "kind": "frame",
+        "hashVerified": true,
+        "description": "Stage 6 mechanical-proof artifact: off_2p0s_ch8-launch.png."
+      },
+      {
+        "ref": "frame:verification-ch8-captures-desktop-off_8p5s_ch8-launch-png",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-desktop/off_8p5s_ch8-launch.png",
+        "sha256": "b82b5583add1cb98ed26e4e09a1236ca3c7cb6eb55ae084efd563dee3536cfac",
+        "kind": "frame",
+        "hashVerified": true,
+        "description": "Stage 6 mechanical-proof artifact: off_8p5s_ch8-launch.png."
+      },
+      {
+        "ref": "trace:verification-ch8-captures-mobile-landscape-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-mobile-landscape.json",
+        "sha256": "a4be950a4a66a96501941e4ff2fcde2156ec2df25377f46b358f7f10d0cdf24d",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Sidecar for the ch8 hold-cadence strip at 844x390."
+      },
+      {
+        "ref": "trace:verification-ch8-captures-mobile-portrait-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-mobile-portrait.json",
+        "sha256": "0cc25127b9ed304ddd510e7f60e1e226cfde8f4f87742fd8a56680ed9e620999",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Sidecar for the ch8 hold-cadence strip at 390x844."
+      },
+      {
+        "ref": "frame:verification-ch8-captures-mobile-portrait-off_2p0s_ch8-launch-png",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-mobile-portrait/off_2p0s_ch8-launch.png",
+        "sha256": "ed834a733550503c534adb1a91933ceade203464d443e09e3222e4dc3f7f3636",
+        "kind": "frame",
+        "hashVerified": true,
+        "description": "Stage 6 mechanical-proof artifact: off_2p0s_ch8-launch.png."
+      },
+      {
+        "ref": "trace:verification-ch8-captures-potato-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-potato.json",
+        "sha256": "e9a0dea04fdc716fb2b09a02683ef7a696246f4c73b670d07d3e363ff3d4c601",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Sidecar for the ch8 hold-cadence strip at the POTATO tier."
+      },
+      {
+        "ref": "frame:verification-ch8-captures-potato-off_9p7s_ch8-launch-png",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-potato/off_9p7s_ch8-launch.png",
+        "sha256": "6ee66f3d15501ef95dd1642da5aaf03a6b9a0118e15b72e7f0cfe6724f9805ba",
+        "kind": "frame",
+        "hashVerified": true,
+        "description": "Stage 6 mechanical-proof artifact: off_9p7s_ch8-launch.png."
+      },
+      {
+        "ref": "trace:verification-ch8-captures-reduced-motion-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-captures-reduced-motion.json",
+        "sha256": "6794835e836f082bada504ae52dd6d1f741760c2e36a21a922569f861467d2dc",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Sidecar for the ch8 hold-cadence strip under prefers-reduced-motion."
+      },
+      {
+        "ref": "trace:verification-ch8-flow-trace-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-flow-trace.json",
+        "sha256": "0cc83474527e171bf1dd79fdabeed6bb236e9499d709dded2f941a918971a980",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Three cold ch8-launch movie runs; every emission stamped with the game story clock."
+      },
+      {
+        "ref": "trace:verification-ch8-window-av-score-trace-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/ch8-window-av-score-trace.json",
+        "sha256": "3957a24bc8576b9c633b383c546a0a2dff76f647c83ea7baed0b88888f5a3c0b",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Signed AV snapshot sampled every 250 ms across the implemented ch8 hold: anchor, shot, camera authority, applied FOV, postFx, score cueRefs, intensity and hit."
+      },
+      {
+        "ref": "trace:verification-score-ch8-window-verify-analysis-json",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification/score-ch8-window-verify-analysis.json",
+        "sha256": "06a6f3c18d79496ba1dfe1fbd306ed5a698f2ed82c7976eaf9c8420fe5525100",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "Post-implementation combined music-bus offline renders and windowed RMS analysis."
+      },
+      {
+        "ref": "trace:closing-seam-ch8",
+        "path": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/evidence/verification-final/seams/seams-ch8.json",
+        "sha256": "3fb7832c75a31d81eddbe312d8d563a513dd8ef282039a8521a1f0ee010fe5ce",
+        "kind": "trace",
+        "hashVerified": true,
+        "description": "CIN-10 ch8 hold->crossing 500 ms seam strip."
+      }
+    ]
+  },
+  "mechanicalFindings": [
+    {
+      "id": "MF-1",
+      "severity": "blocking-for-evidence",
+      "title": "The movie lane finishes ch9-hearth sealed inside a doorless shelter, so the free-play entry seam has no sky.",
+      "evidence": [
+        "evidence/baseline/00_015s_ch9-hearth_hearth-enter.png",
+        "evidence/baseline/01_124s_ch9-hearth_hearth-closing.png",
+        "evidence/baseline/03_130s_done_freeplay-seam.png",
+        "evidence/baseline/06_185s_done_sky-zenith.png",
+        "evidence/baseline/baseline-trace.json#skyWalk"
+      ],
+      "cause": "main/src/story/emergentMovieRuntime.ts#buildAndCertifyEmergentMovieShelter places a ceiling plus every wall face on both cells of the habitat core column — a sealed 1x1x2 box with no doorway; completeEmergentMovieSafeRest then rests the player inside it.",
+      "measurement": "six headings x 6s held forward (36s) never cleared the SHELTERED thermal state; a control movement receipt in the same session moved the player 12.2 units, so the input path is live.",
+      "scope": "movie/autopilot lane only. A human-built shelter is not produced by this code path.",
+      "consequence": "any ST-0 sky perception staged at the movie-lane done seam is invisible in the movie lane as shipped."
+    },
+    {
+      "id": "MF-2",
+      "severity": "note",
+      "title": "A ?story=ch9-hearth&movie=1 deep link never advances.",
+      "evidence": "recon run, 400s at ch9-hearth with autopilot pos frozen at [10.5, 50.79, -8] and goal null; no timeout rescue fired.",
+      "cause": "main/src/story/autopilot.ts case ch9-hearth returns immediately when getHabitatWorldState(TIDEGARDEN_WORLD_ID) is null; seedForBeat only seeds milestones, it does not build the habitat.",
+      "consequence": "ch9/ch10 movie-lane evidence must enter at ?story=base (ch9-settle) or earlier."
+    },
+    {
+      "id": "MF-3",
+      "severity": "note",
+      "title": "Declared hearth post effects do not render at the LOW tier.",
+      "evidence": "signed AV reports postFx [\"fx.hearth.01-living-night\"] / [\"fx.hearth.04-the-line-remains-open\"] while getGraphicsQuality() reports postProcess:false, colorGrade:false and getColorGrade() is null.",
+      "cause": "main/src/config/graphicsSettings.ts QUALITY_PROFILES.LOW",
+      "consequence": "LOW strips are a geometry/HUD/palette-family reference only; they are not grade evidence."
+    }
+  ],
+  "headedStatus": "pending",
+  "anchorBindingMethod": {
+    "summary": "Every baseline capture binds to anc.ch10.cold-noticed, the only contract anchor whose staged place and time are the second hearth at night. These frames are the shipped predecessor state that anchor re-activates from; none of them was produced by a ch10 anchor, because no ch10 runtime exists at this revision.",
+    "observedRuntimeAnchorsField": "Each capture also records observedRuntimeAnchor: the signed-AV anchor actually live in the shipped runtime when the frame was taken (anc.settle.shelter-certified, anc.hearth.freeplay-handback), or the descriptive seam name for frames taken after the rail released at completion.",
+    "postChangeExpectation": "After ch10 lands, verification captures bind to their own firing anchors; these baseline frames stay bound to anc.ch10.cold-noticed as its before state."
+  },
+  "stateTraces": [
+    {
+      "path": "evidence/baseline/baseline-trace.json",
+      "sha256": "aaa89a74de98083e6c16e0a86265d9b9fe0a7a87e59551a559491e7be01be032",
+      "kind": "state-trace-json",
+      "role": "non-media state trace produced by the probe; not ffprobe media and deliberately outside the captures array",
+      "anchor": "anc.ch10.cold-noticed",
+      "description": "2 Hz change-detected state trace, ch9-settle -> ch9-hearth -> done, with anchor deep reads and the UX feedback-cue log."
+    },
+    {
+      "path": "evidence/baseline/sky-baseline-trace.json",
+      "sha256": "0458b24a2c98c0ac0fd1dba7abe79fde311ccedbfb050c85d8b0db923ee83f2f",
+      "kind": "state-trace-json",
+      "role": "non-media state trace produced by the probe; not ffprobe media and deliberately outside the captures array",
+      "anchor": "anc.ch10.cold-noticed",
+      "description": "outdoor night-sky capture trace with the pointer-lock movement receipt."
+    }
+  ]
+}

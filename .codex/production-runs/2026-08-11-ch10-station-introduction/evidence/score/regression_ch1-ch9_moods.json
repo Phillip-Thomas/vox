@@ -1,0 +1,218 @@
+{
+  "deliverable": "evidence/score/regression_ch1-ch9_moods.json",
+  "method": "the frozen MOODS table is extracted from the pinned source revision and from the working tree; every shipped beat entry is hashed line-for-line and counted unchanged only if its exact authored line survives byte-for-byte",
+  "pinnedRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+  "moodsTableByteIdentical": true,
+  "shippedBeatCount": 40,
+  "changedBeats": [],
+  "fileNumstat": {
+    "added": 178,
+    "deleted": 0
+  },
+  "additiveOnly": {
+    "rule": "chapter 10 lives in its own CH10_MOODS table; no shipped ch1-ch9 mood entry may be edited or removed",
+    "passes": true
+  },
+  "beats": [
+    {
+      "beat": "crawl",
+      "sha256": "d5b627994f9874ac",
+      "unchanged": true
+    },
+    {
+      "beat": "manifest",
+      "sha256": "ba034e3b0d4c4fa1",
+      "unchanged": true
+    },
+    {
+      "beat": "voyage",
+      "sha256": "993a08dd015493db",
+      "unchanged": true
+    },
+    {
+      "beat": "deflect",
+      "sha256": "e3de58de5f65d071",
+      "unchanged": true
+    },
+    {
+      "beat": "crash",
+      "sha256": "801b3820820ae12b",
+      "unchanged": true
+    },
+    {
+      "beat": "descent",
+      "sha256": "5b23e8494ed1112b",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-fixed",
+      "sha256": "7d83085188236770",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-track",
+      "sha256": "a92024a72246792b",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-raster",
+      "sha256": "742b509c6ee89926",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-depth",
+      "sha256": "1576ee4f4748e7fa",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-nav",
+      "sha256": "412ce97f216f7c2c",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-iso",
+      "sha256": "088967fb88b429b1",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-lift",
+      "sha256": "38d037a7da16c5fe",
+      "unchanged": true
+    },
+    {
+      "beat": "ch1-anomaly",
+      "sha256": "eb8379f0e9b7e4ac",
+      "unchanged": true
+    },
+    {
+      "beat": "a1-ramp",
+      "sha256": "738481d69a2bd12d",
+      "unchanged": true
+    },
+    {
+      "beat": "ch2-color",
+      "sha256": "86c03f1bfbd8ab35",
+      "unchanged": true
+    },
+    {
+      "beat": "ch2-approach",
+      "sha256": "fa0c2c373d9306fe",
+      "unchanged": true
+    },
+    {
+      "beat": "a2-awakening",
+      "sha256": "e9c6fde38db4dd8b",
+      "unchanged": true
+    },
+    {
+      "beat": "ch3-gather",
+      "sha256": "3073d0b4d22cb0c5",
+      "unchanged": true
+    },
+    {
+      "beat": "ch3-dusk",
+      "sha256": "53d87dd931405734",
+      "unchanged": true
+    },
+    {
+      "beat": "ch3-await-rest",
+      "sha256": "68deb80a655fe701",
+      "unchanged": true
+    },
+    {
+      "beat": "a3-dawn",
+      "sha256": "402b6c1c9181cae9",
+      "unchanged": true
+    },
+    {
+      "beat": "ch3-thirst",
+      "sha256": "89ea3a6ebdd57c67",
+      "unchanged": true
+    },
+    {
+      "beat": "ch3-forage",
+      "sha256": "31cb3b3c8f7aa423",
+      "unchanged": true
+    },
+    {
+      "beat": "ch3-signal",
+      "sha256": "cef6732e035e427e",
+      "unchanged": true
+    },
+    {
+      "beat": "ch4-vigil",
+      "sha256": "d115b0e8829c315e",
+      "unchanged": true
+    },
+    {
+      "beat": "ch4-arrival",
+      "sha256": "cb2e84ec6fea4c7f",
+      "unchanged": true
+    },
+    {
+      "beat": "ch4-audit",
+      "sha256": "b54bda98f31581cb",
+      "unchanged": true
+    },
+    {
+      "beat": "ch4-comply",
+      "sha256": "d37d408f5dcc1d28",
+      "unchanged": true
+    },
+    {
+      "beat": "ch4-defy",
+      "sha256": "c8b3bed0d0267436",
+      "unchanged": true
+    },
+    {
+      "beat": "a4-exhale",
+      "sha256": "76deeae624a6d321",
+      "unchanged": true
+    },
+    {
+      "beat": "ch5-maw",
+      "sha256": "cd87fbf6b4f45e84",
+      "unchanged": true
+    },
+    {
+      "beat": "ch6-dive",
+      "sha256": "fd9d3f805d145031",
+      "unchanged": true
+    },
+    {
+      "beat": "ch7-reconstruct",
+      "sha256": "ff1e3b5777f2e75d",
+      "unchanged": true
+    },
+    {
+      "beat": "ch7-board",
+      "sha256": "be93f6a694cf9aa0",
+      "unchanged": true
+    },
+    {
+      "beat": "ch8-launch",
+      "sha256": "ba12b7f173bd0746",
+      "unchanged": true
+    },
+    {
+      "beat": "ch8-crossing",
+      "sha256": "b430469d3f139aec",
+      "unchanged": true
+    },
+    {
+      "beat": "ch8-landfall",
+      "sha256": "430eef2b100a9890",
+      "unchanged": true
+    },
+    {
+      "beat": "ch9-settle",
+      "sha256": "8da254198d754aa4",
+      "unchanged": true
+    },
+    {
+      "beat": "ch9-hearth",
+      "sha256": "f14b61d0c20ff027",
+      "unchanged": true
+    }
+  ]
+}

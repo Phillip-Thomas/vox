@@ -1,0 +1,4336 @@
+{
+  "capturedAt": "2026-08-12T03:02:38.707Z",
+  "base": "http://localhost:5176",
+  "corridorFence": {
+    "url": "?story=ch10-transit&movie=1&profile=LOW",
+    "approach": {
+      "handbackAt": null,
+      "samples": [
+        {
+          "t": 0,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 1,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 2,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 3,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 4,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 5,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 6,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 7,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 8,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 9,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 10,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 11,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 12,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 13,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 14,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 15,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 16,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 17,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 18,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 19,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 20,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 21,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 22,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 23,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 24,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 25,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 26,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 27,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 28,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 29,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 30,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 31,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 32,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 33,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 34,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 35,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 36,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 37,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 38,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 39,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 40,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 41,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 42,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 43,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 44,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 45,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 46,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 47,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 48,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 49,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 50,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 51,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 52,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 53,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 54,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 55,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 56,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 57,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 58,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 59,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 60,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 61,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 62,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 63,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 64,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 65,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 66,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 67,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 68,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 69,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 70,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 71,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 72,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 73,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 74,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 75,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 76,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 77,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 78,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 79,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 80,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 81,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 82,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 83,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 84,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 85,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 86,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 87,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 88,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 89,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 90,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 91,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 92,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 93,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 94,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 95,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 96,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 97,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 98,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 99,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 100,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 101,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 102,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 103,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 104,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 105,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 106,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 107,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 108,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 109,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 110,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 111,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 112,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 113,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 114,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 115,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 116,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 117,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 118,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 119,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 120,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 121,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 122,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 123,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 124,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 125,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 126,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 127,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 128,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 129,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 130,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 131,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 132,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 133,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 134,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 135,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 136,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 137,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 138,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 139,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 140,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 141,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 142,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 143,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 144,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 145,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 146,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 147,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 148,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 149,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 150,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 151,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 152,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 153,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 154,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 155,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 156,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 157,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 158,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 159,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 160,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 161,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 162,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 163,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 164,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 165,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 166,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 167,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 168,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 169,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 170,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 171,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 172,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 173,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 174,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 175,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 176,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 177,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 178,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 180,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 181,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 182,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 183,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 184,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 185,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 186,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 187,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 188,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 189,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 190,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 191,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 192,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 193,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 194,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 195,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 196,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 197,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 198,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 199,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 200,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 201,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 202,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 203,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 204,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 205,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 206,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 207,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 208,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 209,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 210,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 211,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 212,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 213,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 214,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 215,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 216,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 217,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 218,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 219,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 220,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 221,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 222,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 223,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 224,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 225,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 226,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 227,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 228,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 229,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 230,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 231,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 232,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 233,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 234,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 235,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 236,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 237,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 238,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 239,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 240,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 241,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 242,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 243,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 244,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 245,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 246,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 247,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 248,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 249,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 250,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 251,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 252,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 253,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 254,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 255,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 256,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 257,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 258,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 259,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 260,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 261,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 262,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 263,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 264,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 265,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 266,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 267,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 268,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 269,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 270,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 271,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 272,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 273,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 274,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 275,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 276,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 277,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 278,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 279,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 280,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 281,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 282,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 283,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 284,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 285,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 286,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 287,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 288,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 289,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 290,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 291,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 292,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 293,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 294,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 295,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 296,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 297,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 298,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 299,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 300,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 301,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 302,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 303,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 304,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 305,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 306,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 307,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 308,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 309,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 310,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 311,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 312,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 313,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 314,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 315,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 316,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 317,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 318,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 319,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 320,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 321,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 322,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 323,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 324,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 325,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 326,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 327,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 328,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 329,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 330,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 331,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 332,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 333,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 334,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 335,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 336,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 337,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 338,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 339,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 340,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 341,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 342,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 343,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 344,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 345,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 346,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 347,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 348,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 349,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 350,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 351,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 352,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 353,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 354,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 355,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 356,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 357,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 358,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 359,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 360,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 361,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 362,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 363,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 364,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 365,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 366,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 367,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 368,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 369,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 370,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 371,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 372,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 373,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 374,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 375,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 376,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 377,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 378,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 379,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 380,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 381,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 382,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 383,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 384,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 385,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 386,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 387,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 388,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 389,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 390,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 391,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 392,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 393,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 394,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 395,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 396,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 397,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 398,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 399,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 400,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 401,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 402,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 403,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 404,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 405,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 406,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 407,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 408,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 409,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 410,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 411,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 412,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 413,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 414,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 415,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 416,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 417,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 418,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        },
+        {
+          "t": 419,
+          "station": {
+            "worldId": "-1,-1:a0",
+            "distance": 6630,
+            "phase": "unknown",
+            "canDock": false
+          },
+          "phase": "surface"
+        }
+      ],
+      "reachedCorridor": false
+    },
+    "contactsBefore": {
+      "phase": "surface",
+      "ship": [
+        4,
+        53.5,
+        -6
+      ],
+      "stations": [
+        {
+          "worldId": "-1,-1:a0",
+          "distance": 6630,
+          "phase": "unknown",
+          "canDock": false
+        }
+      ]
+    },
+    "contactsAfter": {
+      "phase": "surface",
+      "ship": [
+        4,
+        53.5,
+        -6
+      ],
+      "stations": [
+        {
+          "worldId": "-1,-1:a0",
+          "distance": 6630,
+          "phase": "unknown",
+          "canDock": false
+        }
+      ]
+    },
+    "speedBefore": 0,
+    "systemTargetBefore": null,
+    "systemTargetAfter": null,
+    "urlBefore": "http://localhost:5176/?story=ch10-transit&movie=1&profile=LOW",
+    "urlAfter": "http://localhost:5176/?story=ch10-transit&movie=1&profile=LOW",
+    "navigated": false,
+    "advisoryBefore": {
+      "holdForApproach": false,
+      "onTheCorridor": false,
+      "cleared": false,
+      "berth": false,
+      "dock": false,
+      "localLock": false,
+      "flightCorridor": false
+    },
+    "advisoryAfter": {
+      "holdForApproach": false,
+      "onTheCorridor": false,
+      "cleared": false,
+      "berth": false,
+      "dock": false,
+      "localLock": false,
+      "flightCorridor": false
+    },
+    "hudAfter": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+    "captionAfter": null,
+    "fence": {
+      "dockingAuthorized": false,
+      "targetingAuthorized": true,
+      "storyContext": true,
+      "sandbox": false,
+      "dockEnabled": true,
+      "CORRIDOR_RANGE": 1400,
+      "DOCK_SPEED_LIMIT": 34,
+      "systemTarget": null
+    },
+    "pageErrors": []
+  },
+  "reloadSafety": {
+    "checkpoints": [],
+    "pageErrors": [],
+    "allIdentical": false
+  },
+  "t3Rung": {
+    "objectiveEvents": [
+      {
+        "t": 0,
+        "beat": "ch10-transit",
+        "from": null,
+        "to": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "health": "ready",
+        "requiresMarker": "false",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "caption": null,
+        "cueCount": 0
+      }
+    ],
+    "handbackAt": null,
+    "feedbackLog": [],
+    "trace": [
+      {
+        "t": 0,
+        "beat": "ch10-transit",
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "requiresMarker": "false",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "caption": null,
+        "anchor": null
+      },
+      {
+        "t": 0.5,
+        "beat": "ch10-transit",
+        "objectiveId": "station:transit:ignite",
+        "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+        "requiresMarker": "false",
+        "health": "ready",
+        "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+        "caption": null,
+        "anchor": null
+      }
+    ]
+  },
+  "galaxyFirewall": {
+    "samples": [
+      {
+        "t": 0,
+        "anchor": null,
+        "galaxyVisible": null,
+        "galaxyObjects": null
+      },
+      {
+        "t": 0.5,
+        "anchor": null,
+        "galaxyVisible": false,
+        "galaxyObjects": []
+      }
+    ],
+    "anyGalaxyVisibleDuringTransit": false
+  }
+}

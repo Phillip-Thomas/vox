@@ -68,6 +68,9 @@ const BEAT_LABELS: Record<StoryBeat, string> = {
   'ch8-crossing': 'ch8 · local-system crossing',
   'ch8-landfall': 'ch8 · Tidegarden landfall',
   'ch9-settle': 'ch9 · build the second hearth',
+  'ch10-cold': 'ch10 · the hum drops a step',
+  'ch10-ask': 'ch10 · the crossing back, and the ask',
+  'ch10-transit': 'ch10 · the bearing, flown',
   'ch9-hearth': 'ch9 · safe rest / handback',
   done: 'complete  [two-world free play]'
 };

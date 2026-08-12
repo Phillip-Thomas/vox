@@ -6,7 +6,10 @@ import {
   type ApproachReadout
 } from '../game/spaceStation/spaceStationApproach.ts';
 import { systemSpaceStations, type SpaceStationBody } from '../game/spaceStation/spaceStationBody.ts';
-import { forcedSpaceStationCount } from '../game/spaceStation/spaceStationDevFlag.ts';
+import {
+  forcedSpaceStationCount,
+  spaceStationDockingAuthorized
+} from '../game/spaceStation/spaceStationDevFlag.ts';
 import type { SystemCoordinate } from '../game/starSystem.ts';
 import { getSpaceFlightSnapshot } from '../state/spaceFlight.ts';
 import { commitSpaceStationTarget, getSystemFlightSnapshot } from '../state/systemFlight.ts';
@@ -30,8 +33,26 @@ export interface SpaceStationContact {
 
 let latestContact: SpaceStationContact | null = null;
 
-/** Nearest station within instrument range, or null. Read by the HUD's own loop. */
+/**
+ * Nearest station within instrument range, or null. Read by the HUD's own loop.
+ *
+ * The advisory register ("hold for approach", "on the corridor · N to the
+ * berth") is implied-dock copy and is embargoed from story mode until the
+ * docking era: while docking is unauthorized this publishes NOTHING, so a player
+ * who noses inside the corridor receives instrument silence — no advisory, no
+ * dock offer, no refusal line. Silence is the canon, because the station is
+ * never the actor and a refusal would be an act.
+ */
 export function spaceStationContact(): SpaceStationContact | null {
+  return spaceStationDockingAuthorized() ? latestContact : null;
+}
+
+/**
+ * The truthful geometric contact, independent of what the instrument is allowed
+ * to say. The story's own seam and standoff read range from here: withholding
+ * the station's VOICE must not blind the chapter to where the station is.
+ */
+export function spaceStationApproachGeometry(): SpaceStationContact | null {
   return latestContact;
 }
 
@@ -63,6 +84,9 @@ export default function SpaceStationApproachDriver({
       if (event.code !== 'KeyF') return;
       const contact = latestContact;
       if (!contact?.readout.canDock) return;
+      // The story fence: until docking is authorized, [F] neither commits nor
+      // navigates. Sandbox membership is tested inside the predicate.
+      if (!spaceStationDockingAuthorized()) return;
       // Publish the target before handing off, so anything watching the flight
       // store sees where the player went rather than inferring it afterwards.
       commitSpaceStationTarget(contact.body.address);

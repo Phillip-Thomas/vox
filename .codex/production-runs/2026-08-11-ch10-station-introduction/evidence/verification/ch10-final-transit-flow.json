@@ -1,0 +1,1572 @@
+{
+  "capturedAt": "2026-08-12T06:23:38.494Z",
+  "base": "http://localhost:5176",
+  "mode": "transit-flow",
+  "constants": {
+    "ASK_TIMEOUT": 320,
+    "TRANSIT_TIMEOUT": 260,
+    "HOLD_DURATION_MS": 2500,
+    "STANDOFF": 1500
+  },
+  "runs": [
+    {
+      "id": "transit-from-flow",
+      "url": "?story=ch10-ask&movie=1&profile=LOW",
+      "startedAt": "2026-08-12T06:23:38.567Z",
+      "legs": {
+        "boarded": 1.874,
+        "launched": 2.631,
+        "left-atmosphere": 4.763,
+        "target-acquired": 5.47,
+        "world-handoff-to-origin": 15.544,
+        "descent-to-origin": 15.544,
+        "relay-handle-resolved": 15.544
+      },
+      "legBeatClock": {
+        "boarded": 1,
+        "launched": 1.7,
+        "left-atmosphere": 3.9,
+        "target-acquired": 4.6,
+        "world-handoff-to-origin": 14.5,
+        "descent-to-origin": 14.5,
+        "relay-handle-resolved": 14.5
+      },
+      "legWallMs": {
+        "boarded": 4897,
+        "launched": 5652,
+        "left-atmosphere": 7790,
+        "target-acquired": 8497,
+        "world-handoff-to-origin": 18495,
+        "descent-to-origin": 18495,
+        "relay-handle-resolved": 18495
+      },
+      "objectiveEvents": [
+        {
+          "t": 1.163,
+          "beatClock": 0.3,
+          "beat": "ch10-ask",
+          "from": null,
+          "to": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be d",
+          "cues": 0
+        },
+        {
+          "t": 1.874,
+          "beatClock": 1,
+          "beat": "ch10-ask",
+          "from": "station:return:reboard",
+          "to": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "cues": 0
+        },
+        {
+          "t": 15.544,
+          "beatClock": 14.5,
+          "beat": "ch10-ask",
+          "from": "station:return:crossing",
+          "to": "station:return:landfall",
+          "markerLabel": "WRECK SITE · LAND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SITE · LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+          "caption": null,
+          "cues": 0
+        }
+      ],
+      "trace": [
+        {
+          "t": 1.163,
+          "wallMs": 3036,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "missing-marker",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD. | ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be d",
+          "cues": 0,
+          "flight": {
+            "phase": "surface",
+            "controlMode": "fps"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "surface",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              2188,
+              -58,
+              -1643
+            ],
+            "quat": [
+              0,
+              0.7071,
+              0,
+              0.7071
+            ],
+            "speed": 0
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2188,
+              -58.21649242297673,
+              -1643
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8782,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 0.3,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 1.874,
+          "marker": "LEG:boarded",
+          "wallMs": 4897,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "cues": 0,
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "surface",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              2188,
+              -39,
+              -1643
+            ],
+            "quat": [
+              0,
+              0.7071,
+              0,
+              0.7071
+            ],
+            "speed": 0
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2188,
+              -38.35898886953879,
+              -1643
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8785,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 1,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 1.874,
+          "wallMs": 4897,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "cues": 0,
+          "flight": {
+            "phase": "surface",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "surface",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              2188,
+              -39,
+              -1643
+            ],
+            "quat": [
+              0,
+              0.7071,
+              0,
+              0.7071
+            ],
+            "speed": 0
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "jump"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "surface",
+            "ship": [
+              2188,
+              -38.35898886953879,
+              -1643
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8785,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 1,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "jump"
+            ],
+            "stillTime": 0,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 2.631,
+          "marker": "LEG:launched",
+          "wallMs": 5652,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "atmosphere",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              2187,
+              -24,
+              -1643
+            ],
+            "quat": [
+              0.0003,
+              0.7429,
+              -0.0007,
+              0.6694
+            ],
+            "speed": 13.73
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              2187.2848048010287,
+              -24.499357560100464,
+              -1642.9527073929
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8786,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 1.7,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 2.631,
+          "wallMs": 5652,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": "(the channel at the wreck never closed. asking is still a thing that can be done.)",
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "atmosphere",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              2187,
+              -24,
+              -1643
+            ],
+            "quat": [
+              0.0003,
+              0.7429,
+              -0.0007,
+              0.6694
+            ],
+            "speed": 13.73
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              2187.2848048010287,
+              -24.499357560100464,
+              -1642.9527073929
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8786,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 1.7,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "forward",
+              "sprint"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 4.763,
+          "marker": "LEG:left-atmosphere",
+          "wallMs": 7790,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "local_space",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              1930,
+              -23,
+              -1514
+            ],
+            "quat": [
+              0.002,
+              0.8972,
+              -0.0041,
+              0.4416
+            ],
+            "speed": 240.38
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              1929.80533819916,
+              -22.62097923225805,
+              -1514.4251633942588
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8520,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 3.9,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 4.763,
+          "wallMs": 7790,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "local_space",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              1930,
+              -23,
+              -1514
+            ],
+            "quat": [
+              0.002,
+              0.8972,
+              -0.0041,
+              0.4416
+            ],
+            "speed": 240.38
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              1929.80533819916,
+              -22.62097923225805,
+              -1514.4251633942588
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8520,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 3.9,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 5.47,
+          "marker": "LEG:target-acquired",
+          "wallMs": 8497,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "local_space",
+            "targetKind": "system_body",
+            "targetWorldId": "-1,-1",
+            "pos": [
+              1778,
+              -21,
+              -1414
+            ],
+            "quat": [
+              0.002,
+              0.8996,
+              -0.0042,
+              0.4367
+            ],
+            "speed": 280.12
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              1777.803594903401,
+              -21.12865788657534,
+              -1413.687263327834
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8361,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 4.6,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.7,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 5.47,
+          "wallMs": 8497,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:crossing",
+          "markerLabel": "ORIGIN WORLD · COURSE",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | ORIGIN WORLD · COURSE | FIND THE ORIGIN WORLD. | CENTER IT AND CROSS.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1:p1",
+            "locationMode": "local_space",
+            "targetKind": "system_body",
+            "targetWorldId": "-1,-1",
+            "pos": [
+              1778,
+              -21,
+              -1414
+            ],
+            "quat": [
+              0.002,
+              0.8996,
+              -0.0042,
+              0.4367
+            ],
+            "speed": 280.12
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": "-1,-1",
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": null,
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              1777.803594903401,
+              -21.12865788657534,
+              -1413.687263327834
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 8361,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 4.6,
+            "pos": [
+              8.67,
+              51.08,
+              -8
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.7,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 15.544,
+          "marker": "LEG:world-handoff-to-origin",
+          "wallMs": 18495,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:landfall",
+          "markerLabel": "WRECK SITE · LAND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SITE · LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              111,
+              -2,
+              -107
+            ],
+            "quat": [
+              0.002,
+              0.9169,
+              -0.0047,
+              0.399
+            ],
+            "speed": 59.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "interact"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              110.59545640715267,
+              -1.6003053884402212,
+              -106.25192603256848
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6713,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 14.5,
+            "pos": [
+              116.14,
+              -1.67,
+              -110.71
+            ],
+            "keys": [
+              "forward",
+              "interact"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 15.544,
+          "marker": "LEG:descent-to-origin",
+          "wallMs": 18495,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:landfall",
+          "markerLabel": "WRECK SITE · LAND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SITE · LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              111,
+              -2,
+              -107
+            ],
+            "quat": [
+              0.002,
+              0.9169,
+              -0.0047,
+              0.399
+            ],
+            "speed": 59.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "interact"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              110.59545640715267,
+              -1.6003053884402212,
+              -106.25192603256848
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6713,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 14.5,
+            "pos": [
+              116.14,
+              -1.67,
+              -110.71
+            ],
+            "keys": [
+              "forward",
+              "interact"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 15.544,
+          "marker": "LEG:relay-handle-resolved",
+          "wallMs": 18495,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:landfall",
+          "markerLabel": "WRECK SITE · LAND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SITE · LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              111,
+              -2,
+              -107
+            ],
+            "quat": [
+              0.002,
+              0.9169,
+              -0.0047,
+              0.399
+            ],
+            "speed": 59.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "interact"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              110.59545640715267,
+              -1.6003053884402212,
+              -106.25192603256848
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6713,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 14.5,
+            "pos": [
+              116.14,
+              -1.67,
+              -110.71
+            ],
+            "keys": [
+              "forward",
+              "interact"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 15.544,
+          "wallMs": 18495,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:landfall",
+          "markerLabel": "WRECK SITE · LAND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SITE · LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "descent",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "atmosphere",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              111,
+              -2,
+              -107
+            ],
+            "quat": [
+              0.002,
+              0.9169,
+              -0.0047,
+              0.399
+            ],
+            "speed": 59.16
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "interact"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "descent",
+            "ship": [
+              110.59545640715267,
+              -1.6003053884402212,
+              -106.25192603256848
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6713,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 14.5,
+            "pos": [
+              116.14,
+              -1.67,
+              -110.71
+            ],
+            "keys": [
+              "forward",
+              "interact"
+            ],
+            "stillTime": 0.1,
+            "teleportNudgesTotal": 0
+          }
+        },
+        {
+          "t": 25.136,
+          "wallMs": 28163,
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:landfall",
+          "markerLabel": "WRECK SITE · LAND",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | WRECK SITE · LAND | FOLLOW THE WRECK SITE MARKER DOWN. | LAND NEAR THE RELAY.",
+          "caption": null,
+          "cues": 0,
+          "flight": {
+            "phase": "deep_space",
+            "controlMode": "flight"
+          },
+          "system": {
+            "activePlanetId": "-1,-1",
+            "locationMode": "local_space",
+            "targetKind": null,
+            "targetWorldId": null,
+            "pos": [
+              -174,
+              5,
+              172
+            ],
+            "quat": [
+              0.002,
+              0.9169,
+              -0.0047,
+              0.399
+            ],
+            "speed": 119.21
+          },
+          "directive": {
+            "active": true,
+            "beat": "ch10-ask",
+            "targetWorldId": null,
+            "targetSystemPosition": null,
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ]
+          },
+          "av": {
+            "active": true,
+            "beat": "ch10-ask",
+            "anchorId": null,
+            "history": [],
+            "authority": null,
+            "fov": null,
+            "agency": null,
+            "postFx": [],
+            "reset": null
+          },
+          "milestones": {
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false
+          },
+          "score": {
+            "variant": "crossing-back",
+            "carrierAlive": false,
+            "intensity": null,
+            "maxIntensity": 0.44
+          },
+          "relayHandle": [
+            -2,
+            51,
+            -2
+          ],
+          "contacts": {
+            "phase": "deep_space",
+            "ship": [
+              -174.06012632095525,
+              4.74395589361244,
+              171.57569283113602
+            ],
+            "stations": [
+              {
+                "worldId": "-1,-1:a0",
+                "distance": 6467,
+                "phase": "unknown",
+                "canDock": false
+              }
+            ]
+          },
+          "autopilot": {
+            "beat": "ch10-ask",
+            "clock": 24,
+            "pos": [
+              116.14,
+              -1.67,
+              -110.71
+            ],
+            "keys": [
+              "forward",
+              "jump",
+              "sprint"
+            ],
+            "stillTime": 0.8,
+            "teleportNudgesTotal": 0
+          }
+        }
+      ],
+      "pageErrors": [],
+      "completed": false,
+      "specifiers": {
+        "spaceFlight": "/src/state/spaceFlight.ts",
+        "systemFlight": "/src/state/systemFlight.ts?t=1786514098957",
+        "storyState": "/src/story/storyState.ts?t=1786514098957",
+        "progression": "/src/game/systems/progressionSystem.ts",
+        "autopilot": "/src/story/autopilot.ts?t=1786514147901",
+        "signedAv": "/src/story/signedSceneAvRuntime.ts?t=1786514098957",
+        "director": "/src/story/emergentStoryDirector.ts?t=1786514125561",
+        "score": "/src/story/emergentScoreDirector.ts?t=1786514098957",
+        "relay": "/src/story/world/WreckRelay.tsx?t=1786514098957"
+      },
+      "durationSeconds": 700.4,
+      "lastBeatClock": 696.5,
+      "feedbackLog": [],
+      "legDurations": {
+        "boarded": 1.87,
+        "launched": 0.76,
+        "left-atmosphere": 2.13,
+        "target-acquired": 0.71,
+        "world-handoff-to-origin": 10.07,
+        "descent-to-origin": 0,
+        "relay-handle-resolved": 0
+      }
+    }
+  ]
+}

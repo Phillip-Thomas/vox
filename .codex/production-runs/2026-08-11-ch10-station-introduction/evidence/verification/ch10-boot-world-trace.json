@@ -1,0 +1,614 @@
+{
+  "capturedAt": "2026-08-12T02:52:41.567Z",
+  "base": "http://localhost:5176",
+  "defect": {
+    "id": "OD-boot-world",
+    "reportedBy": "owner",
+    "lockRevision": "R6",
+    "rootCause": "resolveStoryBootWorldId computed tidegardenOwned from an enumeration (beat 'ch8-landfall' or chapter 'ch9' or 'complete') that stopped at ch9, so every ch10 beat booted on the origin world",
+    "repair": "the ownership test is now a chapter-ORDER comparison via storyChapterAtLeast(chapter, 'ch9'); ch1-ch9 decisions are regression-proven byte-identical by a table over STORY_BEAT_ORDER",
+    "expected": {
+      "worldId": "-1,-1:p1",
+      "seed": 1600321158
+    },
+    "defectSeedObserved": 3215739679
+  },
+  "scenarios": {
+    "ch10-cold": {
+      "url": "?story=ch10-cold&profile=LOW&systemprobe=1",
+      "pageErrors": [],
+      "resolvedSpecifiers": {
+        "storyState": "/src/story/storyState.ts",
+        "tidegardenRoute": "/src/story/tidegardenRoute.ts",
+        "systemFlight": "/src/state/systemFlight.ts",
+        "starSystem": "/src/game/starSystem.ts"
+      },
+      "story": {
+        "chapter": "ch10",
+        "beat": "ch10-cold",
+        "active": true
+      },
+      "routeOnline": true,
+      "bootWorldDecision": "-1,-1:p1",
+      "tidegardenIdentity": {
+        "worldId": "-1,-1:p1",
+        "coordinate": {
+          "x": -1,
+          "y": -1
+        },
+        "seed": 1600321158,
+        "generationSchemaVersion": 1,
+        "systemId": "-1,-1",
+        "address": {
+          "system": {
+            "x": -1,
+            "y": -1
+          },
+          "slot": 1
+        },
+        "planetIdentityVersion": 1
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "targetKind": null,
+        "targetWorldId": null
+      },
+      "residentWorld": {
+        "worldId": "-1,-1:p1",
+        "seed": 1600321158
+      },
+      "celestial": {
+        "spaceBlend": 0,
+        "phase": "surface",
+        "camera": [
+          10.500000027010389,
+          52.13897476196289,
+          -8.000000008990977
+        ],
+        "bodies": [
+          {
+            "worldId": "-1,-1",
+            "visible": true,
+            "centerDistance": 137.99999999999997,
+            "scale": 2.5148081629743846,
+            "ndc": [
+              0.7311095076803852,
+              0.14037347731976796,
+              1.0010430744174057
+            ],
+            "projectedBoundRadiusPixels": 15.007857495574862
+          }
+        ]
+      },
+      "boundaryStateRefs": [
+        "state:camera/embodied",
+        "state:camera/free-look",
+        "state:control/on-foot",
+        "state:free-play/two-world-handoff",
+        "state:item/kestrel-keel-memory-banked",
+        "state:maw/repaired",
+        "state:reality/alive",
+        "state:ship-restoration/flight_ready",
+        "state:space-flight/control-mode=fps",
+        "state:space-flight/phase!=deep_space",
+        "state:space-flight/phase=surface",
+        "state:story/active",
+        "state:story/complete",
+        "state:system-flight/active-planet=-1,-1:p1",
+        "state:world/tidegarden"
+      ],
+      "lockChip": {
+        "localLock": false,
+        "flightCorridor": false,
+        "matchedLines": []
+      },
+      "camera": [
+        10.500000027010389,
+        52.13897476196289,
+        -8.000000008990977
+      ],
+      "assertions": {
+        "bootWorldMatchesExpectation": true,
+        "residentWorldMatchesExpectation": true,
+        "terrainSeedMatchesExpectation": true,
+        "renderOriginAgreesWithResidentWorld": true,
+        "noCompanionCollapsedOntoCamera": true,
+        "collapsedBodies": [],
+        "companionPlacements": [
+          {
+            "worldId": "-1,-1",
+            "visible": true,
+            "centerDistance": 137.99999999999997,
+            "scale": 2.5148081629743846
+          }
+        ],
+        "noLockChipOnFoot": true,
+        "expectation": "Tidegarden owns this beat"
+      }
+    },
+    "ch10-ask": {
+      "url": "?story=ch10-ask&profile=LOW&systemprobe=1",
+      "pageErrors": [],
+      "resolvedSpecifiers": {
+        "storyState": "/src/story/storyState.ts",
+        "tidegardenRoute": "/src/story/tidegardenRoute.ts",
+        "systemFlight": "/src/state/systemFlight.ts",
+        "starSystem": "/src/game/starSystem.ts"
+      },
+      "story": {
+        "chapter": "ch10",
+        "beat": "ch10-ask",
+        "active": true
+      },
+      "routeOnline": true,
+      "bootWorldDecision": "-1,-1:p1",
+      "tidegardenIdentity": {
+        "worldId": "-1,-1:p1",
+        "coordinate": {
+          "x": -1,
+          "y": -1
+        },
+        "seed": 1600321158,
+        "generationSchemaVersion": 1,
+        "systemId": "-1,-1",
+        "address": {
+          "system": {
+            "x": -1,
+            "y": -1
+          },
+          "slot": 1
+        },
+        "planetIdentityVersion": 1
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "targetKind": null,
+        "targetWorldId": null
+      },
+      "residentWorld": {
+        "worldId": "-1,-1:p1",
+        "seed": 1600321158
+      },
+      "celestial": {
+        "spaceBlend": 0,
+        "phase": "surface",
+        "camera": [
+          10.500000027010389,
+          52.13897476196289,
+          -8.000000008990977
+        ],
+        "bodies": [
+          {
+            "worldId": "-1,-1",
+            "visible": true,
+            "centerDistance": 138,
+            "scale": 2.5148158596035133,
+            "ndc": [
+              0.7307389768898283,
+              0.1400515145916753,
+              1.001042802948337
+            ],
+            "projectedBoundRadiusPixels": 15.007903427473309
+          }
+        ]
+      },
+      "boundaryStateRefs": [
+        "state:camera/embodied",
+        "state:camera/free-look",
+        "state:control/on-foot",
+        "state:free-play/two-world-handoff",
+        "state:item/kestrel-keel-memory-banked",
+        "state:maw/repaired",
+        "state:reality/alive",
+        "state:ship-restoration/flight_ready",
+        "state:space-flight/control-mode=fps",
+        "state:space-flight/phase!=deep_space",
+        "state:space-flight/phase=surface",
+        "state:story/active",
+        "state:story/complete",
+        "state:system-flight/active-planet=-1,-1:p1",
+        "state:world/tidegarden"
+      ],
+      "lockChip": {
+        "localLock": false,
+        "flightCorridor": false,
+        "matchedLines": []
+      },
+      "camera": [
+        10.500000027010389,
+        52.13897476196289,
+        -8.000000008990977
+      ],
+      "assertions": {
+        "bootWorldMatchesExpectation": true,
+        "residentWorldMatchesExpectation": true,
+        "terrainSeedMatchesExpectation": true,
+        "renderOriginAgreesWithResidentWorld": true,
+        "noCompanionCollapsedOntoCamera": true,
+        "collapsedBodies": [],
+        "companionPlacements": [
+          {
+            "worldId": "-1,-1",
+            "visible": true,
+            "centerDistance": 138,
+            "scale": 2.5148158596035133
+          }
+        ],
+        "noLockChipOnFoot": true,
+        "expectation": "Tidegarden owns this beat"
+      }
+    },
+    "ch10-transit": {
+      "url": "?story=ch10-transit&profile=LOW&systemprobe=1",
+      "pageErrors": [],
+      "resolvedSpecifiers": {
+        "storyState": "/src/story/storyState.ts",
+        "tidegardenRoute": "/src/story/tidegardenRoute.ts",
+        "systemFlight": "/src/state/systemFlight.ts",
+        "starSystem": "/src/game/starSystem.ts"
+      },
+      "story": {
+        "chapter": "ch10",
+        "beat": "ch10-transit",
+        "active": true
+      },
+      "routeOnline": true,
+      "bootWorldDecision": "-1,-1",
+      "tidegardenIdentity": {
+        "worldId": "-1,-1:p1",
+        "coordinate": {
+          "x": -1,
+          "y": -1
+        },
+        "seed": 1600321158,
+        "generationSchemaVersion": 1,
+        "systemId": "-1,-1",
+        "address": {
+          "system": {
+            "x": -1,
+            "y": -1
+          },
+          "slot": 1
+        },
+        "planetIdentityVersion": 1
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "activePlanetId": "-1,-1",
+        "lastActivePlanetId": "-1,-1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          0,
+          0,
+          0
+        ],
+        "targetKind": null,
+        "targetWorldId": null
+      },
+      "residentWorld": {
+        "worldId": "-1,-1",
+        "seed": 3215739679
+      },
+      "celestial": {
+        "spaceBlend": 0,
+        "phase": "surface",
+        "camera": [
+          4,
+          53.5,
+          -6
+        ],
+        "bodies": [
+          {
+            "worldId": "-1,-1:p1",
+            "visible": true,
+            "centerDistance": 138,
+            "scale": 2.5389766107831817,
+            "ndc": [
+              -0.8070636186791331,
+              -0.07574103214872507,
+              1.0206588976082613
+            ],
+            "projectedBoundRadiusPixels": 16.510846745386402
+          }
+        ]
+      },
+      "boundaryStateRefs": [
+        "state:camera/embodied",
+        "state:camera/free-look",
+        "state:control/flight",
+        "state:free-play/two-world-handoff",
+        "state:item/kestrel-keel-memory-banked",
+        "state:maw/repaired",
+        "state:reality/alive",
+        "state:ship-restoration/flight_ready",
+        "state:space-flight/control-mode=flight",
+        "state:space-flight/phase!=deep_space",
+        "state:space-flight/phase=surface",
+        "state:story/active",
+        "state:story/ch10-bearing-claimed",
+        "state:story/complete",
+        "state:system-flight/active-planet=-1,-1",
+        "state:world/origin"
+      ],
+      "lockChip": {
+        "localLock": false,
+        "flightCorridor": false,
+        "matchedLines": []
+      },
+      "camera": [
+        4,
+        53.5,
+        -6
+      ],
+      "assertions": {
+        "bootWorldMatchesExpectation": true,
+        "residentWorldMatchesExpectation": true,
+        "terrainSeedMatchesExpectation": true,
+        "renderOriginAgreesWithResidentWorld": true,
+        "noCompanionCollapsedOntoCamera": true,
+        "collapsedBodies": [],
+        "companionPlacements": [
+          {
+            "worldId": "-1,-1:p1",
+            "visible": true,
+            "centerDistance": 138,
+            "scale": 2.5389766107831817
+          }
+        ],
+        "noLockChipOnFoot": true,
+        "expectation": "the origin owns this beat and must be unchanged by the repair"
+      }
+    },
+    "ch9-hearth": {
+      "url": "?story=ch9-hearth&profile=LOW&systemprobe=1",
+      "pageErrors": [],
+      "resolvedSpecifiers": {
+        "storyState": "/src/story/storyState.ts",
+        "tidegardenRoute": "/src/story/tidegardenRoute.ts",
+        "systemFlight": "/src/state/systemFlight.ts",
+        "starSystem": "/src/game/starSystem.ts"
+      },
+      "story": {
+        "chapter": "ch9",
+        "beat": "ch9-hearth",
+        "active": true
+      },
+      "routeOnline": true,
+      "bootWorldDecision": "-1,-1:p1",
+      "tidegardenIdentity": {
+        "worldId": "-1,-1:p1",
+        "coordinate": {
+          "x": -1,
+          "y": -1
+        },
+        "seed": 1600321158,
+        "generationSchemaVersion": 1,
+        "systemId": "-1,-1",
+        "address": {
+          "system": {
+            "x": -1,
+            "y": -1
+          },
+          "slot": 1
+        },
+        "planetIdentityVersion": 1
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "activePlanetId": "-1,-1:p1",
+        "lastActivePlanetId": "-1,-1:p1",
+        "locationMode": "surface",
+        "renderOrigin": [
+          2180,
+          -110,
+          -1635
+        ],
+        "targetKind": null,
+        "targetWorldId": null
+      },
+      "residentWorld": {
+        "worldId": "-1,-1:p1",
+        "seed": 1600321158
+      },
+      "celestial": {
+        "spaceBlend": 0,
+        "phase": "surface",
+        "camera": [
+          10.500000027010389,
+          52.13897476196289,
+          -8.000000008990977
+        ],
+        "bodies": [
+          {
+            "worldId": "-1,-1",
+            "visible": true,
+            "centerDistance": 137.99999999999997,
+            "scale": 2.5148018784341044,
+            "ndc": [
+              0.7314130957348953,
+              0.14063658357462205,
+              1.0010432968789416
+            ],
+            "projectedBoundRadiusPixels": 15.007819990732013
+          }
+        ]
+      },
+      "boundaryStateRefs": [
+        "state:camera/embodied",
+        "state:camera/free-look",
+        "state:control/on-foot",
+        "state:item/kestrel-keel-memory-banked",
+        "state:maw/repaired",
+        "state:reality/alive",
+        "state:ship-restoration/flight_ready",
+        "state:space-flight/control-mode=fps",
+        "state:space-flight/phase!=deep_space",
+        "state:space-flight/phase=surface",
+        "state:story/active",
+        "state:system-flight/active-planet=-1,-1:p1",
+        "state:world/tidegarden"
+      ],
+      "lockChip": {
+        "localLock": false,
+        "flightCorridor": false,
+        "matchedLines": []
+      },
+      "camera": [
+        10.500000027010389,
+        52.13897476196289,
+        -8.000000008990977
+      ],
+      "assertions": {
+        "bootWorldMatchesExpectation": true,
+        "residentWorldMatchesExpectation": true,
+        "terrainSeedMatchesExpectation": true,
+        "renderOriginAgreesWithResidentWorld": true,
+        "noCompanionCollapsedOntoCamera": true,
+        "collapsedBodies": [],
+        "companionPlacements": [
+          {
+            "worldId": "-1,-1",
+            "visible": true,
+            "centerDistance": 137.99999999999997,
+            "scale": 2.5148018784341044
+          }
+        ],
+        "noLockChipOnFoot": true,
+        "expectation": "Tidegarden owns this beat"
+      }
+    },
+    "ch8-crossing": {
+      "url": "?story=ch8-crossing&profile=LOW&systemprobe=1",
+      "pageErrors": [],
+      "resolvedSpecifiers": {
+        "storyState": "/src/story/storyState.ts",
+        "tidegardenRoute": "/src/story/tidegardenRoute.ts",
+        "systemFlight": "/src/state/systemFlight.ts",
+        "starSystem": "/src/game/starSystem.ts"
+      },
+      "story": {
+        "chapter": "ch8",
+        "beat": "ch8-crossing",
+        "active": true
+      },
+      "routeOnline": true,
+      "bootWorldDecision": "-1,-1",
+      "tidegardenIdentity": {
+        "worldId": "-1,-1:p1",
+        "coordinate": {
+          "x": -1,
+          "y": -1
+        },
+        "seed": 1600321158,
+        "generationSchemaVersion": 1,
+        "systemId": "-1,-1",
+        "address": {
+          "system": {
+            "x": -1,
+            "y": -1
+          },
+          "slot": 1
+        },
+        "planetIdentityVersion": 1
+      },
+      "systemFlight": {
+        "systemId": "-1,-1",
+        "activePlanetId": "-1,-1",
+        "lastActivePlanetId": "-1,-1",
+        "locationMode": "local_space",
+        "renderOrigin": [
+          0,
+          0,
+          0
+        ],
+        "targetKind": null,
+        "targetWorldId": null
+      },
+      "residentWorld": {
+        "worldId": "-1,-1",
+        "seed": 3215739679
+      },
+      "celestial": {
+        "spaceBlend": 1,
+        "phase": "deep_space",
+        "camera": [
+          19.89479500932165,
+          208.52232019145256,
+          -14.92109625699124
+        ],
+        "bodies": [
+          {
+            "worldId": "-1,-1:p1",
+            "visible": true,
+            "centerDistance": 2718.8539165319485,
+            "scale": 50,
+            "ndc": [
+              504.48235066133975,
+              667.9100469099726,
+              1.5761065179139466
+            ],
+            "projectedBoundRadiusPixels": 16.503416614922475
+          }
+        ]
+      },
+      "boundaryStateRefs": [
+        "state:camera/embodied",
+        "state:camera/free-look",
+        "state:control/flight",
+        "state:item/kestrel-keel-memory-banked",
+        "state:maw/repaired",
+        "state:reality/alive",
+        "state:ship-restoration/flight_ready",
+        "state:space-flight/control-mode=flight",
+        "state:space-flight/phase=deep_space",
+        "state:story/active",
+        "state:system-flight/active-planet=-1,-1",
+        "state:world/origin"
+      ],
+      "lockChip": {
+        "localLock": false,
+        "flightCorridor": false,
+        "matchedLines": []
+      },
+      "camera": [
+        19.89479500932165,
+        208.52232019145256,
+        -14.92109625699124
+      ],
+      "assertions": {
+        "bootWorldMatchesExpectation": true,
+        "residentWorldMatchesExpectation": true,
+        "terrainSeedMatchesExpectation": true,
+        "renderOriginAgreesWithResidentWorld": true,
+        "noCompanionCollapsedOntoCamera": true,
+        "collapsedBodies": [],
+        "companionPlacements": [
+          {
+            "worldId": "-1,-1:p1",
+            "visible": true,
+            "centerDistance": 2718.8539165319485,
+            "scale": 50
+          }
+        ],
+        "noLockChipOnFoot": true,
+        "expectation": "the origin owns this beat and must be unchanged by the repair"
+      }
+    }
+  }
+}
