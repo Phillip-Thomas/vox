@@ -2327,7 +2327,7 @@ index 5c8fac5..a260d30 100644
      }
    ]
 diff --git a/main/chapter-registry.json b/main/chapter-registry.json
-index 1680efa..054a47f 100644
+index 1680efa..bdd74f3 100644
 --- a/main/chapter-registry.json
 +++ b/main/chapter-registry.json
 @@ -24,19 +24,44 @@
@@ -2336,11 +2336,11 @@ index 1680efa..054a47f 100644
        ]
 +    },
 +    {
-+      "id": "ch10-station-introduction@draft-v6",
++      "id": "ch10-station-introduction@draft-v7",
 +      "sceneId": "ch10-station-introduction",
-+      "contractVersion": "draft-v6",
++      "contractVersion": "draft-v7",
 +      "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json",
-+      "sha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
++      "sha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
 +      "coversBeats": [
 +        "ch10-cold",
 +        "ch10-ask",
@@ -3927,51 +3927,51 @@ index 1680efa..054a47f 100644
 +        "runtime:src/story/emergentStoryDirector.ts#chapter-10-guidance"
 +      ],
 +      "revealRefs": [
-+        "scene:ch10-station-introduction@draft-v6#reveal:r1",
-+        "scene:ch10-station-introduction@draft-v6#reveal:r2",
-+        "scene:ch10-station-introduction@draft-v6#reveal:r3",
-+        "scene:ch10-station-introduction@draft-v6#reveal:r4",
-+        "scene:ch10-station-introduction@draft-v6#reveal:r5-non-spends"
++        "scene:ch10-station-introduction@draft-v7#reveal:r1",
++        "scene:ch10-station-introduction@draft-v7#reveal:r2",
++        "scene:ch10-station-introduction@draft-v7#reveal:r3",
++        "scene:ch10-station-introduction@draft-v7#reveal:r4",
++        "scene:ch10-station-introduction@draft-v7#reveal:r5-non-spends"
 +      ],
 +      "avBoundary": {
 +        "sceneContractRefs": [
-+          "ch10-station-introduction@draft-v6"
++          "ch10-station-introduction@draft-v7"
 +        ],
 +        "entry": {
 +          "anchorRefs": [
-+            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.cold-noticed"
++            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.cold-noticed"
 +          ],
 +          "scoreRefs": [
-+            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.cold-step"
++            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.cold-step"
 +          ],
 +          "cameraRefs": [
-+            "scene:ch10-station-introduction@draft-v6#camera:cin.cold.01-hum-drop"
++            "scene:ch10-station-introduction@draft-v7#camera:cin.cold.01-hum-drop"
 +          ],
 +          "paletteRefs": [
-+            "scene:ch10-station-introduction@draft-v6#palette:pal.ch10.fire-night-and-station-amber"
++            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
 +          ]
 +        },
 +        "exit": {
 +          "anchorRefs": [
-+            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.station-resolved",
-+            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.threshold-handback"
++            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.station-resolved",
++            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.threshold-handback"
 +          ],
 +          "scoreRefs": [
-+            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.station-resolved",
-+            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.threshold-release"
++            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.station-resolved",
++            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.threshold-release"
 +          ],
 +          "cameraRefs": [
-+            "scene:ch10-station-introduction@draft-v6#camera:cin.transit.04-resolve",
-+            "scene:ch10-station-introduction@draft-v6#camera:cin.transit.05-threshold-handback"
++            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.04-resolve",
++            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.05-threshold-handback"
 +          ],
 +          "paletteRefs": [
-+            "scene:ch10-station-introduction@draft-v6#palette:pal.ch10.fire-night-and-station-amber"
++            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
 +          ]
 +        }
 +      },
 +      "acceptance": {
 +        "evidenceRefs": [
-+          "scene:ch10-station-introduction@draft-v6#evidence",
++          "scene:ch10-station-introduction@draft-v7#evidence",
 +          "runtime:src/story/emergentStoryDirector.test.ts#chapter-10-guidance",
 +          "runtime:src/story/storyBoundaryTelemetry.test.ts#chapter-10-station-claims"
 +        ],
@@ -4029,10 +4029,18 @@ index 1680efa..054a47f 100644
          "performanceBudgets": {
            "maxEntryLoadMs": 45000,
 diff --git a/main/src/components/ShipController.tsx b/main/src/components/ShipController.tsx
-index 343a190..6ca5bd1 100644
+index 343a190..f2a8159 100644
 --- a/main/src/components/ShipController.tsx
 +++ b/main/src/components/ShipController.tsx
-@@ -803,6 +803,19 @@ export default function ShipController({
+@@ -68,6 +68,7 @@ import { landingHitMatchesValidatedTerrain } from '../utils/shipLandingValidatio
+ import { persistShipFlightLocation } from '../state/shipFlightContinuity.ts';
+ import { getAutopilotFlightDirective } from '../story/autopilot.ts';
+ import { getStoryStateSnapshot } from '../story/storyState.ts';
++import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
+ import {
+   VEHICLE_SCENE_AV_EVENTS,
+   activateLaunchIgnitionFromCreatedSequence,
+@@ -803,6 +804,19 @@ export default function ShipController({
              descriptor.systemPosition[2] - systemPose[2]
            ).normalize();
          }
@@ -4052,6 +4060,48 @@ index 343a190..6ca5bd1 100644
        }
        if (desiredDirection.lengthSq() > 0.5) {
          const referenceUp = Math.abs(desiredDirection.y) < 0.88
+@@ -852,9 +866,26 @@ export default function ShipController({
+       controls.forward
+     );
+     const boost = boostActive ? BOOST_MULTIPLIER : 1;
++    // D-A6: THE HOLD MUST HOLD, in manual flight as much as in the movie lane.
++    // The director already freezes movement at the resolve anchor and releases
++    // it exactly at the hand-back, but in flight nothing consumed that freeze —
++    // so a manual pilot could fly straight through the 2.5s hold the closing
++    // shot is built on. THRUST ONLY: attitude and look stay live, because the
++    // hold is about not travelling, not about taking the camera away.
++    //
++    // Scoped to ch10-transit rather than to the move scale alone. Several
++    // shipped ch1-ch9 sequences freeze movement, and rather than rely on the
++    // claim that none of them can coincide with a flight frame, this cannot
++    // reach them by construction.
++    const storyNow = getStoryStateSnapshot();
++    const thrustHeld = storyNow.active
++      && storyNow.beat === 'ch10-transit'
++      && getStoryInputPolicy().moveSpeedScale === 0;
+     let accel = 0;
+-    if (controls.forward) accel += THRUST_ACCEL * boost;
+-    if (controls.backward) accel -= THRUST_ACCEL;
++    if (!thrustHeld) {
++      if (controls.forward) accel += THRUST_ACCEL * boost;
++      if (controls.backward) accel -= THRUST_ACCEL;
++    }
+     if (accel !== 0) {
+       velocity.current.addScaledVector(localForward, accel * dt);
+     }
+@@ -972,7 +1003,11 @@ export default function ShipController({
+     cam.position.copy(position.current);
+     displayQuat.current.slerp(quat, 1 - Math.exp(-CAM_SMOOTH * dt));
+     cam.quaternion.copy(displayQuat.current);
+-    const throttle = controls.forward ? (boostActive ? 1 : 0.58) : controls.backward ? -0.34 : 0;
++    // The engine reads what the ship is actually doing: held means no throttle,
++    // so the hold is heard as well as seen.
++    const throttle = thrustHeld
++      ? 0
++      : controls.forward ? (boostActive ? 1 : 0.58) : controls.backward ? -0.34 : 0;
+     syncFlightFeedback(
+       throttle,
+       boostActive,
 diff --git a/main/src/components/SpaceStationApproachDriver.tsx b/main/src/components/SpaceStationApproachDriver.tsx
 index 07a8df2..b190ed7 100644
 --- a/main/src/components/SpaceStationApproachDriver.tsx
@@ -4107,16 +4157,15 @@ index 07a8df2..b190ed7 100644
        // store sees where the player went rather than inferring it afterwards.
        commitSpaceStationTarget(contact.body.address);
 diff --git a/main/src/components/SystemCompanionBodies.tsx b/main/src/components/SystemCompanionBodies.tsx
-index c981f48..66bb505 100644
+index c981f48..62be950 100644
 --- a/main/src/components/SystemCompanionBodies.tsx
 +++ b/main/src/components/SystemCompanionBodies.tsx
-@@ -52,8 +52,23 @@ import {
+@@ -52,8 +52,22 @@ import {
    type CompanionSystemMotionProfile,
    EXACT_TERRAIN_BATCH_SIZE,
    EXACT_WATER_BATCH_SIZE,
 -  SURFACE_SKY_INNER_RADIUS
 +  SURFACE_SKY_INNER_RADIUS,
-+  st0ClampedPixels,
 +  st0NightVisibility,
 +  st0QuadScale,
 +  st0RenderPredicate,
@@ -4135,7 +4184,28 @@ index c981f48..66bb505 100644
  
  interface SystemCompanionBodiesProps {
    currentCoordinate: SystemCoordinate;
-@@ -138,6 +153,12 @@ const COMPANION_PROGRAM_KEY = 'system-companion-unified-v2';
+@@ -133,11 +147,33 @@ interface BodyRuntime {
+   exactShell: ExactShellRuntime | null;
+ }
+ 
++/**
++ * ST-0's live apparent direction, for the MOVIE LANE ONLY.
++ *
++ * The autopilot's idle-gaze bias needs to know where the dot actually is and
++ * whether it is up yet; the alternative was recomputing the bearing from the
++ * motion profile in a second place, which is how two sources of one fact start
++ * disagreeing. Published, never consumed by rendering, and read by nothing in
++ * manual play — ST-0 acquiring a forced look would be ST-0 acquiring a cue, and
++ * the no-cue law is absolute.
++ */
++export const st0GazeHandle: {
++  direction: THREE.Vector3 | null;
++  aboveHorizon: boolean;
++} = { direction: null, aboveHorizon: false };
++const _st0GazeDirection = new THREE.Vector3();
++
+ const CLOUD_SCALE = 1.024;
+ const COMPANION_PROGRAM_KEY = 'system-companion-unified-v2';
  const EXACT_COMPANION_PROGRAM_KEY = 'system-companion-exact-v2';
  const EXACT_FACE_COMPANION_PROGRAM_KEY = 'system-companion-exact-face-v2';
  const EXACT_SHELL_PROMOTION_SECONDS = 0.45;
@@ -4148,7 +4218,7 @@ index c981f48..66bb505 100644
  const exactInstanceMatrix = new THREE.Matrix4();
  const exactInstancePosition = new THREE.Vector3();
  const exactWaterPlacement = createWaterFacePlacementScratch();
-@@ -826,6 +847,38 @@ export default function SystemCompanionBodies({
+@@ -826,6 +862,38 @@ export default function SystemCompanionBodies({
    useEffect(() => () => ringGeometry.dispose(), [ringGeometry]);
    useEffect(() => () => exactWaterGeometry.dispose(), [exactWaterGeometry]);
  
@@ -4187,7 +4257,7 @@ index c981f48..66bb505 100644
    useFrame(({ camera, gl, clock }) => {
      const spaceFlight = getSpaceFlightSnapshot();
      const phase = spaceFlight.phase;
-@@ -914,6 +967,19 @@ export default function SystemCompanionBodies({
+@@ -914,6 +982,19 @@ export default function SystemCompanionBodies({
        runtime.targetHandle.publish(work.bodyRenderPosition);
  
        if (physicalSpace) {
@@ -4207,7 +4277,7 @@ index c981f48..66bb505 100644
          const exactShell = canOwnExactShell
            ? ensureExactTerrainShell(
              runtime,
-@@ -921,8 +987,6 @@ export default function SystemCompanionBodies({
+@@ -921,8 +1002,6 @@ export default function SystemCompanionBodies({
              exactWaterGeometry
            )
            : runtime.exactShell;
@@ -4216,7 +4286,7 @@ index c981f48..66bb505 100644
          const desiredExactBlend = exactShell?.ready && canOwnExactShell
            ? companionExactShellBlend(centerDistance)
            : 0;
-@@ -992,6 +1056,76 @@ export default function SystemCompanionBodies({
+@@ -992,6 +1071,84 @@ export default function SystemCompanionBodies({
        setMaterialVisibility(runtime.ringMaterial, placement.visibility);
      }
  
@@ -4224,6 +4294,7 @@ index c981f48..66bb505 100644
 +    // companion body, it owns no terrain, and it must never inherit their
 +    // targeting, exact-shell or spin machinery.
 +    const st0 = st0Ref.current;
++    st0GazeHandle.aboveHorizon = false;
 +    if (st0) {
 +      const st0Visible = st0Bearing !== null
 +        && phase === 'surface'
@@ -4269,12 +4340,17 @@ index c981f48..66bb505 100644
 +          const placement = companionCelestialPlacement(input, work0.placement);
 +          const perspective = camera as THREE.PerspectiveCamera;
 +          const drawingHeight = gl.getDrawingBufferSize(work.framebufferSize).y;
++          // The authored size, straight through: ST0_MIN_PIXELS is a frozen
++          // contract constant, and `drawingHeight` is already the DEVICE
++          // buffer height, so the DPR argument is 1 and 2.4 means 2.4 device
++          // pixels on every tier and viewport. (A clamp used to stand here whose
++          // only argument was this same constant — see ST0_MIN_PIXELS.)
 +          const scale = st0QuadScale(
 +            placement.centerDistance,
 +            THREE.MathUtils.degToRad(perspective.fov),
 +            drawingHeight,
 +            1,
-+            st0ClampedPixels(ST0_MIN_PIXELS)
++            ST0_MIN_PIXELS
 +          );
 +          st0.position
 +            .copy(work.cameraPosition)
@@ -4286,6 +4362,8 @@ index c981f48..66bb505 100644
 +          // world's own darkness and the horizon it rises over.
 +          material.opacity = nightVisibility * placement.visibility;
 +          st0.visible = material.opacity > 0.002;
++          st0GazeHandle.direction = _st0GazeDirection.copy(work0.direction);
++          st0GazeHandle.aboveHorizon = st0.visible;
 +        }
 +      }
 +    }
@@ -4293,7 +4371,7 @@ index c981f48..66bb505 100644
      if (projectionProbeEnabled) {
        const perspective = camera as THREE.PerspectiveCamera;
        const focalLengthPixels = gl.getDrawingBufferSize(work.framebufferSize).y
-@@ -1101,6 +1235,24 @@ export default function SystemCompanionBodies({
+@@ -1101,6 +1258,31 @@ export default function SystemCompanionBodies({
            )}
          </group>
        ))}
@@ -4312,21 +4390,109 @@ index c981f48..66bb505 100644
 +          transparent
 +          opacity={0}
 +          depthWrite={false}
-+          depthTest={false}
++          // D-A8: ST-0 drew THROUGH terrain. The analytic horizon gate above is
++          // a sphere test — it knows where the planet's horizon is, not where
++          // this world's ridges are — so a dot below a ridge line still painted
++          // over it. Depth testing is the honest occluder and costs nothing:
++          // the terrain has already written depth, the sky has not, and this
++          // still writes none of its own. Zero extra draw calls, so the <=1
++          // draw-call term is untouched.
++          depthTest
 +        />
 +      </mesh>
      </group>
    );
  }
+diff --git a/main/src/components/SystemSpaceStations.tsx b/main/src/components/SystemSpaceStations.tsx
+index d9f7fdf..9dda4fd 100644
+--- a/main/src/components/SystemSpaceStations.tsx
++++ b/main/src/components/SystemSpaceStations.tsx
+@@ -2,7 +2,10 @@ import { useMemo } from 'react';
+ import { spaceStationBody } from '../game/spaceStation/spaceStationBody.ts';
+ import { buildSpaceStationDescriptor } from '../game/spaceStation/spaceStationDescriptor.ts';
+ import { systemSpaceStations } from '../game/spaceStation/spaceStationBody.ts';
+-import { forcedSpaceStationCount } from '../game/spaceStation/spaceStationDevFlag.ts';
++import {
++  forcedSpaceStationCount,
++  spaceStationDockingAuthorized
++} from '../game/spaceStation/spaceStationDevFlag.ts';
+ import type { SystemCoordinate } from '../game/starSystem.ts';
+ import { useSystemFlight } from '../state/systemFlight.ts';
+ import {
+@@ -90,6 +93,14 @@ export default function SystemSpaceStations({
+           descriptor={descriptor}
+           body={body}
+           renderOrigin={systemFlight.renderOrigin}
++          // D-A5. The berth ring is the station offering a berth, and in a story
++          // world where docking is unauthorized the station addresses the player
++          // in nothing — not in the advisory register, not on [F], and not in
++          // geometry either. Same predicate as both of those, evaluated here at
++          // the shipped game's mount: the sandbox reaches the exterior through
++          // SpaceStationApproach and never renders this component at all, so it
++          // cannot be reached by this flag.
++          suppressDockOffer={!spaceStationDockingAuthorized()}
+         />
+       ))}
+     </>
+diff --git a/main/src/components/spaceStation/SpaceStationExterior.tsx b/main/src/components/spaceStation/SpaceStationExterior.tsx
+index 4af640c..5ba96c4 100644
+--- a/main/src/components/spaceStation/SpaceStationExterior.tsx
++++ b/main/src/components/spaceStation/SpaceStationExterior.tsx
+@@ -95,6 +95,19 @@ export interface SpaceStationExteriorProps {
+    * coloured dots on the sky — which reads as fireflies, not as a destination.
+    */
+   maxRange?: number;
++  /**
++   * Withhold the geometry that OFFERS a berth — the splayed guide arms, their
++   * sequenced approach lamps, and the threshold strips outlining the mouth.
++   *
++   * Defaults to false, which is the sandbox's case and the shipped free-flight
++   * case: the station is drawn exactly as it always has been, instance for
++   * instance. The shipped game's mount raises it in story worlds where
++   * `story:station-docking-authorized` is unheld, so the same fence that already
++   * withholds the advisory register and [F] also withholds the offer's picture.
++   * The dock itself — jamb frame, lit mouth, inner glow — is architecture and is
++   * never suppressed; a station with no door would be a different station.
++   */
++  suppressDockOffer?: boolean;
+ }
+ 
+ const DEFAULT_MAX_RANGE = 26_000;
+@@ -104,7 +117,8 @@ export function SpaceStationExterior({
+   descriptor,
+   body: suppliedBody,
+   renderOrigin = ORIGIN,
+-  maxRange = DEFAULT_MAX_RANGE
++  maxRange = DEFAULT_MAX_RANGE,
++  suppressDockOffer = false
+ }: SpaceStationExteriorProps) {
+   const hullRef = useRef<THREE.InstancedMesh>(null);
+   const lightRef = useRef<THREE.InstancedMesh>(null);
+@@ -194,6 +208,7 @@ export function SpaceStationExterior({
+ 
+     let hullIndex = 0;
+     for (const box of exterior.boxes) {
++      if (suppressDockOffer && box.dockOffer) continue;
+       if (range > TIER_RANGE[box.tier]) continue;
+       scratch.position.set(box.center[0], box.center[1], box.center[2]);
+       if (box.rotation) {
+@@ -217,6 +232,7 @@ export function SpaceStationExterior({
+ 
+     let lightIndex = 0;
+     for (const light of exterior.lights) {
++      if (suppressDockOffer && light.dockOffer) continue;
+       const beacon = isBeacon(light.tone);
+       // Window rows are the station's texture, not its signal. Once they fall below
+       // a pixel they stop being rows and become static, so they are dropped and the
 diff --git a/main/src/components/systemCompanionBodiesModel.test.ts b/main/src/components/systemCompanionBodiesModel.test.ts
-index 96754bd..29b2de5 100644
+index 96754bd..35491ad 100644
 --- a/main/src/components/systemCompanionBodiesModel.test.ts
 +++ b/main/src/components/systemCompanionBodiesModel.test.ts
 @@ -14,6 +14,17 @@ import {
    companionPresentationMotionWeight,
    companionSystemMotionProfile,
    companionVisualBudget,
-+  st0ClampedPixels,
++  st0DeviceProjectedPixels,
 +  st0NightVisibility,
 +  st0QuadScale,
 +  st0RenderPredicate,
@@ -4340,7 +4506,7 @@ index 96754bd..29b2de5 100644
    COMPANION_APPARENT_DRIFT_RATE_RAD_PER_SEC,
    COMPANION_MOTION_FADE_END,
    COMPANION_MOTION_FADE_START,
-@@ -424,3 +435,82 @@ function tupleDistance(a: readonly number[], b: readonly number[]): number {
+@@ -424,3 +435,107 @@ function tupleDistance(a: readonly number[], b: readonly number[]): number {
  function angleBetween(a: readonly number[], b: readonly number[]): number {
    return Math.acos(THREE.MathUtils.clamp(dot(a, b) / (tupleLength(a) * tupleLength(b)), -1, 1));
  }
@@ -4393,11 +4559,36 @@ index 96754bd..29b2de5 100644
 +    expect(st0RenderPredicate({ ...live, storyWorld: false })).toBe(false);
 +  });
 +
-+  it('clamps to a findable point that can never read as a disc', () => {
-+    expect(st0ClampedPixels(0.2)).toBe(ST0_MIN_PIXELS);
-+    expect(st0ClampedPixels(2.6)).toBeCloseTo(2.6, 6);
-+    expect(st0ClampedPixels(40)).toBe(ST0_MAX_PIXELS);
-+    expect(st0ClampedPixels(Number.NaN)).toBe(ST0_MIN_PIXELS);
++  it('renders a findable point that can never read as a disc, at every tier, DPR and viewport', () => {
++    // D-A8. The ceiling used to live in a clamp whose only argument was
++    // ST0_MIN_PIXELS itself, so it could not bind and proved nothing. The term
++    // is now measured on the rendered result: build the quad exactly as the
++    // component does, then read back what it occupies on screen.
++    const fovs = [60, 70, 75, 90];
++    const heights = [360, 720, 1080, 2160];
++    const dprs = [1, 2, 3];
++    const distances = [120, 5_000, 250_000];
++    for (const fovDeg of fovs) {
++      for (const height of heights) {
++        for (const dpr of dprs) {
++          for (const distance of distances) {
++            const fov = THREE.MathUtils.degToRad(fovDeg);
++            // The component passes the DEVICE buffer height, so DPR is folded
++            // into `height` there and is 1 at the call; both spellings must
++            // land on the same device-pixel footprint.
++            const scale = st0QuadScale(distance, fov, height * dpr, 1, ST0_MIN_PIXELS);
++            const pixels = st0DeviceProjectedPixels(scale, distance, fov, height, dpr);
++            const label = `${fovDeg}deg/${height}px/dpr${dpr}/${distance}`;
++            expect(pixels, label).toBeCloseTo(ST0_MIN_PIXELS, 6);
++            expect(pixels, label).toBeLessThanOrEqual(ST0_MAX_PIXELS);
++            expect(pixels, label).toBeGreaterThanOrEqual(ST0_MIN_PIXELS - 1e-6);
++          }
++        }
++      }
++    }
++    // And the authored constant itself honours the ceiling, so no viewport can
++    // ever put the dot above it.
++    expect(ST0_MIN_PIXELS).toBeLessThanOrEqual(ST0_MAX_PIXELS);
 +  });
 +
 +  it('means DEVICE pixels, so the clamp survives every DPR', () => {
@@ -4424,10 +4615,10 @@ index 96754bd..29b2de5 100644
 +  });
 +});
 diff --git a/main/src/components/systemCompanionBodiesModel.ts b/main/src/components/systemCompanionBodiesModel.ts
-index 0691f99..a45f0a6 100644
+index 0691f99..2d00cfa 100644
 --- a/main/src/components/systemCompanionBodiesModel.ts
 +++ b/main/src/components/systemCompanionBodiesModel.ts
-@@ -409,6 +409,131 @@ export function companionCelestialPlacement(
+@@ -409,6 +409,156 @@ export function companionCelestialPlacement(
    return out;
  }
  
@@ -4457,12 +4648,24 @@ index 0691f99..a45f0a6 100644
 +/** ±34° of latitude: from a −6.8° mean the track peaks near +27° elevation. */
 +export const ST0_LATITUDE_AMPLITUDE_RADIANS = 0.6;
 +/**
-+ * The shipped MIN_BEACON_PIXELS precedent, in DEVICE pixels. Distance would
-+ * otherwise shrink the dot below a pixel; the clamp keeps it findable and the
-+ * ceiling below keeps it from ever reading as a disc.
++ * The shipped MIN_BEACON_PIXELS precedent, in DEVICE pixels, and — since D-A8 —
++ * the whole story: ST-0's on-screen size is this AUTHORED constant, not a
++ * projection of the station's true extent. Distance would otherwise shrink the
++ * dot below a pixel, and a station rendered at its real angular size would read
++ * as a disc rather than a point.
++ *
++ * The contract's companion term, "never exceeding ~3 px at any tier/DPR/
++ * viewport", is therefore satisfied by construction rather than by a runtime
++ * clamp: the size is a constant, so no tier, DPR or viewport can move it. A
++ * `st0ClampedPixels(ST0_MIN_PIXELS)` ceiling stood here and could not bind —
++ * its only argument was this constant — so it and its ST0_MAX_PIXELS ceiling
++ * were dead code asserting a guarantee they never made. `st0DeviceProjectedPixels`
++ * below is the executable form of the term instead: it measures what the quad
++ * actually occupies, and the model test holds it to the ceiling across the tier,
++ * DPR and viewport matrix.
 + */
 +export const ST0_MIN_PIXELS = 2.4;
-+/** It may never exceed ~3 px at any tier, DPR or viewport. */
++/** The contract's ceiling, kept as the value the measurement is held against. */
 +export const ST0_MAX_PIXELS = 3;
 +/** Warm sodium-family amber: the station's kept light, at its first distance. */
 +export const ST0_COLOR = '#ffb45a';
@@ -4536,10 +4739,23 @@ index 0691f99..a45f0a6 100644
 +  return Math.max(1e-4, centerDistance * angular);
 +}
 +
-+/** Never smaller than findable, never large enough to read as a disc. */
-+export function st0ClampedPixels(naturalPixels: number): number {
-+  if (!Number.isFinite(naturalPixels)) return ST0_MIN_PIXELS;
-+  return Math.min(ST0_MAX_PIXELS, Math.max(ST0_MIN_PIXELS, naturalPixels));
++/**
++ * The inverse of `st0QuadScale`: what the quad ACTUALLY occupies on screen, in
++ * device pixels, for a given scale/distance/lens/viewport. This is the honest
++ * expression of the "never exceeding ~3 px" ceiling — a measurement of the
++ * rendered result rather than a clamp on an input that was already a constant.
++ */
++export function st0DeviceProjectedPixels(
++  quadScale: number,
++  centerDistance: number,
++  verticalFovRadians: number,
++  viewportHeightPixels: number,
++  devicePixelRatio: number
++): number {
++  const safeHeight = Math.max(1, viewportHeightPixels * Math.max(1, devicePixelRatio));
++  const pixelsPerRadian = safeHeight / Math.max(1e-6, verticalFovRadians);
++  const angular = Math.max(0, quadScale) / Math.max(1e-6, centerDistance);
++  return angular * pixelsPerRadian;
 +}
 +
 +/**
@@ -4619,6 +4835,203 @@ index 09fdf87..ded8409 100644
 +  if (!isStorySpaceStationContext()) return true;
 +  return hasMilestone(STORY_MILESTONES.ch10BearingClaimed);
 +}
+diff --git a/main/src/game/spaceStation/spaceStationExterior.test.ts b/main/src/game/spaceStation/spaceStationExterior.test.ts
+index 7c16aa0..4347de5 100644
+--- a/main/src/game/spaceStation/spaceStationExterior.test.ts
++++ b/main/src/game/spaceStation/spaceStationExterior.test.ts
+@@ -1,5 +1,10 @@
++import { readFileSync } from 'node:fs';
+ import { describe, expect, it } from 'vitest';
+ import { spaceStationBody, systemToStationLocal } from './spaceStationBody.ts';
++import {
++  isStorySpaceStationContext,
++  spaceStationDockingAuthorized
++} from './spaceStationDevFlag.ts';
+ import { buildSpaceStationDescriptor } from './spaceStationDescriptor.ts';
+ import {
+   buildSpaceStationExterior,
+@@ -209,3 +214,102 @@ describe('the berth you fly into is the airlock you walk out of', () => {
+     }
+   });
+ });
++
++describe('D-A5: the station never offers a berth it has not authorized', () => {
++  // Suppression is a render-time skip over a builder-time tag, so both halves are
++  // provable without a renderer: the tag is asserted here on the built exterior,
++  // and the skip is asserted against the two loops that consume it.
++  const rendererSource = readFileSync(
++    new URL('../../components/spaceStation/SpaceStationExterior.tsx', import.meta.url),
++    'utf8'
++  );
++  const shippedMountSource = readFileSync(
++    new URL('../../components/SystemSpaceStations.tsx', import.meta.url),
++    'utf8'
++  );
++  const sandboxMountSource = readFileSync(
++    new URL('../../components/spaceStation/SpaceStationApproach.tsx', import.meta.url),
++    'utf8'
++  );
++
++  const offerBoxes = exterior.boxes.filter(box => box.dockOffer);
++  const offerLights = exterior.lights.filter(light => light.dockOffer);
++
++  it('tags exactly the offer — the guide arms, their chase lamps, and the threshold strips', () => {
++    // Four splayed arms; seven lamps down each; nine strip pairs on each of two
++    // axes, both sides. The counts are asserted rather than bounded, because a
++    // tag that silently grew to cover the hull would still "suppress the ring".
++    expect(offerBoxes).toHaveLength(4);
++    expect(offerLights).toHaveLength(4 * 7 + 9 * 2 * 2);
++    expect(offerBoxes.every(box => box.tier === 'structure')).toBe(true);
++    const offerTones = new Set(offerLights.map(light => light.tone));
++    expect(offerTones).toEqual(new Set([
++      EXTERIOR_LIGHT_TONE.navRed,
++      EXTERIOR_LIGHT_TONE.navGreen,
++      EXTERIOR_LIGHT_TONE.dockWhite
++    ]));
++  });
++
++  it('never tags the dock itself — the door is architecture, not an invitation', () => {
++    // The lit mouth and its recessed inner glow are the station having a door.
++    // A station that loses its door in story mode is a different station, and
++    // the contract asked for no dock OFFER geometry, not for no dock.
++    const mouthLights = exterior.lights.filter(
++      light =>
++        Math.abs(light.center[0] - exterior.mouth[0]) < 4 &&
++        Math.abs(light.center[1] - exterior.mouth[1]) < 1 &&
++        Math.abs(light.center[2] - exterior.mouth[2]) < 1
++    );
++    expect(mouthLights.length).toBeGreaterThanOrEqual(2);
++    expect(mouthLights.some(light => light.dockOffer)).toBe(false);
++    // Nor the jamb frame, which is pressure hull.
++    expect(exterior.boxes.some(box => box.tier === 'mass' && box.dockOffer)).toBe(false);
++  });
++
++  it('suppresses only the offer, leaving every other instance byte-identical', () => {
++    // The renderer's skip, applied here to the same arrays it walks.
++    const keptBoxes = exterior.boxes.filter(box => !box.dockOffer);
++    const keptLights = exterior.lights.filter(light => !light.dockOffer);
++    expect(keptBoxes).toHaveLength(exterior.boxes.length - offerBoxes.length);
++    expect(keptLights).toHaveLength(exterior.lights.length - offerLights.length);
++    // Byte-identity of the survivors, in order: suppression must not renumber,
++    // reorder, or re-tone anything it keeps.
++    const untouched = buildSpaceStationExterior(descriptor.graph, descriptor.seed);
++    expect(keptBoxes).toEqual(untouched.boxes.filter(box => !box.dockOffer));
++    expect(keptLights).toEqual(untouched.lights.filter(light => !light.dockOffer));
++    expect(untouched.mouth).toEqual(exterior.mouth);
++  });
++
++  it('holds the skip at both instancing loops, behind a default-off prop', () => {
++    expect(rendererSource).toContain('suppressDockOffer = false');
++    expect(rendererSource).toContain('if (suppressDockOffer && box.dockOffer) continue;');
++    expect(rendererSource).toContain('if (suppressDockOffer && light.dockOffer) continue;');
++  });
++
++  it('gates the shipped mount on the same predicate as the advisory and [F]', () => {
++    expect(shippedMountSource).toContain('spaceStationDockingAuthorized');
++    expect(shippedMountSource).toContain('suppressDockOffer={!spaceStationDockingAuthorized()}');
++  });
++
++  it('leaves the ?spacestation= sandbox byte-identical, structurally', () => {
++    // THE SANDBOX IS A SHIPPED SURFACE, so this is proven rather than argued.
++    // Three independent reasons, any one of which would be enough:
++    // 1. the sandbox reaches the exterior through SpaceStationApproach, which
++    //    neither passes the prop nor knows the predicate exists;
++    expect(sandboxMountSource).toContain('<SpaceStationExterior descriptor={descriptor} body={body} />');
++    expect(sandboxMountSource).not.toContain('suppressDockOffer');
++    expect(sandboxMountSource).not.toContain('spaceStationDockingAuthorized');
++    // 2. it never mounts the shipped game's SystemSpaceStations at all, which is
++    //    the only component that raises the flag;
++    expect(sandboxMountSource).not.toContain('SystemSpaceStations');
++    // 3. and the prop defaults to false, so an unpassed prop draws everything.
++    expect(rendererSource).toContain('suppressDockOffer = false');
++  });
++
++  it('answers "authorized" wherever the story is not the context, so free flight is unchanged', () => {
++    // The predicate short-circuits on non-story context (which includes the
++    // sandbox), so every non-story surface keeps the offer it always had.
++    expect(isStorySpaceStationContext()).toBe(false);
++    expect(spaceStationDockingAuthorized()).toBe(true);
++  });
++});
+diff --git a/main/src/game/spaceStation/spaceStationExterior.ts b/main/src/game/spaceStation/spaceStationExterior.ts
+index 8fab86a..0db4d71 100644
+--- a/main/src/game/spaceStation/spaceStationExterior.ts
++++ b/main/src/game/spaceStation/spaceStationExterior.ts
+@@ -38,14 +38,37 @@ export interface ExteriorBox {
+   tier: ExteriorTier;
+   /** Index into the hull palette. */
+   tone: number;
++  /** See `DOCK OFFER` below. Absent means ordinary station architecture. */
++  dockOffer?: boolean;
+ }
+ 
++/*
++  DOCK OFFER.
++
++  A station has a dock the way a building has a door: it is architecture, and it
++  is there whether or not you are welcome. What is NOT architecture is the
++  equipment that *offers* you a berth — the four splayed guide arms, the
++  sequenced nav lamps that chase inward along them, and the threshold strips
++  that outline the mouth. Those exist to say "come in, line up on this", which
++  is an act of address, and in a story world where docking is not authorized the
++  station never addresses the player at all. That fence is already enforced for
++  the advisory register and for [F]; the same fence now governs the geometry,
++  because a cyan berth ring floating under the dock in the cut-line frame is the
++  station making the offer in pictures instead of in words.
++
++  Tagged rather than removed, and tagged HERE rather than pattern-matched
++  downstream, because the builder is the only place that still knows which boxes
++  are the offer: it pushes everything into two flat arrays and nothing after
++  this point can tell a guide arm from a radiator fin.
++*/
+ export interface ExteriorLight {
+   center: Vec3Tuple;
+   size: Vec3Tuple;
+   rotation?: Vec3Tuple;
+   /** Index into the emissive palette. */
+   tone: number;
++  /** See `DOCK OFFER` above. Absent means ordinary station architecture. */
++  dockOffer?: boolean;
+   /** Seconds per blink cycle. Absent or 0 is a steady light. */
+   blink?: number;
+   /** Offset into the blink cycle so a row of beacons does not pulse in unison. */
+@@ -532,7 +555,8 @@ function berthStructure(
+       size: [reach, 3.4, 3.4],
+       rotation: [0, dy * 0.09, dz * 0.09],
+       tier: 'structure',
+-      tone: 2
++      tone: 2,
++      dockOffer: true
+     });
+ 
+     // Sequenced approach lights running back toward the mouth. Nav convention:
+@@ -551,7 +575,8 @@ function berthStructure(
+         blink: 1.5,
+         // Phase runs with distance, so the lights chase inward toward the mouth.
+         phase: (1 - t) * 1.5,
+-        duty: 0.3
++        duty: 0.3,
++        dockOffer: true
+       });
+     }
+   }
+@@ -587,12 +612,14 @@ function berthStructure(
+       lights.push({
+         center: [mouth[0] - 3.4, mouth[1] + t * halfHeight * 2, mouth[2] + side * (halfWidth + 1)],
+         size: [1.4, 2.2, 1.4],
+-        tone: EXTERIOR_LIGHT_TONE.dockWhite
++        tone: EXTERIOR_LIGHT_TONE.dockWhite,
++        dockOffer: true
+       });
+       lights.push({
+         center: [mouth[0] - 3.4, mouth[1] + side * (halfHeight + 1), mouth[2] + t * halfWidth * 2],
+         size: [1.4, 1.4, 2.6],
+-        tone: EXTERIOR_LIGHT_TONE.dockWhite
++        tone: EXTERIOR_LIGHT_TONE.dockWhite,
++        dockOffer: true
+       });
+     }
+   }
 diff --git a/main/src/game/systems/interactionSystem.ts b/main/src/game/systems/interactionSystem.ts
 index e69f725..247f8a6 100644
 --- a/main/src/game/systems/interactionSystem.ts
@@ -4731,11 +5144,14 @@ index 3b8c7e3..750a7bf 100644
        return;
      }
 diff --git a/main/src/story/autopilot.ts b/main/src/story/autopilot.ts
-index fc59576..a644f9f 100644
+index fc59576..e1f0f44 100644
 --- a/main/src/story/autopilot.ts
 +++ b/main/src/story/autopilot.ts
-@@ -17,8 +17,10 @@ import { heroTreeHandle } from './world/HeroAppleTree.tsx';
+@@ -15,10 +15,13 @@ import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
+ import { signalMesaHandle } from './world/SignalMesa.tsx';
+ import { heroTreeHandle } from './world/HeroAppleTree.tsx';
  import { wreckRelayHandle } from './world/WreckRelay.tsx';
++import { st0GazeHandle } from '../components/SystemCompanionBodies.tsx';
  import {
    getKeelMemoryPose,
 -  storyAnchors
@@ -4746,7 +5162,15 @@ index fc59576..a644f9f 100644
  import { isSpawnSettled } from '../game/spawnSettle.ts';
  import { anomalyMassDesignated, beginA1, beginA2, vigilRestReady } from './storyDirector.ts';
  import { advanceToBeat } from './storyState.ts';
-@@ -75,6 +77,7 @@ import {
+@@ -26,6 +29,7 @@ import { setStoryMoveScale } from './storyInputPolicy.ts';
+ import {
+   setCinematicGazeIntent,
+   setCinematicLookTarget,
++  getCinematicLookWeight,
+   setCinematicLookWeight,
+   type CinematicGazeMode
+ } from './cinematicLook.ts';
+@@ -75,6 +79,7 @@ import {
    exitShip,
    getSpaceFlightSnapshot
  } from '../state/spaceFlight.ts';
@@ -4754,7 +5178,7 @@ index fc59576..a644f9f 100644
  import { getCurrentDayPhase } from '../game/worldClock.ts';
  import {
    buildAndCertifyEmergentMovieShelter,
-@@ -83,9 +86,20 @@ import {
+@@ -83,9 +88,20 @@ import {
    getEmergentMovieSettlementBinding,
    getEmergentMovieWreckBinding,
    installEmergentMovieHabitatCore,
@@ -4775,7 +5199,7 @@ index fc59576..a644f9f 100644
  import {
    getTidegardenChosenHabitatSite,
    TIDEGARDEN_SETTLEMENT_MILESTONES
-@@ -173,7 +187,8 @@ const DRIVEN_BEATS: ReadonlySet<StoryBeat> = new Set([
+@@ -173,7 +189,8 @@ const DRIVEN_BEATS: ReadonlySet<StoryBeat> = new Set([
    'ch4-audit', 'ch4-comply', 'ch4-defy',
    'ch5-maw', 'ch6-dive', 'ch7-reconstruct', 'ch7-board',
    'ch8-launch', 'ch8-crossing', 'ch8-landfall',
@@ -4785,7 +5209,7 @@ index fc59576..a644f9f 100644
  ]);
  
  export function isAutopilotDriving(): boolean {
-@@ -231,22 +246,127 @@ export interface AutopilotFlightDirective {
+@@ -231,22 +248,268 @@ export interface AutopilotFlightDirective {
    active: boolean;
    beat: StoryBeat | null;
    targetWorldId: string | null;
@@ -4912,10 +5336,151 @@ index fc59576..a644f9f 100644
 +  ];
 +}
 +
++
++// --- ST-0 idle-gaze bias (D-A3, movie lane only) ----------------------------
++//
++// Cinematography's ruling, implemented to its exact terms. The night walk from
++// the hearth to the fabricator is the run's ST-0 evidence window, and an
++// unbiased pilot stares at its goal the whole way, so the dot never lands in
++// frame. This lets the pilot GLANCE UP between goal-critical look demands.
++//
++// It is a gaze bias and nothing else: heading and velocity are untouched, it
++// runs only while `isAutopilotDriving()` in the movie lane, and manual play
++// cannot reach it. ST-0 acquiring a forced look would be ST-0 acquiring a cue,
++// and the no-cue law is absolute — so the player is never steered, only the
++// film crew's own camera operator is.
++const ST0_GAZE_WEIGHT = 0.35;
++const ST0_GAZE_MIN_SECONDS = 1.5;
++/**
++ * A glance, not a stare — but long enough to actually arrive.
++ *
++ * At weight 0.35 the shipped look-rate clamp (`pull * 3 * dt` in
++ * CameraControls) is an exponential approach with a ~0.95 s time constant, so
++ * the first second of any glance is spent in transit and photographs the way
++ * there rather than the thing. A 3 s window therefore spent a third of itself
++ * off-target and could not meet the ruling's own crossing-frame acceptance.
++ * 4.5 s is still well short of the walk and still reads as a look away and
++ * back; the ruling's floors — 1.5 s minimum, 0.5 s release, 10 s cooldown —
++ * are untouched.
++ */
++const ST0_GAZE_MAX_SECONDS = 4.5;
++const ST0_GAZE_RELEASE_SECONDS = 0.5;
++const ST0_GAZE_COOLDOWN_SECONDS = 10;
++const ST0_GAZE_PITCH_CAP_RADIANS = (25 * Math.PI) / 180;
++/**
++ * The aim point is a PROXY on the ST-0 ray a few metres out, not a far point in
++ * the sky, and that is load-bearing rather than cosmetic.
++ *
++ * `solveSurfaceGaze` only lets the true subject own pitch when the subject is
++ * on the viewer's own cube face AND within `inspectRange` tangentially;
++ * otherwise it keeps the eyes on the travel bearing with a small seeded scan
++ * and clamps pitch to +15°. A goal 240 m along the ray has ~217 m of tangential
++ * range, so the glance yawed toward ST-0's azimuth and then never pitched up at
++ * all — the state machine engaged (D-A3's 7/432 samples) while the dot stayed
++ * out of frame. Ten metres puts the proxy inside the direct band on the
++ * viewer's own face, so the solver aims at the true elevation, and the +25° cap
++ * below is enforced on the ray BEFORE the proxy is built rather than left to
++ * the solver's travel clamp.
++ */
++const ST0_GAZE_REACH = 10;
++
++let st0GazeStartedAt = -Infinity;
++let st0GazeEndedAt = -Infinity;
++let st0GazeActive = false;
++let st0GazeRestoreWeight = 1;
++const _st0GazeGoal = new THREE.Vector3();
++const _st0GazeAim = new THREE.Vector3();
++const _st0GazeTangent = new THREE.Vector3();
++
++function resetSt0GazeBias(): void {
++  if (st0GazeActive) setCinematicLookWeight(st0GazeRestoreWeight);
++  st0GazeActive = false;
++  st0GazeStartedAt = -Infinity;
++  st0GazeEndedAt = -Infinity;
++}
++
++/**
++ * Returns true when the pilot is currently glancing at ST-0, in which case the
++ * caller must NOT issue its own look this frame. `goalCritical` is the caller's
++ * statement that the shot needs its eyes on the goal right now — arriving,
++ * acting, or anything the beat is about; a demand disengages within half a
++ * second and starts the cooldown.
++ */
++function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean {
++  if (!MOVIE || !isAutopilotDriving()) {
++    resetSt0GazeBias();
++    return false;
++  }
++  const up = getPlayerUp();
++  const available = st0GazeHandle.aboveHorizon && st0GazeHandle.direction !== null;
++  const held = beatClock - st0GazeStartedAt;
++
++  if (st0GazeActive) {
++    // A goal-critical demand releases the glance, but never mid-flick: the
++    // minimum dwell is what makes it read as looking rather than twitching.
++    const mustRelease = goalCritical || !available;
++    if (mustRelease && held >= ST0_GAZE_RELEASE_SECONDS) {
++      st0GazeActive = false;
++      st0GazeEndedAt = beatClock;
++      // Hand the walk's own look authority straight back, at exactly the
++      // strength it had before the glance borrowed it.
++      setCinematicLookWeight(st0GazeRestoreWeight);
++      return false;
++    }
++    // The ruling's floor is 1.5s and it is enforced here rather than assumed:
++    // retuning the glance length down can never take it below a look.
++    if (!mustRelease && held >= Math.max(ST0_GAZE_MIN_SECONDS, ST0_GAZE_MAX_SECONDS)) {
++      st0GazeActive = false;
++      st0GazeEndedAt = beatClock;
++      setCinematicLookWeight(st0GazeRestoreWeight);
++      return false;
++    }
++  } else {
++    if (goalCritical || !available) return false;
++    if (beatClock - st0GazeEndedAt < ST0_GAZE_COOLDOWN_SECONDS) return false;
++    st0GazeActive = true;
++    st0GazeStartedAt = beatClock;
++    st0GazeRestoreWeight = getCinematicLookWeight();
++  }
++
++  const direction = st0GazeHandle.direction;
++  if (!direction) {
++    resetSt0GazeBias();
++    return false;
++  }
++  // Pitch cap: look UP toward the dot, but never crane past +25 degrees, so the
++  // walk keeps its footing in frame and the horizon never leaves the shot. The
++  // capped ray is REBUILT from its own tangent at exactly the cap angle;
++  // clipping the up-component and re-normalizing (the earlier spelling) lands
++  // above the cap, because normalizing grows the tangent back and the elevation
++  // with it — measurably +25.4 degrees rather than +25.
++  _st0GazeAim.copy(direction).normalize();
++  const rise = THREE.MathUtils.clamp(_st0GazeAim.dot(up), -1, 1);
++  if (Math.asin(rise) > ST0_GAZE_PITCH_CAP_RADIANS) {
++    _st0GazeTangent.copy(_st0GazeAim).addScaledVector(up, -rise);
++    if (_st0GazeTangent.lengthSq() < 1e-8) return false;
++    _st0GazeTangent.normalize();
++    _st0GazeAim
++      .copy(_st0GazeTangent)
++      .multiplyScalar(Math.cos(ST0_GAZE_PITCH_CAP_RADIANS))
++      .addScaledVector(up, Math.sin(ST0_GAZE_PITCH_CAP_RADIANS))
++      .normalize();
++  }
++  _st0GazeGoal.copy(player).addScaledVector(_st0GazeAim, ST0_GAZE_REACH);
++  setCinematicLookWeight(ST0_GAZE_WEIGHT);
++  // `inspect`, not `travel`: travel's +15° pitch ceiling sits below the ruling's
++  // own +25° cap and would silently overrule it. Inspect's ±30° band contains
++  // the cap, so the cap enforced on the ray above is the only one that binds,
++  // and inspect's smaller scan keeps the glance human rather than mechanical.
++  // Route direction is the aim itself — the eyes move, the walk does not.
++  lookNaturallyToward(_st0GazeGoal, player, 0, _st0GazeGoal, 'inspect');
++  return true;
++}
++
  // Legacy presentation-ladder timeouts. No emergent beat is listed here: those
  // scenes may wait, but they may not turn elapsed time into narrative evidence.
  const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
-@@ -270,7 +390,13 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
+@@ -270,7 +533,13 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
    // Raised for the stargaze: night lands ~42s in, then the 8-line sequence
    // (~45.5s) + the 18s reveal ramp + the held rest prompt push natural
    // completion to ~100s. 140 keeps the beat's own resolution well inside.
@@ -4930,7 +5495,7 @@ index fc59576..a644f9f 100644
  };
  
  let clockBeat: StoryBeat | null = null;
-@@ -294,6 +420,12 @@ let dryCrossFaceWaterContactFramesTotal = 0;
+@@ -294,6 +563,12 @@ let dryCrossFaceWaterContactFramesTotal = 0;
  let dryWalkWaterContactFramesTotal = 0;
  const DRY_WALK_WATER_CONTACT_REPLAN_FRAMES = 8;
  
@@ -4943,7 +5508,7 @@ index fc59576..a644f9f 100644
  function noteGoal(target: THREE.Vector3): void {
    if (_goalRef.distanceTo(target) > 2.5) {
      _goalRef.copy(target);
-@@ -1759,6 +1891,132 @@ export function autopilotTick(dt: number): void {
+@@ -1759,6 +2034,137 @@ export function autopilotTick(dt: number): void {
        }
        break;
      }
@@ -4972,6 +5537,11 @@ index fc59576..a644f9f 100644
 +      if (!ship) break;
 +      const fabricator = _goalScratch.set(ship[0], ship[1], ship[2]);
 +      const shipDistance = walkToward(fabricator, 3.4, 1.1);
++      // THE ST-0 EVIDENCE WINDOW. This walk is the one the contract nominates,
++      // so it is where the glance lives. Arrival is goal-critical — the eyes
++      // come back down for the act itself — and the bias never touches the
++      // route, only where the camera happens to be pointed on the way.
++      tickSt0GazeBias(getPlayerWorldPosition(), shipDistance <= 10);
 +      if (shipDistance <= 6) commitChapter10FabricationAttempt(actorId);
 +      break;
 +    }
@@ -5465,7 +6035,7 @@ index 45db513..4d3e787 100644
    reconstructionFacts = { ...DEFAULT_RECONSTRUCTION_FACTS };
    reconstructionVariant = null;
 diff --git a/main/src/story/emergentStoryDirector.test.ts b/main/src/story/emergentStoryDirector.test.ts
-index 38b473f..172740b 100644
+index 38b473f..c358531 100644
 --- a/main/src/story/emergentStoryDirector.test.ts
 +++ b/main/src/story/emergentStoryDirector.test.ts
 @@ -1,4 +1,29 @@
@@ -5508,7 +6078,7 @@ index 38b473f..172740b 100644
  import {
    placePiece,
    resetStructures,
-@@ -68,9 +94,26 @@ import {
+@@ -68,9 +94,27 @@ import {
    CH8_STACK_ONE_SECONDS,
    CH8_STACK_THREE_SECONDS,
    CH8_STACK_TWO_SECONDS,
@@ -5518,6 +6088,7 @@ index 38b473f..172740b 100644
 +  chapter10ColdEntryReady,
 +  chapter10ClaimedStationBody,
 +  chapter10WreckSitePosition,
++  chapter10GuidanceTrace,
 +  getChapter10MarkerTarget,
 +  reconcileChapter10StationTarget,
 +  chapter10SeamConditionMet,
@@ -5536,7 +6107,7 @@ index 38b473f..172740b 100644
  } from './emergentStoryDirector.ts';
  import {
    getEmergentStoryEvents,
-@@ -81,7 +124,13 @@ import {
+@@ -81,7 +125,13 @@ import {
    getWreckReconstructionAction,
    performWreckReconstructionAction
  } from './wreckReconstruction.ts';
@@ -5551,7 +6122,7 @@ index 38b473f..172740b 100644
  import {
    advanceToBeat,
    beginStory,
-@@ -108,9 +157,12 @@ import {
+@@ -108,9 +158,12 @@ import {
    validateTidegardenHabitatSite,
    type TidegardenRelationshipProof
  } from './tidegardenSettlement.ts';
@@ -5565,7 +6136,7 @@ index 38b473f..172740b 100644
    debugStartInSpace,
    enterAtmosphere,
    enterShip,
-@@ -122,6 +174,7 @@ import {
+@@ -122,6 +175,7 @@ import {
  import {
    commitSystemBodyTarget,
    commitSystemPlanetHandoff,
@@ -5573,7 +6144,7 @@ index 38b473f..172740b 100644
    resetSystemFlightForInterstellarArrival,
    resetSystemFlightStoreForTests,
    setActiveSystemPlanet
-@@ -1345,3 +1398,819 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
+@@ -1345,3 +1399,942 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
      });
    });
  });
@@ -5851,6 +6422,121 @@ index 38b473f..172740b 100644
 +    expect(marker?.label).toBe('WRECK RELAY · CLAIM THE BEARING');
 +    observeGuidedStoryMarker(marker?.label ?? null);
 +    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
++  });
++
++  it('never instructs a player on foot to ignite, on either entry path', () => {
++    // UX-1. The bearing is claimed ON FOOT at the wreck relay, and ch10-transit
++    // then published `HOLD [SPACE] TO IGNITE AND LIFT.` with no marker at all —
++    // an input she cannot press (on foot [SPACE] is the jetpack) pointing at a
++    // Kestrel parked wherever she happened to land. The beat now opens with the
++    // ch8 boarding rung and only reaches ignite from the cockpit.
++    const cues: string[] = [];
++    const stop = subscribeStoryUxFeedback(cue => {
++      if (cue.type === 'objective-enter') cues.push(cue.objectiveId);
++    });
++    setShipPosition([12, 10, 4]);
++    resetSystemFlightForInterstellarArrival({
++      system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
++      locationMode: 'surface',
++      activePlanetId: STORY_PRIMARY_WORLD_ID,
++      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
++    });
++    markMilestone(STORY_MILESTONES.ch10RelayAsked, ACTOR_ID);
++    markMilestone(STORY_MILESTONES.ch10RelayAnswered, ACTOR_ID);
++    markMilestone(STORY_MILESTONES.ch10BearingClaimed, ACTOR_ID);
++
++    // ENTRY PATH ONE — continuous play, standing at the relay the instant the
++    // beat opens.
++    advanceToBeat('ch10-transit');
++    enterEmergentStoryBeat('ch10-transit');
++    const onFoot = getActiveGuidedStoryObjective();
++    expect(onFoot?.id).toBe('station:transit:reboard');
++    expect(onFoot?.markerLabel).toBe('KESTREL HATCH · REBOARD');
++    expect(onFoot?.workOrder).toEqual([
++      'RETURN TO THE KESTREL.',
++      'FOLLOW THE HATCH MARKER AND [F] BOARD.'
++    ]);
++    expect(onFoot?.requiresMarker).toBe(true);
++    expect(onFoot?.workOrder.join(' ')).not.toContain('[SPACE]');
++    // The locator is the Kestrel's LIVE pose, so it is honest at any landfall.
++    const marker = getChapter10MarkerTarget('ch10-transit');
++    expect(marker?.label).toBe('KESTREL HATCH · REBOARD');
++    expect(marker && [marker.position.x, marker.position.y, marker.position.z])
++      .toEqual([12, 10, 4]);
++    observeGuidedStoryMarker(marker?.label ?? null);
++    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
++    expect(cues).toEqual(['station:transit:reboard']);
++
++    // UX-3/UX-4: the same sample the verifier takes, with no movie lane and no
++    // DOM — and it explains WHY this rung and not the other one.
++    const onFootTrace = chapter10GuidanceTrace();
++    expect(onFootTrace).toMatchObject({
++      beat: 'ch10-transit',
++      objectiveId: 'station:transit:reboard',
++      markerLabel: 'KESTREL HATCH · REBOARD',
++      requiresMarker: true,
++      health: 'ready',
++      markerTargetLabel: 'KESTREL HATCH · REBOARD',
++      aboard: false
++    });
++    expect(onFootTrace.markerTargetPosition).toEqual([12, 10, 4]);
++    expect(onFootTrace.receipts.bearingClaimed).toBe(true);
++    expect(onFootTrace.receipts.transitIgnited).toBe(false);
++
++    // Aboard, and only aboard, the ignite card may speak.
++    expect(enterShip()).toBe(true);
++    emergentStoryDirectorTick(0.016);
++    const aboard = getActiveGuidedStoryObjective();
++    expect(aboard?.id).toBe('station:transit:ignite');
++    expect(aboard?.workOrder).toEqual([
++      'BRING THE KESTREL ONLINE.',
++      'HOLD [SPACE] TO IGNITE AND LIFT.'
++    ]);
++    expect(aboard?.requiresMarker).toBe(false);
++    expect(getChapter10MarkerTarget('ch10-transit')).toBeNull();
++    expect(cues).toEqual(['station:transit:reboard', 'station:transit:ignite']);
++    expect(chapter10GuidanceTrace()).toMatchObject({
++      objectiveId: 'station:transit:ignite',
++      requiresMarker: false,
++      markerTargetLabel: null,
++      aboard: true
++    });
++
++    // Disembarking before ignition returns to the locator with a fresh cue —
++    // exactly what ch8's launch ladder does.
++    expect(exitShip()).toBe(true);
++    emergentStoryDirectorTick(0.016);
++    expect(getActiveGuidedStoryObjective()?.id).toBe('station:transit:reboard');
++    expect(cues).toEqual([
++      'station:transit:reboard',
++      'station:transit:ignite',
++      'station:transit:reboard'
++    ]);
++
++    // ENTRY PATH TWO — the `?story=ch10-transit` deep link / reload: the claim
++    // is durable, there is no session history, and the player is on foot.
++    clearGuidedStoryObjective();
++    observeGuidedStoryMarker(null);
++    advanceToBeat('ch10-transit');
++    enterEmergentStoryBeat('ch10-transit');
++    const deepLinked = getActiveGuidedStoryObjective();
++    expect(deepLinked?.id).toBe('station:transit:reboard');
++    expect(getGuidedStoryObjectiveHealth()).not.toBe('missing-marker');
++
++    // And the receipt still outranks the pose: once ignited, standing on foot
++    // cannot walk the ladder backwards.
++    markMilestone(STORY_MILESTONES.ch10TransitIgnited, ACTOR_ID);
++    emergentStoryDirectorTick(0.016);
++    expect(getActiveGuidedStoryObjective()?.id).toBe('station:transit:hold');
++    stop();
++    // The claimed bearing reconciles into the flight store as the beat ticks;
++    // hand the next test back the untargeted system it is entitled to.
++    resetSystemFlightForInterstellarArrival({
++      system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
++      locationMode: 'surface',
++      activePlanetId: STORY_PRIMARY_WORLD_ID,
++      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
++    });
 +  });
 +
 +  it('flies the claimed bearing from durable state, on both entry paths', () => {
@@ -6241,12 +6927,20 @@ index 38b473f..172740b 100644
 +    });
 +    expect(getStoryScoreMood('ch10-transit')?.chord).toContain(CH10_CARRIER_OCTAVE_DEGREE);
 +    // The control the audit rendered: the same variant with no carrier may not
-+    // sound the confirmation, and after a reload it is no longer the state the
-+    // player lands in.
-+    expect(getChapter10ScoreMood('station-resolved', false).chord)
-+      .not.toContain(CH10_CARRIER_OCTAVE_DEGREE);
-+    expect(getChapter10ScoreMood('station-resolved', true).chord)
-+      .toContain(CH10_CARRIER_OCTAVE_DEGREE);
++    // SOUND the confirmation. This asserts every surface the engine can play
++    // from, not just the static chord — checking `chord` alone passed while the
++    // octave double kept sounding out of the progression, and the control
++    // render came back sample-identical to the real resolve. The progression is
++    // the audible one: the engine plays progression[chordIndex] per bar and
++    // only falls back to `chord` when a mood publishes none.
++    const withoutCarrier = getChapter10ScoreMood('station-resolved', false);
++    const withCarrier = getChapter10ScoreMood('station-resolved', true);
++    const everyDegree = (mood: typeof withCarrier): number[] =>
++      [...mood.chord, ...(mood.progression ?? []).flat()];
++    expect(everyDegree(withoutCarrier)).not.toContain(CH10_CARRIER_OCTAVE_DEGREE);
++    expect(everyDegree(withCarrier)).toContain(CH10_CARRIER_OCTAVE_DEGREE);
++    // And the carrier itself is untouched by the guard — only its double goes.
++    expect(everyDegree(withoutCarrier)).toContain(CH10_CARRIER_DEGREE);
 +  });
 +
 +  it('bounds the carrier: absent before the answer, present after, dead at release', () => {
@@ -6394,7 +7088,7 @@ index 38b473f..172740b 100644
 +  });
 +});
 diff --git a/main/src/story/emergentStoryDirector.ts b/main/src/story/emergentStoryDirector.ts
-index 1da0219..436ff0c 100644
+index 1da0219..6b32f2b 100644
 --- a/main/src/story/emergentStoryDirector.ts
 +++ b/main/src/story/emergentStoryDirector.ts
 @@ -3,6 +3,12 @@ import { subscribeFinalizedLocalGameplayCommand } from '../game/commandDispatchA
@@ -6463,7 +7157,7 @@ index 1da0219..436ff0c 100644
    enterSignedSceneAvBeat,
    tickSignedSceneAvRuntime
  } from './signedSceneAvRuntime.ts';
-@@ -98,9 +126,15 @@ import {
+@@ -98,9 +126,18 @@ import {
  } from './emergentScoreDirector.ts';
  import {
    activateGuidedStoryObjective,
@@ -6471,17 +7165,20 @@ index 1da0219..436ff0c 100644
 +  clearGuidedStoryObjective,
 +  observeGuidedStoryMarker,
 +  getActiveGuidedStoryObjective,
-+  type GuidedStoryObjective
++  getGuidedStoryObjectiveHealth,
++  type GuidedStoryObjective,
++  type ObjectiveHealth
  } from './ux/objectiveDirector.ts';
 -import { resolveStoryObjectiveGuidance } from './storyObjectiveGuidance.ts';
 +import {
 +  resolveStoryObjectiveGuidance,
-+  type Ch10AskObjectiveState
++  type Ch10AskObjectiveState,
++  type Ch10TransitObjectiveState
 +} from './storyObjectiveGuidance.ts';
  import {
    advanceFlightGuidanceDwell,
    CH8_FLIGHT_GUIDANCE_DWELL_SECONDS,
-@@ -147,6 +181,11 @@ interface EmergentDirectorRuntime {
+@@ -147,6 +184,11 @@ interface EmergentDirectorRuntime {
    reconstructM6At: number;
    reconstructReceiptAt: number;
    reconstructM7AnchorAt: number;
@@ -6493,7 +7190,7 @@ index 1da0219..436ff0c 100644
  }
  
  /** The three-valued cause taxonomy for L2's firing moment (ruling R1). */
-@@ -171,7 +210,11 @@ const runtime: EmergentDirectorRuntime = {
+@@ -171,7 +213,11 @@ const runtime: EmergentDirectorRuntime = {
    reconstructSlotBusyUntil: -1,
    reconstructM6At: -1,
    reconstructReceiptAt: -1,
@@ -6506,7 +7203,7 @@ index 1da0219..436ff0c 100644
  };
  
  // --- Frozen cadence tables ------------------------------------------------
-@@ -255,6 +298,78 @@ export const CH8_OPEN_QUERY_SECONDS = 14;
+@@ -255,6 +301,78 @@ export const CH8_OPEN_QUERY_SECONDS = 14;
   */
  export const CH8_EXIT_HOLD_SECONDS = 17;
  
@@ -6585,7 +7282,7 @@ index 1da0219..436ff0c 100644
  const CH7_DIAGNOSIS_LATCH = 'ch7-m1-diagnosis';
  const CH8_L1_LATCH = 'ch8-l1-controls';
  const CH8_L2_LATCH = 'ch8-l2-self-order';
-@@ -309,6 +424,33 @@ let finalizedLocalCommandStoryAdapterInstalled = false;
+@@ -309,6 +427,33 @@ let finalizedLocalCommandStoryAdapterInstalled = false;
  // `runtime.elapsed` is the monotonic time source (0 at entry, growing per tick).
  const ch8FlightGuidanceDwell = createFlightGuidanceDwell();
  
@@ -6619,7 +7316,7 @@ index 1da0219..436ff0c 100644
  function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
    if (!beat) return;
    const actorId = getLocalActorId();
-@@ -391,11 +533,76 @@ function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
+@@ -391,11 +536,91 @@ function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
            ) as typeof rawLandfallState
          });
        }
@@ -6635,11 +7332,7 @@ index 1da0219..436ff0c 100644
 +        });
 +      case 'ch10-transit':
 +        return resolveStoryObjectiveGuidance(beat, {
-+          ch10TransitState: hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)
-+            ? 'resolve'
-+            : hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId)
-+              ? 'hold'
-+              : 'ignite'
++          ch10TransitState: chapter10TransitState(actorId)
 +        });
        default:
          return null;
@@ -6694,10 +7387,29 @@ index 1da0219..436ff0c 100644
 +  if (flight.phase !== 'surface' || flight.controlMode === 'flight') return 'landfall';
 +  if (hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId)) return 'bearing-claim';
 +  return 'relay-query';
++}
++
++/**
++ * The ch10-transit ladder. The bearing is claimed on foot at the wreck relay, so
++ * the beat cannot open with `HOLD [SPACE] TO IGNITE` — on foot that glyph is the
++ * jetpack, and the instruction names an input the player cannot press from where
++ * the game put her. `station:transit:reboard` carries the locator to the
++ * Kestrel's live pose; `station:transit:ignite` is derived from being aboard, so
++ * it publishes only in the cockpit and never on the ground. Disembarking before
++ * ignition returns to the boarding rung exactly as ch8's launch ladder does,
++ * with a fresh one-shot enter cue.
++ *
++ * Receipts are read before flight facts here — once the seam is passed or the
++ * transit is ignited the rung is a durable fact of the story, not a pose.
++ */
++function chapter10TransitState(actorId: string): Ch10TransitObjectiveState {
++  if (hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)) return 'resolve';
++  if (hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId)) return 'hold';
++  return getSpaceFlightSnapshot().controlMode === 'flight' ? 'ignite' : 'reboard';
  }
  
  interface AuditRouteRuntime {
-@@ -427,6 +634,7 @@ const AUDITOR_TURN_SPEED = 5.2;
+@@ -427,6 +652,7 @@ const AUDITOR_TURN_SPEED = 5.2;
  /** Called by the primary director at the same beat boundary as score/camera reset. */
  export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
    ensureFinalizedLocalCommandStoryAdapter();
@@ -6705,7 +7417,7 @@ index 1da0219..436ff0c 100644
    const leavingA4 = runtime.beat === 'a4-exhale' && beat !== 'a4-exhale';
    if (leavingA4) {
      clearVoxelRealityOverrides();
-@@ -454,8 +662,11 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
+@@ -454,8 +680,11 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
    runtime.reconstructM6At = -1;
    runtime.reconstructReceiptAt = -1;
    runtime.reconstructM7AnchorAt = -1;
@@ -6718,7 +7430,7 @@ index 1da0219..436ff0c 100644
    resetAuditRoute();
    if (beat === 'a4-exhale' && hasMilestone(STORY_MILESTONES.a4)) {
      // Reload after the authority commit reconstructs at the committed front; it
-@@ -463,6 +674,23 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
+@@ -463,6 +692,23 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
      runtime.elapsed = 1.75;
    }
  
@@ -6742,7 +7454,7 @@ index 1da0219..436ff0c 100644
    switch (beat) {
      case 'ch4-audit':
        setWorkOrder(['FOLLOW THE INSPECTION.', 'ATTEND EACH MISMATCH.']);
-@@ -484,17 +712,17 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
+@@ -484,17 +730,17 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
        // Publish before the first rendered world tick. Cold/direct chapter loads
        // can spend tens of seconds preparing terrain; guidance must not look
        // absent while the Canvas is still waiting to drive tickMaw().
@@ -6763,7 +7475,7 @@ index 1da0219..436ff0c 100644
            ...guidance,
            id: `reconstruct:${guidance.id}`
          });
-@@ -502,7 +730,7 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
+@@ -502,7 +748,7 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
        showCaption('(repair is not return.)');
        break;
      case 'ch7-board':
@@ -6772,7 +7484,7 @@ index 1da0219..436ff0c 100644
        showCaption('(the wreck is waiting for an owner.)');
        break;
      case 'ch8-launch':
-@@ -522,10 +750,21 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
+@@ -522,10 +768,21 @@ export function enterEmergentStoryBeat(beat: StoryBeat | null): void {
      case 'ch9-hearth':
        activateSettlementGuidance(getLocalActorId());
        break;
@@ -6794,7 +7506,7 @@ index 1da0219..436ff0c 100644
    // Story, score, camera and PostFX all enter the frozen council contract at
    // this same beat boundary. The rail changes presentation only; durable facts
    // above remain the sole progression authority.
-@@ -585,6 +824,15 @@ export function emergentStoryDirectorTick(dt: number): void {
+@@ -585,6 +842,15 @@ export function emergentStoryDirectorTick(dt: number): void {
      case 'ch9-hearth':
        tickSecondHearth();
        break;
@@ -6810,7 +7522,7 @@ index 1da0219..436ff0c 100644
      default:
        break;
    }
-@@ -711,7 +959,7 @@ function tickA4(): void {
+@@ -711,7 +977,7 @@ function tickA4(): void {
  
  function tickMaw(): void {
    const actorId = getLocalActorId();
@@ -6819,7 +7531,7 @@ index 1da0219..436ff0c 100644
    if (!hasMilestone('maw_repaired', actorId)) return;
    once('maw-repaired', () => {
      markMilestone(STORY_MILESTONES.senseMaw, actorId);
-@@ -738,7 +986,7 @@ function tickMaw(): void {
+@@ -738,7 +1004,7 @@ function tickMaw(): void {
  
  function tickDive(): void {
    const actorId = getLocalActorId();
@@ -6828,7 +7540,7 @@ index 1da0219..436ff0c 100644
    if (!hasBankedKestrelKeelMemory(actorId)) return;
    once('dive-banked', () => {
      runtime.completionObservedAt = runtime.elapsed;
-@@ -764,7 +1012,7 @@ function tickReconstruction(): void {
+@@ -764,7 +1030,7 @@ function tickReconstruction(): void {
          : 'none'
    });
    const guidance = getWreckReconstructionGuidance(actorId);
@@ -6837,7 +7549,7 @@ index 1da0219..436ff0c 100644
      ...guidance,
      id: `reconstruct:${guidance.id}`
    });
-@@ -883,7 +1131,7 @@ function tickBoarding(): void {
+@@ -883,7 +1149,7 @@ function tickBoarding(): void {
        transactionId: boarding.transactionId ?? undefined
      }));
    }
@@ -6846,7 +7558,7 @@ index 1da0219..436ff0c 100644
    reconcilePhysicalBoardingSignedAvFromReceipt(actorId, ORIGIN_WORLD_ID);
    // Control ownership changes behind the hatch before the pressure boundary
    // closes. Do not collapse that staged transaction into "flight mode exists".
-@@ -1149,7 +1397,7 @@ function activateSettlementGuidance(actorId: ReturnType<typeof getLocalActorId>)
+@@ -1149,7 +1415,7 @@ function activateSettlementGuidance(actorId: ReturnType<typeof getLocalActorId>)
      foundationPlaced,
      night: isHabitatNight(dayPhase)
    });
@@ -6855,7 +7567,7 @@ index 1da0219..436ff0c 100644
      ...settlementGuidance,
      id: `settle:${settlementGuidance.id}`
    });
-@@ -1202,7 +1450,7 @@ function tickSecondHearth(): void {
+@@ -1202,7 +1468,7 @@ function tickSecondHearth(): void {
      activateSettlementGuidance(actorId);
      return;
    }
@@ -6864,7 +7576,7 @@ index 1da0219..436ff0c 100644
      id: 'settle:second-hearth-settling',
      kind: 'wait',
      markerLabel: 'SECOND HEARTH · SETTLING',
-@@ -1222,6 +1470,573 @@ function tickSecondHearth(): void {
+@@ -1222,6 +1488,639 @@ function tickSecondHearth(): void {
    completeStory();
  }
  
@@ -7132,7 +7844,8 @@ index 1da0219..436ff0c 100644
 +      return core ? { position: core.clone(), label } : null;
 +    }
 +    case 'station:fabrication-attempt':
-+    case 'station:return:reboard': {
++    case 'station:return:reboard':
++    case 'station:transit:reboard': {
 +      const fabricator = chapter10FabricatorPosition();
 +      return fabricator ? { position: fabricator.clone(), label } : null;
 +    }
@@ -7351,6 +8064,71 @@ index 1da0219..436ff0c 100644
 +  return withinCone || withinFallback;
 +}
 +
++export interface Chapter10GuidanceTrace {
++  beat: StoryBeat | null;
++  objectiveId: string | null;
++  markerLabel: string | null;
++  workOrder: readonly string[];
++  requiresMarker: boolean | null;
++  health: ObjectiveHealth;
++  markerTargetLabel: string | null;
++  markerTargetPosition: [number, number, number] | null;
++  /** The pose facts that select a rung — the ones the movie lane used to hide. */
++  aboard: boolean;
++  flightPhase: string;
++  activePlanetId: string | null;
++  /** The durable receipts the ladder reads, so a sample explains itself. */
++  receipts: Record<string, boolean>;
++}
++
++/**
++ * A LANE-AGNOSTIC, READ-ONLY sample of chapter 10's guidance state.
++ *
++ * UX-3/UX-4: every stamp path in this run was `movie=1&profile=LOW`, and the
++ * only reason was reach — the verifier scraped the HUD's DOM attributes, and
++ * driving the ladder far enough to see a rung meant letting the autopilot fly.
++ * That made the invariant a movie-lane claim about a manual-lane law. This is
++ * the seam that removes the excuse: it observes exactly what the HUD observes,
++ * from outside the DOM, in whichever lane the page is running, and it reports
++ * the pose and receipt facts that SELECTED the rung so a manual sample is
++ * self-explaining rather than a bare id.
++ *
++ * It mutates nothing, publishes nothing, and drives nothing. Probes step the
++ * ladder the way they already do — the shipped commit seams above, and
++ * `enterShip`/`exitShip` for the boarding rung — and read the result here.
++ */
++export function chapter10GuidanceTrace(): Chapter10GuidanceTrace {
++  const actorId = getLocalActorId();
++  const beat = runtime.beat;
++  const objective = getActiveGuidedStoryObjective();
++  const target = getChapter10MarkerTarget(beat, objective ?? undefined);
++  const flight = getSpaceFlightSnapshot();
++  return {
++    beat,
++    objectiveId: objective?.id ?? null,
++    markerLabel: objective?.markerLabel ?? null,
++    workOrder: objective?.workOrder ?? [],
++    requiresMarker: objective?.requiresMarker ?? null,
++    health: getGuidedStoryObjectiveHealth(),
++    markerTargetLabel: target?.label ?? null,
++    markerTargetPosition: target
++      ? [target.position.x, target.position.y, target.position.z]
++      : null,
++    aboard: flight.controlMode === 'flight',
++    flightPhase: flight.phase,
++    activePlanetId: getSystemFlightSnapshot().activePlanetId ?? null,
++    receipts: {
++      faultRead: hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId),
++      fabricationRefused: hasMilestone(STORY_MILESTONES.ch10FabricationRefused, actorId),
++      relayAsked: hasMilestone(STORY_MILESTONES.ch10RelayAsked, actorId),
++      relayAnswered: hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId),
++      bearingClaimed: hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId),
++      transitIgnited: hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId),
++      seamPassed: hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)
++    }
++  };
++}
++
 +const _stationBearing = new THREE.Vector3();
 +
 +export function readChapter10SeamFacts(): Chapter10SeamFacts {
@@ -7439,7 +8217,7 @@ index 1da0219..436ff0c 100644
   * Building remains owned by the normal command lane. This adapter translates
   * only its accepted Tidegarden foundation receipt into Story vocabulary; it
 diff --git a/main/src/story/generatedSceneAvRuntime.json b/main/src/story/generatedSceneAvRuntime.json
-index 99456a7..11da9cc 100644
+index 99456a7..b59ca2a 100644
 --- a/main/src/story/generatedSceneAvRuntime.json
 +++ b/main/src/story/generatedSceneAvRuntime.json
 @@ -6,6 +6,20 @@
@@ -7455,8 +8233,8 @@ index 99456a7..11da9cc 100644
 +    },
 +    {
 +      "sceneId": "ch10-station-introduction",
-+      "contractVersion": "draft-v6",
-+      "sha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
++      "contractVersion": "draft-v7",
++      "sha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
 +      "status": "frozen"
 +    }
 +  ],
@@ -8552,7 +9330,7 @@ index 85996ff..3e5f875 100644
 +  });
 +});
 diff --git a/main/src/story/signedSceneAvRuntime.ts b/main/src/story/signedSceneAvRuntime.ts
-index fb0b75f..ce512e2 100644
+index fb0b75f..4e23b73 100644
 --- a/main/src/story/signedSceneAvRuntime.ts
 +++ b/main/src/story/signedSceneAvRuntime.ts
 @@ -21,11 +21,41 @@ import {
@@ -8575,8 +9353,8 @@ index fb0b75f..ce512e2 100644
 + * exact bytes or the runtime refuses to load.
 + */
 +export const CH10_SCENE_AV_SHA256 =
-+  '4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94';
-+export const CH10_SCENE_AV_REVISION = 'draft-v6';
++  '32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860';
++export const CH10_SCENE_AV_REVISION = 'draft-v7';
 +export const SIGNED_SCENE_AV_SOURCES: readonly {
 +  readonly sceneId: string;
 +  readonly contractVersion: string;
@@ -8853,7 +9631,7 @@ index 4e58c47..037b646 100644
  
  const FALLBACK_POLICY: InteractionPolicy = {
 diff --git a/main/src/story/storyObjectiveGuidance.test.ts b/main/src/story/storyObjectiveGuidance.test.ts
-index 7129716..8e81e8c 100644
+index 7129716..82eb5fc 100644
 --- a/main/src/story/storyObjectiveGuidance.test.ts
 +++ b/main/src/story/storyObjectiveGuidance.test.ts
 @@ -18,7 +18,7 @@ const CINEMATIC_BEATS = [
@@ -8865,8 +9643,52 @@ index 7129716..8e81e8c 100644
  
  function resolve(
    beat: StoryBeat,
+@@ -168,6 +168,43 @@ describe('story objective guidance authoring', () => {
+     expect(landfallObjectives.map(entry => entry.requiresMarker)).toEqual([false, false, false]);
+   });
+ 
++  it('authors the ch10 ladders, and never puts a cockpit input on a rung reached on foot', () => {
++    const cold = ['fault-read', 'fabrication-attempt'] as const;
++    const ask = ['reboard', 'crossing', 'landfall', 'relay-query', 'bearing-claim'] as const;
++    const transit = ['reboard', 'ignite', 'hold', 'resolve'] as const;
++
++    const coldObjectives = cold.map(ch10ColdState => resolve('ch10-cold', { ch10ColdState })!);
++    const askObjectives = ask.map(ch10AskState => resolve('ch10-ask', { ch10AskState })!);
++    const transitObjectives = transit.map(ch10TransitState => resolve('ch10-transit', { ch10TransitState })!);
++
++    for (const objectives of [coldObjectives, askObjectives, transitObjectives]) {
++      expect(new Set(objectives.map(entry => entry.id)).size).toBe(objectives.length);
++    }
++
++    // UX-1: the boarding rung leads the transit ladder, carries a marker, and
++    // reuses the ch8/ch10-ask reboard grammar verbatim.
++    expect(transitObjectives[0]).toMatchObject({
++      id: 'station:transit:reboard',
++      kind: 'travel',
++      markerLabel: 'KESTREL HATCH · REBOARD',
++      requiresMarker: true
++    });
++    expect(transitObjectives[0]!.workOrder).toEqual([
++      'RETURN TO THE KESTREL.',
++      'FOLLOW THE HATCH MARKER AND [F] BOARD.'
++    ]);
++    expect(transitObjectives[0]!.markerLabel).toBe(askObjectives[0]!.markerLabel);
++    expect(transitObjectives[0]!.workOrder).toEqual(askObjectives[0]!.workOrder);
++    expect(transitObjectives.map(entry => entry.requiresMarker))
++      .toEqual([true, false, true, false]);
++    // [SPACE] belongs to exactly one rung, and it is the one reached aboard.
++    expect(transitObjectives.filter(entry => entry.workOrder.join(' ').includes('[SPACE]')))
++      .toHaveLength(1);
++    expect(transitObjectives[1]?.id).toBe('station:transit:ignite');
++    // And the beat's default entry state is the locator, not the cockpit input.
++    expect(resolve('ch10-transit')?.id).toBe('station:transit:reboard');
++  });
++
+   it('returns complete actionable contracts for every default objective beat', () => {
+     const objectiveBeats = Object.entries(STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION)
+       .filter(([, disposition]) => disposition === 'objective')
 diff --git a/main/src/story/storyObjectiveGuidance.ts b/main/src/story/storyObjectiveGuidance.ts
-index da608cb..27d65f3 100644
+index da608cb..cf8cd17 100644
 --- a/main/src/story/storyObjectiveGuidance.ts
 +++ b/main/src/story/storyObjectiveGuidance.ts
 @@ -41,7 +41,14 @@ export const STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION = {
@@ -8885,7 +9707,7 @@ index da608cb..27d65f3 100644
  } as const satisfies Partial<Record<StoryBeat, StoryObjectiveBeatDisposition>>;
  
  export type StoryObjectiveGuidanceBeat = keyof typeof STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION;
-@@ -74,6 +81,20 @@ export type DefianceObjectiveStage = 'test-maw' | 'refuse' | 'complete';
+@@ -74,6 +81,26 @@ export type DefianceObjectiveStage = 'test-maw' | 'refuse' | 'complete';
  export type Ch8LaunchObjectiveState = 'surface-on-foot' | 'surface-flight' | 'launching' | 'deep-space';
  export type Ch8CrossingObjectiveState = 'acquire-sibling' | 'hold-course' | 'approach-envelope';
  export type Ch8LandfallObjectiveState = 'descent' | 'surface-flight' | 'surface-fps';
@@ -8901,12 +9723,18 @@ index da608cb..27d65f3 100644
 +  | 'landfall'
 +  | 'relay-query'
 +  | 'bearing-claim';
-+/** T1 → T3. Only the middle rung carries a marker; the other two are cards. */
-+export type Ch10TransitObjectiveState = 'ignite' | 'hold' | 'resolve';
++/**
++ * The boarding rung, then T1 → T3. The claim is performed on foot at the relay,
++ * so the beat opens with a locator to the Kestrel; `ignite` is state-derived and
++ * only ever reached once the player is aboard, which is why `HOLD [SPACE]` can
++ * never be shown to a player standing on the ground (it renders as the jetpack
++ * glyph there). Only `reboard` and `hold` carry markers.
++ */
++export type Ch10TransitObjectiveState = 'reboard' | 'ignite' | 'hold' | 'resolve';
  
  /**
   * Presentation facts only. None of these values is evidence that gameplay
-@@ -94,6 +115,9 @@ export interface StoryObjectiveGuidanceFacts {
+@@ -94,6 +121,9 @@ export interface StoryObjectiveGuidanceFacts {
    ch8LaunchState: Ch8LaunchObjectiveState;
    ch8CrossingState: Ch8CrossingObjectiveState;
    ch8LandfallState: Ch8LandfallObjectiveState;
@@ -8916,7 +9744,7 @@ index da608cb..27d65f3 100644
  }
  
  export const DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS: Readonly<StoryObjectiveGuidanceFacts> =
-@@ -111,7 +135,10 @@ export const DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS: Readonly<StoryObjectiveGuid
+@@ -111,7 +141,12 @@ export const DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS: Readonly<StoryObjectiveGuid
      defianceStage: 'test-maw',
      ch8LaunchState: 'surface-flight',
      ch8CrossingState: 'acquire-sibling',
@@ -8924,11 +9752,13 @@ index da608cb..27d65f3 100644
 +    ch8LandfallState: 'descent',
 +    ch10ColdState: 'fault-read',
 +    ch10AskState: 'reboard',
-+    ch10TransitState: 'ignite'
++    // The beat is entered on foot at the wreck relay, so its default rung is the
++    // locator, not the cockpit input.
++    ch10TransitState: 'reboard'
    });
  
  type ObjectiveResolver = (
-@@ -227,7 +254,10 @@ const OBJECTIVE_RESOLVERS = {
+@@ -227,7 +262,10 @@ const OBJECTIVE_RESOLVERS = {
    'ch4-defy': facts => defianceObjective(facts.defianceStage),
    'ch8-launch': facts => launchObjective(facts.ch8LaunchState),
    'ch8-crossing': facts => crossingObjective(facts.ch8CrossingState),
@@ -8940,7 +9770,7 @@ index da608cb..27d65f3 100644
  } satisfies Record<StoryObjectiveAuthoredBeat, ObjectiveResolver>;
  
  /** Returns the authored disposition without inferring one for unrelated beats. */
-@@ -561,6 +591,113 @@ function landfallObjective(state: Ch8LandfallObjectiveState): GuidedStoryObjecti
+@@ -561,6 +599,123 @@ function landfallObjective(state: Ch8LandfallObjectiveState): GuidedStoryObjecti
    }
  }
  
@@ -9022,6 +9852,16 @@ index da608cb..27d65f3 100644
 +
 +function ch10TransitObjective(state: Ch10TransitObjectiveState): GuidedStoryObjective {
 +  switch (state) {
++    case 'reboard':
++      // Grammar identical to ch8:launch:reboard and station:return:reboard —
++      // boarding the Kestrel always looks the same. The marker resolves from the
++      // ship's live pose, so the locator is honest wherever she landed.
++      return objective(
++        'station:transit:reboard',
++        'travel',
++        'KESTREL HATCH · REBOARD',
++        ['RETURN TO THE KESTREL.', 'FOLLOW THE HATCH MARKER AND [F] BOARD.']
++      );
 +    case 'ignite':
 +      return objective(
 +        'station:transit:ignite',
@@ -9055,10 +9895,10 @@ index da608cb..27d65f3 100644
    id: string,
    kind: GuidedStoryObjective['kind'],
 diff --git a/main/src/story/storyScore.ts b/main/src/story/storyScore.ts
-index 1eaa8f0..4c50b57 100644
+index 1eaa8f0..2a0e67c 100644
 --- a/main/src/story/storyScore.ts
 +++ b/main/src/story/storyScore.ts
-@@ -124,6 +124,184 @@ export type Chapter7BoardingScoreVariant =
+@@ -124,6 +124,194 @@ export type Chapter7BoardingScoreVariant =
    | 'vehicle-owner'
    | 'cockpit';
  
@@ -9229,15 +10069,25 @@ index 1eaa8f0..4c50b57 100644
 +  carrierAlive = false
 +): ScoreMood {
 +  const base = cloneMood(CH10_MOODS[variant]);
-+  if (!carrierAlive && variant === 'station-resolved') {
-+    // Defensive only: the octave double is the carrier's own confirmation and
-+    // may never sound without it.
-+    return {
-+      ...base,
-+      chord: base.chord.filter(degree => degree !== CH10_CARRIER_OCTAVE_DEGREE)
-+    };
-+  }
-+  return base;
++  if (carrierAlive || variant !== 'station-resolved') return base;
++  // The octave double is the carrier's own confirmation and may never sound
++  // without it. Filtering `chord` ALONE did not achieve that, and the control
++  // render proved it: this mood publishes a `progression`, the engine plays
++  // `progression[chordIndex]` on every bar boundary and falls back to `chord`
++  // only when there is no progression — so degree 29 kept sounding out of
++  // [0, 9, 17, 29] in BOTH carrier states and the "illegal" control was
++  // sample-identical to the real resolve. (The pad also voices only
++  // SCORE_PAD_VOICE_COUNT tones, so the trailing 29 of the five-tone static
++  // chord was never voiced anyway — the filter was removing a degree nothing
++  // played.) Both surfaces are filtered here, because the audible one is the
++  // progression.
++  const withoutOctaveDouble = (degrees: readonly number[]): number[] =>
++    degrees.filter(degree => degree !== CH10_CARRIER_OCTAVE_DEGREE);
++  return {
++    ...base,
++    chord: withoutOctaveDouble(base.chord),
++    progression: base.progression?.map(withoutOctaveDouble)
++  };
 +}
 +
  /**
@@ -10242,7 +11092,7 @@ index 89101b2..b35d313 100644
    collector.assert(changedPaths.every((file) => (lock?.allowedPaths || []).some((allowed) => pathMatchesBoundary(file, allowed))), 'implementation.allowed-paths', 'Every changed file must fit the locked allowed paths', changedPaths.filter((file) => !(lock?.allowedPaths || []).some((allowed) => pathMatchesBoundary(file, allowed))))
    collector.assert(changedPaths.every((file) => !(lock?.protectedPaths || []).some((protectedPath) => pathMatchesBoundary(file, protectedPath))), 'implementation.protected-paths', 'Implementation diff cannot touch protected paths', changedPaths.filter((file) => (lock?.protectedPaths || []).some((protectedPath) => pathMatchesBoundary(file, protectedPath))))
 diff --git a/main/tools/generate-scene-av-runtime.mjs b/main/tools/generate-scene-av-runtime.mjs
-index 0fa1675..f135aca 100644
+index 0fa1675..43227b9 100644
 --- a/main/tools/generate-scene-av-runtime.mjs
 +++ b/main/tools/generate-scene-av-runtime.mjs
 @@ -5,16 +5,28 @@ import { readFile, writeFile } from 'node:fs/promises';
@@ -10265,8 +11115,8 @@ index 0fa1675..f135aca 100644
 +  },
 +  {
 +    contractPath: '../.codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json',
-+    sha256: '4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94',
-+    contractVersion: 'draft-v6',
++    sha256: '32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860',
++    contractVersion: 'draft-v7',
 +    anchorCount: 10
 +  }
 +];

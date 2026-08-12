@@ -1,0 +1,86 @@
+{
+  "capturedAt": "2026-08-12T17:25:38.772Z",
+  "base": "http://localhost:5176",
+  "mode": "berth",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "cases": [
+    {
+      "id": "story-transit",
+      "url": "?story=ch10-transit&movie=1&profile=LOW",
+      "pageErrors": [],
+      "exterior": {
+        "dockingAuthorized": false,
+        "builderError": "TypeError: graph.cells is not iterable"
+      },
+      "instanceGroups": [
+        {
+          "distance": 1834.7,
+          "counts": [
+            126,
+            15
+          ]
+        },
+        {
+          "distance": 5130.6,
+          "counts": [
+            16,
+            1,
+            1
+          ]
+        },
+        {
+          "distance": 5141.6,
+          "counts": [
+            17165,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ]
+        },
+        {
+          "distance": 5141.6,
+          "counts": [
+            5735,
+            227
+          ]
+        }
+      ],
+      "stationDistance": 1548,
+      "dockingMilestone": false,
+      "frame": "/tmp/claude-1000/-home-thomasphillip-Projects-vox/4c6601d0-eb4e-4134-a9ec-ba9c68378cc1/scratchpad/v7/berth-story-transit.png"
+    },
+    {
+      "id": "sandbox",
+      "url": "?spacestation=1&profile=LOW",
+      "pageErrors": [],
+      "exterior": {
+        "dockingAuthorized": true,
+        "builderError": "TypeError: graph.cells is not iterable"
+      },
+      "instanceGroups": null,
+      "stationDistance": null,
+      "dockingMilestone": false,
+      "frame": "/tmp/claude-1000/-home-thomasphillip-Projects-vox/4c6601d0-eb4e-4134-a9ec-ba9c68378cc1/scratchpad/v7/berth-sandbox.png"
+    }
+  ]
+}

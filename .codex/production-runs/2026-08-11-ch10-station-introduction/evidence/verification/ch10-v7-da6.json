@@ -1,0 +1,3171 @@
+{
+  "capturedAt": "2026-08-12T17:14:40.147Z",
+  "base": "http://localhost:5176",
+  "mode": "da6",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "pageErrors": [],
+  "trace": [
+    {
+      "at": 7542,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 191.16,
+      "quat": [
+        -0.0675,
+        0.6427,
+        0.0567,
+        0.761
+      ]
+    },
+    {
+      "at": 7705,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 200.23,
+      "quat": [
+        -0.0681,
+        0.6421,
+        0.0572,
+        0.7614
+      ]
+    },
+    {
+      "at": 7828,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 210.19,
+      "quat": [
+        -0.0686,
+        0.6416,
+        0.0576,
+        0.7618
+      ]
+    },
+    {
+      "at": 7951,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 219.64,
+      "quat": [
+        -0.069,
+        0.6412,
+        0.0579,
+        0.7621
+      ]
+    },
+    {
+      "at": 8084,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 227.27,
+      "quat": [
+        -0.0693,
+        0.6409,
+        0.0581,
+        0.7623
+      ]
+    },
+    {
+      "at": 8208,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 236.47,
+      "quat": [
+        -0.0696,
+        0.6406,
+        0.0584,
+        0.7625
+      ]
+    },
+    {
+      "at": 8331,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 244.37,
+      "quat": [
+        -0.0698,
+        0.6404,
+        0.0585,
+        0.7626
+      ]
+    },
+    {
+      "at": 8459,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 252.87,
+      "quat": [
+        -0.07,
+        0.6402,
+        0.0587,
+        0.7627
+      ]
+    },
+    {
+      "at": 8584,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 259.87,
+      "quat": [
+        -0.0701,
+        0.6401,
+        0.0588,
+        0.7628
+      ]
+    },
+    {
+      "at": 8708,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 267.3,
+      "quat": [
+        -0.0702,
+        0.64,
+        0.0589,
+        0.7629
+      ]
+    },
+    {
+      "at": 8831,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 273.44,
+      "quat": [
+        -0.0703,
+        0.6399,
+        0.0589,
+        0.763
+      ]
+    },
+    {
+      "at": 8958,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 280.03,
+      "quat": [
+        -0.0704,
+        0.6398,
+        0.059,
+        0.763
+      ]
+    },
+    {
+      "at": 9082,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 285.43,
+      "quat": [
+        -0.0705,
+        0.6397,
+        0.0591,
+        0.7631
+      ]
+    },
+    {
+      "at": 9207,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 291.23,
+      "quat": [
+        -0.0705,
+        0.6397,
+        0.0591,
+        0.7631
+      ]
+    },
+    {
+      "at": 9331,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 296,
+      "quat": [
+        -0.0706,
+        0.6396,
+        0.0591,
+        0.7632
+      ]
+    },
+    {
+      "at": 9458,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 301.11,
+      "quat": [
+        -0.0706,
+        0.6396,
+        0.0592,
+        0.7632
+      ]
+    },
+    {
+      "at": 9581,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 305.32,
+      "quat": [
+        -0.0707,
+        0.6395,
+        0.0592,
+        0.7632
+      ]
+    },
+    {
+      "at": 9707,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 309.84,
+      "quat": [
+        -0.0707,
+        0.6395,
+        0.0592,
+        0.7633
+      ]
+    },
+    {
+      "at": 9831,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 313.56,
+      "quat": [
+        -0.0707,
+        0.6394,
+        0.0593,
+        0.7633
+      ]
+    },
+    {
+      "at": 9958,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 317.53,
+      "quat": [
+        -0.0708,
+        0.6394,
+        0.0593,
+        0.7633
+      ]
+    },
+    {
+      "at": 10083,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0708,
+        0.6394,
+        0.0593,
+        0.7633
+      ]
+    },
+    {
+      "at": 10207,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0708,
+        0.6393,
+        0.0593,
+        0.7633
+      ]
+    },
+    {
+      "at": 10330,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 312.63,
+      "quat": [
+        -0.0709,
+        0.6393,
+        0.0594,
+        0.7634
+      ]
+    },
+    {
+      "at": 10457,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 284.43,
+      "quat": [
+        -0.0709,
+        0.6393,
+        0.0594,
+        0.7634
+      ]
+    },
+    {
+      "at": 10582,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 261.24,
+      "quat": [
+        -0.0709,
+        0.6393,
+        0.0594,
+        0.7634
+      ]
+    },
+    {
+      "at": 10707,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 236.49,
+      "quat": [
+        -0.071,
+        0.6392,
+        0.0594,
+        0.7634
+      ]
+    },
+    {
+      "at": 10831,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 216.12,
+      "quat": [
+        -0.071,
+        0.6392,
+        0.0594,
+        0.7634
+      ]
+    },
+    {
+      "at": 10956,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 194.31,
+      "quat": [
+        -0.071,
+        0.6392,
+        0.0594,
+        0.7634
+      ]
+    },
+    {
+      "at": 11080,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 176.4,
+      "quat": [
+        -0.071,
+        0.6392,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 11205,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 181.46,
+      "quat": [
+        -0.071,
+        0.6392,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 11330,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 192.62,
+      "quat": [
+        -0.071,
+        0.6391,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 11458,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 204.5,
+      "quat": [
+        -0.0711,
+        0.6391,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 11582,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 214.25,
+      "quat": [
+        -0.0711,
+        0.6391,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 11709,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 224.75,
+      "quat": [
+        -0.0711,
+        0.6391,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 11833,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 233.33,
+      "quat": [
+        -0.0711,
+        0.6391,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 11958,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 242.55,
+      "quat": [
+        -0.0711,
+        0.6391,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 12083,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 250.16,
+      "quat": [
+        -0.0711,
+        0.6391,
+        0.0595,
+        0.7635
+      ]
+    },
+    {
+      "at": 12207,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 258.28,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0595,
+        0.7636
+      ]
+    },
+    {
+      "at": 12332,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 264.97,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 12456,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 272.13,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 12580,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 278.02,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 12708,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite"
+      ],
+      "beat": "ch10-transit",
+      "speed": 284.33,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 12833,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 289.48,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 12957,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 295.03,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13081,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 299.59,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13205,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 304.49,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13330,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 308.51,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13457,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 312.81,
+      "quat": [
+        -0.0712,
+        0.639,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13582,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 316.35,
+      "quat": [
+        -0.0712,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13708,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13832,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 13957,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 14081,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 14207,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 14331,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 14457,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 14581,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0596,
+        0.7636
+      ]
+    },
+    {
+      "at": 14707,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 14831,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 298.32,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 14957,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 271.09,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15081,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 248.78,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15207,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 224.81,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15331,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 205.06,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15457,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 183.96,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15581,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 174.81,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15705,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 187.88,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15829,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 198.62,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 15952,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 208.77,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16075,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 219.64,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16199,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 228.58,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16322,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 238.15,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16446,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 245.99,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16571,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 254.41,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16695,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 261.32,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16818,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 267.83,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 16942,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 274.82,
+      "quat": [
+        -0.0713,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17067,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 280.57,
+      "quat": [
+        -0.0714,
+        0.6389,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17192,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 286.71,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17316,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 291.77,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17441,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 297.18,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17565,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 301.62,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17690,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 306.39,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17815,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 310.3,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 17940,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 314.5,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18065,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 317.95,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18190,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18314,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18440,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18565,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18689,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18815,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 18940,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19064,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19190,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 312.65,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19314,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 287.96,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19440,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 261.4,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19565,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 239.59,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19690,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 216.22,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19815,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 197.04,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 19940,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 176.41,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20065,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 179.86,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20189,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 192.6,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20313,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 203.06,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20440,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 214.28,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20564,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 223.49,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20689,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 233.4,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20814,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 241.52,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 20940,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 250.21,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21065,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 257.37,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21188,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 265.05,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21312,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 271.34,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21438,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 278.1,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21563,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 283.64,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21691,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 289.64,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21815,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 294.48,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 21940,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 299.71,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22065,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 304.01,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22189,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 308.61,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22313,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 312.4,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22447,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 316.47,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22573,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22699,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22822,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 22946,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23073,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23197,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23323,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23448,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23573,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 320,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23698,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 298.28,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23823,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 271.07,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 23947,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 248.69,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24073,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 224.69,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24198,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 204.95,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24323,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 183.84,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24448,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 174.73,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24573,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 187.83,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24696,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 198.61,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24823,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 210.15,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 24948,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 219.59,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25072,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 229.74,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25196,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 238.06,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25322,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 247,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25447,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 254.36,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25573,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 262.22,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25696,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 268.7,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25821,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 275.62,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 25945,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 281.3,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26070,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 287.4,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26195,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 292.39,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26322,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 297.75,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26446,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 302.16,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26571,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light"
+      ],
+      "beat": "ch10-transit",
+      "speed": 306.89,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26695,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 298.27,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26822,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 278.67,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 26946,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 262.6,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27073,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 245.35,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27198,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 231.2,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27324,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 216.05,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27448,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 203.61,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27573,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 190.26,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27696,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 179.31,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27823,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 167.53,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 27947,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 157.9,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28074,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 147.52,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28199,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 139.07,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28322,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 129.95,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28446,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 122.46,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28572,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 114.44,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28696,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 107.85,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28822,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 100.75,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 28945,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 94.96,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 29072,
+      "moveSpeedScale": 0,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved"
+      ],
+      "beat": "ch10-transit",
+      "speed": 88.72,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 29198,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 83.23,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 29444,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 79.58,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 29567,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 75.17,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 29691,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 70.25,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 29815,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 66.2,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 29939,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 61.86,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30062,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 58.31,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30190,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 54.49,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30315,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 51.34,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30441,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 47.98,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30565,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 45.21,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30691,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 42.25,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30815,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 39.82,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 30939,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 37.2,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 31062,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 35.06,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 31189,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 32.76,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 31313,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 30.88,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 31441,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 28.85,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 31565,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 27.18,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 31688,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 25.4,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    },
+    {
+      "at": 31812,
+      "moveSpeedScale": 1,
+      "history": [
+        "anc.ch10.transit-ignite",
+        "anc.ch10.seam-of-light",
+        "anc.ch10.station-resolved",
+        "anc.ch10.threshold-handback"
+      ],
+      "beat": "done",
+      "speed": 23.94,
+      "quat": [
+        -0.0714,
+        0.6388,
+        0.0597,
+        0.7637
+      ]
+    }
+  ],
+  "resolvedAtMs": 26695,
+  "handbackAtMs": 29198,
+  "holdDurationMs": 2503,
+  "holdSpec": 2500,
+  "moveScaleDuringHold": [
+    0
+  ],
+  "moveScaleAfterHandback": [
+    1
+  ],
+  "attitudeChangedDuringHold": false,
+  "speedDuringHold": [
+    298.27,
+    278.67,
+    262.6,
+    245.35,
+    231.2,
+    216.05,
+    203.61,
+    190.26,
+    179.31,
+    167.53,
+    157.9,
+    147.52,
+    139.07,
+    129.95,
+    122.46,
+    114.44,
+    107.85,
+    100.75,
+    94.96,
+    88.72
+  ],
+  "shipControllerBranch": {
+    "branchPresent": true,
+    "snippet": "const thrustHeld = storyNow.active && storyNow.beat === \"ch10-transit\" && getStoryInputPolicy().moveSpeedScale === 0;\n    let accel = 0;\n    if (!thrustHeld) {\n      if (controls.forward) accel += THRUST_ACCEL * boost;\n      if (controls.backward) accel -= THR"
+  }
+}

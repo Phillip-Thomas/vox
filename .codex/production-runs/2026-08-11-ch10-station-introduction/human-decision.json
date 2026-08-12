@@ -1,20 +1,131 @@
 {
   "schema": "paravoxia.humanDecision.v1",
-  "runId": "{{RUN_ID}}",
-  "contractVersion": "draft-v0",
-  "contractSha256": "{{SHA256_OF_SCENE_CONTRACT}}",
-  "reviewer": "{{HUMAN_APPROVER}}",
-  "reviewedAt": "{{ISO_8601}}",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "reviewer": "owner (Phillip Thomas) — decisions pending",
+  "reviewedAt": "2026-08-12T00:00:00Z",
   "decision": "pending",
-  "headedRealGpuEvidence": false,
-  "scopeMatchesProductionLock": false,
-  "evidenceRefs": [],
-  "tasteRationale": "{{WHAT_WORKS_WHAT_DOES_NOT_AND_WHY}}",
-  "dissentDisposition": "{{DISPOSITION_OR_PENDING}}",
-  "acceptedExceptions": [],
-  "remainingGates": [
-    "{{GATE}}"
+  "headedRealGpuEvidence": true,
+  "headedRealGpuEvidenceNote": "Partial and owner-supplied rather than commissioned: the owner played the live build headed and reported two defects (a full-size companion-planet shell drawn centred on the camera, and a FLIGHT CORRIDOR lock with no way in). Both traced to one cause — resolveStoryBootWorldId stopped at ch9, so ch10 booted on the origin world — and both are fixed and regression-tested. No systematic headed screening of the ch10 shot ladder has been performed; the two hero stills and every strip are headless SwiftShader captures.",
+  "scopeMatchesProductionLock": true,
+  "scopeNote": "Lock revisions R1-R8 record every path added beyond the original boundary, each with the defect or contract term that forced it. R8 records the owner-directed hosting deploy, which spent the publish decision the lock had reserved.",
+  "evidenceRefs": [
+    "verification-report.json",
+    "story-audit.md",
+    "score-audit.md",
+    "cinematography-audit.md",
+    "ux-audit.md",
+    "naive-audience-report.md",
+    "dissent-register.md",
+    "director-signoffs.json",
+    "evidence/capture/still-station-resolved.png",
+    "evidence/score/relay_ask-through-answer_combined.wav",
+    "evidence/score/station-resolved_combined.wav",
+    "evidence/verification/ch10-final-full.json"
   ],
-  "publishDecision": "not_requested",
-  "publishAuthorityRef": null
+  "tasteRationale": "PENDING OWNER SESSION. The machine record is substantially complete: the story spine traverses end to end (449s, 30/30 legs, zero rescues), canon passes with the hidden-pillar spend now audibly earned, the score lane is independently lockable, and every owner-reported defect is closed. What remains is constitutionally the owner's, and one item is newly urgent because the build is live.",
+  "dissentDisposition": "pending — dissent-register.md preserves six declined alternatives plus the blind viewer's report verbatim; the cohesion judge has not yet ruled, so judge-derived exceptions are not yet enumerated here",
+  "acceptedExceptions": [
+    "UX-2",
+    "D-12",
+    "F8"
+  ],
+  "acceptedExceptionDetails": [
+    {
+      "id": "UX-2",
+      "acceptedBy": "cinematography-director (ruling, 2026-08-12)",
+      "scope": "mobile-potato renders the whole ch10 work order as a JOURNAL button at all six anchors; the verb is one tap away",
+      "conditions": [
+        "shipped baseline, not a ch10 regression — the HUD surfaces are outside this run's allowed paths",
+        "a ch10-scoped affordance was rejected because it would fork guidance",
+        "routed as a whole-game mobile-guidance packet; the mobile arrival is carried by the K1 caption, not the button"
+      ]
+    },
+    {
+      "id": "D-12",
+      "acceptedBy": "story-verifier + orchestrator (defect register)",
+      "scope": "origin-side landfall leg intermittency, closed on frequency: 8/8 post-fix completions at 5.1-7.8s against a pre-fix 2-of-4 hang rate with an 89.4s worst case",
+      "conditions": [
+        "the repair (descent aims at the derivable wreck site) addresses the characterized cause, not the symptom",
+        "residual: no post-fix run has been observed off this headless SwiftShader box"
+      ]
+    },
+    {
+      "id": "F8",
+      "acceptedBy": "story-canon-auditor + orchestrator (routing)",
+      "scope": "story-authority.json raises the runtime story ceiling and evidence chain to ch10 but activeProduction still names the 2026-07-13 run",
+      "conditions": [
+        "coherent as it stands — no artifact claims the ch10 contract is the registered activeProduction",
+        "the authority gate pins production identity in five coupled literals; retargeting would drop the signed A4-to-ch9 contract out of gate coverage",
+        "routed as a multi-production registration follow-on requiring its own schema, gate design and lock revision"
+      ]
+    }
+  ],
+  "ownerDecisions": [
+    {
+      "id": "owner-decision-docking-architecture",
+      "question": "Docking: page reload (as the sandbox does today) or an in-place scene swap?",
+      "why": "Gates the entire second run. The interior wants an 8cm near plane and system space a 100km far plane, which is why the shipped path navigates rather than swaps. A reload kills StoryDirectorDriver, the signed AV rail and score continuity across the seam, forcing resume-through-milestones; an in-place swap preserves them but is a large renderer change.",
+      "recommendation": "in-place scene swap, and budget it as its own run — the reload forecloses both the score's continuous-pedal thesis and an unbroken arrival grammar, which are the two things that would make docking feel authored rather than loaded",
+      "status": "pending"
+    },
+    {
+      "id": "owner-decision-corridor-silence-legibility",
+      "question": "Flying to the station and receiving complete silence inside the corridor is contract-correct. You read it as unfinished rather than as a closed door. Authorize one beat that makes the withholding legible as a choice?",
+      "why": "The chapter intends 'an address without an invitation', but intent only lands if the closed door reads as deliberate. This is the only owner-reported experience defect still open, and the build is live.",
+      "recommendation": "yes — cheap, inside this run's lane, in the chapter's own voice rather than a fourth advisory line",
+      "status": "pending"
+    },
+    {
+      "id": "owner-taste-voice-lane",
+      "question": "Chapter 10's low lines are parenthetical second person ('a wall you sealed yourself', 'the going is still yours'). The ch7/ch8 repair you approved moved the movement voice to bare first person ('the scar remains. now it can carry me.'). Which lane does ch10 belong to?",
+      "why": "At the chapter's stated agency peak, K10's 'yours' places the voice outside the doer. Consistent with ch9; inconsistent with the lane you just moved.",
+      "options": [
+        "keep second person (ch9 continuity)",
+        "re-voice to first person (ch7/ch8 continuity)",
+        "an authored split at the threshold"
+      ],
+      "recommendation": "the Chapter Director recommends the authored split; it is a taste call and yours",
+      "status": "pending"
+    },
+    {
+      "id": "owner-taste-reveal-scale",
+      "question": "The station reveal's musical restraint: authored discipline, or too small?",
+      "why": "Three independent reviewers flagged the same perception from different directions — the blind viewer ('too small for the biggest image; nothing you'd remember'), the canon auditor (the answer's continuation reads as thinning), and the score auditor (the answer enters ~6dB under the ask's own mean). The score lane's position is that withholding the station's key, theme, mediant and lead is the point, and that it is banked for the docking run.",
+      "recommendation": "listen to evidence/score/station-resolved_combined.wav against evidence/score/relay_ask-through-answer_combined.wav before deciding; the restraint is defensible but it is now three-for-three against it",
+      "status": "pending"
+    },
+    {
+      "id": "owner-decision-firebase-predeploy-gate",
+      "question": "Should firebase.json's predeploy hook run verify, not just build?",
+      "why": "The 2026-08-12 deploy went out green-looking while scene:av:check and chapter:registry:check were red, because predeploy runs npm run build only. Nothing in the repo's governance chain can currently block a deploy. firebase.json is a protected path, so this needs your authorization.",
+      "recommendation": "yes — the deploy that prompted this was harmless (the red checks were version pins, not correctness), but the gap is structural",
+      "status": "pending"
+    },
+    {
+      "id": "owner-decision-release-surface",
+      "question": "The build is live at https://paravox-game.web.app with ch10 behind ?story= dev entry. Confirm the player-facing ceiling stays at ch4-arrival, or promote?",
+      "why": "The deploy spent the publish gate the lock reserved; the surface question was never separately decided.",
+      "recommendation": "keep the ceiling at ch4-arrival until the cohesion judge rules and a headed screening exists — ch10's shot ladder has never been seen on a real GPU by anyone but you, informally",
+      "status": "pending"
+    }
+  ],
+  "remainingGates": [
+    "final-wiring-batch-reboard-rung-gaze-bias-st0-occlusion-berth-ring",
+    "verifier-strip-regeneration-and-composition-re-measurement",
+    "verifier-hero-still-reshoots-seam-and-st0",
+    "cinematography-composition-verdict-suspension-lift",
+    "scene-cohesion-judge-final-ruling",
+    "owner-decision-docking-architecture",
+    "owner-decision-corridor-silence-legibility",
+    "owner-taste-voice-lane",
+    "owner-taste-reveal-scale",
+    "owner-decision-firebase-predeploy-gate",
+    "owner-decision-release-surface",
+    "headed-screening-of-the-ch10-shot-ladder"
+  ],
+  "publishDecision": "executed",
+  "publishDecisionNote": "The owner directed a hosting deploy on 2026-08-12; firebase deploy --only hosting shipped 11 files to paravox-game (https://paravox-game.web.app). It went out from an uncommitted tree, since committed as 9a20dde (not pushed). The lock's machine field publishAllowed remains false because its schema constrains it to that value; production-lock.md revision R8 is the authoritative record. The demo's player-facing ceiling was not changed by the deploy.",
+  "publishAuthorityRef": "production-lock.md#lock-revision-R8"
 }

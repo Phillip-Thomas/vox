@@ -1,0 +1,191 @@
+{
+  "capturedAt": "2026-08-12T17:18:36.655Z",
+  "base": "http://localhost:5176",
+  "mode": "seam",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "stills": [
+    {
+      "tier": "HIGH",
+      "pageErrors": [],
+      "raisedAtDistance": 6166,
+      "appliedProfile": "HIGH",
+      "file": "evidence/capture/still-seam-of-light.png",
+      "latch": {
+        "at": 13323,
+        "frames": 222,
+        "distance": 5191
+      },
+      "distanceAtShutter": 5137,
+      "rangeSpec": [
+        5100,
+        5200
+      ],
+      "qualityProfile": "HIGH",
+      "renderCameraFov": 79,
+      "stationSpineGeom": {
+        "instances": 53,
+        "spineLengthPx": 64.4,
+        "spineThicknessPx": 21,
+        "spinePercentOfFrameWidth": 5.03,
+        "screenBBoxPx": [
+          61,
+          40.4
+        ],
+        "bboxPercentOfFrameWidth": 4.76,
+        "centroidPx": [
+          632.3,
+          355.7
+        ],
+        "centroidPercentX": 49.4,
+        "spineVisualAngleDeg": 8.435,
+        "thicknessVisualAngleDeg": 2.306,
+        "offAxisDeg": 0.006
+      },
+      "stationMask": {
+        "maskPixels": 709,
+        "spineLengthPx": 63.9,
+        "spineThicknessPx": 21.4,
+        "spinePercentOfFrameWidth": 4.99,
+        "thicknessPercentOfFrameWidth": 1.67,
+        "spineVisualAngleDeg": 7.01,
+        "thicknessVisualAngleDeg": 2.345,
+        "silhouetteBBox": [
+          610,
+          344,
+          61,
+          42
+        ],
+        "centroidPx": [
+          645.9,
+          367.8
+        ],
+        "centroidPercentX": 50.46,
+        "centroidOffsetFromViewCenterDeg": 1.075
+      },
+      "cockpitMask": {
+        "maskPixels": 655886,
+        "silhouetteBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "apertureWidthPx": 641,
+        "apertureRow": 392,
+        "apertureSpanPx": [
+          319,
+          959
+        ],
+        "apertureWidthAt1280": 641,
+        "aperturePercentOfFrameWidth": 50.08
+      },
+      "galaxyInFrame": 0,
+      "companionsInFrame": 0,
+      "flightPhase": "deep_space",
+      "milestones": {
+        "faultRead": true,
+        "fabricationRefused": true,
+        "relayAsked": true,
+        "relayAnswered": true,
+        "bearingClaimed": true,
+        "transitIgnited": true,
+        "seamPassed": true,
+        "stationResolved": false,
+        "ch10Complete": false,
+        "dockingAuthorized": false
+      },
+      "beat": "ch10-transit"
+    },
+    {
+      "tier": "LOW",
+      "pageErrors": [],
+      "file": "evidence/capture/still-seam-of-light-low.png",
+      "latch": {
+        "at": 12190,
+        "frames": 454,
+        "distance": 5185
+      },
+      "distanceAtShutter": 5135,
+      "rangeSpec": [
+        5100,
+        5200
+      ],
+      "qualityProfile": "LOW",
+      "renderCameraFov": 79,
+      "stationSpineGeom": {
+        "instances": 53,
+        "spineLengthPx": 64.3,
+        "spineThicknessPx": 21,
+        "spinePercentOfFrameWidth": 5.02,
+        "screenBBoxPx": [
+          60.9,
+          40.4
+        ],
+        "bboxPercentOfFrameWidth": 4.76,
+        "centroidPx": [
+          632.3,
+          355.7
+        ],
+        "centroidPercentX": 49.4,
+        "spineVisualAngleDeg": 8.429,
+        "thicknessVisualAngleDeg": 2.305,
+        "offAxisDeg": 0.006
+      },
+      "stationMask": {
+        "maskPixels": 693,
+        "spineLengthPx": 63.9,
+        "spineThicknessPx": 21.4,
+        "spinePercentOfFrameWidth": 4.99,
+        "thicknessPercentOfFrameWidth": 1.67,
+        "spineVisualAngleDeg": 7.012,
+        "thicknessVisualAngleDeg": 2.349,
+        "silhouetteBBox": [
+          610,
+          344,
+          61,
+          42
+        ],
+        "centroidPx": [
+          646,
+          367.7
+        ],
+        "centroidPercentX": 50.47,
+        "centroidOffsetFromViewCenterDeg": 1.068
+      },
+      "cockpitMask": {
+        "maskPixels": 571198,
+        "silhouetteBBox": [
+          0,
+          0,
+          1280,
+          720
+        ],
+        "apertureWidthPx": 659,
+        "apertureRow": 414,
+        "apertureSpanPx": [
+          294,
+          952
+        ],
+        "apertureWidthAt1280": 659,
+        "aperturePercentOfFrameWidth": 51.48
+      },
+      "galaxyInFrame": 0,
+      "companionsInFrame": 0,
+      "flightPhase": "deep_space",
+      "milestones": {
+        "faultRead": true,
+        "fabricationRefused": true,
+        "relayAsked": true,
+        "relayAnswered": true,
+        "bearingClaimed": true,
+        "transitIgnited": true,
+        "seamPassed": true,
+        "stationResolved": false,
+        "ch10Complete": false,
+        "dockingAuthorized": false
+      },
+      "beat": "ch10-transit"
+    }
+  ]
+}

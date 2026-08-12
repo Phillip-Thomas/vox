@@ -1,0 +1,405 @@
+{
+  "capturedAt": "2026-08-12T17:37:21.557Z",
+  "base": "http://localhost:5176",
+  "mode": "ux1",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "paths": [
+    {
+      "url": "?story=ch10-transit&profile=LOW",
+      "lane": "manual (no movie=1)",
+      "pageErrors": [],
+      "steps": [
+        {
+          "label": "entry",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "guidance": {
+            "beat": "ch10-transit",
+            "objectiveId": "station:transit:ignite",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready",
+            "markerTargetLabel": null,
+            "markerTargetPosition": null,
+            "aboard": true,
+            "flightPhase": "surface",
+            "activePlanetId": "-1,-1",
+            "receipts": {
+              "faultRead": true,
+              "fabricationRefused": true,
+              "relayAsked": true,
+              "relayAnswered": true,
+              "bearingClaimed": true,
+              "transitIgnited": false,
+              "seamPassed": false
+            }
+          },
+          "aboard": true,
+          "flightPhase": "surface",
+          "milestones": {
+            "faultRead": true,
+            "fabricationRefused": true,
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false,
+            "dockingAuthorized": false
+          },
+          "cueCount": 0,
+          "cues": []
+        },
+        {
+          "label": "on-foot-after-claim",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "guidance": {
+            "beat": "ch10-transit",
+            "objectiveId": "station:transit:ignite",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready",
+            "markerTargetLabel": null,
+            "markerTargetPosition": null,
+            "aboard": true,
+            "flightPhase": "surface",
+            "activePlanetId": "-1,-1",
+            "receipts": {
+              "faultRead": true,
+              "fabricationRefused": true,
+              "relayAsked": true,
+              "relayAnswered": true,
+              "bearingClaimed": true,
+              "transitIgnited": false,
+              "seamPassed": false
+            }
+          },
+          "aboard": true,
+          "flightPhase": "surface",
+          "milestones": {
+            "faultRead": true,
+            "fabricationRefused": true,
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false,
+            "dockingAuthorized": false
+          },
+          "cueCount": 0,
+          "cues": []
+        },
+        {
+          "label": "boarded",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "guidance": {
+            "beat": "ch10-transit",
+            "objectiveId": "station:transit:ignite",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready",
+            "markerTargetLabel": null,
+            "markerTargetPosition": null,
+            "aboard": true,
+            "flightPhase": "surface",
+            "activePlanetId": "-1,-1",
+            "receipts": {
+              "faultRead": true,
+              "fabricationRefused": true,
+              "relayAsked": true,
+              "relayAnswered": true,
+              "bearingClaimed": true,
+              "transitIgnited": false,
+              "seamPassed": false
+            }
+          },
+          "aboard": true,
+          "flightPhase": "surface",
+          "milestones": {
+            "faultRead": true,
+            "fabricationRefused": true,
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false,
+            "dockingAuthorized": false
+          },
+          "cueCount": 0,
+          "cues": []
+        },
+        {
+          "label": "disembarked-pre-ignition",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "guidance": {
+            "beat": "ch10-transit",
+            "objectiveId": "station:transit:reboard",
+            "markerLabel": "KESTREL HATCH · REBOARD",
+            "workOrder": [
+              "RETURN TO THE KESTREL.",
+              "FOLLOW THE HATCH MARKER AND [F] BOARD."
+            ],
+            "requiresMarker": true,
+            "health": "ready",
+            "markerTargetLabel": "KESTREL HATCH · REBOARD",
+            "markerTargetPosition": [
+              3,
+              53.5,
+              -6
+            ],
+            "aboard": false,
+            "flightPhase": "surface",
+            "activePlanetId": "-1,-1",
+            "receipts": {
+              "faultRead": true,
+              "fabricationRefused": true,
+              "relayAsked": true,
+              "relayAnswered": true,
+              "bearingClaimed": true,
+              "transitIgnited": false,
+              "seamPassed": false
+            }
+          },
+          "aboard": false,
+          "flightPhase": "surface",
+          "milestones": {
+            "faultRead": true,
+            "fabricationRefused": true,
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false,
+            "dockingAuthorized": false
+          },
+          "cueCount": 1,
+          "cues": [
+            {
+              "at": 17209,
+              "id": "station:transit:reboard",
+              "kind": null,
+              "beat": "ch10-transit"
+            }
+          ]
+        },
+        {
+          "label": "reboarded",
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "requiresMarker": "false",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "guidance": {
+            "beat": "ch10-transit",
+            "objectiveId": "station:transit:ignite",
+            "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+            "workOrder": [
+              "BRING THE KESTREL ONLINE.",
+              "HOLD [SPACE] TO IGNITE AND LIFT."
+            ],
+            "requiresMarker": false,
+            "health": "ready",
+            "markerTargetLabel": null,
+            "markerTargetPosition": null,
+            "aboard": true,
+            "flightPhase": "surface",
+            "activePlanetId": "-1,-1",
+            "receipts": {
+              "faultRead": true,
+              "fabricationRefused": true,
+              "relayAsked": true,
+              "relayAnswered": true,
+              "bearingClaimed": true,
+              "transitIgnited": false,
+              "seamPassed": false
+            }
+          },
+          "aboard": true,
+          "flightPhase": "surface",
+          "milestones": {
+            "faultRead": true,
+            "fabricationRefused": true,
+            "relayAsked": true,
+            "relayAnswered": true,
+            "bearingClaimed": true,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false,
+            "dockingAuthorized": false
+          },
+          "cueCount": 2,
+          "cues": [
+            {
+              "at": 17209,
+              "id": "station:transit:reboard",
+              "kind": null,
+              "beat": "ch10-transit"
+            },
+            {
+              "at": 19735,
+              "id": "station:transit:ignite",
+              "kind": null,
+              "beat": "ch10-transit"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "url": "?story=ch10-ask&profile=LOW",
+      "lane": "manual (no movie=1)",
+      "pageErrors": [],
+      "steps": [
+        {
+          "label": "entry",
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "guidance": {
+            "beat": "ch10-ask",
+            "objectiveId": "station:return:reboard",
+            "markerLabel": "KESTREL HATCH · REBOARD",
+            "workOrder": [
+              "RETURN TO THE KESTREL.",
+              "FOLLOW THE HATCH MARKER AND [F] BOARD."
+            ],
+            "requiresMarker": true,
+            "health": "ready",
+            "markerTargetLabel": "KESTREL HATCH · REBOARD",
+            "markerTargetPosition": [
+              8,
+              51.5,
+              -8
+            ],
+            "aboard": false,
+            "flightPhase": "surface",
+            "activePlanetId": "-1,-1:p1",
+            "receipts": {
+              "faultRead": true,
+              "fabricationRefused": true,
+              "relayAsked": false,
+              "relayAnswered": false,
+              "bearingClaimed": false,
+              "transitIgnited": false,
+              "seamPassed": false
+            }
+          },
+          "aboard": false,
+          "flightPhase": "surface",
+          "milestones": {
+            "faultRead": true,
+            "fabricationRefused": true,
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false,
+            "dockingAuthorized": false
+          },
+          "cueCount": 0,
+          "cues": []
+        },
+        {
+          "label": "ask-settled",
+          "beat": "ch10-ask",
+          "objectiveId": "station:return:reboard",
+          "markerLabel": "KESTREL HATCH · REBOARD",
+          "health": "ready",
+          "requiresMarker": "true",
+          "hudText": "CURRENT OBJECTIVE | KESTREL HATCH · REBOARD | RETURN TO THE KESTREL. | FOLLOW THE HATCH MARKER AND [F] BOARD.",
+          "guidance": {
+            "beat": "ch10-ask",
+            "objectiveId": "station:return:reboard",
+            "markerLabel": "KESTREL HATCH · REBOARD",
+            "workOrder": [
+              "RETURN TO THE KESTREL.",
+              "FOLLOW THE HATCH MARKER AND [F] BOARD."
+            ],
+            "requiresMarker": true,
+            "health": "ready",
+            "markerTargetLabel": "KESTREL HATCH · REBOARD",
+            "markerTargetPosition": [
+              8,
+              51.5,
+              -8
+            ],
+            "aboard": false,
+            "flightPhase": "surface",
+            "activePlanetId": "-1,-1:p1",
+            "receipts": {
+              "faultRead": true,
+              "fabricationRefused": true,
+              "relayAsked": false,
+              "relayAnswered": false,
+              "bearingClaimed": false,
+              "transitIgnited": false,
+              "seamPassed": false
+            }
+          },
+          "aboard": false,
+          "flightPhase": "surface",
+          "milestones": {
+            "faultRead": true,
+            "fabricationRefused": true,
+            "relayAsked": false,
+            "relayAnswered": false,
+            "bearingClaimed": false,
+            "transitIgnited": false,
+            "seamPassed": false,
+            "stationResolved": false,
+            "ch10Complete": false,
+            "dockingAuthorized": false
+          },
+          "cueCount": 0,
+          "cues": []
+        }
+      ]
+    }
+  ]
+}

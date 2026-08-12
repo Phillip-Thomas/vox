@@ -1,0 +1,8662 @@
+{
+  "capturedAt": "2026-08-12T17:26:50.433Z",
+  "base": "http://localhost:5176",
+  "mode": "st0cross",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "pageErrors": [],
+  "traceSamples": 432,
+  "inFrustumSamples": 0,
+  "inFrustumSamplesRequired": 60,
+  "visibleSamples": 0,
+  "aboveHorizonSamples": 0,
+  "peaks": [],
+  "peakIntervalsSeconds": [],
+  "consecutivePeriodsProven": 0,
+  "trace": [
+    {
+      "t": 0.01,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.8033,
+        -9.3212
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 81.388,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 53.4,
+      "cameraFov": 70
+    },
+    {
+      "t": 0.51,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.8033,
+        -11.702
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 83.093,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 66.5,
+      "cameraFov": 70
+    },
+    {
+      "t": 1.01,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.8033,
+        -14.6169
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 84.446,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 82.7,
+      "cameraFov": 70
+    },
+    {
+      "t": 1.51,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.7228,
+        -15.7508
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 85.307,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 86.1,
+      "cameraFov": 75.25587049532855
+    },
+    {
+      "t": 2.02,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.3864,
+        5.7804
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 101.776,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 87.9,
+      "cameraFov": 78.97800793675334
+    },
+    {
+      "t": 2.52,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.2209,
+        1.3814
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 130.188,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 116.1,
+      "cameraFov": 78.99994769427201
+    },
+    {
+      "t": 3.02,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.1771,
+        0.6705
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 148.593,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 180.4,
+      "cameraFov": 78.99999986026766
+    },
+    {
+      "t": 3.53,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.1467,
+        0.407
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 158.274,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 272.5,
+      "cameraFov": 78.9999999996522
+    },
+    {
+      "t": 4.03,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.1228,
+        0.2725
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 163.944,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 392.7,
+      "cameraFov": 78.99999999999947
+    },
+    {
+      "t": 4.53,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.1053,
+        0.1992
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 167.298,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 528.3,
+      "cameraFov": 78.99999999999997
+    },
+    {
+      "t": 5.04,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.092,
+        0.1531
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 169.537,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 680.7,
+      "cameraFov": 78.99999999999997
+    },
+    {
+      "t": 5.54,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0822,
+        0.1239
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 171.023,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 836.6,
+      "cameraFov": 78.99999999999997
+    },
+    {
+      "t": 6.05,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0843,
+        0.1168
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 171.987,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 983.5,
+      "cameraFov": 73.05493151927125
+    },
+    {
+      "t": 6.56,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0854,
+        0.1101
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 172.44,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1090.5,
+      "cameraFov": 70.55939235824735
+    },
+    {
+      "t": 7.06,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0713,
+        0.0866
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 172.794,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1188.3,
+      "cameraFov": 78.95564607128256
+    },
+    {
+      "t": 7.56,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0681,
+        0.0786
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.217,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1305.6,
+      "cameraFov": 78.99991988349394
+    },
+    {
+      "t": 8.06,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0645,
+        0.0712
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.65,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1438.5,
+      "cameraFov": 78.99999987339388
+    },
+    {
+      "t": 8.57,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0609,
+        0.0644
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.071,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1588.4,
+      "cameraFov": 78.99999999984375
+    },
+    {
+      "t": 9.07,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0577,
+        0.0586
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.434,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1742.9,
+      "cameraFov": 78.99999999999976
+    },
+    {
+      "t": 9.58,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0551,
+        0.0536
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.74,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1901.7,
+      "cameraFov": 78.99999999999997
+    },
+    {
+      "t": 10.08,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0531,
+        0.0495
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.978,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2059.1,
+      "cameraFov": 78.99999999999997
+    },
+    {
+      "t": 10.58,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0598,
+        0.053
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 175.083,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2185.5,
+      "cameraFov": 71.84014238946051
+    },
+    {
+      "t": 11.09,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0575,
+        0.0481
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 175.058,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2274.6,
+      "cameraFov": 74.88235467357765
+    },
+    {
+      "t": 11.59,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0546,
+        0.0431
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.997,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2356.8,
+      "cameraFov": 78.98722658329268
+    },
+    {
+      "t": 12.09,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0568,
+        0.0418
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.85,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2422.5,
+      "cameraFov": 78.99997846434812
+    },
+    {
+      "t": 12.6,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0602,
+        0.0409
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.607,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2473.5,
+      "cameraFov": 78.99999996601785
+    },
+    {
+      "t": 13.1,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0648,
+        0.0402
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 174.256,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2513.3,
+      "cameraFov": 78.99999999994758
+    },
+    {
+      "t": 13.6,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0712,
+        0.0395
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.761,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2545.3,
+      "cameraFov": 78.99999999999993
+    },
+    {
+      "t": 14.24,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 14.75,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 15.28,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 15.78,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 16.29,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 16.79,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 17.31,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 17.81,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 18.32,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 18.82,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 19.32,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 19.83,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 20.33,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 20.83,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 21.34,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 21.85,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 22.35,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 22.85,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 23.36,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 23.86,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 24.37,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 24.88,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 25.39,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 25.89,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 26.4,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 26.92,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 27.44,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 27.94,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 28.45,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0774,
+        0.0392
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 173.284,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 2567.2,
+      "cameraFov": 78.89896042568212
+    },
+    {
+      "t": 28.95,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.0212,
+        -3.5394
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 69.787,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 57.5,
+      "cameraFov": 75
+    },
+    {
+      "t": 29.45,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.2313,
+        -4.1542
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 72.662,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 56.8,
+      "cameraFov": 75
+    },
+    {
+      "t": 29.96,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.5076,
+        -5.4803
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 76.795,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 56.2,
+      "cameraFov": 75
+    },
+    {
+      "t": 30.46,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.539,
+        -6.3668
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 78.557,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 55.8,
+      "cameraFov": 75
+    },
+    {
+      "t": 30.96,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.0967,
+        -4.6543
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 74.368,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 55.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 31.47,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.1258,
+        -3.5367
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 69.809,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 55.1,
+      "cameraFov": 75
+    },
+    {
+      "t": 31.97,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.1451,
+        -3.54
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 69.838,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.9,
+      "cameraFov": 75
+    },
+    {
+      "t": 32.49,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.1507,
+        -3.6559
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 70.429,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.8,
+      "cameraFov": 75
+    },
+    {
+      "t": 32.99,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.124,
+        -3.8866
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 71.491,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.6,
+      "cameraFov": 75
+    },
+    {
+      "t": 33.49,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.109,
+        -4.4449
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 73.674,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 34,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.1003,
+        -4.4683
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 73.752,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 34.51,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.0985,
+        -4.4623
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 73.731,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 35.06,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.0985,
+        -4.4624
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 73.732,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 35.56,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.099,
+        -4.4639
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 73.737,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 36.07,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.0996,
+        -4.4655
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 73.743,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 36.58,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        -0.1001,
+        -4.4672
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 73.748,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.3,
+      "cameraFov": 75
+    },
+    {
+      "t": 37.08,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.9389,
+        -20.8575
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 86.436,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 54.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 37.58,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 38.09,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 38.59,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 39.09,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 39.65,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 40.16,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 40.66,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 41.16,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 41.67,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 42.17,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 42.67,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 43.18,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 43.68,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 44.18,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 44.69,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 45.19,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 45.69,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 46.2,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 46.7,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 47.2,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 47.7,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 48.21,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 48.71,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 49.21,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 49.72,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 50.22,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 50.72,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 51.22,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 51.73,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 52.23,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 52.73,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 53.24,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 53.74,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 54.24,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 54.75,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 55.25,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 55.75,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 56.25,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 56.76,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 57.26,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 57.76,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 58.27,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 58.77,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 59.27,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 59.77,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 60.28,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 60.78,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 61.28,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 61.79,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 62.31,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 62.81,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 63.31,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 63.82,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 64.32,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 64.82,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 65.33,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 65.83,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 66.33,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 66.84,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 67.34,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 67.84,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 68.34,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 68.85,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 69.35,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 69.85,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0,
+        33.0202
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 92.26,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 1.4,
+      "cameraFov": 75
+    },
+    {
+      "t": 70.36,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.863,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5803.9,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 70.86,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5804.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 71.36,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5804.9,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 71.86,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5805.3,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 72.37,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5805.6,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 72.87,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5805.8,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 73.37,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 73.88,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.1,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 74.38,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.2,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 74.88,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.3,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 75.39,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.3,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 75.89,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.4,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 76.39,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.4,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 76.9,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.4,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 77.4,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 77.9,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 78.41,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 78.91,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 79.41,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 79.92,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 80.42,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 80.92,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 81.43,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 81.93,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 82.43,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 82.94,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 83.44,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 83.94,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 84.44,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 84.95,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 85.45,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 85.95,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 86.46,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 86.96,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 87.46,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 87.97,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 88.47,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 88.97,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 89.47,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 89.98,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 90.48,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 90.98,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 91.49,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 91.99,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 92.49,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 93,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 93.5,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 94,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 94.51,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 95.01,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 95.51,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 96.02,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 96.52,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 97.02,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 97.53,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 98.03,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 98.53,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 99.03,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 99.54,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 100.04,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 100.54,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 101.04,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 101.55,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 102.05,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 102.55,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 103.06,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 103.56,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 104.06,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 104.56,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 105.07,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 105.57,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 106.07,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 106.57,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 107.08,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 107.58,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 108.08,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 108.59,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 109.09,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 109.59,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 110.1,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 110.6,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 111.1,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 111.6,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 112.11,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 112.61,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 113.11,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 113.62,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 114.12,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 114.62,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 115.13,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 115.63,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 116.14,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 116.65,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 117.15,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 117.65,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 118.16,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 118.66,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 119.17,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 119.67,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 120.18,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 120.68,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 121.19,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 121.69,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 122.19,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 122.69,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 123.2,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 123.7,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 124.2,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 124.71,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 125.21,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 125.72,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 126.22,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 126.72,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 127.22,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 127.73,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 128.23,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 128.74,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 129.24,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 129.74,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 130.24,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 130.74,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 131.25,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 131.75,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 132.25,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 132.76,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 133.26,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 133.77,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 134.27,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 134.77,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 135.27,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 135.78,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 136.28,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 136.78,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 137.29,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 137.79,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 138.29,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 138.79,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 139.3,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 139.8,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 140.3,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 140.81,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 141.31,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 141.81,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 142.31,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 142.81,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 143.32,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 143.82,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 144.32,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 144.83,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 145.33,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 145.84,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 146.34,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 146.84,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 147.35,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 147.85,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 148.35,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 148.86,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 149.36,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 149.86,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 150.37,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 150.87,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 151.38,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 151.88,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 152.38,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 152.89,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 153.39,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 153.89,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 154.4,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 154.9,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 155.4,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 155.9,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 156.41,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 156.91,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 157.41,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 157.92,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 158.42,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 158.92,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 159.42,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 159.93,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 160.43,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 160.93,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 161.44,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 161.94,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 162.44,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 162.95,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 163.45,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 163.95,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 164.45,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 164.96,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 165.46,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 165.96,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 166.47,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 166.97,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 167.47,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 167.97,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 168.48,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 168.98,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 169.48,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 169.99,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 170.49,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 170.99,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 171.5,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 172,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 172.5,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 173,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 173.51,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 174.01,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 174.51,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 175.02,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 175.52,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 176.02,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 176.53,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 177.03,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 177.53,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 178.04,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 178.54,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 179.04,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 179.55,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 180.06,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 180.56,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 181.06,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 181.57,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 182.07,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 182.57,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 183.07,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 183.58,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 184.08,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 184.58,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 185.09,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 185.59,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 186.09,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 186.6,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 187.1,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 187.6,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 188.1,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 188.61,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 189.11,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 189.61,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 190.11,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 190.62,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 191.12,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 191.62,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 192.13,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 192.63,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 193.13,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 193.63,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 194.14,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 194.64,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 195.14,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 195.65,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 196.15,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 196.65,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 197.15,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 197.66,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 198.16,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 198.66,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 199.16,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 199.67,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 200.17,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 200.67,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 201.18,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 201.68,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 202.19,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 202.69,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 203.19,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 203.69,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 204.19,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 204.7,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 205.2,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 205.7,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 206.21,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 206.71,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 207.21,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 207.71,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 208.22,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 208.72,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 209.22,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 209.73,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 210.23,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 210.73,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 211.24,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 211.75,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 212.25,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 212.75,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 213.25,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 213.75,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 214.26,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 214.76,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 215.26,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 215.77,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 216.27,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 216.77,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    },
+    {
+      "t": 217.27,
+      "present": true,
+      "visible": false,
+      "opacity": 0,
+      "altitudeDeg": -90,
+      "ndc": [
+        0.0004,
+        0.0283
+      ],
+      "inFrustum": false,
+      "offAxisDeg": 178.864,
+      "depthTest": true,
+      "depthWrite": false,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "quadScale": 1,
+      "distance": 5806.5,
+      "cameraFov": 70.00017165287088
+    }
+  ],
+  "stripFrames": [],
+  "stripFrameCount": 0,
+  "stripInFrustumFrames": 0,
+  "stripInFrustumRequired": 4
+}

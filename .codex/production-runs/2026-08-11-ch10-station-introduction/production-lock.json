@@ -100,7 +100,11 @@
     "main/tools/generate-scene-av-runtime.mjs",
     "main/src/story/world/StoryWorldProps.tsx",
     "main/src/story/tidegardenRoute.ts",
-    "main/src/components/ShipController.tsx"
+    "main/src/components/ShipController.tsx",
+    "main/src/game/spaceStation/spaceStationExterior.ts",
+    "main/src/components/spaceStation/SpaceStationExterior.tsx",
+    "main/src/components/SystemSpaceStations.tsx",
+    "main/src/game/spaceStation/spaceStationExterior.test.ts"
   ],
   "protectedPaths": [
     "main/public/audio/",
@@ -109,7 +113,11 @@
     "firebase.json",
     ".firebaserc"
   ],
-  "lockedBeats": ["ch10-cold", "ch10-ask", "ch10-transit"],
+  "lockedBeats": [
+    "ch10-cold",
+    "ch10-ask",
+    "ch10-transit"
+  ],
   "currentRestrictions": {
     "storyCeiling": "ch4-arrival",
     "postArrivalStoryMutationAllowed": true,

@@ -1,5 +1,5 @@
 {
-  "capturedAt": "2026-08-12T03:11:11.485Z",
+  "capturedAt": "2026-08-12T17:51:18.904Z",
   "base": "http://localhost:5176",
   "which": "st0",
   "strips": [
@@ -25,24 +25,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -51,7 +44,7 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.5579,
+          "dayPhase": 0.558,
           "daylight": 0,
           "isNight": true,
           "galaxyObjects": [],
@@ -81,24 +74,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -107,17 +93,17 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.6861,
+          "dayPhase": 0.6838,
           "daylight": 0,
           "isNight": true,
           "galaxyObjects": [],
           "st0": {
             "visible": true,
-            "opacity": 0.8835835305548277,
-            "altitudeDeg": 4.09,
+            "opacity": 0.8273980024314253,
+            "altitudeDeg": 3.79,
             "ndc": [
-              -0.639,
-              0.157
+              -0.63,
+              0.143
             ],
             "inFrustum": true
           }
@@ -137,24 +123,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -163,17 +142,17 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.7128,
+          "dayPhase": 0.7103,
           "daylight": 0,
           "isNight": true,
           "galaxyObjects": [],
           "st0": {
             "visible": true,
             "opacity": 1,
-            "altitudeDeg": 11.45,
+            "altitudeDeg": 11.09,
             "ndc": [
-              -1.071,
-              0.675
+              -1.035,
+              0.636
             ],
             "inFrustum": false
           }
@@ -193,24 +172,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -219,17 +191,17 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.7605,
+          "dayPhase": 0.758,
           "daylight": 0,
           "isNight": true,
           "galaxyObjects": [],
           "st0": {
             "visible": true,
             "opacity": 1,
-            "altitudeDeg": 14.16,
+            "altitudeDeg": 14.47,
             "ndc": [
-              3.714,
-              -3.437
+              4.25,
+              -3.943
             ],
             "inFrustum": false
           }
@@ -249,24 +221,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -275,17 +240,17 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.7914,
+          "dayPhase": 0.7887,
           "daylight": 0,
           "isNight": true,
           "galaxyObjects": [],
           "st0": {
             "visible": true,
             "opacity": 1,
-            "altitudeDeg": 2.66,
+            "altitudeDeg": 3.29,
             "ndc": [
-              0.898,
-              -0.625
+              0.933,
+              -0.665
             ],
             "inFrustum": false
           }
@@ -305,24 +270,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -331,13 +289,13 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.8365,
+          "dayPhase": 0.8337,
           "daylight": 0,
           "isNight": true,
           "galaxyObjects": [],
           "st0": {
             "visible": false,
-            "opacity": 0.05618895891897726,
+            "opacity": 0.05617688407075321,
             "altitudeDeg": -13.17,
             "ndc": [
               0.44,
@@ -361,24 +319,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -387,13 +338,13 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.8627,
+          "dayPhase": 0.8596,
           "daylight": 0,
           "isNight": true,
           "galaxyObjects": [],
           "st0": {
             "visible": false,
-            "opacity": 0.05618895891897726,
+            "opacity": 0.05617688407075321,
             "altitudeDeg": -13.17,
             "ndc": [
               0.44,
@@ -417,24 +368,17 @@
             "flightCorridor": false
           },
           "av": {
-            "active": true,
-            "anchorId": "anc.ch10.cold-noticed",
-            "authority": "player-camera",
-            "fov": 75,
-            "agency": {
-              "movement": "player",
-              "look": "player",
-              "interaction": "player",
-              "handBackAnchorRef": "anc.ch10.fault-read"
-            },
+            "active": false,
+            "anchorId": null,
+            "authority": null,
+            "fov": null,
+            "agency": null,
             "postFx": [],
-            "history": [
-              "anc.ch10.cold-noticed"
-            ],
+            "history": [],
             "reset": null
           },
           "system": {
-            "activePlanetId": "-1,-1:p1",
+            "activePlanetId": "0,0",
             "locationMode": "surface",
             "targetKind": null,
             "targetWorldId": null
@@ -443,17 +387,17 @@
             "phase": "surface",
             "controlMode": "fps"
           },
-          "dayPhase": 0.5002,
-          "daylight": 0.3454,
+          "dayPhase": 0.5011,
+          "daylight": 0.318,
           "isNight": false,
           "galaxyObjects": [],
           "st0": {
             "visible": true,
-            "opacity": 0.01302720394170422,
-            "altitudeDeg": 15.94,
+            "opacity": 0.09149807318482615,
+            "altitudeDeg": 15.69,
             "ndc": [
-              297.582,
-              -275.781
+              17.37,
+              -16.15
             ],
             "inFrustum": false
           }
@@ -461,23 +405,23 @@
       ],
       "pageErrors": [],
       "risings": [
-        33.7,
-        232.2
+        33.1,
+        232.5
       ],
       "settings": [
-        73
+        72.3
       ],
       "periodsObserved": [
-        198.5
+        199.4
       ],
       "peakAltitude": {
-        "alt": 16.32,
-        "t": 50.5
+        "alt": 16.31,
+        "t": 49.9
       },
       "inFrustumSamples": 7,
       "visibleSamples": 52,
       "nightSamples": 192,
-      "sampleCount": 432
+      "sampleCount": 433
     }
   ],
   "traces": {
@@ -539,7 +483,7 @@
       {
         "t": 1.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.5389,
+        "dayPhase": 0.539,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -573,9 +517,9 @@
         "autopilotPos": null
       },
       {
-        "t": 2.5,
+        "t": 2.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.5431,
+        "dayPhase": 0.5432,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -593,7 +537,7 @@
       {
         "t": 3.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.5452,
+        "dayPhase": 0.5453,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -647,7 +591,7 @@
       {
         "t": 4.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.5516,
+        "dayPhase": 0.5517,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -683,7 +627,7 @@
       {
         "t": 5.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.5558,
+        "dayPhase": 0.5559,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -701,7 +645,7 @@
       {
         "t": 6.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.5579,
+        "dayPhase": 0.558,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -719,7 +663,7 @@
       {
         "t": 6.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.5609,
+        "dayPhase": 0.5608,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -737,7 +681,7 @@
       {
         "t": 7.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.563,
+        "dayPhase": 0.5629,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -755,7 +699,7 @@
       {
         "t": 7.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.5652,
+        "dayPhase": 0.5651,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -773,7 +717,7 @@
       {
         "t": 8.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.5673,
+        "dayPhase": 0.5672,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -791,7 +735,7 @@
       {
         "t": 8.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.5694,
+        "dayPhase": 0.5693,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -807,9 +751,9 @@
         "autopilotPos": null
       },
       {
-        "t": 9.4,
+        "t": 9.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.5715,
+        "dayPhase": 0.5714,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -825,9 +769,9 @@
         "autopilotPos": null
       },
       {
-        "t": 9.9,
+        "t": 9.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.5736,
+        "dayPhase": 0.5735,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -843,9 +787,9 @@
         "autopilotPos": null
       },
       {
-        "t": 10.4,
+        "t": 10.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.5757,
+        "dayPhase": 0.5756,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -861,9 +805,9 @@
         "autopilotPos": null
       },
       {
-        "t": 10.9,
+        "t": 10.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.5778,
+        "dayPhase": 0.5777,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -879,7 +823,7 @@
         "autopilotPos": null
       },
       {
-        "t": 11.4,
+        "t": 11.3,
         "beat": "ch10-cold",
         "dayPhase": 0.5799,
         "daylight": 0,
@@ -899,7 +843,7 @@
       {
         "t": 11.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.582,
+        "dayPhase": 0.5819,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -917,7 +861,7 @@
       {
         "t": 12.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.5841,
+        "dayPhase": 0.584,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -953,7 +897,7 @@
       {
         "t": 13.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.5884,
+        "dayPhase": 0.5883,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -989,7 +933,7 @@
       {
         "t": 14.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.5926,
+        "dayPhase": 0.5925,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1025,7 +969,7 @@
       {
         "t": 15.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.5968,
+        "dayPhase": 0.5967,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1043,7 +987,7 @@
       {
         "t": 15.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.5989,
+        "dayPhase": 0.5988,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1059,9 +1003,9 @@
         "autopilotPos": null
       },
       {
-        "t": 16.5,
+        "t": 16.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.6011,
+        "dayPhase": 0.601,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1077,7 +1021,7 @@
         "autopilotPos": null
       },
       {
-        "t": 17,
+        "t": 16.9,
         "beat": "ch10-cold",
         "dayPhase": 0.6031,
         "daylight": 0,
@@ -1095,9 +1039,9 @@
         "autopilotPos": null
       },
       {
-        "t": 17.5,
+        "t": 17.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.6053,
+        "dayPhase": 0.6051,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1113,9 +1057,9 @@
         "autopilotPos": null
       },
       {
-        "t": 18,
+        "t": 17.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.6074,
+        "dayPhase": 0.6072,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1131,9 +1075,9 @@
         "autopilotPos": null
       },
       {
-        "t": 18.5,
+        "t": 18.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.6096,
+        "dayPhase": 0.6094,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1149,9 +1093,9 @@
         "autopilotPos": null
       },
       {
-        "t": 19,
+        "t": 18.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.6117,
+        "dayPhase": 0.6115,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1167,9 +1111,9 @@
         "autopilotPos": null
       },
       {
-        "t": 19.5,
+        "t": 19.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.6137,
+        "dayPhase": 0.6135,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1185,9 +1129,9 @@
         "autopilotPos": null
       },
       {
-        "t": 20,
+        "t": 19.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.6158,
+        "dayPhase": 0.6157,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1205,7 +1149,7 @@
       {
         "t": 20.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6179,
+        "dayPhase": 0.6178,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1223,7 +1167,7 @@
       {
         "t": 21,
         "beat": "ch10-cold",
-        "dayPhase": 0.6201,
+        "dayPhase": 0.6199,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1241,7 +1185,7 @@
       {
         "t": 21.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6222,
+        "dayPhase": 0.622,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1259,7 +1203,7 @@
       {
         "t": 22,
         "beat": "ch10-cold",
-        "dayPhase": 0.6243,
+        "dayPhase": 0.6242,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1277,7 +1221,7 @@
       {
         "t": 22.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6264,
+        "dayPhase": 0.6262,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1295,7 +1239,7 @@
       {
         "t": 23,
         "beat": "ch10-cold",
-        "dayPhase": 0.6285,
+        "dayPhase": 0.6283,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1313,7 +1257,7 @@
       {
         "t": 23.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6306,
+        "dayPhase": 0.6305,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1329,9 +1273,9 @@
         "autopilotPos": null
       },
       {
-        "t": 24.1,
+        "t": 24,
         "beat": "ch10-cold",
-        "dayPhase": 0.6327,
+        "dayPhase": 0.6326,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1347,9 +1291,9 @@
         "autopilotPos": null
       },
       {
-        "t": 24.6,
+        "t": 24.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6349,
+        "dayPhase": 0.6346,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1365,9 +1309,9 @@
         "autopilotPos": null
       },
       {
-        "t": 25.1,
+        "t": 25,
         "beat": "ch10-cold",
-        "dayPhase": 0.637,
+        "dayPhase": 0.6368,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1383,9 +1327,9 @@
         "autopilotPos": null
       },
       {
-        "t": 25.6,
+        "t": 25.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6391,
+        "dayPhase": 0.6389,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1401,9 +1345,9 @@
         "autopilotPos": null
       },
       {
-        "t": 26.1,
+        "t": 26,
         "beat": "ch10-cold",
-        "dayPhase": 0.6412,
+        "dayPhase": 0.641,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1419,9 +1363,9 @@
         "autopilotPos": null
       },
       {
-        "t": 26.6,
+        "t": 26.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6433,
+        "dayPhase": 0.6431,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1437,9 +1381,9 @@
         "autopilotPos": null
       },
       {
-        "t": 27.1,
+        "t": 27,
         "beat": "ch10-cold",
-        "dayPhase": 0.6454,
+        "dayPhase": 0.6452,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1457,7 +1401,7 @@
       {
         "t": 27.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.6475,
+        "dayPhase": 0.6474,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1475,7 +1419,7 @@
       {
         "t": 28.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.6496,
+        "dayPhase": 0.6494,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1493,7 +1437,7 @@
       {
         "t": 28.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.6517,
+        "dayPhase": 0.6516,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1511,7 +1455,7 @@
       {
         "t": 29.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.6538,
+        "dayPhase": 0.6537,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1529,7 +1473,7 @@
       {
         "t": 29.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.6559,
+        "dayPhase": 0.6558,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1547,7 +1491,7 @@
       {
         "t": 30.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.658,
+        "dayPhase": 0.6579,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1565,7 +1509,7 @@
       {
         "t": 30.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.6602,
+        "dayPhase": 0.66,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1583,7 +1527,7 @@
       {
         "t": 31.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.6623,
+        "dayPhase": 0.6621,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1601,7 +1545,7 @@
       {
         "t": 31.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.6644,
+        "dayPhase": 0.6642,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1619,7 +1563,7 @@
       {
         "t": 32.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.6665,
+        "dayPhase": 0.6663,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1635,9 +1579,9 @@
         "autopilotPos": null
       },
       {
-        "t": 32.7,
+        "t": 32.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.6686,
+        "dayPhase": 0.6685,
         "daylight": 0,
         "isNight": true,
         "st0": {
@@ -1653,396 +1597,396 @@
         "autopilotPos": null
       },
       {
-        "t": 33.2,
+        "t": 33.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.6707,
-        "daylight": 0,
-        "isNight": true,
-        "st0": {
-          "visible": false,
-          "opacity": 0,
-          "altitudeDeg": -90,
-          "ndc": [
-            0.962,
-            8.494
-          ],
-          "inFrustum": false
-        },
-        "autopilotPos": null
-      },
-      {
-        "t": 33.7,
-        "beat": "ch10-cold",
-        "dayPhase": 0.6727,
+        "dayPhase": 0.6706,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.12261532321190217,
-          "altitudeDeg": 0.65,
+          "opacity": 0.08430030705021577,
+          "altitudeDeg": 0.39,
           "ndc": [
-            -0.554,
-            0.017
+            -0.549,
+            0.008
           ],
           "inFrustum": true
         },
         "autopilotPos": null
       },
       {
-        "t": 37.6,
+        "t": 37,
         "beat": "ch10-cold",
-        "dayPhase": 0.6891,
+        "dayPhase": 0.6867,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.9842544020285604,
-          "altitudeDeg": 4.88,
+          "opacity": 0.9511758352669859,
+          "altitudeDeg": 4.54,
           "ndc": [
-            -0.667,
-            0.194
+            -0.654,
+            0.178
           ],
           "inFrustum": true
         },
         "autopilotPos": null
       },
       {
-        "t": 38.1,
+        "t": 37.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6912,
+        "dayPhase": 0.6887,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 1,
-          "altitudeDeg": 5.45,
+          "opacity": 0.9963040723048253,
+          "altitudeDeg": 5.1,
           "ndc": [
-            -0.688,
-            0.223
+            -0.675,
+            0.205
           ],
           "inFrustum": true
         },
         "autopilotPos": null
       },
       {
-        "t": 38.6,
+        "t": 38,
         "beat": "ch10-cold",
-        "dayPhase": 0.6933,
+        "dayPhase": 0.6909,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 6.02,
+          "altitudeDeg": 5.68,
           "ndc": [
-            -0.712,
-            0.253
+            -0.698,
+            0.235
           ],
           "inFrustum": true
         },
         "autopilotPos": null
       },
       {
-        "t": 39.1,
+        "t": 38.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6954,
+        "dayPhase": 0.693,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 6.59,
+          "altitudeDeg": 6.25,
           "ndc": [
-            -0.737,
-            0.286
+            -0.722,
+            0.266
           ],
           "inFrustum": true
         },
         "autopilotPos": null
       },
       {
-        "t": 39.6,
+        "t": 39,
         "beat": "ch10-cold",
-        "dayPhase": 0.6975,
+        "dayPhase": 0.6951,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 7.18,
+          "altitudeDeg": 6.83,
           "ndc": [
-            -0.766,
-            0.321
+            -0.748,
+            0.299
           ],
           "inFrustum": true
         },
         "autopilotPos": null
       },
       {
-        "t": 40.1,
+        "t": 39.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.6996,
+        "dayPhase": 0.6972,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 7.78,
+          "altitudeDeg": 7.43,
           "ndc": [
-            -0.796,
-            0.358
+            -0.778,
+            0.336
           ],
           "inFrustum": true
         },
         "autopilotPos": null
       },
       {
-        "t": 44,
+        "t": 43.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.7157,
+        "dayPhase": 0.7132,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 12.21,
+          "altitudeDeg": 11.86,
           "ndc": [
-            -1.16,
-            0.773
+            -1.116,
+            0.726
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 44.5,
+        "t": 43.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.7178,
+        "dayPhase": 0.7153,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 12.75,
+          "altitudeDeg": 12.4,
           "ndc": [
-            -1.234,
-            0.854
+            -1.184,
+            0.8
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 45,
+        "t": 44.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.7199,
+        "dayPhase": 0.7174,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 13.25,
+          "altitudeDeg": 12.93,
           "ndc": [
-            -1.318,
-            0.944
+            -1.264,
+            0.886
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 45.5,
+        "t": 44.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.722,
+        "dayPhase": 0.7195,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 13.74,
+          "altitudeDeg": 13.43,
           "ndc": [
-            -1.416,
-            1.047
+            -1.352,
+            0.98
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 46,
+        "t": 45.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.7241,
+        "dayPhase": 0.7217,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 14.19,
+          "altitudeDeg": 13.91,
           "ndc": [
-            -1.529,
-            1.165
+            -1.457,
+            1.09
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 46.5,
+        "t": 45.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.7263,
+        "dayPhase": 0.7237,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 14.62,
+          "altitudeDeg": 14.35,
           "ndc": [
-            -1.663,
-            1.303
+            -1.575,
+            1.213
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 47,
+        "t": 46.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.7284,
+        "dayPhase": 0.7258,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 15,
+          "altitudeDeg": 14.75,
           "ndc": [
-            -1.824,
-            1.465
+            -1.715,
+            1.355
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 47.5,
+        "t": 46.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.7305,
+        "dayPhase": 0.728,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 15.34,
+          "altitudeDeg": 15.13,
           "ndc": [
-            -2.014,
-            1.655
+            -1.889,
+            1.53
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 48,
+        "t": 47.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.7326,
+        "dayPhase": 0.7301,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 15.64,
+          "altitudeDeg": 15.45,
           "ndc": [
-            -2.255,
-            1.892
+            -2.095,
+            1.734
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 48.5,
+        "t": 47.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.7347,
+        "dayPhase": 0.7321,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 15.89,
+          "altitudeDeg": 15.73,
           "ndc": [
-            -2.565,
-            2.194
+            -2.352,
+            1.986
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 49,
+        "t": 48.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.7368,
+        "dayPhase": 0.7343,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 16.08,
+          "altitudeDeg": 15.96,
           "ndc": [
-            -2.963,
-            2.577
+            -2.694,
+            2.318
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 49.5,
+        "t": 48.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.7389,
+        "dayPhase": 0.7364,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 16.22,
+          "altitudeDeg": 16.13,
           "ndc": [
-            -3.518,
-            3.106
+            -3.137,
+            2.743
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 50,
+        "t": 49.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.741,
+        "dayPhase": 0.7385,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 16.3,
+          "altitudeDeg": 16.25,
           "ndc": [
-            -4.321,
-            3.864
+            -3.781,
+            3.355
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 50.5,
+        "t": 49.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.7431,
+        "dayPhase": 0.7406,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 16.32,
+          "altitudeDeg": 16.31,
           "ndc": [
-            -5.61,
-            5.074
+            -4.722,
+            4.242
+          ],
+          "inFrustum": false
+        },
+        "autopilotPos": null
+      },
+      {
+        "t": 50.4,
+        "beat": "ch10-cold",
+        "dayPhase": 0.7428,
+        "daylight": 0,
+        "isNight": true,
+        "st0": {
+          "visible": true,
+          "opacity": 1,
+          "altitudeDeg": 16.31,
+          "ndc": [
+            -6.367,
+            5.781
           ],
           "inFrustum": false
         },
@@ -2051,552 +1995,534 @@
       {
         "t": 51,
         "beat": "ch10-cold",
-        "dayPhase": 0.7452,
+        "dayPhase": 0.7448,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 16.28,
+          "altitudeDeg": 16.25,
           "ndc": [
-            -8.03,
-            7.331
+            -9.613,
+            8.804
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 51.6,
+        "t": 54.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.7473,
+        "dayPhase": 0.7608,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 16.18,
+          "altitudeDeg": 13.77,
           "ndc": [
-            -14.192,
-            13.056
+            3.226,
+            -2.973
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 55.4,
+        "t": 55.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.7634,
+        "dayPhase": 0.763,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 13.39,
+          "altitudeDeg": 13.19,
           "ndc": [
-            2.879,
-            -2.642
+            2.726,
+            -2.495
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 55.9,
+        "t": 55.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.7655,
+        "dayPhase": 0.7651,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 12.79,
+          "altitudeDeg": 12.57,
           "ndc": [
-            2.483,
-            -2.26
+            2.369,
+            -2.149
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 56.4,
+        "t": 56.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.7676,
+        "dayPhase": 0.7672,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 12.13,
+          "altitudeDeg": 11.88,
           "ndc": [
-            2.18,
-            -1.964
+            2.086,
+            -1.871
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 56.9,
+        "t": 56.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.7697,
+        "dayPhase": 0.7693,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 11.43,
+          "altitudeDeg": 11.18,
           "ndc": [
-            1.94,
-            -1.727
+            1.869,
+            -1.655
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 57.4,
+        "t": 57.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.7718,
+        "dayPhase": 0.7714,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 10.7,
+          "altitudeDeg": 10.4,
           "ndc": [
-            1.752,
-            -1.538
+            1.686,
+            -1.471
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 58,
+        "t": 57.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.774,
+        "dayPhase": 0.7735,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 9.89,
+          "altitudeDeg": 9.62,
           "ndc": [
-            1.587,
-            -1.37
+            1.54,
+            -1.322
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 58.5,
+        "t": 58.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.7761,
+        "dayPhase": 0.7756,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 9.09,
+          "altitudeDeg": 8.82,
           "ndc": [
-            1.455,
-            -1.234
+            1.416,
+            -1.193
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 59,
+        "t": 62.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.7782,
+        "dayPhase": 0.7915,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 8.25,
+          "altitudeDeg": 2.09,
           "ndc": [
-            1.343,
-            -1.116
+            0.869,
+            -0.59
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 62.8,
+        "t": 62.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.7944,
+        "dayPhase": 0.7937,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 1.37,
+          "altitudeDeg": 1.16,
           "ndc": [
-            0.834,
-            -0.549
+            0.825,
+            -0.538
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 63.3,
+        "t": 63.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.7965,
+        "dayPhase": 0.7958,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": 0.45,
+          "altitudeDeg": 0.26,
           "ndc": [
-            0.794,
-            -0.5
+            0.786,
+            -0.491
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 63.9,
+        "t": 63.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.7985,
+        "dayPhase": 0.7978,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -0.42,
+          "altitudeDeg": -0.62,
           "ndc": [
-            0.758,
-            -0.457
+            0.75,
+            -0.447
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 64.4,
+        "t": 64.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8007,
+        "dayPhase": 0.8,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -1.32,
+          "altitudeDeg": -1.52,
           "ndc": [
-            0.724,
-            -0.414
+            0.716,
+            -0.405
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 64.9,
+        "t": 64.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8028,
+        "dayPhase": 0.8021,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -2.18,
+          "altitudeDeg": -2.38,
           "ndc": [
-            0.693,
-            -0.376
+            0.686,
+            -0.367
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 65.4,
+        "t": 65.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8049,
+        "dayPhase": 0.8042,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -3.06,
+          "altitudeDeg": -3.23,
           "ndc": [
-            0.664,
-            -0.339
+            0.659,
+            -0.332
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 65.9,
+        "t": 65.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.807,
+        "dayPhase": 0.8063,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -3.9,
+          "altitudeDeg": -4.08,
           "ndc": [
-            0.638,
-            -0.305
+            0.632,
+            -0.298
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 66.4,
+        "t": 66.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8091,
+        "dayPhase": 0.8084,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -4.72,
+          "altitudeDeg": -4.89,
           "ndc": [
-            0.614,
-            -0.274
+            0.609,
+            -0.267
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 66.9,
+        "t": 66.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8112,
+        "dayPhase": 0.8105,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -5.5,
+          "altitudeDeg": -5.67,
           "ndc": [
-            0.592,
-            -0.244
+            0.587,
+            -0.238
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 67.4,
+        "t": 67.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8133,
+        "dayPhase": 0.8126,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
           "opacity": 1,
-          "altitudeDeg": -6.29,
+          "altitudeDeg": -6.46,
           "ndc": [
-            0.571,
-            -0.216
+            0.566,
+            -0.21
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 67.9,
+        "t": 67.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8155,
+        "dayPhase": 0.8147,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.9962589789410162,
-          "altitudeDeg": -7.08,
+          "opacity": 0.99155170517756,
+          "altitudeDeg": -7.21,
           "ndc": [
-            0.551,
-            -0.189
+            0.548,
+            -0.184
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 68.4,
+        "t": 68.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8176,
+        "dayPhase": 0.8168,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.9511082876083448,
-          "altitudeDeg": -7.8,
+          "opacity": 0.937679633194839,
+          "altitudeDeg": -7.94,
           "ndc": [
-            0.534,
-            -0.164
+            0.531,
+            -0.16
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 68.9,
+        "t": 68.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8197,
+        "dayPhase": 0.8189,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.8647126832212958,
-          "altitudeDeg": -8.53,
+          "opacity": 0.8429529119875366,
+          "altitudeDeg": -8.67,
           "ndc": [
-            0.518,
-            -0.14
+            0.515,
+            -0.136
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 69.4,
+        "t": 69.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8218,
+        "dayPhase": 0.821,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.7511581733868036,
-          "altitudeDeg": -9.23,
+          "opacity": 0.7266437128066848,
+          "altitudeDeg": -9.36,
           "ndc": [
-            0.503,
-            -0.118
+            0.501,
+            -0.114
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 69.9,
+        "t": 69.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8239,
+        "dayPhase": 0.8231,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.6233850997625777,
-          "altitudeDeg": -9.9,
+          "opacity": 0.5972050775799997,
+          "altitudeDeg": -10.04,
           "ndc": [
-            0.49,
-            -0.097
+            0.488,
+            -0.093
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 70.4,
+        "t": 70.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.826,
+        "dayPhase": 0.8253,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.4858160106661048,
-          "altitudeDeg": -10.59,
+          "opacity": 0.46016217958103045,
+          "altitudeDeg": -10.72,
           "ndc": [
-            0.478,
-            -0.076
+            0.476,
+            -0.072
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 70.9,
+        "t": 70.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8281,
+        "dayPhase": 0.8273,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.35583165537265266,
-          "altitudeDeg": -11.24,
+          "opacity": 0.332706635042665,
+          "altitudeDeg": -11.36,
           "ndc": [
-            0.467,
-            -0.056
+            0.465,
+            -0.053
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 71.4,
+        "t": 71.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.8302,
+        "dayPhase": 0.8294,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.2372721458001695,
-          "altitudeDeg": -11.88,
+          "opacity": 0.2178351549495689,
+          "altitudeDeg": -11.99,
           "ndc": [
-            0.457,
-            -0.037
+            0.455,
+            -0.034
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 72,
+        "t": 71.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.8323,
+        "dayPhase": 0.8316,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": true,
-          "opacity": 0.13798350386097794,
-          "altitudeDeg": -12.5,
+          "opacity": 0.1190213935845926,
+          "altitudeDeg": -12.64,
           "ndc": [
-            0.449,
-            -0.019
+            0.447,
+            -0.015
           ],
           "inFrustum": false
         },
         "autopilotPos": null
       },
       {
-        "t": 72.5,
+        "t": 72.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.8344,
-        "daylight": 0,
-        "isNight": true,
-        "st0": {
-          "visible": true,
-          "opacity": 0.06063676836472995,
-          "altitudeDeg": -13.13,
-          "ndc": [
-            0.441,
-            -0.001
-          ],
-          "inFrustum": false
-        },
-        "autopilotPos": null
-      },
-      {
-        "t": 73,
-        "beat": "ch10-cold",
-        "dayPhase": 0.8365,
+        "dayPhase": 0.8337,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2607,14 +2533,14 @@
         "autopilotPos": null
       },
       {
-        "t": 73.7,
+        "t": 72.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.8395,
+        "dayPhase": 0.8364,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2625,14 +2551,14 @@
         "autopilotPos": null
       },
       {
-        "t": 74.2,
+        "t": 73.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.8416,
+        "dayPhase": 0.8385,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2643,14 +2569,14 @@
         "autopilotPos": null
       },
       {
-        "t": 74.7,
+        "t": 73.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.8437,
+        "dayPhase": 0.8407,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2661,14 +2587,14 @@
         "autopilotPos": null
       },
       {
-        "t": 75.2,
+        "t": 74.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.8458,
+        "dayPhase": 0.8428,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2679,14 +2605,14 @@
         "autopilotPos": null
       },
       {
-        "t": 75.7,
+        "t": 75,
         "beat": "ch10-cold",
-        "dayPhase": 0.8479,
+        "dayPhase": 0.8448,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2697,14 +2623,14 @@
         "autopilotPos": null
       },
       {
-        "t": 76.2,
+        "t": 75.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.8501,
+        "dayPhase": 0.847,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2715,14 +2641,14 @@
         "autopilotPos": null
       },
       {
-        "t": 76.7,
+        "t": 76,
         "beat": "ch10-cold",
-        "dayPhase": 0.8522,
+        "dayPhase": 0.8491,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2733,14 +2659,14 @@
         "autopilotPos": null
       },
       {
-        "t": 77.2,
+        "t": 76.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.8543,
+        "dayPhase": 0.8512,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2751,14 +2677,14 @@
         "autopilotPos": null
       },
       {
-        "t": 77.7,
+        "t": 77,
         "beat": "ch10-cold",
-        "dayPhase": 0.8564,
+        "dayPhase": 0.8533,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2769,14 +2695,14 @@
         "autopilotPos": null
       },
       {
-        "t": 78.2,
+        "t": 77.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.8585,
+        "dayPhase": 0.8554,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2787,14 +2713,32 @@
         "autopilotPos": null
       },
       {
-        "t": 78.7,
+        "t": 78,
         "beat": "ch10-cold",
-        "dayPhase": 0.8606,
+        "dayPhase": 0.8576,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
+          "altitudeDeg": -13.17,
+          "ndc": [
+            0.44,
+            0
+          ],
+          "inFrustum": false
+        },
+        "autopilotPos": null
+      },
+      {
+        "t": 78.5,
+        "beat": "ch10-cold",
+        "dayPhase": 0.8596,
+        "daylight": 0,
+        "isNight": true,
+        "st0": {
+          "visible": false,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2807,12 +2751,12 @@
       {
         "t": 79.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8627,
+        "dayPhase": 0.8625,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2823,14 +2767,14 @@
         "autopilotPos": null
       },
       {
-        "t": 79.9,
+        "t": 79.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8656,
+        "dayPhase": 0.8646,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2841,14 +2785,14 @@
         "autopilotPos": null
       },
       {
-        "t": 80.4,
+        "t": 80.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8676,
+        "dayPhase": 0.8667,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2859,14 +2803,14 @@
         "autopilotPos": null
       },
       {
-        "t": 80.9,
+        "t": 80.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8698,
+        "dayPhase": 0.8688,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2877,14 +2821,14 @@
         "autopilotPos": null
       },
       {
-        "t": 81.4,
+        "t": 81.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8718,
+        "dayPhase": 0.8709,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2895,14 +2839,14 @@
         "autopilotPos": null
       },
       {
-        "t": 81.9,
+        "t": 81.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.874,
+        "dayPhase": 0.873,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2913,14 +2857,14 @@
         "autopilotPos": null
       },
       {
-        "t": 82.5,
+        "t": 82.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8761,
+        "dayPhase": 0.8751,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2931,14 +2875,14 @@
         "autopilotPos": null
       },
       {
-        "t": 83,
+        "t": 82.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8782,
+        "dayPhase": 0.8772,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2949,14 +2893,14 @@
         "autopilotPos": null
       },
       {
-        "t": 83.5,
+        "t": 83.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8803,
+        "dayPhase": 0.8793,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2967,14 +2911,14 @@
         "autopilotPos": null
       },
       {
-        "t": 84,
+        "t": 83.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8824,
+        "dayPhase": 0.8814,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -2985,14 +2929,14 @@
         "autopilotPos": null
       },
       {
-        "t": 84.5,
+        "t": 84.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8845,
+        "dayPhase": 0.8835,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3003,14 +2947,14 @@
         "autopilotPos": null
       },
       {
-        "t": 85,
+        "t": 84.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8866,
+        "dayPhase": 0.8856,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3021,14 +2965,14 @@
         "autopilotPos": null
       },
       {
-        "t": 85.5,
+        "t": 85.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.8887,
+        "dayPhase": 0.8878,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3039,14 +2983,14 @@
         "autopilotPos": null
       },
       {
-        "t": 86,
+        "t": 85.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.8908,
+        "dayPhase": 0.8898,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3057,14 +3001,14 @@
         "autopilotPos": null
       },
       {
-        "t": 86.5,
+        "t": 86.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.8929,
+        "dayPhase": 0.8919,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3075,14 +3019,14 @@
         "autopilotPos": null
       },
       {
-        "t": 87,
+        "t": 86.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.895,
+        "dayPhase": 0.8941,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3093,14 +3037,14 @@
         "autopilotPos": null
       },
       {
-        "t": 87.5,
+        "t": 87.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.8971,
+        "dayPhase": 0.8962,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3111,14 +3055,14 @@
         "autopilotPos": null
       },
       {
-        "t": 88,
+        "t": 87.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.8993,
+        "dayPhase": 0.8982,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3129,14 +3073,14 @@
         "autopilotPos": null
       },
       {
-        "t": 88.5,
+        "t": 88.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.9014,
+        "dayPhase": 0.9004,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3147,14 +3091,14 @@
         "autopilotPos": null
       },
       {
-        "t": 89,
+        "t": 88.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.9035,
+        "dayPhase": 0.9025,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3165,14 +3109,14 @@
         "autopilotPos": null
       },
       {
-        "t": 89.5,
+        "t": 89.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.9056,
+        "dayPhase": 0.9046,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3183,14 +3127,14 @@
         "autopilotPos": null
       },
       {
-        "t": 90,
+        "t": 89.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.9076,
+        "dayPhase": 0.9067,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3201,14 +3145,14 @@
         "autopilotPos": null
       },
       {
-        "t": 90.5,
+        "t": 90.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.9097,
+        "dayPhase": 0.9088,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3219,14 +3163,14 @@
         "autopilotPos": null
       },
       {
-        "t": 91,
+        "t": 90.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.9118,
+        "dayPhase": 0.9109,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3237,14 +3181,14 @@
         "autopilotPos": null
       },
       {
-        "t": 91.5,
+        "t": 91.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.9139,
+        "dayPhase": 0.913,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3255,14 +3199,14 @@
         "autopilotPos": null
       },
       {
-        "t": 92.1,
+        "t": 91.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.9161,
+        "dayPhase": 0.9151,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3273,14 +3217,14 @@
         "autopilotPos": null
       },
       {
-        "t": 92.6,
+        "t": 92.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.9182,
+        "dayPhase": 0.9172,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3291,14 +3235,14 @@
         "autopilotPos": null
       },
       {
-        "t": 93.1,
+        "t": 92.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.9203,
+        "dayPhase": 0.9194,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3309,14 +3253,14 @@
         "autopilotPos": null
       },
       {
-        "t": 93.6,
+        "t": 93.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.9224,
+        "dayPhase": 0.9214,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3327,14 +3271,14 @@
         "autopilotPos": null
       },
       {
-        "t": 94.1,
+        "t": 93.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.9245,
+        "dayPhase": 0.9235,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3345,14 +3289,14 @@
         "autopilotPos": null
       },
       {
-        "t": 94.6,
+        "t": 94.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.9266,
+        "dayPhase": 0.9257,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3363,14 +3307,14 @@
         "autopilotPos": null
       },
       {
-        "t": 95.1,
+        "t": 94.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.9287,
+        "dayPhase": 0.9278,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3381,14 +3325,14 @@
         "autopilotPos": null
       },
       {
-        "t": 95.6,
+        "t": 95.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9308,
+        "dayPhase": 0.9298,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3399,14 +3343,14 @@
         "autopilotPos": null
       },
       {
-        "t": 96.1,
+        "t": 95.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.9329,
+        "dayPhase": 0.932,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3417,14 +3361,14 @@
         "autopilotPos": null
       },
       {
-        "t": 96.6,
+        "t": 96.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9351,
+        "dayPhase": 0.9341,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3435,14 +3379,14 @@
         "autopilotPos": null
       },
       {
-        "t": 97.1,
+        "t": 96.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.9372,
+        "dayPhase": 0.9362,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3453,14 +3397,14 @@
         "autopilotPos": null
       },
       {
-        "t": 97.6,
+        "t": 97.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9392,
+        "dayPhase": 0.9383,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3471,14 +3415,14 @@
         "autopilotPos": null
       },
       {
-        "t": 98.1,
+        "t": 97.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.9414,
+        "dayPhase": 0.9404,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3489,14 +3433,14 @@
         "autopilotPos": null
       },
       {
-        "t": 98.6,
+        "t": 98.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9435,
+        "dayPhase": 0.9425,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3507,14 +3451,14 @@
         "autopilotPos": null
       },
       {
-        "t": 99.1,
+        "t": 98.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.9456,
+        "dayPhase": 0.9446,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3525,14 +3469,14 @@
         "autopilotPos": null
       },
       {
-        "t": 99.6,
+        "t": 99.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9477,
+        "dayPhase": 0.9467,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3543,14 +3487,14 @@
         "autopilotPos": null
       },
       {
-        "t": 100.1,
+        "t": 99.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.9498,
+        "dayPhase": 0.9488,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3561,14 +3505,14 @@
         "autopilotPos": null
       },
       {
-        "t": 100.7,
+        "t": 100.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9519,
+        "dayPhase": 0.951,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3579,14 +3523,14 @@
         "autopilotPos": null
       },
       {
-        "t": 101.2,
+        "t": 100.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.954,
+        "dayPhase": 0.953,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3597,14 +3541,14 @@
         "autopilotPos": null
       },
       {
-        "t": 101.7,
+        "t": 101.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9561,
+        "dayPhase": 0.9552,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3615,14 +3559,14 @@
         "autopilotPos": null
       },
       {
-        "t": 102.2,
+        "t": 101.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.9583,
+        "dayPhase": 0.9573,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3633,14 +3577,14 @@
         "autopilotPos": null
       },
       {
-        "t": 102.7,
+        "t": 102.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9604,
+        "dayPhase": 0.9594,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3651,14 +3595,14 @@
         "autopilotPos": null
       },
       {
-        "t": 103.2,
+        "t": 102.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.9624,
+        "dayPhase": 0.9615,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3669,14 +3613,14 @@
         "autopilotPos": null
       },
       {
-        "t": 103.7,
+        "t": 103.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.9646,
+        "dayPhase": 0.9636,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3687,14 +3631,14 @@
         "autopilotPos": null
       },
       {
-        "t": 104.2,
+        "t": 104,
         "beat": "ch10-cold",
-        "dayPhase": 0.9667,
+        "dayPhase": 0.9657,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3705,14 +3649,14 @@
         "autopilotPos": null
       },
       {
-        "t": 104.7,
+        "t": 104.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.9688,
+        "dayPhase": 0.9678,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3723,14 +3667,14 @@
         "autopilotPos": null
       },
       {
-        "t": 105.2,
+        "t": 105,
         "beat": "ch10-cold",
-        "dayPhase": 0.9709,
+        "dayPhase": 0.9699,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3741,14 +3685,14 @@
         "autopilotPos": null
       },
       {
-        "t": 105.7,
+        "t": 105.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.973,
+        "dayPhase": 0.9721,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3759,14 +3703,14 @@
         "autopilotPos": null
       },
       {
-        "t": 106.2,
+        "t": 106,
         "beat": "ch10-cold",
-        "dayPhase": 0.9751,
+        "dayPhase": 0.9741,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3777,14 +3721,14 @@
         "autopilotPos": null
       },
       {
-        "t": 106.7,
+        "t": 106.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.9773,
+        "dayPhase": 0.9762,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3795,14 +3739,14 @@
         "autopilotPos": null
       },
       {
-        "t": 107.2,
+        "t": 107,
         "beat": "ch10-cold",
-        "dayPhase": 0.9794,
+        "dayPhase": 0.9784,
         "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3813,14 +3757,14 @@
         "autopilotPos": null
       },
       {
-        "t": 107.7,
+        "t": 107.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.9814,
-        "daylight": 0.0005,
+        "dayPhase": 0.9805,
+        "daylight": 0,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3831,14 +3775,14 @@
         "autopilotPos": null
       },
       {
-        "t": 108.3,
+        "t": 108,
         "beat": "ch10-cold",
-        "dayPhase": 0.9835,
-        "daylight": 0.0091,
+        "dayPhase": 0.9825,
+        "daylight": 0.0036,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3849,14 +3793,14 @@
         "autopilotPos": null
       },
       {
-        "t": 108.8,
+        "t": 108.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.9857,
-        "daylight": 0.0283,
+        "dayPhase": 0.9847,
+        "daylight": 0.0182,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3867,14 +3811,14 @@
         "autopilotPos": null
       },
       {
-        "t": 109.3,
+        "t": 109,
         "beat": "ch10-cold",
-        "dayPhase": 0.9878,
-        "daylight": 0.0566,
+        "dayPhase": 0.9868,
+        "daylight": 0.042,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3885,14 +3829,14 @@
         "autopilotPos": null
       },
       {
-        "t": 109.8,
+        "t": 109.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.9899,
-        "daylight": 0.0926,
+        "dayPhase": 0.9889,
+        "daylight": 0.0744,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3903,14 +3847,14 @@
         "autopilotPos": null
       },
       {
-        "t": 110.3,
+        "t": 110,
         "beat": "ch10-cold",
-        "dayPhase": 0.992,
-        "daylight": 0.1375,
+        "dayPhase": 0.991,
+        "daylight": 0.1158,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3921,14 +3865,14 @@
         "autopilotPos": null
       },
       {
-        "t": 110.8,
+        "t": 110.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.9941,
-        "daylight": 0.1871,
+        "dayPhase": 0.9931,
+        "daylight": 0.1626,
         "isNight": true,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3939,14 +3883,14 @@
         "autopilotPos": null
       },
       {
-        "t": 111.3,
+        "t": 111,
         "beat": "ch10-cold",
-        "dayPhase": 0.9963,
-        "daylight": 0.2437,
+        "dayPhase": 0.9952,
+        "daylight": 0.215,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3957,14 +3901,14 @@
         "autopilotPos": null
       },
       {
-        "t": 111.8,
+        "t": 111.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.9984,
-        "daylight": 0.3036,
+        "dayPhase": 0.9973,
+        "daylight": 0.2739,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3975,14 +3919,14 @@
         "autopilotPos": null
       },
       {
-        "t": 112.3,
+        "t": 112,
         "beat": "ch10-cold",
-        "dayPhase": 0.0004,
-        "daylight": 0.3651,
+        "dayPhase": 0.9994,
+        "daylight": 0.3347,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -3993,14 +3937,14 @@
         "autopilotPos": null
       },
       {
-        "t": 112.8,
+        "t": 112.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.0026,
-        "daylight": 0.431,
+        "dayPhase": 0.0015,
+        "daylight": 0.398,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4011,14 +3955,14 @@
         "autopilotPos": null
       },
       {
-        "t": 113.3,
+        "t": 113.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0047,
-        "daylight": 0.4962,
+        "dayPhase": 0.0037,
+        "daylight": 0.465,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4029,14 +3973,14 @@
         "autopilotPos": null
       },
       {
-        "t": 113.8,
+        "t": 113.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.0068,
-        "daylight": 0.5619,
+        "dayPhase": 0.0057,
+        "daylight": 0.5303,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4047,14 +3991,14 @@
         "autopilotPos": null
       },
       {
-        "t": 114.3,
+        "t": 114.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0088,
-        "daylight": 0.626,
+        "dayPhase": 0.0079,
+        "daylight": 0.5973,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4065,14 +4009,14 @@
         "autopilotPos": null
       },
       {
-        "t": 114.8,
+        "t": 114.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.011,
-        "daylight": 0.6901,
+        "dayPhase": 0.01,
+        "daylight": 0.6607,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4083,14 +4027,14 @@
         "autopilotPos": null
       },
       {
-        "t": 115.3,
+        "t": 115.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0131,
-        "daylight": 0.7494,
+        "dayPhase": 0.0121,
+        "daylight": 0.7215,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4101,14 +4045,14 @@
         "autopilotPos": null
       },
       {
-        "t": 115.8,
+        "t": 115.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.0152,
-        "daylight": 0.8052,
+        "dayPhase": 0.0142,
+        "daylight": 0.7806,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4119,14 +4063,14 @@
         "autopilotPos": null
       },
       {
-        "t": 116.3,
+        "t": 116.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0173,
-        "daylight": 0.8561,
+        "dayPhase": 0.0163,
+        "daylight": 0.8332,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4137,14 +4081,14 @@
         "autopilotPos": null
       },
       {
-        "t": 116.8,
+        "t": 116.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.0194,
-        "daylight": 0.9006,
+        "dayPhase": 0.0184,
+        "daylight": 0.8803,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4155,14 +4099,14 @@
         "autopilotPos": null
       },
       {
-        "t": 117.4,
+        "t": 117.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0215,
-        "daylight": 0.9381,
+        "dayPhase": 0.0205,
+        "daylight": 0.9221,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4173,14 +4117,14 @@
         "autopilotPos": null
       },
       {
-        "t": 117.9,
+        "t": 117.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.0236,
-        "daylight": 0.968,
+        "dayPhase": 0.0226,
+        "daylight": 0.9551,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4191,14 +4135,14 @@
         "autopilotPos": null
       },
       {
-        "t": 118.4,
+        "t": 118.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0257,
-        "daylight": 0.9882,
+        "dayPhase": 0.0247,
+        "daylight": 0.9797,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4209,14 +4153,14 @@
         "autopilotPos": null
       },
       {
-        "t": 118.9,
+        "t": 118.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.0278,
-        "daylight": 0.9987,
+        "dayPhase": 0.0269,
+        "daylight": 0.9953,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4227,14 +4171,14 @@
         "autopilotPos": null
       },
       {
-        "t": 119.4,
+        "t": 119.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0299,
+        "dayPhase": 0.0289,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4245,14 +4189,14 @@
         "autopilotPos": null
       },
       {
-        "t": 119.9,
+        "t": 119.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.0321,
+        "dayPhase": 0.0311,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4263,14 +4207,14 @@
         "autopilotPos": null
       },
       {
-        "t": 120.4,
+        "t": 120.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.0342,
+        "dayPhase": 0.0332,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4281,14 +4225,14 @@
         "autopilotPos": null
       },
       {
-        "t": 120.9,
+        "t": 120.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0363,
+        "dayPhase": 0.0353,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4299,14 +4243,14 @@
         "autopilotPos": null
       },
       {
-        "t": 121.4,
+        "t": 121.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.0384,
+        "dayPhase": 0.0374,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4317,14 +4261,14 @@
         "autopilotPos": null
       },
       {
-        "t": 121.9,
+        "t": 121.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0404,
+        "dayPhase": 0.0395,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4335,14 +4279,14 @@
         "autopilotPos": null
       },
       {
-        "t": 122.4,
+        "t": 122.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.0426,
+        "dayPhase": 0.0416,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4353,14 +4297,14 @@
         "autopilotPos": null
       },
       {
-        "t": 122.9,
+        "t": 122.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0446,
+        "dayPhase": 0.0437,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4371,14 +4315,14 @@
         "autopilotPos": null
       },
       {
-        "t": 123.4,
+        "t": 123.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.0468,
+        "dayPhase": 0.0458,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4389,14 +4333,14 @@
         "autopilotPos": null
       },
       {
-        "t": 123.9,
+        "t": 123.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0489,
+        "dayPhase": 0.048,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4407,14 +4351,14 @@
         "autopilotPos": null
       },
       {
-        "t": 124.4,
+        "t": 124.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.051,
+        "dayPhase": 0.05,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4425,14 +4369,14 @@
         "autopilotPos": null
       },
       {
-        "t": 124.9,
+        "t": 124.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0531,
+        "dayPhase": 0.0522,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4443,14 +4387,14 @@
         "autopilotPos": null
       },
       {
-        "t": 125.4,
+        "t": 125.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.0552,
+        "dayPhase": 0.0543,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4461,14 +4405,14 @@
         "autopilotPos": null
       },
       {
-        "t": 125.9,
+        "t": 125.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0573,
+        "dayPhase": 0.0564,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4479,14 +4423,14 @@
         "autopilotPos": null
       },
       {
-        "t": 126.5,
+        "t": 126.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.0594,
+        "dayPhase": 0.0585,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4497,14 +4441,14 @@
         "autopilotPos": null
       },
       {
-        "t": 127,
+        "t": 126.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0615,
+        "dayPhase": 0.0606,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4515,14 +4459,14 @@
         "autopilotPos": null
       },
       {
-        "t": 127.5,
+        "t": 127.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.0636,
+        "dayPhase": 0.0627,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4533,14 +4477,14 @@
         "autopilotPos": null
       },
       {
-        "t": 128,
+        "t": 127.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.0657,
+        "dayPhase": 0.0648,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4551,14 +4495,14 @@
         "autopilotPos": null
       },
       {
-        "t": 128.5,
+        "t": 128.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.0678,
+        "dayPhase": 0.0669,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4569,14 +4513,14 @@
         "autopilotPos": null
       },
       {
-        "t": 129,
+        "t": 128.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.0699,
+        "dayPhase": 0.069,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4587,14 +4531,14 @@
         "autopilotPos": null
       },
       {
-        "t": 129.5,
+        "t": 129.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.072,
+        "dayPhase": 0.0712,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4605,14 +4549,14 @@
         "autopilotPos": null
       },
       {
-        "t": 130,
+        "t": 129.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.0742,
+        "dayPhase": 0.0732,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4623,14 +4567,14 @@
         "autopilotPos": null
       },
       {
-        "t": 130.5,
+        "t": 130.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.0762,
+        "dayPhase": 0.0753,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4641,14 +4585,14 @@
         "autopilotPos": null
       },
       {
-        "t": 131,
+        "t": 130.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.0784,
+        "dayPhase": 0.0775,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4659,14 +4603,14 @@
         "autopilotPos": null
       },
       {
-        "t": 131.5,
+        "t": 131.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.0805,
+        "dayPhase": 0.0796,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4677,14 +4621,14 @@
         "autopilotPos": null
       },
       {
-        "t": 132,
+        "t": 131.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.0826,
+        "dayPhase": 0.0817,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4695,14 +4639,14 @@
         "autopilotPos": null
       },
       {
-        "t": 132.5,
+        "t": 132.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.0846,
+        "dayPhase": 0.0838,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4713,14 +4657,14 @@
         "autopilotPos": null
       },
       {
-        "t": 133,
+        "t": 132.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.0868,
+        "dayPhase": 0.0859,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4731,14 +4675,14 @@
         "autopilotPos": null
       },
       {
-        "t": 133.5,
+        "t": 133.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.0889,
+        "dayPhase": 0.088,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4749,14 +4693,14 @@
         "autopilotPos": null
       },
       {
-        "t": 134,
+        "t": 133.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.091,
+        "dayPhase": 0.0901,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4767,14 +4711,14 @@
         "autopilotPos": null
       },
       {
-        "t": 134.5,
+        "t": 134.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.0931,
+        "dayPhase": 0.0922,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4785,14 +4729,14 @@
         "autopilotPos": null
       },
       {
-        "t": 135.1,
+        "t": 134.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.0953,
+        "dayPhase": 0.0943,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4803,14 +4747,14 @@
         "autopilotPos": null
       },
       {
-        "t": 135.6,
+        "t": 135.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.0974,
+        "dayPhase": 0.0964,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4821,14 +4765,14 @@
         "autopilotPos": null
       },
       {
-        "t": 136.1,
+        "t": 135.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.0995,
+        "dayPhase": 0.0985,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4839,14 +4783,14 @@
         "autopilotPos": null
       },
       {
-        "t": 136.6,
+        "t": 136.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.1016,
+        "dayPhase": 0.1007,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4857,14 +4801,14 @@
         "autopilotPos": null
       },
       {
-        "t": 137.1,
+        "t": 136.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.1037,
+        "dayPhase": 0.1028,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4875,14 +4819,14 @@
         "autopilotPos": null
       },
       {
-        "t": 137.6,
+        "t": 137.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1058,
+        "dayPhase": 0.1048,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4893,14 +4837,14 @@
         "autopilotPos": null
       },
       {
-        "t": 138.1,
+        "t": 137.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1079,
+        "dayPhase": 0.107,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4911,14 +4855,14 @@
         "autopilotPos": null
       },
       {
-        "t": 138.6,
+        "t": 138.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.11,
+        "dayPhase": 0.1091,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4929,14 +4873,14 @@
         "autopilotPos": null
       },
       {
-        "t": 139.1,
+        "t": 138.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1122,
+        "dayPhase": 0.1112,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4947,14 +4891,14 @@
         "autopilotPos": null
       },
       {
-        "t": 139.6,
+        "t": 139.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1142,
+        "dayPhase": 0.1133,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4965,14 +4909,14 @@
         "autopilotPos": null
       },
       {
-        "t": 140.1,
+        "t": 139.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1164,
+        "dayPhase": 0.1154,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -4983,14 +4927,14 @@
         "autopilotPos": null
       },
       {
-        "t": 140.6,
+        "t": 140.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1185,
+        "dayPhase": 0.1175,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5001,14 +4945,14 @@
         "autopilotPos": null
       },
       {
-        "t": 141.1,
+        "t": 140.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1206,
+        "dayPhase": 0.1196,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5019,14 +4963,14 @@
         "autopilotPos": null
       },
       {
-        "t": 141.6,
+        "t": 141.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1227,
+        "dayPhase": 0.1217,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5037,14 +4981,14 @@
         "autopilotPos": null
       },
       {
-        "t": 142.1,
+        "t": 141.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1248,
+        "dayPhase": 0.1238,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5055,14 +4999,14 @@
         "autopilotPos": null
       },
       {
-        "t": 142.7,
+        "t": 142.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1269,
+        "dayPhase": 0.1259,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5073,14 +5017,14 @@
         "autopilotPos": null
       },
       {
-        "t": 143.2,
+        "t": 142.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.129,
+        "dayPhase": 0.128,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5091,14 +5035,14 @@
         "autopilotPos": null
       },
       {
-        "t": 143.7,
+        "t": 143.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1312,
+        "dayPhase": 0.1301,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5109,14 +5053,14 @@
         "autopilotPos": null
       },
       {
-        "t": 144.2,
+        "t": 143.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1332,
+        "dayPhase": 0.1323,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5127,14 +5071,14 @@
         "autopilotPos": null
       },
       {
-        "t": 144.7,
+        "t": 144.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1353,
+        "dayPhase": 0.1343,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5145,14 +5089,14 @@
         "autopilotPos": null
       },
       {
-        "t": 145.2,
+        "t": 144.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1375,
+        "dayPhase": 0.1364,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5163,14 +5107,14 @@
         "autopilotPos": null
       },
       {
-        "t": 145.7,
+        "t": 145.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.1395,
+        "dayPhase": 0.1386,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5181,14 +5125,14 @@
         "autopilotPos": null
       },
       {
-        "t": 146.2,
+        "t": 145.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.1417,
+        "dayPhase": 0.1407,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5199,14 +5143,14 @@
         "autopilotPos": null
       },
       {
-        "t": 146.7,
+        "t": 146.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1437,
+        "dayPhase": 0.1428,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5217,14 +5161,14 @@
         "autopilotPos": null
       },
       {
-        "t": 147.2,
+        "t": 147,
         "beat": "ch10-cold",
-        "dayPhase": 0.1459,
+        "dayPhase": 0.1449,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5235,14 +5179,14 @@
         "autopilotPos": null
       },
       {
-        "t": 147.7,
+        "t": 147.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.148,
+        "dayPhase": 0.147,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5253,14 +5197,14 @@
         "autopilotPos": null
       },
       {
-        "t": 148.2,
+        "t": 148,
         "beat": "ch10-cold",
-        "dayPhase": 0.1501,
+        "dayPhase": 0.1491,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5271,14 +5215,14 @@
         "autopilotPos": null
       },
       {
-        "t": 148.7,
+        "t": 148.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1522,
+        "dayPhase": 0.1512,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5289,14 +5233,14 @@
         "autopilotPos": null
       },
       {
-        "t": 149.2,
+        "t": 149,
         "beat": "ch10-cold",
-        "dayPhase": 0.1543,
+        "dayPhase": 0.1533,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5307,14 +5251,14 @@
         "autopilotPos": null
       },
       {
-        "t": 149.7,
+        "t": 149.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1564,
+        "dayPhase": 0.1554,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5325,14 +5269,14 @@
         "autopilotPos": null
       },
       {
-        "t": 150.2,
+        "t": 150,
         "beat": "ch10-cold",
-        "dayPhase": 0.1585,
+        "dayPhase": 0.1575,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5343,14 +5287,14 @@
         "autopilotPos": null
       },
       {
-        "t": 150.7,
+        "t": 150.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1606,
+        "dayPhase": 0.1596,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5361,14 +5305,14 @@
         "autopilotPos": null
       },
       {
-        "t": 151.3,
+        "t": 151,
         "beat": "ch10-cold",
-        "dayPhase": 0.1628,
+        "dayPhase": 0.1617,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5379,14 +5323,14 @@
         "autopilotPos": null
       },
       {
-        "t": 151.8,
+        "t": 151.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1649,
+        "dayPhase": 0.1639,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5397,14 +5341,14 @@
         "autopilotPos": null
       },
       {
-        "t": 152.3,
+        "t": 152,
         "beat": "ch10-cold",
-        "dayPhase": 0.167,
+        "dayPhase": 0.1659,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5415,14 +5359,14 @@
         "autopilotPos": null
       },
       {
-        "t": 152.8,
+        "t": 152.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1691,
+        "dayPhase": 0.1681,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5433,14 +5377,14 @@
         "autopilotPos": null
       },
       {
-        "t": 153.3,
+        "t": 153,
         "beat": "ch10-cold",
-        "dayPhase": 0.1712,
+        "dayPhase": 0.1702,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5451,14 +5395,14 @@
         "autopilotPos": null
       },
       {
-        "t": 153.8,
+        "t": 153.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1733,
+        "dayPhase": 0.1723,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5469,14 +5413,14 @@
         "autopilotPos": null
       },
       {
-        "t": 154.3,
+        "t": 154,
         "beat": "ch10-cold",
-        "dayPhase": 0.1754,
+        "dayPhase": 0.1744,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5487,14 +5431,14 @@
         "autopilotPos": null
       },
       {
-        "t": 154.8,
+        "t": 154.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.1775,
+        "dayPhase": 0.1765,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5505,14 +5449,14 @@
         "autopilotPos": null
       },
       {
-        "t": 155.3,
+        "t": 155.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.1796,
+        "dayPhase": 0.1786,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5523,14 +5467,14 @@
         "autopilotPos": null
       },
       {
-        "t": 155.8,
+        "t": 155.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.1817,
+        "dayPhase": 0.1807,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5541,14 +5485,14 @@
         "autopilotPos": null
       },
       {
-        "t": 156.3,
+        "t": 156.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.1838,
+        "dayPhase": 0.1828,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5559,14 +5503,14 @@
         "autopilotPos": null
       },
       {
-        "t": 156.8,
+        "t": 156.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.1859,
+        "dayPhase": 0.1849,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5577,14 +5521,14 @@
         "autopilotPos": null
       },
       {
-        "t": 157.3,
+        "t": 157.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.1881,
+        "dayPhase": 0.1871,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5595,14 +5539,14 @@
         "autopilotPos": null
       },
       {
-        "t": 157.8,
+        "t": 157.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.1901,
+        "dayPhase": 0.1891,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5613,14 +5557,14 @@
         "autopilotPos": null
       },
       {
-        "t": 158.3,
+        "t": 158.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.1923,
+        "dayPhase": 0.1912,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5631,14 +5575,14 @@
         "autopilotPos": null
       },
       {
-        "t": 158.8,
+        "t": 158.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.1944,
+        "dayPhase": 0.1934,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5649,14 +5593,14 @@
         "autopilotPos": null
       },
       {
-        "t": 159.4,
+        "t": 159.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.1965,
+        "dayPhase": 0.1955,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5667,14 +5611,14 @@
         "autopilotPos": null
       },
       {
-        "t": 159.9,
+        "t": 159.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.1986,
+        "dayPhase": 0.1975,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5685,14 +5629,14 @@
         "autopilotPos": null
       },
       {
-        "t": 160.4,
+        "t": 160.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.2007,
+        "dayPhase": 0.1997,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5703,14 +5647,14 @@
         "autopilotPos": null
       },
       {
-        "t": 160.9,
+        "t": 160.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.2029,
+        "dayPhase": 0.2018,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5721,14 +5665,14 @@
         "autopilotPos": null
       },
       {
-        "t": 161.4,
+        "t": 161.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.2049,
+        "dayPhase": 0.2039,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5739,14 +5683,14 @@
         "autopilotPos": null
       },
       {
-        "t": 161.9,
+        "t": 161.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.2071,
+        "dayPhase": 0.206,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5757,14 +5701,14 @@
         "autopilotPos": null
       },
       {
-        "t": 162.4,
+        "t": 162.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.2091,
+        "dayPhase": 0.2081,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5775,14 +5719,14 @@
         "autopilotPos": null
       },
       {
-        "t": 162.9,
+        "t": 162.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.2113,
+        "dayPhase": 0.2102,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5793,14 +5737,14 @@
         "autopilotPos": null
       },
       {
-        "t": 163.4,
+        "t": 163.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.2134,
+        "dayPhase": 0.2123,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5811,14 +5755,14 @@
         "autopilotPos": null
       },
       {
-        "t": 163.9,
+        "t": 163.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.2155,
+        "dayPhase": 0.2144,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5829,14 +5773,14 @@
         "autopilotPos": null
       },
       {
-        "t": 164.4,
+        "t": 164.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.2176,
+        "dayPhase": 0.2165,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5847,14 +5791,14 @@
         "autopilotPos": null
       },
       {
-        "t": 164.9,
+        "t": 164.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.2197,
+        "dayPhase": 0.2187,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5865,14 +5809,14 @@
         "autopilotPos": null
       },
       {
-        "t": 165.4,
+        "t": 165.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.2218,
+        "dayPhase": 0.2207,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5883,14 +5827,14 @@
         "autopilotPos": null
       },
       {
-        "t": 165.9,
+        "t": 165.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.224,
+        "dayPhase": 0.2229,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5901,14 +5845,14 @@
         "autopilotPos": null
       },
       {
-        "t": 166.4,
+        "t": 166.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.226,
+        "dayPhase": 0.225,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5919,14 +5863,14 @@
         "autopilotPos": null
       },
       {
-        "t": 167,
+        "t": 166.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.2282,
+        "dayPhase": 0.2271,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5937,14 +5881,14 @@
         "autopilotPos": null
       },
       {
-        "t": 167.5,
+        "t": 167.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.2302,
+        "dayPhase": 0.2292,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5955,14 +5899,14 @@
         "autopilotPos": null
       },
       {
-        "t": 168,
+        "t": 167.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.2323,
+        "dayPhase": 0.2313,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5973,14 +5917,14 @@
         "autopilotPos": null
       },
       {
-        "t": 168.5,
+        "t": 168.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.2344,
+        "dayPhase": 0.2334,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -5991,14 +5935,14 @@
         "autopilotPos": null
       },
       {
-        "t": 169,
+        "t": 168.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.2365,
+        "dayPhase": 0.2355,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6009,14 +5953,14 @@
         "autopilotPos": null
       },
       {
-        "t": 169.5,
+        "t": 169.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.2387,
+        "dayPhase": 0.2376,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6027,14 +5971,14 @@
         "autopilotPos": null
       },
       {
-        "t": 170,
+        "t": 169.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.2408,
+        "dayPhase": 0.2397,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6045,14 +5989,14 @@
         "autopilotPos": null
       },
       {
-        "t": 170.5,
+        "t": 170.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.2429,
+        "dayPhase": 0.2418,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6063,14 +6007,14 @@
         "autopilotPos": null
       },
       {
-        "t": 171,
+        "t": 170.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.245,
+        "dayPhase": 0.2439,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6081,14 +6025,14 @@
         "autopilotPos": null
       },
       {
-        "t": 171.5,
+        "t": 171.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.2471,
+        "dayPhase": 0.246,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6099,14 +6043,14 @@
         "autopilotPos": null
       },
       {
-        "t": 172,
+        "t": 171.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.2493,
+        "dayPhase": 0.2482,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6117,14 +6061,14 @@
         "autopilotPos": null
       },
       {
-        "t": 172.5,
+        "t": 172.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.2514,
+        "dayPhase": 0.2502,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6135,14 +6079,14 @@
         "autopilotPos": null
       },
       {
-        "t": 173,
+        "t": 172.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2534,
+        "dayPhase": 0.2524,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6153,14 +6097,14 @@
         "autopilotPos": null
       },
       {
-        "t": 173.5,
+        "t": 173.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.2556,
+        "dayPhase": 0.2545,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6171,14 +6115,14 @@
         "autopilotPos": null
       },
       {
-        "t": 174,
+        "t": 173.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2577,
+        "dayPhase": 0.2566,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6189,14 +6133,14 @@
         "autopilotPos": null
       },
       {
-        "t": 174.5,
+        "t": 174.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.2598,
+        "dayPhase": 0.2587,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6207,14 +6151,14 @@
         "autopilotPos": null
       },
       {
-        "t": 175,
+        "t": 174.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2619,
+        "dayPhase": 0.2608,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6225,14 +6169,14 @@
         "autopilotPos": null
       },
       {
-        "t": 175.6,
+        "t": 175.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.264,
+        "dayPhase": 0.2629,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6243,14 +6187,14 @@
         "autopilotPos": null
       },
       {
-        "t": 176.1,
+        "t": 175.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2661,
+        "dayPhase": 0.265,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6261,14 +6205,14 @@
         "autopilotPos": null
       },
       {
-        "t": 176.6,
+        "t": 176.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.2682,
+        "dayPhase": 0.2671,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6279,14 +6223,14 @@
         "autopilotPos": null
       },
       {
-        "t": 177.1,
+        "t": 176.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2703,
+        "dayPhase": 0.2693,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6297,14 +6241,14 @@
         "autopilotPos": null
       },
       {
-        "t": 177.6,
+        "t": 177.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.2724,
+        "dayPhase": 0.2714,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6315,14 +6259,14 @@
         "autopilotPos": null
       },
       {
-        "t": 178.1,
+        "t": 177.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2745,
+        "dayPhase": 0.2734,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6333,14 +6277,14 @@
         "autopilotPos": null
       },
       {
-        "t": 178.6,
+        "t": 178.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.2766,
+        "dayPhase": 0.2756,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6351,14 +6295,14 @@
         "autopilotPos": null
       },
       {
-        "t": 179.1,
+        "t": 178.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2787,
+        "dayPhase": 0.2777,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6369,14 +6313,14 @@
         "autopilotPos": null
       },
       {
-        "t": 179.6,
+        "t": 179.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.2809,
+        "dayPhase": 0.2798,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6387,14 +6331,14 @@
         "autopilotPos": null
       },
       {
-        "t": 180.1,
+        "t": 179.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.2829,
+        "dayPhase": 0.2819,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6405,14 +6349,14 @@
         "autopilotPos": null
       },
       {
-        "t": 180.6,
+        "t": 180.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.285,
+        "dayPhase": 0.284,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6423,14 +6367,14 @@
         "autopilotPos": null
       },
       {
-        "t": 181.1,
+        "t": 180.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.2871,
+        "dayPhase": 0.2861,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6441,14 +6385,14 @@
         "autopilotPos": null
       },
       {
-        "t": 181.6,
+        "t": 181.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.2893,
+        "dayPhase": 0.2882,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6459,14 +6403,14 @@
         "autopilotPos": null
       },
       {
-        "t": 182.1,
+        "t": 181.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.2914,
+        "dayPhase": 0.2903,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6477,14 +6421,14 @@
         "autopilotPos": null
       },
       {
-        "t": 182.6,
+        "t": 182.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.2935,
+        "dayPhase": 0.2924,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6495,14 +6439,14 @@
         "autopilotPos": null
       },
       {
-        "t": 183.1,
+        "t": 182.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.2956,
+        "dayPhase": 0.2946,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6513,14 +6457,14 @@
         "autopilotPos": null
       },
       {
-        "t": 183.7,
+        "t": 183.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.2977,
+        "dayPhase": 0.2966,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6531,14 +6475,14 @@
         "autopilotPos": null
       },
       {
-        "t": 184.2,
+        "t": 183.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.2998,
+        "dayPhase": 0.2988,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6549,14 +6493,14 @@
         "autopilotPos": null
       },
       {
-        "t": 184.7,
+        "t": 184.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.3019,
+        "dayPhase": 0.3009,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6567,14 +6511,14 @@
         "autopilotPos": null
       },
       {
-        "t": 185.2,
+        "t": 184.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.3041,
+        "dayPhase": 0.303,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6585,14 +6529,14 @@
         "autopilotPos": null
       },
       {
-        "t": 185.7,
+        "t": 185.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.3061,
+        "dayPhase": 0.3051,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6603,14 +6547,14 @@
         "autopilotPos": null
       },
       {
-        "t": 186.2,
+        "t": 185.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.3083,
+        "dayPhase": 0.3072,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6621,14 +6565,14 @@
         "autopilotPos": null
       },
       {
-        "t": 186.7,
+        "t": 186.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.3103,
+        "dayPhase": 0.3093,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6639,14 +6583,14 @@
         "autopilotPos": null
       },
       {
-        "t": 187.2,
+        "t": 186.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.3125,
+        "dayPhase": 0.3114,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6657,14 +6601,14 @@
         "autopilotPos": null
       },
       {
-        "t": 187.7,
+        "t": 187.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.3146,
+        "dayPhase": 0.3135,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6675,14 +6619,14 @@
         "autopilotPos": null
       },
       {
-        "t": 188.2,
+        "t": 187.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.3167,
+        "dayPhase": 0.3156,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6693,14 +6637,14 @@
         "autopilotPos": null
       },
       {
-        "t": 188.7,
+        "t": 188.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.3187,
+        "dayPhase": 0.3177,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6711,14 +6655,14 @@
         "autopilotPos": null
       },
       {
-        "t": 189.2,
+        "t": 188.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.3209,
+        "dayPhase": 0.3198,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6729,14 +6673,14 @@
         "autopilotPos": null
       },
       {
-        "t": 189.7,
+        "t": 189.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.323,
+        "dayPhase": 0.322,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6747,14 +6691,14 @@
         "autopilotPos": null
       },
       {
-        "t": 190.2,
+        "t": 190,
         "beat": "ch10-cold",
-        "dayPhase": 0.3251,
+        "dayPhase": 0.3241,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6765,14 +6709,14 @@
         "autopilotPos": null
       },
       {
-        "t": 190.7,
+        "t": 190.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.3272,
+        "dayPhase": 0.3262,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6783,14 +6727,14 @@
         "autopilotPos": null
       },
       {
-        "t": 191.2,
+        "t": 191,
         "beat": "ch10-cold",
-        "dayPhase": 0.3293,
+        "dayPhase": 0.3283,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6801,14 +6745,14 @@
         "autopilotPos": null
       },
       {
-        "t": 191.7,
+        "t": 191.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.3314,
+        "dayPhase": 0.3304,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6819,14 +6763,14 @@
         "autopilotPos": null
       },
       {
-        "t": 192.2,
+        "t": 192,
         "beat": "ch10-cold",
-        "dayPhase": 0.3335,
+        "dayPhase": 0.3325,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6837,14 +6781,14 @@
         "autopilotPos": null
       },
       {
-        "t": 192.7,
+        "t": 192.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.3356,
+        "dayPhase": 0.3346,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6855,14 +6799,14 @@
         "autopilotPos": null
       },
       {
-        "t": 193.3,
+        "t": 193,
         "beat": "ch10-cold",
-        "dayPhase": 0.3377,
+        "dayPhase": 0.3367,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6873,14 +6817,14 @@
         "autopilotPos": null
       },
       {
-        "t": 193.8,
+        "t": 193.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.3399,
+        "dayPhase": 0.3388,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6891,14 +6835,14 @@
         "autopilotPos": null
       },
       {
-        "t": 194.3,
+        "t": 194,
         "beat": "ch10-cold",
-        "dayPhase": 0.3419,
+        "dayPhase": 0.3409,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6909,14 +6853,14 @@
         "autopilotPos": null
       },
       {
-        "t": 194.8,
+        "t": 194.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.3441,
+        "dayPhase": 0.343,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6927,14 +6871,14 @@
         "autopilotPos": null
       },
       {
-        "t": 195.3,
+        "t": 195,
         "beat": "ch10-cold",
-        "dayPhase": 0.3462,
+        "dayPhase": 0.3452,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6945,14 +6889,14 @@
         "autopilotPos": null
       },
       {
-        "t": 195.8,
+        "t": 195.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.3483,
+        "dayPhase": 0.3473,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6963,14 +6907,14 @@
         "autopilotPos": null
       },
       {
-        "t": 196.3,
+        "t": 196,
         "beat": "ch10-cold",
-        "dayPhase": 0.3504,
+        "dayPhase": 0.3494,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6981,14 +6925,14 @@
         "autopilotPos": null
       },
       {
-        "t": 196.8,
+        "t": 196.5,
         "beat": "ch10-cold",
-        "dayPhase": 0.3525,
+        "dayPhase": 0.3515,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -6999,14 +6943,14 @@
         "autopilotPos": null
       },
       {
-        "t": 197.3,
+        "t": 197,
         "beat": "ch10-cold",
-        "dayPhase": 0.3547,
+        "dayPhase": 0.3536,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7017,14 +6961,14 @@
         "autopilotPos": null
       },
       {
-        "t": 197.8,
+        "t": 197.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3568,
+        "dayPhase": 0.3557,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7035,14 +6979,14 @@
         "autopilotPos": null
       },
       {
-        "t": 198.3,
+        "t": 198.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.3588,
+        "dayPhase": 0.3578,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7053,14 +6997,14 @@
         "autopilotPos": null
       },
       {
-        "t": 198.8,
+        "t": 198.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3609,
+        "dayPhase": 0.3599,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7071,14 +7015,14 @@
         "autopilotPos": null
       },
       {
-        "t": 199.3,
+        "t": 199.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.3631,
+        "dayPhase": 0.362,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7089,14 +7033,14 @@
         "autopilotPos": null
       },
       {
-        "t": 199.8,
+        "t": 199.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3652,
+        "dayPhase": 0.3641,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7107,14 +7051,14 @@
         "autopilotPos": null
       },
       {
-        "t": 200.3,
+        "t": 200.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.3673,
+        "dayPhase": 0.3662,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7125,14 +7069,14 @@
         "autopilotPos": null
       },
       {
-        "t": 200.9,
+        "t": 200.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3694,
+        "dayPhase": 0.3684,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7143,14 +7087,14 @@
         "autopilotPos": null
       },
       {
-        "t": 201.4,
+        "t": 201.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.3715,
+        "dayPhase": 0.3704,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7161,14 +7105,14 @@
         "autopilotPos": null
       },
       {
-        "t": 201.9,
+        "t": 201.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3736,
+        "dayPhase": 0.3725,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7179,14 +7123,14 @@
         "autopilotPos": null
       },
       {
-        "t": 202.4,
+        "t": 202.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.3758,
+        "dayPhase": 0.3747,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7197,14 +7141,14 @@
         "autopilotPos": null
       },
       {
-        "t": 202.9,
+        "t": 202.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3779,
+        "dayPhase": 0.3768,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7215,14 +7159,14 @@
         "autopilotPos": null
       },
       {
-        "t": 203.4,
+        "t": 203.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.38,
+        "dayPhase": 0.3789,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7233,14 +7177,14 @@
         "autopilotPos": null
       },
       {
-        "t": 203.9,
+        "t": 203.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3821,
+        "dayPhase": 0.381,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7251,14 +7195,14 @@
         "autopilotPos": null
       },
       {
-        "t": 204.4,
+        "t": 204.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.3842,
+        "dayPhase": 0.3831,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7269,14 +7213,14 @@
         "autopilotPos": null
       },
       {
-        "t": 204.9,
+        "t": 204.6,
         "beat": "ch10-cold",
-        "dayPhase": 0.3863,
+        "dayPhase": 0.3852,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7287,14 +7231,14 @@
         "autopilotPos": null
       },
       {
-        "t": 205.4,
+        "t": 205.1,
         "beat": "ch10-cold",
-        "dayPhase": 0.3884,
+        "dayPhase": 0.3873,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7305,14 +7249,14 @@
         "autopilotPos": null
       },
       {
-        "t": 205.9,
+        "t": 205.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.3905,
+        "dayPhase": 0.3895,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7323,14 +7267,14 @@
         "autopilotPos": null
       },
       {
-        "t": 206.4,
+        "t": 206.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.3926,
+        "dayPhase": 0.3916,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7341,14 +7285,14 @@
         "autopilotPos": null
       },
       {
-        "t": 206.9,
+        "t": 206.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.3948,
+        "dayPhase": 0.3936,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7359,14 +7303,14 @@
         "autopilotPos": null
       },
       {
-        "t": 207.5,
+        "t": 207.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.3969,
+        "dayPhase": 0.3958,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7377,14 +7321,14 @@
         "autopilotPos": null
       },
       {
-        "t": 208,
+        "t": 207.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.399,
+        "dayPhase": 0.3979,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7395,14 +7339,14 @@
         "autopilotPos": null
       },
       {
-        "t": 208.5,
+        "t": 208.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.4011,
+        "dayPhase": 0.4,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7413,14 +7357,14 @@
         "autopilotPos": null
       },
       {
-        "t": 209,
+        "t": 208.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.4032,
+        "dayPhase": 0.4021,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7431,14 +7375,14 @@
         "autopilotPos": null
       },
       {
-        "t": 209.5,
+        "t": 209.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.4054,
+        "dayPhase": 0.4042,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7449,14 +7393,14 @@
         "autopilotPos": null
       },
       {
-        "t": 210,
+        "t": 209.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.4074,
+        "dayPhase": 0.4063,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7467,14 +7411,14 @@
         "autopilotPos": null
       },
       {
-        "t": 210.5,
+        "t": 210.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.4096,
+        "dayPhase": 0.4084,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7485,14 +7429,14 @@
         "autopilotPos": null
       },
       {
-        "t": 211,
+        "t": 210.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.4116,
+        "dayPhase": 0.4105,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7503,14 +7447,14 @@
         "autopilotPos": null
       },
       {
-        "t": 211.5,
+        "t": 211.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.4138,
+        "dayPhase": 0.4126,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7521,14 +7465,14 @@
         "autopilotPos": null
       },
       {
-        "t": 212,
+        "t": 211.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.4159,
+        "dayPhase": 0.4148,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7539,14 +7483,14 @@
         "autopilotPos": null
       },
       {
-        "t": 212.5,
+        "t": 212.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.418,
+        "dayPhase": 0.4168,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7557,14 +7501,14 @@
         "autopilotPos": null
       },
       {
-        "t": 213,
+        "t": 212.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.4202,
+        "dayPhase": 0.4189,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7575,14 +7519,14 @@
         "autopilotPos": null
       },
       {
-        "t": 213.5,
+        "t": 213.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.4222,
+        "dayPhase": 0.4211,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7593,14 +7537,14 @@
         "autopilotPos": null
       },
       {
-        "t": 214,
+        "t": 213.7,
         "beat": "ch10-cold",
-        "dayPhase": 0.4244,
+        "dayPhase": 0.4232,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7611,14 +7555,14 @@
         "autopilotPos": null
       },
       {
-        "t": 214.5,
+        "t": 214.2,
         "beat": "ch10-cold",
-        "dayPhase": 0.4265,
+        "dayPhase": 0.4252,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7629,14 +7573,14 @@
         "autopilotPos": null
       },
       {
-        "t": 215.1,
+        "t": 214.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.4286,
+        "dayPhase": 0.4274,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7647,14 +7591,14 @@
         "autopilotPos": null
       },
       {
-        "t": 215.6,
+        "t": 215.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4307,
+        "dayPhase": 0.4295,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7665,14 +7609,14 @@
         "autopilotPos": null
       },
       {
-        "t": 216.1,
+        "t": 215.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.4328,
+        "dayPhase": 0.4316,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7683,14 +7627,14 @@
         "autopilotPos": null
       },
       {
-        "t": 216.6,
+        "t": 216.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4349,
+        "dayPhase": 0.4337,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7701,14 +7645,14 @@
         "autopilotPos": null
       },
       {
-        "t": 217.1,
+        "t": 216.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.437,
+        "dayPhase": 0.4358,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7719,14 +7663,14 @@
         "autopilotPos": null
       },
       {
-        "t": 217.6,
+        "t": 217.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4391,
+        "dayPhase": 0.4379,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7737,14 +7681,14 @@
         "autopilotPos": null
       },
       {
-        "t": 218.1,
+        "t": 217.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.4412,
+        "dayPhase": 0.44,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7755,14 +7699,14 @@
         "autopilotPos": null
       },
       {
-        "t": 218.6,
+        "t": 218.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4433,
+        "dayPhase": 0.4421,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7773,14 +7717,14 @@
         "autopilotPos": null
       },
       {
-        "t": 219.1,
+        "t": 218.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.4454,
+        "dayPhase": 0.4442,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7791,14 +7735,14 @@
         "autopilotPos": null
       },
       {
-        "t": 219.6,
+        "t": 219.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4475,
+        "dayPhase": 0.4463,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7809,14 +7753,14 @@
         "autopilotPos": null
       },
       {
-        "t": 220.1,
+        "t": 219.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.4496,
+        "dayPhase": 0.4484,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7827,14 +7771,14 @@
         "autopilotPos": null
       },
       {
-        "t": 220.6,
+        "t": 220.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4517,
+        "dayPhase": 0.4505,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7845,14 +7789,14 @@
         "autopilotPos": null
       },
       {
-        "t": 221.1,
+        "t": 220.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.4538,
+        "dayPhase": 0.4527,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7863,14 +7807,14 @@
         "autopilotPos": null
       },
       {
-        "t": 221.6,
+        "t": 221.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4559,
+        "dayPhase": 0.4548,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7881,14 +7825,14 @@
         "autopilotPos": null
       },
       {
-        "t": 222.1,
+        "t": 221.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.458,
+        "dayPhase": 0.4568,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7899,14 +7843,14 @@
         "autopilotPos": null
       },
       {
-        "t": 222.6,
+        "t": 222.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4601,
+        "dayPhase": 0.459,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7917,14 +7861,14 @@
         "autopilotPos": null
       },
       {
-        "t": 223.1,
+        "t": 222.8,
         "beat": "ch10-cold",
-        "dayPhase": 0.4622,
+        "dayPhase": 0.4611,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7935,14 +7879,14 @@
         "autopilotPos": null
       },
       {
-        "t": 223.6,
+        "t": 223.3,
         "beat": "ch10-cold",
-        "dayPhase": 0.4643,
+        "dayPhase": 0.4632,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7953,14 +7897,14 @@
         "autopilotPos": null
       },
       {
-        "t": 224.1,
+        "t": 223.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.4664,
+        "dayPhase": 0.4653,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7971,14 +7915,14 @@
         "autopilotPos": null
       },
       {
-        "t": 224.6,
+        "t": 224.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.4685,
+        "dayPhase": 0.4674,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -7989,14 +7933,14 @@
         "autopilotPos": null
       },
       {
-        "t": 225.2,
+        "t": 224.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.4707,
+        "dayPhase": 0.4695,
         "daylight": 1,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8007,14 +7951,14 @@
         "autopilotPos": null
       },
       {
-        "t": 225.7,
+        "t": 225.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.4728,
-        "daylight": 0.9969,
+        "dayPhase": 0.4716,
+        "daylight": 0.9998,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8025,14 +7969,14 @@
         "autopilotPos": null
       },
       {
-        "t": 226.2,
+        "t": 225.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.4748,
-        "daylight": 0.9838,
+        "dayPhase": 0.4737,
+        "daylight": 0.9922,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8043,14 +7987,14 @@
         "autopilotPos": null
       },
       {
-        "t": 226.7,
+        "t": 226.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.477,
-        "daylight": 0.9603,
+        "dayPhase": 0.4758,
+        "daylight": 0.9746,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8061,14 +8005,14 @@
         "autopilotPos": null
       },
       {
-        "t": 227.2,
+        "t": 226.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.4791,
-        "daylight": 0.9291,
+        "dayPhase": 0.4779,
+        "daylight": 0.947,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8079,14 +8023,14 @@
         "autopilotPos": null
       },
       {
-        "t": 227.7,
+        "t": 227.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.4812,
-        "daylight": 0.8892,
+        "dayPhase": 0.48,
+        "daylight": 0.9119,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8097,14 +8041,14 @@
         "autopilotPos": null
       },
       {
-        "t": 228.2,
+        "t": 227.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.4833,
-        "daylight": 0.8426,
+        "dayPhase": 0.4822,
+        "daylight": 0.8682,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8115,14 +8059,14 @@
         "autopilotPos": null
       },
       {
-        "t": 228.7,
+        "t": 228.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.4854,
-        "daylight": 0.7906,
+        "dayPhase": 0.4843,
+        "daylight": 0.8195,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8133,14 +8077,14 @@
         "autopilotPos": null
       },
       {
-        "t": 229.2,
+        "t": 228.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.4875,
-        "daylight": 0.7348,
+        "dayPhase": 0.4863,
+        "daylight": 0.7656,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8151,14 +8095,14 @@
         "autopilotPos": null
       },
       {
-        "t": 229.7,
+        "t": 229.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.4896,
-        "daylight": 0.672,
+        "dayPhase": 0.4885,
+        "daylight": 0.7054,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8169,14 +8113,14 @@
         "autopilotPos": null
       },
       {
-        "t": 230.2,
+        "t": 229.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.4917,
-        "daylight": 0.609,
+        "dayPhase": 0.4906,
+        "daylight": 0.6438,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8187,14 +8131,14 @@
         "autopilotPos": null
       },
       {
-        "t": 230.7,
+        "t": 230.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.4939,
-        "daylight": 0.5429,
+        "dayPhase": 0.4927,
+        "daylight": 0.58,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8205,14 +8149,14 @@
         "autopilotPos": null
       },
       {
-        "t": 231.2,
+        "t": 230.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.496,
-        "daylight": 0.476,
+        "dayPhase": 0.4948,
+        "daylight": 0.5126,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8223,14 +8167,14 @@
         "autopilotPos": null
       },
       {
-        "t": 231.7,
+        "t": 231.4,
         "beat": "ch10-cold",
-        "dayPhase": 0.4981,
-        "daylight": 0.4114,
+        "dayPhase": 0.4969,
+        "daylight": 0.4473,
         "isNight": false,
         "st0": {
           "visible": false,
-          "opacity": 0.05618895891897726,
+          "opacity": 0.05617688407075321,
           "altitudeDeg": -13.17,
           "ndc": [
             0.44,
@@ -8241,18 +8185,36 @@
         "autopilotPos": null
       },
       {
-        "t": 232.2,
+        "t": 231.9,
         "beat": "ch10-cold",
-        "dayPhase": 0.5002,
-        "daylight": 0.3454,
+        "dayPhase": 0.499,
+        "daylight": 0.3828,
+        "isNight": false,
+        "st0": {
+          "visible": false,
+          "opacity": 0.05617688407075321,
+          "altitudeDeg": -13.17,
+          "ndc": [
+            0.44,
+            0
+          ],
+          "inFrustum": false
+        },
+        "autopilotPos": null
+      },
+      {
+        "t": 232.5,
+        "beat": "ch10-cold",
+        "dayPhase": 0.5011,
+        "daylight": 0.318,
         "isNight": false,
         "st0": {
           "visible": true,
-          "opacity": 0.01302720394170422,
-          "altitudeDeg": 15.94,
+          "opacity": 0.09149807318482615,
+          "altitudeDeg": 15.69,
           "ndc": [
-            297.582,
-            -275.781
+            17.37,
+            -16.15
           ],
           "inFrustum": false
         },

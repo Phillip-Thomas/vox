@@ -179,12 +179,21 @@ if (WHICH === 'st0') {
   const id = 'strip-st0-crossing';
   const dir = path.join(CAP_DIR, id);
   fs.mkdirSync(dir, { recursive: true });
-  // MOVIE MODE IS WRONG FOR THIS STRIP: the movie lane's ch10-cold beat lasts
-  // ~9s (the Kestrel is parked at the hearth, so the "hearth-to-fabricator
-  // night walk" is nine seconds long), which cannot contain a 90s ST-0 period.
-  // The strip is taken in a HELD ch10-cold beat instead, and the discrepancy is
-  // reported rather than papered over.
+  // LANE MATTERS, AND IT USED TO BE MISREPORTED.
+  //
+  // The movie lane's ch10-cold beat is short (the Kestrel is parked at the
+  // hearth, so the night walk is a handful of seconds) and cannot contain a 90s
+  // ST-0 period, so this strip has always been shot in a HELD ch10-cold beat in
+  // the MANUAL lane. That is a legitimate way to photograph the ellipse — but
+  // the report recorded the url as '?story=ch10-cold&movie=1&profile=LOW',
+  // which it never was, and the movie-only gaze bias is FORBIDDEN to run in the
+  // manual lane by the ruling that created it. Any acceptance about ST-0 being
+  // framed by the glance therefore could not be met by this capture no matter
+  // what the code did. The url is now recorded as opened, the lane is named,
+  // and the strip carries the gaze diagnostic so the report says for itself
+  // whether the mechanism under test was even permitted to run.
   const url = process.env.VOX_ST0_URL ?? '?story=ch10-cold&profile=LOW';
+  const lane = /[?&]movie=1\b/.test(url) ? 'movie' : 'manual';
   const { page, errs } = await openPage(url, { settleMs: 14000 });
   // Start of night, not midnight: night runs from phase ~0.5054 to 1.0, which
   // at DAY_LENGTH_SECONDS 240 is ~119s — barely longer than one 90s ST-0
@@ -268,7 +277,9 @@ if (WHICH === 'st0') {
     await new Promise(r => setTimeout(r, 500));
   }
   const periods = risings.slice(1).map((r, i) => Number((r - risings[i]).toFixed(1)));
-  report.strips.push({ id, url: '?story=ch10-cold&movie=1&profile=LOW', tier: 'LOW',
+  const gaze = await page.evaluate(() => (window.__st0Gaze ? { ...window.__st0Gaze } : null))
+    .catch(() => null);
+  report.strips.push({ id, url, lane, gazeBiasPermittedInLane: lane === 'movie', gaze, tier: 'LOW',
     viewport: '1280x720', frameCount: frames.length, frames, pageErrors: errs,
     risings, settings, periodsObserved: periods, peakAltitude: peak,
     inFrustumSamples: trace.filter(x => x.st0?.inFrustum).length,

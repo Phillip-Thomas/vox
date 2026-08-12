@@ -1,0 +1,72 @@
+{
+  "probe": "ch10-st0-gaze-engage",
+  "capturedAt": "2026-08-12T18:05:29.384Z",
+  "base": "http://localhost:5176",
+  "lanes": {
+    "manual": {
+      "url": "?story=ch10-cold&profile=LOW",
+      "samples": 570,
+      "samplesWithGazeDiag": 0,
+      "samplesWithAutopilotTicking": 0,
+      "beats": [
+        "ch10-cold"
+      ],
+      "counters": null,
+      "blockedByHistogram": {},
+      "st0VisibleSamples": 0,
+      "st0InFrustumSamples": 0,
+      "st0Samples": 570,
+      "pageErrors": [],
+      "finalDiag": null
+    },
+    "movie": {
+      "url": "?story=ch10-cold&movie=1&profile=LOW",
+      "samples": 559,
+      "samplesWithGazeDiag": 559,
+      "samplesWithAutopilotTicking": 559,
+      "beats": [
+        "ch10-ask",
+        "ch10-transit",
+        "done"
+      ],
+      "counters": {
+        "frames": 420,
+        "framesMovie": 420,
+        "framesDriving": 420,
+        "framesAvailable": 0,
+        "framesGoalCritical": 341,
+        "framesAllConjunctsTrue": 0,
+        "framesEngaged": 0,
+        "engagements": 0
+      },
+      "blockedByHistogram": {
+        "goal-critical-look-demand": 559
+      },
+      "st0VisibleSamples": 0,
+      "st0InFrustumSamples": 11,
+      "st0Samples": 467,
+      "pageErrors": [],
+      "finalDiag": {
+        "frames": 420,
+        "framesMovie": 420,
+        "framesDriving": 420,
+        "framesAvailable": 0,
+        "framesGoalCritical": 341,
+        "framesAllConjunctsTrue": 0,
+        "framesEngaged": 0,
+        "engagements": 0,
+        "movie": true,
+        "driving": true,
+        "aboveHorizon": false,
+        "haveDirection": false,
+        "goalCritical": true,
+        "engaged": false,
+        "blockedBy": "goal-critical-look-demand",
+        "beat": "ch10-cold",
+        "beatClock": 8.09,
+        "cooldownRemaining": 0,
+        "aimPitchDeg": 0
+      }
+    }
+  }
+}

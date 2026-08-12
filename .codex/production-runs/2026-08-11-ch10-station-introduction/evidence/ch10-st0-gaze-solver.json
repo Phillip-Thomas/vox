@@ -1,0 +1,83 @@
+{
+  "probe": "ch10-st0-gaze-solver",
+  "rows": [
+    {
+      "elevationDeg": 5,
+      "reach": 240,
+      "mode": "travel",
+      "direct": false,
+      "solvedPitchDeg": 0,
+      "aimPitchDeg": 5,
+      "errorDeg": 5
+    },
+    {
+      "elevationDeg": 5,
+      "reach": 10,
+      "mode": "inspect",
+      "direct": true,
+      "solvedPitchDeg": 5,
+      "aimPitchDeg": 5,
+      "errorDeg": 0
+    },
+    {
+      "elevationDeg": 10,
+      "reach": 240,
+      "mode": "travel",
+      "direct": false,
+      "solvedPitchDeg": 0,
+      "aimPitchDeg": 10,
+      "errorDeg": 10
+    },
+    {
+      "elevationDeg": 10,
+      "reach": 10,
+      "mode": "inspect",
+      "direct": true,
+      "solvedPitchDeg": 10,
+      "aimPitchDeg": 10,
+      "errorDeg": 0
+    },
+    {
+      "elevationDeg": 18,
+      "reach": 240,
+      "mode": "travel",
+      "direct": false,
+      "solvedPitchDeg": 0,
+      "aimPitchDeg": 18,
+      "errorDeg": 18
+    },
+    {
+      "elevationDeg": 18,
+      "reach": 10,
+      "mode": "inspect",
+      "direct": true,
+      "solvedPitchDeg": 18,
+      "aimPitchDeg": 18,
+      "errorDeg": 0
+    },
+    {
+      "elevationDeg": 27,
+      "reach": 240,
+      "mode": "travel",
+      "direct": false,
+      "solvedPitchDeg": 0,
+      "aimPitchDeg": 25,
+      "errorDeg": 25
+    },
+    {
+      "elevationDeg": 27,
+      "reach": 10,
+      "mode": "inspect",
+      "direct": true,
+      "solvedPitchDeg": 25,
+      "aimPitchDeg": 25,
+      "errorDeg": 0
+    }
+  ],
+  "verdict": {
+    "shippedWorstErrorDeg": 25,
+    "repairedWorstErrorDeg": 0,
+    "repairedAllDirect": true,
+    "repairedNeverAboveCap": true
+  }
+}

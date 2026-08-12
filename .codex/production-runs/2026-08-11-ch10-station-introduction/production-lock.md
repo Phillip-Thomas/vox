@@ -184,7 +184,11 @@ Material values of `production-lock.json`, mirrored for the deterministic gate:
   `main/src/story/storyInteractions.ts`; `main/src/game/data/recipes.ts`;
   `main/src/story/tidegardenLandfallBootstrap.ts`;
   `main/tools/generate-scene-av-runtime.mjs`; `main/src/story/world/StoryWorldProps.tsx`;
-  `main/src/story/tidegardenRoute.ts`; `main/src/components/ShipController.tsx`
+  `main/src/story/tidegardenRoute.ts`; `main/src/components/ShipController.tsx`;
+  `main/src/game/spaceStation/spaceStationExterior.ts` (R9);
+  `main/src/game/spaceStation/spaceStationExterior.test.ts` (R9);
+  `main/src/components/spaceStation/SpaceStationExterior.tsx` (R9);
+  `main/src/components/SystemSpaceStations.tsx` (R9)
 
 **Lock revision R4 (2026-08-11, orchestrator, Stage 6 interim).**
 `main/tools/generate-scene-av-runtime.mjs` added: the generator pins the
@@ -225,5 +229,69 @@ there. Bounded to adding that field and consuming it in the movie-flight
 branch; manual-control feel and every ch1–ch9 movie path must be
 regression-proven unchanged (the field is absent for all shipped beats).
 Faking a ch8 beat name to borrow its branches was correctly rejected.
+
+**Lock revision R8 (2026-08-12, orchestrator, recording an owner action).**
+The owner directed a hosting deploy and it was executed:
+`firebase deploy --only hosting` to **paravox-game** (11 files, release
+complete), serving https://paravox-game.web.app. This spends the publish
+decision the lock reserved (`publishAllowed: false`, "publishing is a separate
+owner decision"); the machine lock's field is left `false` because the schema
+constrains it to that value, so this prose entry is the authoritative record
+that publishing occurred and by whose direction.
+
+Recorded honestly about what shipped:
+- the deploy went out from a working tree that was **uncommitted at deploy
+  time**; it has since been committed as `9a20dde` on
+  `agent/paravoxia-story-audio-world-update` (not pushed), so the released
+  bundle now has a recoverable revision;
+- `firebase.json`'s `predeploy` runs `npm run build` only — **not** `verify` —
+  so the deploy went out while `scene:av:check` and `chapter:registry:check`
+  were red on a version pin (the contract had advanced to draft-v7 with only
+  Chapter's signature). Typecheck, 2,261 tests and the build were green; the
+  red checks were governance bookkeeping, not runtime correctness;
+- the player-facing release ceiling remains `ch4-arrival` and ch10 is reachable
+  only through `?story=` dev entry, so the published surface is unchanged in
+  normal play — but all ch10 runtime code is live;
+- the deploy was correctly scoped to `--only hosting`, leaving the `auth`
+  block in `firebase.json` untouched.
+
+**Lock revision R9 (2026-08-12, orchestrator, berth-ring suppression).** Three
+station-exterior paths added — `main/src/game/spaceStation/spaceStationExterior.ts`
+(berthStructure), `main/src/components/spaceStation/SpaceStationExterior.tsx`,
+`main/src/components/SystemSpaceStations.tsx` — bounded to suppressing
+dock-offer geometry in story worlds under the `story:station-docking-authorized`
+predicate, per Cinematography's D-A5 ruling. The cyan berth ring currently
+renders in the run's own cut-line hero still against the contract's "no dock
+offer geometry" term. The `?spacestation=` sandbox reaches the mesh through a
+different mount, so mount-level suppression is byte-safe for it by
+construction — prove that rather than assume it. No other station-exterior
+behaviour may change.
+
+**Tier substitution (2026-08-12).** The Fable weekly limit was reached
+mid-amendment; the Score and Cinematography Director agents (fable-tier by
+frontmatter) terminated on API error while collecting draft-v7 signatures.
+Signature collection was re-run on opus-tier agents. Signing is a verification
+act (diff inspection, wording confirmation, hash binding), not creative
+authorship, so the substitution does not move creative authority — but it is
+recorded here rather than left implicit, and any *new* creative authorship in a
+future loop must wait for fable capacity.
 - protectedPaths: `main/public/audio/`; `main/src/audio/`; `main/src/components/audio/`;
   `firebase.json`; `.firebaserc`
+
+**Lock revision R9 (2026-08-12, orchestrator, D-A5 berth-ring suppression).**
+Granted on the engineer's enumeration. Four paths added to allowedPaths:
+`main/src/game/spaceStation/spaceStationExterior.ts` (the builder is the only
+place that still knows which boxes are the berth offer — downstream it is two
+flat arrays in which a guide arm is indistinguishable from a radiator fin),
+`main/src/components/spaceStation/SpaceStationExterior.tsx` (the two instancing
+loops that must skip the tagged instances, behind a default-off prop),
+`main/src/components/SystemSpaceStations.tsx` (the shipped game's mount, the
+only place the `story:station-docking-authorized` predicate may be read for
+this purpose), and the type-forced test twin
+`main/src/game/spaceStation/spaceStationExterior.test.ts` — the sandbox is a
+shipped surface, so its byte-identity is to be PROVEN by test rather than
+argued from the mount graph. Bounded to exactly that: no other station-exterior
+behaviour may change, the dock itself (jamb frame, lit mouth, inner glow) is
+architecture and is not suppressed, and the `?spacestation=` sandbox must draw
+instance-for-instance what it draws today. The machine mirror's allowedPaths
+list is extended by the same four entries.

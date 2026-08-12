@@ -1,0 +1,230 @@
+{
+  "capturedAt": "2026-08-12T17:19:07.979Z",
+  "base": "http://localhost:5176",
+  "mode": "cutline",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "pageErrors": [],
+  "raisedAtDistance": 5186,
+  "appliedProfile": "HIGH",
+  "still": {
+    "id": "still-station-resolved",
+    "file": "evidence/capture/still-station-resolved.png",
+    "tier": "HIGH",
+    "armedAt": {
+      "at": 29319,
+      "distance": 1093
+    },
+    "rangeSpec": [
+      1000,
+      1300
+    ],
+    "rangeAtShutter": 1077,
+    "stationCentreRange": 1318.2,
+    "renderCameraFov": 70.0002,
+    "avFov": null,
+    "spineSpec": [
+      28,
+      34
+    ],
+    "stationMask": {
+      "maskPixels": 16514,
+      "spineLengthPx": 329.9,
+      "spineThicknessPx": 98.2,
+      "spinePercentOfFrameWidth": 25.77,
+      "thicknessPercentOfFrameWidth": 7.67,
+      "spineVisualAngleDeg": 32.074,
+      "thicknessVisualAngleDeg": 9.543,
+      "silhouetteBBox": [
+        466,
+        280,
+        311,
+        200
+      ],
+      "centroidPx": [
+        651.9,
+        390.1
+      ],
+      "centroidPercentX": 50.93,
+      "centroidOffsetFromViewCenterDeg": 3.141
+    },
+    "stationSpineGeom": {
+      "instances": 613,
+      "spineLengthPx": 252.5,
+      "spineThicknessPx": 51.8,
+      "spinePercentOfFrameWidth": 19.72,
+      "screenBBoxPx": [
+        212.5,
+        159.6
+      ],
+      "bboxPercentOfFrameWidth": 16.6,
+      "centroidPx": [
+        593.7,
+        348.6
+      ],
+      "centroidPercentX": 46.38,
+      "spineVisualAngleDeg": 27.314,
+      "thicknessVisualAngleDeg": 5.034,
+      "offAxisDeg": 0
+    },
+    "cockpitMask": {
+      "maskPixels": 640498,
+      "silhouetteBBox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "apertureWidthPx": 646,
+      "apertureRow": 403,
+      "apertureSpanPx": [
+        317,
+        962
+      ],
+      "apertureWidthAt1280": 646,
+      "aperturePercentOfFrameWidth": 50.47
+    },
+    "stationHullInstances": 613,
+    "stationLightInstances": 126,
+    "k11Painted": true,
+    "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "objectiveId": null,
+    "hudText": null,
+    "resetReason": "completion",
+    "galaxyInFrame": 0,
+    "companionsInFrame": 0,
+    "canDock": false,
+    "dockingAuthorized": false,
+    "state": {
+      "wallMs": 29625,
+      "beat": "done",
+      "objectiveId": null,
+      "markerLabel": null,
+      "health": null,
+      "requiresMarker": null,
+      "hudText": null,
+      "feedObjectiveId": null,
+      "feedHealth": null,
+      "feedText": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+      "cueCount": 1,
+      "flight": {
+        "phase": "deep_space",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1",
+        "locationMode": "local_space",
+        "targetWorldId": "-1,-1:a0",
+        "targetKind": "space_station",
+        "pos": [
+          -5497,
+          -933,
+          -962
+        ],
+        "speed": 75.63
+      },
+      "av": {
+        "active": false,
+        "beat": null,
+        "anchorId": null,
+        "history": [
+          "anc.ch10.transit-ignite",
+          "anc.ch10.seam-of-light",
+          "anc.ch10.station-resolved",
+          "anc.ch10.threshold-handback"
+        ],
+        "authority": null,
+        "fov": null,
+        "agency": null,
+        "letterbox": null,
+        "postFx": [],
+        "reset": "completion"
+      },
+      "milestones": {
+        "faultRead": true,
+        "fabricationRefused": true,
+        "relayAsked": true,
+        "relayAnswered": true,
+        "bearingClaimed": true,
+        "transitIgnited": true,
+        "seamPassed": true,
+        "stationResolved": true,
+        "ch10Complete": true,
+        "dockingAuthorized": false
+      },
+      "guidance": {
+        "beat": null,
+        "objectiveId": null,
+        "markerLabel": null,
+        "workOrder": [],
+        "requiresMarker": null,
+        "health": "idle",
+        "markerTargetLabel": null,
+        "markerTargetPosition": null,
+        "aboard": true,
+        "flightPhase": "deep_space",
+        "activePlanetId": "-1,-1",
+        "receipts": {
+          "faultRead": true,
+          "fabricationRefused": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "bearingClaimed": true,
+          "transitIgnited": true,
+          "seamPassed": true
+        }
+      },
+      "qualityProfile": "HIGH",
+      "inputPolicy": {
+        "targetFov": 75,
+        "moveSpeedScale": 1,
+        "targetDpr": null
+      },
+      "flightFeedback": {
+        "fov": 70,
+        "boost": 0,
+        "speed": 75.6,
+        "reducedMotion": false,
+        "active": true
+      },
+      "dayPhase": 0.0219,
+      "daylight": 0.9443,
+      "isNight": false,
+      "score": {
+        "variant": null,
+        "carrierAlive": false,
+        "intensity": 0.28,
+        "maxIntensity": 0.44
+      },
+      "contacts": {
+        "phase": "deep_space",
+        "ship": [
+          -5497.013066795901,
+          -932.702928794209,
+          -962.109957925613
+        ],
+        "stations": [
+          {
+            "worldId": "-1,-1:a0",
+            "distance": 1077,
+            "phase": "approach",
+            "canDock": false
+          }
+        ]
+      },
+      "autopilot": {
+        "beat": "ch10-transit",
+        "clock": 25,
+        "pos": [
+          8,
+          53.85,
+          -6
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "keys": []
+      }
+    }
+  }
+}

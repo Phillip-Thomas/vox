@@ -1,0 +1,1457 @@
+{
+  "capturedAt": "2026-08-12T17:23:17.701Z",
+  "base": "http://localhost:5176",
+  "mode": "occl",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "profiles": [
+    {
+      "id": "desktop-high",
+      "requestedProfile": "HIGH",
+      "pageErrors": [],
+      "samples": 12,
+      "maxDeviceProjectedPixels": 10.2268,
+      "minDeviceProjectedPixels": 10.2268,
+      "ceiling": 3,
+      "depthTest": true,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "rows": [
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "HIGH",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        }
+      ]
+    },
+    {
+      "id": "desktop-medium-rm",
+      "requestedProfile": "MEDIUM",
+      "pageErrors": [],
+      "samples": 12,
+      "maxDeviceProjectedPixels": 10.2268,
+      "minDeviceProjectedPixels": 10.2268,
+      "ceiling": 3,
+      "depthTest": true,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "rows": [
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "MEDIUM",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        }
+      ]
+    },
+    {
+      "id": "desktop-low",
+      "requestedProfile": "LOW",
+      "pageErrors": [],
+      "samples": 12,
+      "maxDeviceProjectedPixels": 10.2268,
+      "minDeviceProjectedPixels": 10.2268,
+      "ceiling": 3,
+      "depthTest": true,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "rows": [
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        },
+        {
+          "present": true,
+          "dpr": 1,
+          "buffer": [
+            1280,
+            720
+          ],
+          "cssSize": [
+            1280,
+            720
+          ],
+          "qualityProfile": "LOW",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 720,
+          "deviceProjectedPixels": 10.2268,
+          "deviceProjectedPixelsAtCssHeight": 10.2268,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 720
+        }
+      ]
+    },
+    {
+      "id": "mobile-potato",
+      "requestedProfile": "POTATO",
+      "pageErrors": [],
+      "samples": 12,
+      "maxDeviceProjectedPixels": 17.9822,
+      "minDeviceProjectedPixels": 17.9822,
+      "ceiling": 3,
+      "depthTest": true,
+      "renderOrder": 2,
+      "frustumCulled": false,
+      "rows": [
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        },
+        {
+          "present": true,
+          "dpr": 3,
+          "buffer": [
+            585,
+            1266
+          ],
+          "cssSize": [
+            390,
+            844
+          ],
+          "qualityProfile": "POTATO",
+          "material": {
+            "depthTest": true,
+            "depthWrite": false,
+            "transparent": true
+          },
+          "renderOrder": 2,
+          "frustumCulled": false,
+          "quadScale": 1,
+          "distance": 53.8,
+          "visible": false,
+          "opacity": 0,
+          "drawingBufferHeight": 1266,
+          "deviceProjectedPixels": 17.9822,
+          "deviceProjectedPixelsAtCssHeight": 35.9643,
+          "ST0_MAX_PIXELS": 3,
+          "bufferHeight": 1266
+        }
+      ]
+    }
+  ]
+}

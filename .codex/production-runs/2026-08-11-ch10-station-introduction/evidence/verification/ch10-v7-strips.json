@@ -1,0 +1,3836 @@
+{
+  "capturedAt": "2026-08-12T17:06:20.003Z",
+  "base": "http://localhost:5176",
+  "mode": "strips",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "strips": [
+    {
+      "id": "strip-transit-a",
+      "url": "?story=ch10-transit&movie=1&profile=LOW",
+      "tier": "LOW",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "pageErrors": [],
+      "frames": [
+        {
+          "file": "evidence/capture/strip-transit-a/00_transit-ignite-before_ch10-transit.png",
+          "label": "transit-ignite-before",
+          "t": 3.08,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:ignite",
+          "markerLabel": "KESTREL FLIGHT CONTROLS · IGNITE",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | KESTREL FLIGHT CONTROLS · IGNITE | BRING THE KESTREL ONLINE. | HOLD [SPACE] TO IGNITE AND LIFT.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "surface",
+          "speed": 0,
+          "stationDistance": 6636,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 77.2583,
+          "flightFeedbackFov": 74.003,
+          "flightBoost": 0.769,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.13431,
+            1.13431,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 52.6,
+            "spineThicknessPx": 17.6,
+            "spinePercentOfFrameWidth": 4.11,
+            "screenBBoxPx": [
+              50.5,
+              32.5
+            ],
+            "bboxPercentOfFrameWidth": 3.95,
+            "centroidPx": [
+              686.7,
+              412.5
+            ],
+            "centroidPercentX": 53.65,
+            "spineVisualAngleDeg": 6.61,
+            "thicknessVisualAngleDeg": 1.885,
+            "offAxisDeg": 9.737
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 51.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 51.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 51.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 87.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 4,
+              "groupDistance": 87.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 4,
+              "groupDistance": 87.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 45,
+              "groupDistance": 87.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 44,
+              "groupDistance": 87.6
+            }
+          ],
+          "stationGroupDistance": 6990.1,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": null
+        },
+        {
+          "file": "evidence/capture/strip-transit-a/01_transit-ignite-at_ch10-transit.png",
+          "label": "transit-ignite-at",
+          "t": 3.48,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "descent",
+          "speed": 75.23,
+          "stationDistance": 6619,
+          "anchorId": "anc.ch10.transit-ignite",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 78.9724,
+          "flightFeedbackFov": 78.891,
+          "flightBoost": 0.999,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.17656,
+            1.17656,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 50.7,
+            "spineThicknessPx": 16.7,
+            "spinePercentOfFrameWidth": 3.96,
+            "screenBBoxPx": [
+              48.3,
+              31.6
+            ],
+            "bboxPercentOfFrameWidth": 3.77,
+            "centroidPx": [
+              656.2,
+              379.9
+            ],
+            "centroidPercentX": 51.26,
+            "spineVisualAngleDeg": 6.632,
+            "thicknessVisualAngleDeg": 1.832,
+            "offAxisDeg": 4.229
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 1.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 45.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 45.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 45.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 89.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 5,
+              "groupDistance": 89.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 5,
+              "groupDistance": 89.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 39,
+              "groupDistance": 89.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 41,
+              "groupDistance": 89.2
+            }
+          ],
+          "stationGroupDistance": 6967.1,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 634073,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 645,
+              "apertureRow": 401,
+              "apertureSpanPx": [
+                317,
+                961
+              ],
+              "apertureWidthAt1280": 645,
+              "aperturePercentOfFrameWidth": 50.39
+            },
+            "station": {
+              "maskPixels": 457,
+              "spineLengthPx": 50.5,
+              "spineThicknessPx": 16.9,
+              "spinePercentOfFrameWidth": 3.94,
+              "thicknessPercentOfFrameWidth": 1.32,
+              "spineVisualAngleDeg": 5.538,
+              "thicknessVisualAngleDeg": 1.851,
+              "silhouetteBBox": [
+                639,
+                324,
+                48,
+                33
+              ],
+              "centroidPx": [
+                666.7,
+                342.4
+              ],
+              "centroidPercentX": 52.09,
+              "centroidOffsetFromViewCenterDeg": 3.506
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-a/02_transit-ignite-after_ch10-transit.png",
+          "label": "transit-ignite-after",
+          "t": 6.39,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 286.09,
+          "stationDistance": 6136,
+          "anchorId": "anc.ch10.transit-ignite",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 79,
+          "flightFeedbackFov": 79,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.17727,
+            1.17727,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 54.7,
+            "spineThicknessPx": 18,
+            "spinePercentOfFrameWidth": 4.28,
+            "screenBBoxPx": [
+              51.9,
+              34.4
+            ],
+            "bboxPercentOfFrameWidth": 4.05,
+            "centroidPx": [
+              633.6,
+              356.5
+            ],
+            "centroidPercentX": 49.5,
+            "spineVisualAngleDeg": 7.177,
+            "thicknessVisualAngleDeg": 1.97,
+            "offAxisDeg": 0.04
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 4.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 528.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 528.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 528.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 546.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 546.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 546.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 53,
+              "groupDistance": 6439.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 6439.3
+            }
+          ],
+          "stationGroupDistance": 6439.3,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 573514,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 718,
+              "apertureRow": 448,
+              "apertureSpanPx": [
+                202,
+                919
+              ],
+              "apertureWidthAt1280": 718,
+              "aperturePercentOfFrameWidth": 56.09
+            },
+            "station": {
+              "maskPixels": 522,
+              "spineLengthPx": 54.4,
+              "spineThicknessPx": 17.8,
+              "spinePercentOfFrameWidth": 4.25,
+              "thicknessPercentOfFrameWidth": 1.39,
+              "spineVisualAngleDeg": 5.973,
+              "thicknessVisualAngleDeg": 1.957,
+              "silhouetteBBox": [
+                615,
+                346,
+                52,
+                36
+              ],
+              "centroidPx": [
+                645,
+                366.2
+              ],
+              "centroidPercentX": 50.39,
+              "centroidOffsetFromViewCenterDeg": 0.876
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-a/03_T2-hold-marker_ch10-transit.png",
+          "label": "T2-hold-marker",
+          "t": 6.62,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 295.37,
+          "stationDistance": 6072,
+          "anchorId": "anc.ch10.transit-ignite",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 79,
+          "flightFeedbackFov": 79,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.17727,
+            1.17727,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 55.3,
+            "spineThicknessPx": 18.1,
+            "spinePercentOfFrameWidth": 4.32,
+            "screenBBoxPx": [
+              52.4,
+              34.7
+            ],
+            "bboxPercentOfFrameWidth": 4.1,
+            "centroidPx": [
+              633.5,
+              356.4
+            ],
+            "centroidPercentX": 49.5,
+            "spineVisualAngleDeg": 7.252,
+            "thicknessVisualAngleDeg": 1.991,
+            "offAxisDeg": 0.033
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 594.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 594.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 594.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 611.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 611.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 611.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 53,
+              "groupDistance": 6373
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 6373
+            }
+          ],
+          "stationGroupDistance": 6373,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 573827,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 725,
+              "apertureRow": 438,
+              "apertureSpanPx": [
+                204,
+                928
+              ],
+              "apertureWidthAt1280": 725,
+              "aperturePercentOfFrameWidth": 56.64
+            },
+            "station": {
+              "maskPixels": 531,
+              "spineLengthPx": 55,
+              "spineThicknessPx": 18.3,
+              "spinePercentOfFrameWidth": 4.29,
+              "thicknessPercentOfFrameWidth": 1.43,
+              "spineVisualAngleDeg": 6.03,
+              "thicknessVisualAngleDeg": 2.003,
+              "silhouetteBBox": [
+                615,
+                346,
+                52,
+                36
+              ],
+              "centroidPx": [
+                645.1,
+                366.4
+              ],
+              "centroidPercentX": 50.4,
+              "centroidOffsetFromViewCenterDeg": 0.895
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-a/04_seam-before_ch10-transit.png",
+          "label": "seam-before",
+          "t": 9.79,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 277.26,
+          "stationDistance": 5269,
+          "anchorId": "anc.ch10.transit-ignite",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 79,
+          "flightFeedbackFov": 79,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.17727,
+            1.17727,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 63.2,
+            "spineThicknessPx": 20.7,
+            "spinePercentOfFrameWidth": 4.94,
+            "screenBBoxPx": [
+              59.9,
+              39.7
+            ],
+            "bboxPercentOfFrameWidth": 4.68,
+            "centroidPx": [
+              632.4,
+              355.8
+            ],
+            "centroidPercentX": 49.41,
+            "spineVisualAngleDeg": 8.289,
+            "thicknessVisualAngleDeg": 2.268,
+            "offAxisDeg": 0.007
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 4.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1386.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1386.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 1386.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 1400.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 1400.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 1400.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 53,
+              "groupDistance": 5579.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 5579.5
+            }
+          ],
+          "stationGroupDistance": 5579.5,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": null
+        },
+        {
+          "file": "evidence/capture/strip-transit-a/05_seam-at_ch10-transit.png",
+          "label": "seam-at",
+          "t": 10.15,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 294.43,
+          "stationDistance": 5165,
+          "anchorId": "anc.ch10.seam-of-light",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 79,
+          "flightFeedbackFov": 79,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.17727,
+            1.17727,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 64.5,
+            "spineThicknessPx": 21.1,
+            "spinePercentOfFrameWidth": 5.04,
+            "screenBBoxPx": [
+              61.1,
+              40.5
+            ],
+            "bboxPercentOfFrameWidth": 4.77,
+            "centroidPx": [
+              632.2,
+              355.7
+            ],
+            "centroidPercentX": 49.39,
+            "spineVisualAngleDeg": 8.452,
+            "thicknessVisualAngleDeg": 2.311,
+            "offAxisDeg": 0.006
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1493.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1493.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 1493.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 1507.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 1507.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 1507.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 53,
+              "groupDistance": 5472.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 5472.4
+            }
+          ],
+          "stationGroupDistance": 5472.4,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 572111,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 738,
+              "apertureRow": 428,
+              "apertureSpanPx": [
+                201,
+                938
+              ],
+              "apertureWidthAt1280": 738,
+              "aperturePercentOfFrameWidth": 57.66
+            },
+            "station": {
+              "maskPixels": 707,
+              "spineLengthPx": 64.3,
+              "spineThicknessPx": 21.4,
+              "spinePercentOfFrameWidth": 5.03,
+              "thicknessPercentOfFrameWidth": 1.67,
+              "spineVisualAngleDeg": 7.06,
+              "thicknessVisualAngleDeg": 2.345,
+              "silhouetteBBox": [
+                610,
+                344,
+                61,
+                42
+              ],
+              "centroidPx": [
+                646,
+                367.8
+              ],
+              "centroidPercentX": 50.47,
+              "centroidOffsetFromViewCenterDeg": 1.083
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-a/06_seam-after_ch10-transit.png",
+          "label": "seam-after",
+          "t": 13.35,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 223.46,
+          "stationDistance": 4301,
+          "anchorId": "anc.ch10.seam-of-light",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 78.9976,
+          "flightFeedbackFov": 78.98,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.17721,
+            1.17721,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 126,
+            "spineLengthPx": 76.6,
+            "spineThicknessPx": 25,
+            "spinePercentOfFrameWidth": 5.99,
+            "screenBBoxPx": [
+              72.6,
+              48.1
+            ],
+            "bboxPercentOfFrameWidth": 5.67,
+            "centroidPx": [
+              632.8,
+              354.8
+            ],
+            "centroidPercentX": 49.44,
+            "spineVisualAngleDeg": 10.044,
+            "thicknessVisualAngleDeg": 2.747,
+            "offAxisDeg": 0.002
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 2356.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 2356.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 2356.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 2368.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 2368.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 2368.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 4609.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 4609.3
+            }
+          ],
+          "stationGroupDistance": 4609.3,
+          "stationHullInstances": 126,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 572498,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 718,
+              "apertureRow": 450,
+              "apertureSpanPx": [
+                200,
+                917
+              ],
+              "apertureWidthAt1280": 718,
+              "aperturePercentOfFrameWidth": 56.09
+            },
+            "station": {
+              "maskPixels": 1010,
+              "spineLengthPx": 76.4,
+              "spineThicknessPx": 25.4,
+              "spinePercentOfFrameWidth": 5.97,
+              "thicknessPercentOfFrameWidth": 1.99,
+              "spineVisualAngleDeg": 8.385,
+              "thicknessVisualAngleDeg": 2.79,
+              "silhouetteBBox": [
+                604,
+                342,
+                72,
+                49
+              ],
+              "centroidPx": [
+                646.9,
+                369.2
+              ],
+              "centroidPercentX": 50.54,
+              "centroidOffsetFromViewCenterDeg": 1.26
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-a/07_galaxy-absence-check_ch10-transit.png",
+          "label": "galaxy-absence-check",
+          "t": 17.56,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 205.97,
+          "stationDistance": 3164,
+          "anchorId": "anc.ch10.seam-of-light",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 78.9557,
+          "flightFeedbackFov": 78.727,
+          "flightBoost": 0.997,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.17614,
+            1.17614,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 126,
+            "spineLengthPx": 102.3,
+            "spineThicknessPx": 32.9,
+            "spinePercentOfFrameWidth": 8,
+            "screenBBoxPx": [
+              97,
+              64
+            ],
+            "bboxPercentOfFrameWidth": 7.58,
+            "centroidPx": [
+              630.2,
+              353.1
+            ],
+            "centroidPercentX": 49.24,
+            "spineVisualAngleDeg": 13.379,
+            "thicknessVisualAngleDeg": 3.609,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 3.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 3466.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 3466.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 3498.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 3498.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 3498.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 3510
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 3510
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 3510
+            }
+          ],
+          "stationGroupDistance": 3466.9,
+          "stationHullInstances": 126,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 573346,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 691,
+              "apertureRow": 422,
+              "apertureSpanPx": [
+                255,
+                945
+              ],
+              "apertureWidthAt1280": 691,
+              "aperturePercentOfFrameWidth": 53.98
+            },
+            "station": {
+              "maskPixels": 1752,
+              "spineLengthPx": 102,
+              "spineThicknessPx": 33.5,
+              "spinePercentOfFrameWidth": 7.97,
+              "thicknessPercentOfFrameWidth": 2.62,
+              "spineVisualAngleDeg": 11.181,
+              "thicknessVisualAngleDeg": 3.677,
+              "silhouetteBBox": [
+                591,
+                336,
+                97,
+                65
+              ],
+              "centroidPx": [
+                648.8,
+                372
+              ],
+              "centroidPercentX": 50.69,
+              "centroidOffsetFromViewCenterDeg": 1.637
+            }
+          }
+        }
+      ],
+      "frameCount": 8,
+      "completedTriggers": 4,
+      "allTriggersHit": true
+    },
+    {
+      "id": "strip-transit-b",
+      "url": "?story=ch10-transit&movie=1&profile=LOW",
+      "tier": "LOW",
+      "viewport": "1280x720",
+      "reducedMotion": false,
+      "pageErrors": [],
+      "frames": [
+        {
+          "file": "evidence/capture/strip-transit-b/00_station-resolved-before_ch10-transit.png",
+          "label": "station-resolved-before",
+          "t": 19.27,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 302.86,
+          "stationDistance": 1518,
+          "anchorId": "anc.ch10.seam-of-light",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 77.7976,
+          "flightFeedbackFov": 79,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.15929,
+            1.15929,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 126,
+            "spineLengthPx": 210.2,
+            "spineThicknessPx": 63.5,
+            "spinePercentOfFrameWidth": 16.42,
+            "screenBBoxPx": [
+              198.8,
+              129.4
+            ],
+            "bboxPercentOfFrameWidth": 15.53,
+            "centroidPx": [
+              618.3,
+              347.2
+            ],
+            "centroidPercentX": 48.3,
+            "spineVisualAngleDeg": 26.456,
+            "thicknessVisualAngleDeg": 6.86,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 4.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1757.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 1757.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5207.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5207.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5207.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5218.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5218.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5218.5
+            }
+          ],
+          "stationGroupDistance": 1757.7,
+          "stationHullInstances": 126,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": null
+        },
+        {
+          "file": "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png",
+          "label": "station-resolved-at",
+          "t": 19.64,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fi",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 261.94,
+          "stationDistance": 1421,
+          "anchorId": "anc.ch10.station-resolved",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 71.4096,
+          "flightFeedbackFov": 73.298,
+          "flightBoost": 0.123,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.02891,
+            1.02891,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 126,
+            "spineLengthPx": 251.2,
+            "spineThicknessPx": 75.3,
+            "spinePercentOfFrameWidth": 19.62,
+            "screenBBoxPx": [
+              237.5,
+              154.3
+            ],
+            "bboxPercentOfFrameWidth": 18.56,
+            "centroidPx": [
+              613.8,
+              344.9
+            ],
+            "centroidPercentX": 47.96,
+            "spineVisualAngleDeg": 28.088,
+            "thicknessVisualAngleDeg": 7.47,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1656.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 1656.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5308.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5308.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5308.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5319.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5319.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5319.8
+            }
+          ],
+          "stationGroupDistance": 1656.5,
+          "stationHullInstances": 126,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 541143,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 778,
+              "apertureRow": 426,
+              "apertureSpanPx": [
+                164,
+                941
+              ],
+              "apertureWidthAt1280": 778,
+              "aperturePercentOfFrameWidth": 60.78
+            },
+            "station": {
+              "maskPixels": 9733,
+              "spineLengthPx": 251.6,
+              "spineThicknessPx": 77.5,
+              "spinePercentOfFrameWidth": 19.65,
+              "thicknessPercentOfFrameWidth": 6.06,
+              "spineVisualAngleDeg": 24.95,
+              "thicknessVisualAngleDeg": 7.691,
+              "silhouetteBBox": [
+                512,
+                300,
+                237,
+                155
+              ],
+              "centroidPx": [
+                653.3,
+                385.1
+              ],
+              "centroidPercentX": 51.04,
+              "centroidOffsetFromViewCenterDeg": 2.814
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-b/02_hold-mid_ch10-transit.png",
+          "label": "hold-mid",
+          "t": 21.18,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead, a light someone el",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 129.04,
+          "stationDistance": 1184,
+          "anchorId": "anc.ch10.station-resolved",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0011,
+          "flightFeedbackFov": 70.001,
+          "flightBoost": 0,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.00001,
+            1.00001,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 231.1,
+            "spineThicknessPx": 48,
+            "spinePercentOfFrameWidth": 18.06,
+            "screenBBoxPx": [
+              194.2,
+              147.1
+            ],
+            "bboxPercentOfFrameWidth": 15.17,
+            "centroidPx": [
+              597.6,
+              349.3
+            ],
+            "centroidPercentX": 46.69,
+            "spineVisualAngleDeg": 25.125,
+            "thicknessVisualAngleDeg": 4.669,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1424.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1424.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5540.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5540.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5540.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5551.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5551.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5551.7
+            }
+          ],
+          "stationGroupDistance": 1424.5,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 536250,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 714,
+              "apertureRow": 471,
+              "apertureSpanPx": [
+                184,
+                897
+              ],
+              "apertureWidthAt1280": 714,
+              "aperturePercentOfFrameWidth": 55.78
+            },
+            "station": {
+              "maskPixels": 13501,
+              "spineLengthPx": 303.2,
+              "spineThicknessPx": 91.1,
+              "spinePercentOfFrameWidth": 23.69,
+              "thicknessPercentOfFrameWidth": 7.12,
+              "spineVisualAngleDeg": 29.481,
+              "thicknessVisualAngleDeg": 8.859,
+              "silhouetteBBox": [
+                482,
+                287,
+                286,
+                185
+              ],
+              "centroidPx": [
+                650.7,
+                387
+              ],
+              "centroidPercentX": 50.83,
+              "centroidOffsetFromViewCenterDeg": 2.826
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-b/03_hold-release_done.png",
+          "label": "hold-release",
+          "t": 22.72,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 63.4,
+          "stationDistance": 1071,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0001,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 255.4,
+            "spineThicknessPx": 52.3,
+            "spinePercentOfFrameWidth": 19.95,
+            "screenBBoxPx": [
+              215,
+              161.4
+            ],
+            "bboxPercentOfFrameWidth": 16.79,
+            "centroidPx": [
+              593.1,
+              348.5
+            ],
+            "centroidPercentX": 46.34,
+            "spineVisualAngleDeg": 27.611,
+            "thicknessVisualAngleDeg": 5.083,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1305
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1305
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5660.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5660.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5660.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5671.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5671.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5671.2
+            }
+          ],
+          "stationGroupDistance": 1305,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 535495,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 783,
+              "apertureRow": 419,
+              "apertureSpanPx": [
+                165,
+                947
+              ],
+              "apertureWidthAt1280": 783,
+              "aperturePercentOfFrameWidth": 61.17
+            },
+            "station": {
+              "maskPixels": 15826,
+              "spineLengthPx": 333.4,
+              "spineThicknessPx": 98.4,
+              "spinePercentOfFrameWidth": 26.04,
+              "thicknessPercentOfFrameWidth": 7.69,
+              "spineVisualAngleDeg": 32.411,
+              "thicknessVisualAngleDeg": 9.57,
+              "silhouetteBBox": [
+                465,
+                279,
+                313,
+                202
+              ],
+              "centroidPx": [
+                647.9,
+                387.3
+              ],
+              "centroidPercentX": 50.62,
+              "centroidOffsetFromViewCenterDeg": 2.761
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-b/04_K11-painted_done.png",
+          "label": "K11-painted",
+          "t": 22.87,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 59.13,
+          "stationDistance": 1063,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0001,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 257.3,
+            "spineThicknessPx": 52.6,
+            "spinePercentOfFrameWidth": 20.1,
+            "screenBBoxPx": [
+              216.6,
+              162.5
+            ],
+            "bboxPercentOfFrameWidth": 16.92,
+            "centroidPx": [
+              592.8,
+              348.5
+            ],
+            "centroidPercentX": 46.31,
+            "spineVisualAngleDeg": 27.801,
+            "thicknessVisualAngleDeg": 5.115,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1296.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1296.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5668.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5668.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5668.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5679.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5679.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5679.5
+            }
+          ],
+          "stationGroupDistance": 1296.7,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 535723,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 765,
+              "apertureRow": 414,
+              "apertureSpanPx": [
+                188,
+                952
+              ],
+              "apertureWidthAt1280": 765,
+              "aperturePercentOfFrameWidth": 59.77
+            },
+            "station": {
+              "maskPixels": 15999,
+              "spineLengthPx": 335.7,
+              "spineThicknessPx": 99.4,
+              "spinePercentOfFrameWidth": 26.22,
+              "thicknessPercentOfFrameWidth": 7.76,
+              "spineVisualAngleDeg": 32.634,
+              "thicknessVisualAngleDeg": 9.66,
+              "silhouetteBBox": [
+                463,
+                278,
+                316,
+                203
+              ],
+              "centroidPx": [
+                647.5,
+                387.2
+              ],
+              "centroidPercentX": 50.59,
+              "centroidOffsetFromViewCenterDeg": 2.745
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-b/05_work-order-cleared_done.png",
+          "label": "work-order-cleared",
+          "t": 23.01,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 54.96,
+          "stationDistance": 1057,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0001,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 258.9,
+            "spineThicknessPx": 52.9,
+            "spinePercentOfFrameWidth": 20.23,
+            "screenBBoxPx": [
+              218,
+              163.4
+            ],
+            "bboxPercentOfFrameWidth": 17.03,
+            "centroidPx": [
+              592.5,
+              348.4
+            ],
+            "centroidPercentX": 46.29,
+            "spineVisualAngleDeg": 27.966,
+            "thicknessVisualAngleDeg": 5.143,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1289.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1289.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5675.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5675.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5675.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5686.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5686.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5686.6
+            }
+          ],
+          "stationGroupDistance": 1289.6,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 535811,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 761,
+              "apertureRow": 442,
+              "apertureSpanPx": [
+                165,
+                925
+              ],
+              "apertureWidthAt1280": 761,
+              "aperturePercentOfFrameWidth": 59.45
+            },
+            "station": {
+              "maskPixels": 16136,
+              "spineLengthPx": 337.5,
+              "spineThicknessPx": 99.8,
+              "spinePercentOfFrameWidth": 26.37,
+              "thicknessPercentOfFrameWidth": 7.8,
+              "spineVisualAngleDeg": 32.812,
+              "thicknessVisualAngleDeg": 9.702,
+              "silhouetteBBox": [
+                462,
+                278,
+                318,
+                204
+              ],
+              "centroidPx": [
+                647.3,
+                387.2
+              ],
+              "centroidPercentX": 50.57,
+              "centroidOffsetFromViewCenterDeg": 2.734
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-b/06_threshold-handback_done.png",
+          "label": "threshold-handback",
+          "t": 23.14,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 51.39,
+          "stationDistance": 1051,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0001,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 260.6,
+            "spineThicknessPx": 53.2,
+            "spinePercentOfFrameWidth": 20.36,
+            "screenBBoxPx": [
+              219.4,
+              164.4
+            ],
+            "bboxPercentOfFrameWidth": 17.14,
+            "centroidPx": [
+              592.2,
+              348.4
+            ],
+            "centroidPercentX": 46.26,
+            "spineVisualAngleDeg": 28.138,
+            "thicknessVisualAngleDeg": 5.171,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1282.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1282.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5683.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5683.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5683.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5693.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5693.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5693.9
+            }
+          ],
+          "stationGroupDistance": 1282.2,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 675449,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 621,
+              "apertureRow": 408,
+              "apertureSpanPx": [
+                255,
+                875
+              ],
+              "apertureWidthAt1280": 621,
+              "aperturePercentOfFrameWidth": 48.52
+            },
+            "station": {
+              "maskPixels": 16323,
+              "spineLengthPx": 339.7,
+              "spineThicknessPx": 100.7,
+              "spinePercentOfFrameWidth": 26.54,
+              "thicknessPercentOfFrameWidth": 7.87,
+              "spineVisualAngleDeg": 33.028,
+              "thicknessVisualAngleDeg": 9.793,
+              "silhouetteBBox": [
+                461,
+                277,
+                319,
+                204
+              ],
+              "centroidPx": [
+                647,
+                387.1
+              ],
+              "centroidPercentX": 50.55,
+              "centroidOffsetFromViewCenterDeg": 2.722
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-transit-b/07_threshold-handback-after_done.png",
+          "label": "threshold-handback-after",
+          "t": 27.31,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 6.19,
+          "stationDistance": 975,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0001,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 281.8,
+            "spineThicknessPx": 56.8,
+            "spinePercentOfFrameWidth": 22.01,
+            "screenBBoxPx": [
+              237.6,
+              176.6
+            ],
+            "bboxPercentOfFrameWidth": 18.56,
+            "centroidPx": [
+              588.3,
+              347.8
+            ],
+            "centroidPercentX": 45.96,
+            "spineVisualAngleDeg": 30.249,
+            "thicknessVisualAngleDeg": 5.522,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1198.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1198.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5766.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5766.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5766.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5777.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5777.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5777.3
+            }
+          ],
+          "stationGroupDistance": 1198.9,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 535555,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 770,
+              "apertureRow": 432,
+              "apertureSpanPx": [
+                165,
+                934
+              ],
+              "apertureWidthAt1280": 770,
+              "aperturePercentOfFrameWidth": 60.16
+            },
+            "station": {
+              "maskPixels": 18407,
+              "spineLengthPx": 365.4,
+              "spineThicknessPx": 106.7,
+              "spinePercentOfFrameWidth": 28.55,
+              "thicknessPercentOfFrameWidth": 8.33,
+              "spineVisualAngleDeg": 35.528,
+              "thicknessVisualAngleDeg": 10.371,
+              "silhouetteBBox": [
+                445,
+                270,
+                344,
+                219
+              ],
+              "centroidPx": [
+                644.2,
+                387
+              ],
+              "centroidPercentX": 50.33,
+              "centroidOffsetFromViewCenterDeg": 2.659
+            }
+          }
+        }
+      ],
+      "frameCount": 8,
+      "completedTriggers": 6,
+      "allTriggersHit": true
+    },
+    {
+      "id": "strip-rm-transit",
+      "url": "?story=ch10-transit&movie=1&profile=LOW",
+      "tier": "LOW",
+      "viewport": "1280x720",
+      "reducedMotion": true,
+      "pageErrors": [],
+      "frames": [
+        {
+          "file": "evidence/capture/strip-rm-transit/00_seam-before_ch10-transit.png",
+          "label": "seam-before",
+          "t": 5.32,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:hold",
+          "markerLabel": "ISSUED BEARING · HOLD",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUED BEARING · HOLD | FLY THE CLAIMED BEARING. | FOLLOW IT UNTIL THE SOURCE RESOLVES.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 272.2,
+          "stationDistance": 5224,
+          "anchorId": "anc.ch10.transit-ignite",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 72,
+          "flightFeedbackFov": 72,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.03761,
+            1.03761,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 72.3,
+            "spineThicknessPx": 23.6,
+            "spinePercentOfFrameWidth": 5.65,
+            "screenBBoxPx": [
+              68.5,
+              45.4
+            ],
+            "bboxPercentOfFrameWidth": 5.35,
+            "centroidPx": [
+              631.3,
+              355.2
+            ],
+            "centroidPercentX": 49.32,
+            "spineVisualAngleDeg": 8.355,
+            "thicknessVisualAngleDeg": 2.363,
+            "offAxisDeg": 0.007
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 3.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1431
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1431
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 1431
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 1444.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 1444.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 1444.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 53,
+              "groupDistance": 5535.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 5535.3
+            }
+          ],
+          "stationGroupDistance": 5535.3,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": null
+        },
+        {
+          "file": "evidence/capture/strip-rm-transit/01_seam-at_ch10-transit.png",
+          "label": "seam-at",
+          "t": 5.69,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 288.82,
+          "stationDistance": 5122,
+          "anchorId": "anc.ch10.seam-of-light",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 72,
+          "flightFeedbackFov": 72,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.03761,
+            1.03761,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 53,
+            "spineLengthPx": 73.7,
+            "spineThicknessPx": 24.1,
+            "spinePercentOfFrameWidth": 5.76,
+            "screenBBoxPx": [
+              69.9,
+              46.3
+            ],
+            "bboxPercentOfFrameWidth": 5.46,
+            "centroidPx": [
+              631.1,
+              355.1
+            ],
+            "centroidPercentX": 49.31,
+            "spineVisualAngleDeg": 8.518,
+            "thicknessVisualAngleDeg": 2.408,
+            "offAxisDeg": 0.006
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 4.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1536.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 1536.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 1536.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 1549.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 1549.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 1549.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 53,
+              "groupDistance": 5430
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 5430
+            }
+          ],
+          "stationGroupDistance": 5430,
+          "stationHullInstances": 53,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 553701,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 730,
+              "apertureRow": 433,
+              "apertureSpanPx": [
+                204,
+                933
+              ],
+              "apertureWidthAt1280": 730,
+              "aperturePercentOfFrameWidth": 57.03
+            },
+            "station": {
+              "maskPixels": 908,
+              "spineLengthPx": 73.3,
+              "spineThicknessPx": 24.6,
+              "spinePercentOfFrameWidth": 5.73,
+              "thicknessPercentOfFrameWidth": 1.92,
+              "spineVisualAngleDeg": 7.334,
+              "thicknessVisualAngleDeg": 2.458,
+              "silhouetteBBox": [
+                606,
+                342,
+                69,
+                48
+              ],
+              "centroidPx": [
+                647.1,
+                369
+              ],
+              "centroidPercentX": 50.55,
+              "centroidOffsetFromViewCenterDeg": 1.146
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-rm-transit/02_seam-after_ch10-transit.png",
+          "label": "seam-after",
+          "t": 9.03,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": null,
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 219.76,
+          "stationDistance": 4256,
+          "anchorId": "anc.ch10.seam-of-light",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 71.999,
+          "flightFeedbackFov": 71.992,
+          "flightBoost": 1,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.03759,
+            1.03759,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 126,
+            "spineLengthPx": 87.8,
+            "spineThicknessPx": 28.7,
+            "spinePercentOfFrameWidth": 6.86,
+            "screenBBoxPx": [
+              83.2,
+              55.1
+            ],
+            "bboxPercentOfFrameWidth": 6.5,
+            "centroidPx": [
+              631.8,
+              354
+            ],
+            "centroidPercentX": 49.36,
+            "spineVisualAngleDeg": 10.142,
+            "thicknessVisualAngleDeg": 2.867,
+            "offAxisDeg": 0.002
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 3.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 2400.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 2400.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 2400.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 2412.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 2412.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 2412.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 4565.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 4565.1
+            }
+          ],
+          "stationGroupDistance": 4565.1,
+          "stationHullInstances": 126,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 556304,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 736,
+              "apertureRow": 427,
+              "apertureSpanPx": [
+                204,
+                939
+              ],
+              "apertureWidthAt1280": 736,
+              "aperturePercentOfFrameWidth": 57.5
+            },
+            "station": {
+              "maskPixels": 1306,
+              "spineLengthPx": 87.6,
+              "spineThicknessPx": 29.1,
+              "spinePercentOfFrameWidth": 6.85,
+              "thicknessPercentOfFrameWidth": 2.27,
+              "spineVisualAngleDeg": 8.763,
+              "thicknessVisualAngleDeg": 2.905,
+              "silhouetteBBox": [
+                599,
+                339,
+                83,
+                57
+              ],
+              "centroidPx": [
+                648,
+                370.6
+              ],
+              "centroidPercentX": 50.63,
+              "centroidOffsetFromViewCenterDeg": 1.327
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-rm-transit/03_station-resolved_ch10-transit.png",
+          "label": "station-resolved",
+          "t": 19.73,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 268.69,
+          "stationDistance": 1432,
+          "anchorId": "anc.ch10.station-resolved",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.4098,
+          "flightFeedbackFov": 70.925,
+          "flightBoost": 0.175,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1.00832,
+            1.00832,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 126,
+            "spineLengthPx": 253.9,
+            "spineThicknessPx": 76.2,
+            "spinePercentOfFrameWidth": 19.84,
+            "screenBBoxPx": [
+              240.2,
+              156.1
+            ],
+            "bboxPercentOfFrameWidth": 18.76,
+            "centroidPx": [
+              613.6,
+              344.7
+            ],
+            "centroidPercentX": 47.94,
+            "spineVisualAngleDeg": 27.887,
+            "thicknessVisualAngleDeg": 7.453,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 4.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1668.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 15,
+              "groupDistance": 1668.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5297
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5297
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5297
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5307.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5307.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5307.9
+            }
+          ],
+          "stationGroupDistance": 1668.3,
+          "stationHullInstances": 126,
+          "stationLightInstances": 15,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 538592,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 789,
+              "apertureRow": 414,
+              "apertureSpanPx": [
+                164,
+                952
+              ],
+              "apertureWidthAt1280": 789,
+              "aperturePercentOfFrameWidth": 61.64
+            },
+            "station": {
+              "maskPixels": 9979,
+              "spineLengthPx": 254.2,
+              "spineThicknessPx": 78.4,
+              "spinePercentOfFrameWidth": 19.86,
+              "thicknessPercentOfFrameWidth": 6.13,
+              "spineVisualAngleDeg": 24.861,
+              "thicknessVisualAngleDeg": 7.671,
+              "silhouetteBBox": [
+                511,
+                299,
+                239,
+                157
+              ],
+              "centroidPx": [
+                653.7,
+                385.5
+              ],
+              "centroidPercentX": 51.07,
+              "centroidOffsetFromViewCenterDeg": 2.833
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-rm-transit/04_hold-mid_ch10-transit.png",
+          "label": "hold-mid",
+          "t": 21.14,
+          "beat": "ch10-transit",
+          "objectiveId": "station:transit:resolve",
+          "markerLabel": "ISSUING STATION · RESOLVING",
+          "health": "ready",
+          "hudText": "CURRENT OBJECTIVE | ISSUING STATION · RESOLVING | THE SOURCE IS RESOLVING. | HOLD.",
+          "caption": "(both fires behind you now. ahead, a light someo",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 131.65,
+          "stationDistance": 1188,
+          "anchorId": "anc.ch10.station-resolved",
+          "avFov": 70,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0003,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 70,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 230.7,
+            "spineThicknessPx": 47.9,
+            "spinePercentOfFrameWidth": 18.02,
+            "screenBBoxPx": [
+              193.8,
+              146.9
+            ],
+            "bboxPercentOfFrameWidth": 15.14,
+            "centroidPx": [
+              597.7,
+              349.3
+            ],
+            "centroidPercentX": 46.69,
+            "spineVisualAngleDeg": 25.079,
+            "thicknessVisualAngleDeg": 4.661,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1426.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1426.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5538.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5538.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5538.4
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5549.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5549.3
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5549.3
+            }
+          ],
+          "stationGroupDistance": 1426.9,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 536444,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 738,
+              "apertureRow": 464,
+              "apertureSpanPx": [
+                167,
+                904
+              ],
+              "apertureWidthAt1280": 738,
+              "aperturePercentOfFrameWidth": 57.66
+            },
+            "station": {
+              "maskPixels": 13526,
+              "spineLengthPx": 302.7,
+              "spineThicknessPx": 91.1,
+              "spinePercentOfFrameWidth": 23.65,
+              "thicknessPercentOfFrameWidth": 7.12,
+              "spineVisualAngleDeg": 29.434,
+              "thicknessVisualAngleDeg": 8.858,
+              "silhouetteBBox": [
+                483,
+                287,
+                285,
+                184
+              ],
+              "centroidPx": [
+                651,
+                387.2
+              ],
+              "centroidPercentX": 50.86,
+              "centroidOffsetFromViewCenterDeg": 2.853
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-rm-transit/05_hold-release_done.png",
+          "label": "hold-release",
+          "t": 22.72,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 59.55,
+          "stationDistance": 1063,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0003,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 257.3,
+            "spineThicknessPx": 52.6,
+            "spinePercentOfFrameWidth": 20.1,
+            "screenBBoxPx": [
+              216.6,
+              162.5
+            ],
+            "bboxPercentOfFrameWidth": 16.92,
+            "centroidPx": [
+              592.8,
+              348.5
+            ],
+            "centroidPercentX": 46.31,
+            "spineVisualAngleDeg": 27.804,
+            "thicknessVisualAngleDeg": 5.116,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1296.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1296.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5668.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5668.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5668.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5679.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5679.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5679.6
+            }
+          ],
+          "stationGroupDistance": 1296.6,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 680490,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 613,
+              "apertureRow": 408,
+              "apertureSpanPx": [
+                259,
+                871
+              ],
+              "apertureWidthAt1280": 613,
+              "aperturePercentOfFrameWidth": 47.89
+            },
+            "station": {
+              "maskPixels": 16017,
+              "spineLengthPx": 335.7,
+              "spineThicknessPx": 99.4,
+              "spinePercentOfFrameWidth": 26.23,
+              "thicknessPercentOfFrameWidth": 7.76,
+              "spineVisualAngleDeg": 32.638,
+              "thicknessVisualAngleDeg": 9.663,
+              "silhouetteBBox": [
+                463,
+                278,
+                316,
+                203
+              ],
+              "centroidPx": [
+                647.5,
+                387.1
+              ],
+              "centroidPercentX": 50.59,
+              "centroidOffsetFromViewCenterDeg": 2.739
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-rm-transit/06_threshold-handback_done.png",
+          "label": "threshold-handback",
+          "t": 22.88,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 54.58,
+          "stationDistance": 1056,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0003,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 259.4,
+            "spineThicknessPx": 53,
+            "spinePercentOfFrameWidth": 20.26,
+            "screenBBoxPx": [
+              218.4,
+              163.7
+            ],
+            "bboxPercentOfFrameWidth": 17.06,
+            "centroidPx": [
+              592.4,
+              348.4
+            ],
+            "centroidPercentX": 46.28,
+            "spineVisualAngleDeg": 28.011,
+            "thicknessVisualAngleDeg": 5.15,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.8
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1287.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1287.7
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5677.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5677.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5677.6
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5688.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5688.5
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5688.5
+            }
+          ],
+          "stationGroupDistance": 1287.7,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 666744,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 634,
+              "apertureRow": 408,
+              "apertureSpanPx": [
+                248,
+                881
+              ],
+              "apertureWidthAt1280": 634,
+              "aperturePercentOfFrameWidth": 49.53
+            },
+            "station": {
+              "maskPixels": 16215,
+              "spineLengthPx": 338.4,
+              "spineThicknessPx": 99.8,
+              "spinePercentOfFrameWidth": 26.44,
+              "thicknessPercentOfFrameWidth": 7.8,
+              "spineVisualAngleDeg": 32.897,
+              "thicknessVisualAngleDeg": 9.704,
+              "silhouetteBBox": [
+                462,
+                278,
+                318,
+                204
+              ],
+              "centroidPx": [
+                647.6,
+                387.3
+              ],
+              "centroidPercentX": 50.59,
+              "centroidOffsetFromViewCenterDeg": 2.755
+            }
+          }
+        },
+        {
+          "file": "evidence/capture/strip-rm-transit/07_threshold-handback-after_done.png",
+          "label": "threshold-handback-after",
+          "t": 27.04,
+          "beat": "done",
+          "objectiveId": null,
+          "markerLabel": null,
+          "health": null,
+          "hudText": null,
+          "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+          "controlMode": "flight",
+          "phase": "deep_space",
+          "speed": 6.57,
+          "stationDistance": 976,
+          "anchorId": null,
+          "avFov": null,
+          "qualityProfile": "LOW",
+          "renderCameraFov": 70.0003,
+          "flightFeedbackFov": 70,
+          "flightBoost": 0,
+          "policyTargetFov": 75,
+          "cockpitShellLocalScale": [
+            1,
+            1,
+            1
+          ],
+          "viewport": {
+            "cssW": 1280,
+            "cssH": 720,
+            "r3fSize": null,
+            "dpr": 1,
+            "glPixelRatio": null,
+            "drawingBuffer": null
+          },
+          "stationSpine": {
+            "instances": 613,
+            "spineLengthPx": 281.7,
+            "spineThicknessPx": 56.8,
+            "spinePercentOfFrameWidth": 22.01,
+            "screenBBoxPx": [
+              237.5,
+              176.5
+            ],
+            "bboxPercentOfFrameWidth": 18.55,
+            "centroidPx": [
+              588.3,
+              347.8
+            ],
+            "centroidPercentX": 45.96,
+            "spineVisualAngleDeg": 30.24,
+            "thicknessVisualAngleDeg": 5.52,
+            "offAxisDeg": 0
+          },
+          "instancedBatches": [
+            {
+              "name": "Mesh",
+              "parent": "ship-cockpit",
+              "count": 72,
+              "groupDistance": 0
+            },
+            {
+              "name": "remote-system-sun-markers",
+              "parent": "remote-system-sun-markers",
+              "count": 32,
+              "groupDistance": 0.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 126,
+              "groupDistance": 1199.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 613,
+              "groupDistance": 1199.2
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5766.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 1,
+              "groupDistance": 5766.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 16,
+              "groupDistance": 5766.1
+            },
+            {
+              "name": "Mesh",
+              "parent": "Scene",
+              "count": 17165,
+              "groupDistance": 5776.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 5735,
+              "groupDistance": 5776.9
+            },
+            {
+              "name": "Mesh",
+              "parent": "Group",
+              "count": 227,
+              "groupDistance": 5776.9
+            }
+          ],
+          "stationGroupDistance": 1199.2,
+          "stationHullInstances": 613,
+          "stationLightInstances": 126,
+          "skyGalaxyInFrame": 0,
+          "skyCompanionsInFrame": 0,
+          "masks": {
+            "bufferSize": [
+              1280,
+              720
+            ],
+            "cockpit": {
+              "maskPixels": 535866,
+              "silhouetteBBox": [
+                0,
+                0,
+                1280,
+                720
+              ],
+              "apertureWidthPx": 789,
+              "apertureRow": 414,
+              "apertureSpanPx": [
+                164,
+                952
+              ],
+              "apertureWidthAt1280": 789,
+              "aperturePercentOfFrameWidth": 61.64
+            },
+            "station": {
+              "maskPixels": 18456,
+              "spineLengthPx": 365.4,
+              "spineThicknessPx": 106.7,
+              "spinePercentOfFrameWidth": 28.55,
+              "thicknessPercentOfFrameWidth": 8.33,
+              "spineVisualAngleDeg": 35.528,
+              "thicknessVisualAngleDeg": 10.371,
+              "silhouetteBBox": [
+                445,
+                270,
+                344,
+                219
+              ],
+              "centroidPx": [
+                644.5,
+                387.2
+              ],
+              "centroidPercentX": 50.35,
+              "centroidOffsetFromViewCenterDeg": 2.68
+            }
+          }
+        }
+      ],
+      "frameCount": 8,
+      "completedTriggers": 5,
+      "allTriggersHit": true
+    }
+  ]
+}

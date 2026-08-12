@@ -1,1587 +1,1672 @@
 {
  "schema": "paravoxia.rawAudiovisualEvidence.v1",
  "runId": "2026-08-11-ch10-station-introduction",
- "contractVersion": "draft-v6",
- "contractSha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+ "contractVersion": "draft-v7",
+ "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
  "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
- "workingTree": "uncommitted ch10 working tree, stamp pass, post D-13 / D-6-remnant / RM-FOV repair round",
- "compiledAt": "2026-08-12T10:38:37.689379Z",
- "note": "Playback metadata only: path, bytes, probed format, duration, and the beat or context label recorded at capture. No interpretation.",
+ "workingTree": "uncommitted ch10 working tree, draft-v7 FINAL evidence pass",
+ "compiledAt": "2026-08-12T17:46:49.963182+00:00",
+ "note": "Intent-free. Every row is path, bytes, the probed format of those exact bytes, the context label the capture carried, and the state values read from the running page at that frame. No verdict, no comparison against any contract term, no interpretation.",
  "items": [
   {
-   "path": "evidence/baseline/00_015s_ch9-hearth_hearth-enter.png",
-   "sha256": "3de4af5ff0b3cf8904fbf4776a2b98c2953aab055f35510c068f62b0234e9867",
-   "bytes": 197873,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "00_015s_ch9-hearth_hearth-enter",
-   "beatLabel": "ch9-hearth"
-  },
-  {
-   "path": "evidence/baseline/01_124s_ch9-hearth_hearth-closing.png",
-   "sha256": "de83dd5149d8b1e4a43ef06d0e220eec1c1787c9493243a9c79074929af4be92",
-   "bytes": 123085,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "01_124s_ch9-hearth_hearth-closing",
-   "beatLabel": "ch9-hearth"
-  },
-  {
-   "path": "evidence/baseline/02_127s_ch9-hearth_hearth-closing-late.png",
-   "sha256": "109f08cd4b194432accd81b582b5cc6a1ae489f7aaaeafe643fe2ac61fca6c95",
-   "bytes": 152411,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "02_127s_ch9-hearth_hearth-closing-late",
-   "beatLabel": "ch9-hearth"
-  },
-  {
-   "path": "evidence/baseline/03_130s_done_freeplay-seam.png",
-   "sha256": "8655aca3dedbfd1c8693ba53601eaf3534ff7dc980d9bfeede14807f3d24ac6c",
-   "bytes": 169618,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "03_130s_done_freeplay-seam",
-   "beatLabel": "done"
-  },
-  {
-   "path": "evidence/baseline/04_138s_done_freeplay-settled.png",
-   "sha256": "d7fc5e6178c9ce18a5475066679179a8363a43f2c6da5d23d31e1d3c4c8ed1a2",
-   "bytes": 168764,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "04_138s_done_freeplay-settled",
-   "beatLabel": "done"
-  },
-  {
-   "path": "evidence/baseline/06_185s_done_sky-zenith.png",
-   "sha256": "c88d268967f2ac4038b7f1d3048b18479a18ad838dbdfd082dae5f769648d6d6",
-   "bytes": 200844,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "06_185s_done_sky-zenith",
-   "beatLabel": "done"
-  },
-  {
-   "path": "evidence/baseline/sky_161s_ch9-hearth_outdoor-sky-mid.png",
-   "sha256": "9d5abe2f881f7fa99ea10242663051f6464debd1c785792e798db5e80b37fdb1",
-   "bytes": 708038,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "sky_161s_ch9-hearth_outdoor-sky-mid",
-   "beatLabel": "ch9-hearth"
-  },
-  {
-   "path": "evidence/baseline/sky_163s_ch9-hearth_outdoor-sky-zenith.png",
-   "sha256": "d7118a927763c5c1160eb6c6c140adc8d6053b63530b955c664c970e1bc37329",
-   "bytes": 707980,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "sky_163s_ch9-hearth_outdoor-sky-zenith",
-   "beatLabel": "ch9-hearth"
-  },
-  {
-   "path": "evidence/capture/still-seam-of-light.png",
-   "sha256": "bbe2dacda3a9a1322ff70b3d407131be8c83b49d84618432ad42d2bb727e11a4",
-   "bytes": 513578,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "still-seam-of-light",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/capture/still-st0-sighting.png",
-   "sha256": "3605d8206047df8585114de484c3006f5cf7ba17c9f4144c853883ac64620e28",
-   "bytes": 844835,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "still-st0-sighting",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/capture/still-station-resolved.png",
-   "sha256": "78b65918b990dffa7d301796708dc3dd7cd009dae094aa17aa6044ba7724d5fc",
-   "bytes": 514547,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "still-station-resolved",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/00_reboard-before_ch10-ask.png",
-   "sha256": "23c0794f5a3a6d5d3ccbb92b31a18eb1d624088d61a03c411a369afe3d6d4454",
-   "bytes": 388263,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "00_reboard-before_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/01_reboard-at_ch10-ask.png",
-   "sha256": "376695a0170ac22792baed2c8f97beb3e0e1e8a102b684ccdecf6dc7a70d9162",
-   "bytes": 364528,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "01_reboard-at_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/02_reboard-after_ch10-ask.png",
-   "sha256": "16c40aceaa67f28cdc0420d6a454e2c9d5bb58908de4c63e2a78d77d086e44d8",
-   "bytes": 295581,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "02_reboard-after_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/03_sibling-acquire-before_ch10-ask.png",
-   "sha256": "5ae230491f8d6fbb4c52ad6827cb4c18be27d15420ba5ae0b413f17619aa3d7b",
-   "bytes": 669284,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "03_sibling-acquire-before_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/04_sibling-acquire-at_ch10-ask.png",
-   "sha256": "401729570ec9f050651ee49603626d2f1ee9bc06a37ff9b0da5c2080f1b64032",
-   "bytes": 567065,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "04_sibling-acquire-at_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/05_sibling-acquire-after_ch10-ask.png",
-   "sha256": "c6d07a8dc85719bbb745c6223490d6b7b960e5510c24a425fdeebdae783e7378",
-   "bytes": 530962,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "05_sibling-acquire-after_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/06_landfall-before_ch10-ask.png",
-   "sha256": "2b1dfed4ea3885933de40775dcecbff1644987032f237d35c0599138637f9a44",
-   "bytes": 320205,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "06_landfall-before_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-a/07_landfall-at_ch10-ask.png",
-   "sha256": "e73f1bf3969f442654cee8f53e8688aeba4559bdf4cb6e0338214bf80c3f3680",
-   "bytes": 673189,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "07_landfall-at_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/00_relay-ask-before_ch10-ask.png",
-   "sha256": "cffd66f6fc5fe0282e80780bdc5b5f211260ca797b81ad77f04db55b56e3ed2d",
-   "bytes": 302822,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "00_relay-ask-before_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/01_relay-ask-at_ch10-ask.png",
-   "sha256": "4ae735d0301d89d5a6ec26e83bdb9a4b662dcb210d2867515af21c3496671038",
-   "bytes": 310945,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "01_relay-ask-at_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/02_relay-answer-at_ch10-ask.png",
-   "sha256": "5253f0c3702c4da326264f33acbb02156940855fda6caa1aac6e18a51e97cedc",
-   "bytes": 306768,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "02_relay-answer-at_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/03_relay-answer-after_ch10-ask.png",
-   "sha256": "a3a47e7fb3929e74219efcaad9663d9e7188da0ce881f53944daafc0dd19b6ea",
-   "bytes": 314295,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "03_relay-answer-after_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/04_bearing-claimed-before_ch10-ask.png",
-   "sha256": "f5c04e3ab930ec731a97511cd445ccda8c373c3d12df7ffa95a820d06f04c393",
-   "bytes": 333141,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "04_bearing-claimed-before_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/05_bearing-claimed-at_ch10-ask.png",
-   "sha256": "3c6910bb6b738694d59a33d92a18f8d1274502db8f312da20c86344f07c71f88",
-   "bytes": 327470,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "05_bearing-claimed-at_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/06_bearing-claimed-after_ch10-transit.png",
-   "sha256": "0249cc776360e4b3e40f54af358ede51c8d88e185f8a5f50680b42630527b98c",
-   "bytes": 300319,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "06_bearing-claimed-after_ch10-transit",
-   "beatLabel": "ch10-transit"
-  },
-  {
-   "path": "evidence/capture/strip-ask-b/07_marker-state-post-claim_ch10-transit.png",
-   "sha256": "12342f3a92aee176b32f06cc4b5553a11382c3f7590756063d2aa25a8c264f0f",
-   "bytes": 292330,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "07_marker-state-post-claim_ch10-transit",
-   "beatLabel": "ch10-transit"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/00_shelter-pre-activation_ch10-cold.png",
-   "sha256": "24e3b2701a2e608552101beed2083b9828477ff36abb20062be2b4e1a00d9391",
-   "bytes": 298926,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "00_shelter-pre-activation_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/01_cold-noticed-before_ch10-cold.png",
-   "sha256": "2fea39184672b0b48fc5c76347df18d52bebe31eb3f93143b1d661c353cfbf44",
-   "bytes": 298302,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "01_cold-noticed-before_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/02_cold-noticed-at_ch10-cold.png",
-   "sha256": "8a443124fb591f30c6cc93e8842207f904f6876e769ad34c234d9304a8dfc39d",
-   "bytes": 299194,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "02_cold-noticed-at_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/03_cold-noticed-after_ch10-cold.png",
-   "sha256": "58875d9d7c54718bba8b887b5d46bde8d335c0ac476d9ddffc4f4cee09bbdb2f",
-   "bytes": 298061,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "03_cold-noticed-after_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/04_K1-painted_ch10-cold.png",
-   "sha256": "3acc5ce6ac4f67b914f5954c6d061861b5edde028689e8c916e5383082bec69d",
-   "bytes": 297443,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "04_K1-painted_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/05_fault-read-before_ch10-cold.png",
-   "sha256": "5c5af1d8df85cff613d1c608593b2b2f4666a786f80ec034d2afcbc4c8ec356a",
-   "bytes": 298218,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "05_fault-read-before_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/06_fault-read-at_ch10-cold.png",
-   "sha256": "d982108aee13b658f146fcf5b54a2a075fb00df29392bbe530581442b766ffd3",
-   "bytes": 319319,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "06_fault-read-at_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-a/07_fault-read-after_ch10-cold.png",
-   "sha256": "e8d23c1f284a06d776f9c8ac51f11fbaf7722fb8321140645717c286ce4366d6",
-   "bytes": 333278,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "07_fault-read-after_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/00_egress-face-pre_ch10-cold.png",
-   "sha256": "ae94e13326878e18ac64f742aa27760603170db3b37095becf636c7c4db198d6",
-   "bytes": 300389,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "00_egress-face-pre_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/01_egress-face-post_ch10-cold.png",
-   "sha256": "62504a81217c2159589859c062754429b3c17363ca861efc3a6d488bba6d92ac",
-   "bytes": 301628,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "01_egress-face-post_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/02_fabrication-refused-before_ch10-cold.png",
-   "sha256": "8cdb18eb4385bb70631f68cd8e21b3d3e743bd56646437159857c20dc90570ae",
-   "bytes": 328307,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "02_fabrication-refused-before_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/03_fabrication-refused-at_ch10-cold.png",
-   "sha256": "81364621157477cd5666a859985be8f4edba88ef2d19221cf69ebc9219c20c6c",
-   "bytes": 321908,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "03_fabrication-refused-at_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/04_fabrication-refused-after_ch10-ask.png",
-   "sha256": "4642f77c325f78fb3137aa9fdc1bb9111281408506a44dec79e41a9a503e2694",
-   "bytes": 328891,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "04_fabrication-refused-after_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/05_refusal-band-dwell_ch10-ask.png",
-   "sha256": "dfbca24e4db592eb67d80d0fd7b7901e25aa6933c38aa6a9a532c7b51d56fdd1",
-   "bytes": 331805,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "05_refusal-band-dwell_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/06_beat-exit-guidance_ch10-ask.png",
-   "sha256": "4ccb5fdc145890f1aee5eb08fe15c893f6550ef94d005b0cba012313645e211d",
-   "bytes": 304970,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "06_beat-exit-guidance_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-cold-b/07_ask-fresh-entry_ch10-ask.png",
-   "sha256": "41dc11fac9eca94fdc71323567bafbbffd272dd082b924a1deffe306e2de7977",
-   "bytes": 306317,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "07_ask-fresh-entry_ch10-ask",
-   "beatLabel": "ch10-ask"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/00_seam-before_ch10-transit.png",
-   "sha256": "2cede45fea6b691547b13b6c0c48a98ae8728749936eae95e5d5b42d8d2dc4cd",
-   "bytes": 557807,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "00_seam-before_ch10-transit",
-   "beatLabel": "ch10-transit"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/01_seam-at_ch10-transit.png",
-   "sha256": "fa1e68761842ed2b3da7d940f34d86108bd5feaf3e07af0ba6a5cfeb8233a92f",
-   "bytes": 551766,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "01_seam-at_ch10-transit",
-   "beatLabel": "ch10-transit"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/02_seam-after_ch10-transit.png",
-   "sha256": "ff5923bd1117fcd7ba54f3f14a9b6a0d71ae59778c934521427aaefeee55f5c3",
-   "bytes": 468167,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "02_seam-after_ch10-transit",
-   "beatLabel": "ch10-transit"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/03_station-resolved_ch10-transit.png",
-   "sha256": "b83fa3b38216278c660e2216716d4fe2ae005424d5577e14ab4ef528aaa0378f",
-   "bytes": 571311,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "03_station-resolved_ch10-transit",
-   "beatLabel": "ch10-transit"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/04_hold-mid_ch10-transit.png",
-   "sha256": "cca57573775a6fc12757d666b7b8653f9e5d74f67ab962b9bc6dff9ed7f68a6f",
-   "bytes": 355945,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "04_hold-mid_ch10-transit",
-   "beatLabel": "ch10-transit"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/05_hold-release_done.png",
-   "sha256": "caae73bd7ae915826f7fb51cba2a782099f8fe7231fbc08bb18b9f48763691bb",
-   "bytes": 255301,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "05_hold-release_done",
-   "beatLabel": "done"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/06_threshold-handback_done.png",
-   "sha256": "28c532b87192559c3cb204683df524d2e1de327fb73ebc8abeabd365d3c11af5",
-   "bytes": 257916,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "06_threshold-handback_done",
-   "beatLabel": "done"
-  },
-  {
-   "path": "evidence/capture/strip-rm-transit/07_threshold-handback-after_done.png",
-   "sha256": "bf7d655409a45207e214be128233be25b5faa793acad2349463b8d6d8b647042",
-   "bytes": 333599,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "07_threshold-handback-after_done",
-   "beatLabel": "done"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/00_pre-rise_ch10-cold.png",
-   "sha256": "1bcf5d9a96102ebae3f9595d3a0d8425648a2f16e84d34c581a8ed4de257c81d",
-   "bytes": 614758,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "00_pre-rise_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/01_rise_ch10-cold.png",
-   "sha256": "74abe945284d5ab84f935dfdf27067692e69bc6f17aeb138a16370564d7a7be1",
-   "bytes": 598578,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "01_rise_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/02_arc-a_ch10-cold.png",
-   "sha256": "2fab7a40c8fe2d7e421e0c8966388a5dfa29e4b7186f9f81705c50ac4b7006cc",
-   "bytes": 596927,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "02_arc-a_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/03_arc-b-true-bearing_ch10-cold.png",
-   "sha256": "8a9e7af2d06c71e1f14d95baa7e0e36ebc43032471f34e2777130d91e810d1c8",
-   "bytes": 594884,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "03_arc-b-true-bearing_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/04_arc-c_ch10-cold.png",
-   "sha256": "108d9c635501d7c39ffdbdd6e36d53aaa3f7a3467ea18b48af865e36c062b74f",
-   "bytes": 594821,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "04_arc-c_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/05_set_ch10-cold.png",
-   "sha256": "764e7176d37b457e6ebbc0c649c27bf2036707dd57de17b643902c93ec0c2f56",
-   "bytes": 598929,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "05_set_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/06_post-set_ch10-cold.png",
-   "sha256": "dae2d8c3541ce3fdfb1f0be92490b9c89d7d18f0c9c57b1350454d93efa1efd2",
-   "bytes": 602254,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "06_post-set_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
-   "path": "evidence/capture/strip-st0-crossing/07_next-rise_ch10-cold.png",
-   "sha256": "6dca9831d501636997378c8de3a589abbcd6de6d862582af16bd1a65cd4f9b7c",
-   "bytes": 584244,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "07_next-rise_ch10-cold",
-   "beatLabel": "ch10-cold"
-  },
-  {
    "path": "evidence/capture/strip-transit-a/00_transit-ignite-before_ch10-transit.png",
-   "sha256": "a216fa18688b3ccc40b74d196cb487ab447d3f7723ce2db5723c7c0df705ea21",
-   "bytes": 319185,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 303289,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "00_transit-ignite-before_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / transit-ignite-before",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 6636,
+    "speed": 0,
+    "flightPhase": "surface",
+    "renderCameraFovDeg": 77.2583,
+    "flightFeedbackFovDeg": 74.003,
+    "cockpitShellLocalScale": [
+     1.13431,
+     1.13431,
+     1
+    ],
+    "cockpitApertureWidthPx": null,
+    "stationSpinePercentOfFrameWidth": null,
+    "stationSpineVisualAngleDeg": null,
+    "objectiveId": "station:transit:ignite",
+    "markerLabel": "KESTREL FLIGHT CONTROLS \u00b7 IGNITE",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-a/01_transit-ignite-at_ch10-transit.png",
-   "sha256": "d02c50ab6b0a00742a34f6c5327e9c6e00104e234bfe25b911b64c751611cfac",
-   "bytes": 235066,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 222761,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "01_transit-ignite-at_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / transit-ignite-at",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 6619,
+    "speed": 75.23,
+    "flightPhase": "descent",
+    "renderCameraFovDeg": 78.9724,
+    "flightFeedbackFovDeg": 78.891,
+    "cockpitShellLocalScale": [
+     1.17656,
+     1.17656,
+     1
+    ],
+    "cockpitApertureWidthPx": 645,
+    "stationSpinePercentOfFrameWidth": 3.94,
+    "stationSpineVisualAngleDeg": 5.538,
+    "objectiveId": "station:transit:hold",
+    "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-a/02_transit-ignite-after_ch10-transit.png",
-   "sha256": "969dbb3917d30610db980e5db61e81c207814ed0ae3632a4b1ac3d928d8b7249",
-   "bytes": 559553,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 566948,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "02_transit-ignite-after_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / transit-ignite-after",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 6136,
+    "speed": 286.09,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 79,
+    "flightFeedbackFovDeg": 79,
+    "cockpitShellLocalScale": [
+     1.17727,
+     1.17727,
+     1
+    ],
+    "cockpitApertureWidthPx": 718,
+    "stationSpinePercentOfFrameWidth": 4.25,
+    "stationSpineVisualAngleDeg": 5.973,
+    "objectiveId": "station:transit:hold",
+    "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-a/03_T2-hold-marker_ch10-transit.png",
-   "sha256": "1f3fb0543ac8374653f3eeb30e7d2511e3eba6ecceafa921e5cebaf76ce8d79e",
-   "bytes": 572783,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 579794,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "03_T2-hold-marker_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / T2-hold-marker",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 6072,
+    "speed": 295.37,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 79,
+    "flightFeedbackFovDeg": 79,
+    "cockpitShellLocalScale": [
+     1.17727,
+     1.17727,
+     1
+    ],
+    "cockpitApertureWidthPx": 725,
+    "stationSpinePercentOfFrameWidth": 4.29,
+    "stationSpineVisualAngleDeg": 6.03,
+    "objectiveId": "station:transit:hold",
+    "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-a/04_seam-before_ch10-transit.png",
-   "sha256": "551ff9d9867e30450c2f8a940427fc6fd50c33f3ef97697ff87180816dc5a5c9",
-   "bytes": 556552,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 564610,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "04_seam-before_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / seam-before",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 5269,
+    "speed": 277.26,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 79,
+    "flightFeedbackFovDeg": 79,
+    "cockpitShellLocalScale": [
+     1.17727,
+     1.17727,
+     1
+    ],
+    "cockpitApertureWidthPx": null,
+    "stationSpinePercentOfFrameWidth": null,
+    "stationSpineVisualAngleDeg": null,
+    "objectiveId": "station:transit:hold",
+    "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-a/05_seam-at_ch10-transit.png",
-   "sha256": "8fc846bf1a6689b8d4edffb5cf3b16e417e4756650bb05ee982dd52c06bd31bd",
-   "bytes": 565421,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 567232,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "05_seam-at_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / seam-at",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 5165,
+    "speed": 294.43,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 79,
+    "flightFeedbackFovDeg": 79,
+    "cockpitShellLocalScale": [
+     1.17727,
+     1.17727,
+     1
+    ],
+    "cockpitApertureWidthPx": 738,
+    "stationSpinePercentOfFrameWidth": 5.03,
+    "stationSpineVisualAngleDeg": 7.06,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-a/06_seam-after_ch10-transit.png",
-   "sha256": "be2479c2759fab97427f6d1befc4412074cd88f428fb640b1d4ed2af5cfc095c",
-   "bytes": 470365,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 494960,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "06_seam-after_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / seam-after",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 4301,
+    "speed": 223.46,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 78.9976,
+    "flightFeedbackFovDeg": 78.98,
+    "cockpitShellLocalScale": [
+     1.17721,
+     1.17721,
+     1
+    ],
+    "cockpitApertureWidthPx": 718,
+    "stationSpinePercentOfFrameWidth": 5.97,
+    "stationSpineVisualAngleDeg": 8.385,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-a/07_galaxy-absence-check_ch10-transit.png",
-   "sha256": "f45b218db34a3b143c57ac62a4719cd02c1598bea8aecf36440a6ce38815fc6f",
-   "bytes": 444803,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 477266,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "07_galaxy-absence-check_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-a / galaxy-absence-check",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 3164,
+    "speed": 205.97,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 78.9557,
+    "flightFeedbackFovDeg": 78.727,
+    "cockpitShellLocalScale": [
+     1.17614,
+     1.17614,
+     1
+    ],
+    "cockpitApertureWidthPx": 691,
+    "stationSpinePercentOfFrameWidth": 7.97,
+    "stationSpineVisualAngleDeg": 11.181,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/00_station-resolved-before_ch10-transit.png",
-   "sha256": "f7f6a21acf56cb2d1b9aecbe8a028196596f2ab47a10b3240bf89994b9c6cf6b",
-   "bytes": 580228,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 573216,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "00_station-resolved-before_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-b / station-resolved-before",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 1518,
+    "speed": 302.86,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 77.7976,
+    "flightFeedbackFovDeg": 79,
+    "cockpitShellLocalScale": [
+     1.15929,
+     1.15929,
+     1
+    ],
+    "cockpitApertureWidthPx": null,
+    "stationSpinePercentOfFrameWidth": null,
+    "stationSpineVisualAngleDeg": null,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png",
-   "sha256": "8fc478161f85551600756e051d955c0da085f07b68d7aae902eb10f0c383628d",
-   "bytes": 541463,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 541991,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "01_station-resolved-at_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-b / station-resolved-at",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 1421,
+    "speed": 261.94,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 71.4096,
+    "flightFeedbackFovDeg": 73.298,
+    "cockpitShellLocalScale": [
+     1.02891,
+     1.02891,
+     1
+    ],
+    "cockpitApertureWidthPx": 778,
+    "stationSpinePercentOfFrameWidth": 19.65,
+    "stationSpineVisualAngleDeg": 24.95,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": "(both fi",
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/02_hold-mid_ch10-transit.png",
-   "sha256": "03a7e8812abc92909e249940ceacf2643ce03bd77fa4e19305d03cc40306cdcd",
-   "bytes": 335590,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 328351,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "02_hold-mid_ch10-transit",
-   "beatLabel": "ch10-transit"
+   "context": "strip-transit-b / hold-mid",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 1184,
+    "speed": 129.04,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0011,
+    "flightFeedbackFovDeg": 70.001,
+    "cockpitShellLocalScale": [
+     1.00001,
+     1.00001,
+     1
+    ],
+    "cockpitApertureWidthPx": 714,
+    "stationSpinePercentOfFrameWidth": 23.69,
+    "stationSpineVisualAngleDeg": 29.481,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": "(both fires behind you now. ahead, a light someone el",
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/03_hold-release_done.png",
-   "sha256": "bb2f629e2a891660d8bad7bdc8d464e896f1b54677adf99369be6d5f9acd2765",
-   "bytes": 253987,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 257761,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "03_hold-release_done",
-   "beatLabel": "done"
+   "context": "strip-transit-b / hold-release",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 1071,
+    "speed": 63.4,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0001,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 783,
+    "stationSpinePercentOfFrameWidth": 26.04,
+    "stationSpineVisualAngleDeg": 32.411,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/04_K11-painted_done.png",
-   "sha256": "44e81da078d6427d3e7031076239647f47ce4a546a3c4e98c06bcadec043edc5",
-   "bytes": 256656,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 262539,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "04_K11-painted_done",
-   "beatLabel": "done"
+   "context": "strip-transit-b / K11-painted",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 1063,
+    "speed": 59.13,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0001,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 765,
+    "stationSpinePercentOfFrameWidth": 26.22,
+    "stationSpineVisualAngleDeg": 32.634,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/05_work-order-cleared_done.png",
-   "sha256": "7b3420d77134257a2efe126b2cbbdcb14f15535cbf007f22580a06b13a06ce23",
-   "bytes": 261040,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 287412,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "05_work-order-cleared_done",
-   "beatLabel": "done"
+   "context": "strip-transit-b / work-order-cleared",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 1057,
+    "speed": 54.96,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0001,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 761,
+    "stationSpinePercentOfFrameWidth": 26.37,
+    "stationSpineVisualAngleDeg": 32.812,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/06_threshold-handback_done.png",
-   "sha256": "48659ea1e6f5d3f60c1fa5772ac3df45208df16d4368db31fe12629175007f93",
-   "bytes": 264352,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 305330,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "06_threshold-handback_done",
-   "beatLabel": "done"
+   "context": "strip-transit-b / threshold-handback",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 1051,
+    "speed": 51.39,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0001,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 621,
+    "stationSpinePercentOfFrameWidth": 26.54,
+    "stationSpineVisualAngleDeg": 33.028,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
   },
   {
    "path": "evidence/capture/strip-transit-b/07_threshold-handback-after_done.png",
-   "sha256": "fc3d94d2c27ce1657937dcd6a9d6fffbe8ac6f861f27b1a3b4b5a99798f03a35",
-   "bytes": 335054,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
+   "bytes": 334526,
+   "ffprobe": {
+    "codec_name": "png",
     "width": 1280,
-    "height": 720
+    "height": 720,
+    "pix_fmt": "rgb24"
    },
-   "audio": null,
-   "label": "07_threshold-handback-after_done",
-   "beatLabel": "done"
+   "context": "strip-transit-b / threshold-handback-after",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 975,
+    "speed": 6.19,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0001,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 770,
+    "stationSpinePercentOfFrameWidth": 28.55,
+    "stationSpineVisualAngleDeg": 35.528,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": false
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/00_seam-before_ch10-transit.png",
+   "bytes": 552385,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / seam-before",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 5224,
+    "speed": 272.2,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 72,
+    "flightFeedbackFovDeg": 72,
+    "cockpitShellLocalScale": [
+     1.03761,
+     1.03761,
+     1
+    ],
+    "cockpitApertureWidthPx": null,
+    "stationSpinePercentOfFrameWidth": null,
+    "stationSpineVisualAngleDeg": null,
+    "objectiveId": "station:transit:hold",
+    "markerLabel": "ISSUED BEARING \u00b7 HOLD",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/01_seam-at_ch10-transit.png",
+   "bytes": 562151,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / seam-at",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 5122,
+    "speed": 288.82,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 72,
+    "flightFeedbackFovDeg": 72,
+    "cockpitShellLocalScale": [
+     1.03761,
+     1.03761,
+     1
+    ],
+    "cockpitApertureWidthPx": 730,
+    "stationSpinePercentOfFrameWidth": 5.73,
+    "stationSpineVisualAngleDeg": 7.334,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/02_seam-after_ch10-transit.png",
+   "bytes": 483347,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / seam-after",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 4256,
+    "speed": 219.76,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 71.999,
+    "flightFeedbackFovDeg": 71.992,
+    "cockpitShellLocalScale": [
+     1.03759,
+     1.03759,
+     1
+    ],
+    "cockpitApertureWidthPx": 736,
+    "stationSpinePercentOfFrameWidth": 6.85,
+    "stationSpineVisualAngleDeg": 8.763,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": null,
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/03_station-resolved_ch10-transit.png",
+   "bytes": 544736,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / station-resolved",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 1432,
+    "speed": 268.69,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.4098,
+    "flightFeedbackFovDeg": 70.925,
+    "cockpitShellLocalScale": [
+     1.00832,
+     1.00832,
+     1
+    ],
+    "cockpitApertureWidthPx": 789,
+    "stationSpinePercentOfFrameWidth": 19.86,
+    "stationSpineVisualAngleDeg": 24.861,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": "(both",
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/04_hold-mid_ch10-transit.png",
+   "bytes": 336255,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / hold-mid",
+   "beat": "ch10-transit",
+   "observed": {
+    "stationDistance": 1188,
+    "speed": 131.65,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0003,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 738,
+    "stationSpinePercentOfFrameWidth": 23.65,
+    "stationSpineVisualAngleDeg": 29.434,
+    "objectiveId": "station:transit:resolve",
+    "markerLabel": "ISSUING STATION \u00b7 RESOLVING",
+    "captionText": "(both fires behind you now. ahead, a light someo",
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/05_hold-release_done.png",
+   "bytes": 262517,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / hold-release",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 1063,
+    "speed": 59.55,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0003,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 613,
+    "stationSpinePercentOfFrameWidth": 26.23,
+    "stationSpineVisualAngleDeg": 32.638,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/06_threshold-handback_done.png",
+   "bytes": 265467,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / threshold-handback",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 1056,
+    "speed": 54.58,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0003,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 634,
+    "stationSpinePercentOfFrameWidth": 26.44,
+    "stationSpineVisualAngleDeg": 32.897,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-rm-transit/07_threshold-handback-after_done.png",
+   "bytes": 333303,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-rm-transit / threshold-handback-after",
+   "beat": "done",
+   "observed": {
+    "stationDistance": 976,
+    "speed": 6.57,
+    "flightPhase": "deep_space",
+    "renderCameraFovDeg": 70.0003,
+    "flightFeedbackFovDeg": 70,
+    "cockpitShellLocalScale": [
+     1,
+     1,
+     1
+    ],
+    "cockpitApertureWidthPx": 789,
+    "stationSpinePercentOfFrameWidth": 28.55,
+    "stationSpineVisualAngleDeg": 35.528,
+    "objectiveId": null,
+    "markerLabel": null,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "qualityProfile": "LOW",
+    "reducedMotion": true
+   }
+  },
+  {
+   "path": "evidence/capture/still-seam-of-light.png",
+   "bytes": 505195,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "hero still: seam of light (HIGH)",
+   "beat": "ch10-transit",
+   "observed": {
+    "latchDistance": 5191,
+    "shutterDistance": 5137,
+    "qualityProfile": "HIGH",
+    "renderCameraFovDeg": 79,
+    "stationMask": {
+     "maskPixels": 709,
+     "spineLengthPx": 63.9,
+     "spineThicknessPx": 21.4,
+     "spinePercentOfFrameWidth": 4.99,
+     "thicknessPercentOfFrameWidth": 1.67,
+     "spineVisualAngleDeg": 7.01,
+     "thicknessVisualAngleDeg": 2.345,
+     "silhouetteBBox": [
+      610,
+      344,
+      61,
+      42
+     ],
+     "centroidPx": [
+      645.9,
+      367.8
+     ],
+     "centroidPercentX": 50.46,
+     "centroidOffsetFromViewCenterDeg": 1.075
+    },
+    "cockpitMask": {
+     "maskPixels": 655886,
+     "silhouetteBBox": [
+      0,
+      0,
+      1280,
+      720
+     ],
+     "apertureWidthPx": 641,
+     "apertureRow": 392,
+     "apertureSpanPx": [
+      319,
+      959
+     ],
+     "apertureWidthAt1280": 641,
+     "aperturePercentOfFrameWidth": 50.08
+    },
+    "galaxyObjectsInFrame": 0,
+    "namedCompanionsInFrame": 0,
+    "milestones": {
+     "faultRead": true,
+     "fabricationRefused": true,
+     "relayAsked": true,
+     "relayAnswered": true,
+     "bearingClaimed": true,
+     "transitIgnited": true,
+     "seamPassed": true,
+     "stationResolved": false,
+     "ch10Complete": false,
+     "dockingAuthorized": false
+    }
+   }
+  },
+  {
+   "path": "evidence/capture/still-seam-of-light-low.png",
+   "bytes": 558693,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "hero still: seam of light (LOW)",
+   "beat": "ch10-transit",
+   "observed": {
+    "latchDistance": 5185,
+    "shutterDistance": 5135,
+    "qualityProfile": "LOW",
+    "renderCameraFovDeg": 79,
+    "stationMask": {
+     "maskPixels": 693,
+     "spineLengthPx": 63.9,
+     "spineThicknessPx": 21.4,
+     "spinePercentOfFrameWidth": 4.99,
+     "thicknessPercentOfFrameWidth": 1.67,
+     "spineVisualAngleDeg": 7.012,
+     "thicknessVisualAngleDeg": 2.349,
+     "silhouetteBBox": [
+      610,
+      344,
+      61,
+      42
+     ],
+     "centroidPx": [
+      646,
+      367.7
+     ],
+     "centroidPercentX": 50.47,
+     "centroidOffsetFromViewCenterDeg": 1.068
+    },
+    "cockpitMask": {
+     "maskPixels": 571198,
+     "silhouetteBBox": [
+      0,
+      0,
+      1280,
+      720
+     ],
+     "apertureWidthPx": 659,
+     "apertureRow": 414,
+     "apertureSpanPx": [
+      294,
+      952
+     ],
+     "apertureWidthAt1280": 659,
+     "aperturePercentOfFrameWidth": 51.48
+    },
+    "galaxyObjectsInFrame": 0,
+    "namedCompanionsInFrame": 0,
+    "milestones": {
+     "faultRead": true,
+     "fabricationRefused": true,
+     "relayAsked": true,
+     "relayAnswered": true,
+     "bearingClaimed": true,
+     "transitIgnited": true,
+     "seamPassed": true,
+     "stationResolved": false,
+     "ch10Complete": false,
+     "dockingAuthorized": false
+    }
+   }
+  },
+  {
+   "path": "evidence/capture/still-station-resolved.png",
+   "bytes": 519061,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "hero still: station resolved (cut line)",
+   "beat": "done",
+   "observed": {
+    "shutterDistance": 1077,
+    "stationCentreRange": 1318.2,
+    "qualityProfile": "HIGH",
+    "renderCameraFovDeg": 70.0002,
+    "stationMask": {
+     "maskPixels": 16514,
+     "spineLengthPx": 329.9,
+     "spineThicknessPx": 98.2,
+     "spinePercentOfFrameWidth": 25.77,
+     "thicknessPercentOfFrameWidth": 7.67,
+     "spineVisualAngleDeg": 32.074,
+     "thicknessVisualAngleDeg": 9.543,
+     "silhouetteBBox": [
+      466,
+      280,
+      311,
+      200
+     ],
+     "centroidPx": [
+      651.9,
+      390.1
+     ],
+     "centroidPercentX": 50.93,
+     "centroidOffsetFromViewCenterDeg": 3.141
+    },
+    "cockpitMask": {
+     "maskPixels": 640498,
+     "silhouetteBBox": [
+      0,
+      0,
+      1280,
+      720
+     ],
+     "apertureWidthPx": 646,
+     "apertureRow": 403,
+     "apertureSpanPx": [
+      317,
+      962
+     ],
+     "apertureWidthAt1280": 646,
+     "aperturePercentOfFrameWidth": 50.47
+    },
+    "stationHullInstances": 613,
+    "stationLightInstances": 126,
+    "captionText": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "objectiveId": null,
+    "hudText": null,
+    "resetReason": "completion",
+    "canDock": false,
+    "dockingAuthorizedMilestone": false,
+    "galaxyObjectsInFrame": 0
+   }
+  },
+  {
+   "path": "evidence/capture/still-st0-sighting.png",
+   "bytes": 844835,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "hero still: ST-0 sighting (CARRIED from draft-v6; not re-shot)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/00_shelter-pre-activation_ch10-cold.png",
+   "bytes": 298926,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/01_cold-noticed-before_ch10-cold.png",
+   "bytes": 298302,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/02_cold-noticed-at_ch10-cold.png",
+   "bytes": 299194,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/03_cold-noticed-after_ch10-cold.png",
+   "bytes": 298061,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/04_K1-painted_ch10-cold.png",
+   "bytes": 297443,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/05_fault-read-before_ch10-cold.png",
+   "bytes": 298218,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/06_fault-read-at_ch10-cold.png",
+   "bytes": 319319,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-a/07_fault-read-after_ch10-cold.png",
+   "bytes": 333278,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-a (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/00_egress-face-pre_ch10-cold.png",
+   "bytes": 300389,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/01_egress-face-post_ch10-cold.png",
+   "bytes": 301628,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/02_fabrication-refused-before_ch10-cold.png",
+   "bytes": 328307,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/03_fabrication-refused-at_ch10-cold.png",
+   "bytes": 321908,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-cold",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/04_fabrication-refused-after_ch10-ask.png",
+   "bytes": 328891,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/05_refusal-band-dwell_ch10-ask.png",
+   "bytes": 331805,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/06_beat-exit-guidance_ch10-ask.png",
+   "bytes": 304970,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-cold-b/07_ask-fresh-entry_ch10-ask.png",
+   "bytes": 306317,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-cold-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/00_reboard-before_ch10-ask.png",
+   "bytes": 388263,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/01_reboard-at_ch10-ask.png",
+   "bytes": 364528,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/02_reboard-after_ch10-ask.png",
+   "bytes": 295581,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/03_sibling-acquire-before_ch10-ask.png",
+   "bytes": 669284,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/04_sibling-acquire-at_ch10-ask.png",
+   "bytes": 567065,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/05_sibling-acquire-after_ch10-ask.png",
+   "bytes": 530962,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/06_landfall-before_ch10-ask.png",
+   "bytes": 320205,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-a/07_landfall-at_ch10-ask.png",
+   "bytes": 673189,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-a (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/00_relay-ask-before_ch10-ask.png",
+   "bytes": 302822,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/01_relay-ask-at_ch10-ask.png",
+   "bytes": 310945,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/02_relay-answer-at_ch10-ask.png",
+   "bytes": 306768,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/03_relay-answer-after_ch10-ask.png",
+   "bytes": 314295,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/04_bearing-claimed-before_ch10-ask.png",
+   "bytes": 333141,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/05_bearing-claimed-at_ch10-ask.png",
+   "bytes": 327470,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-ask",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/06_bearing-claimed-after_ch10-transit.png",
+   "bytes": 300319,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-transit",
+   "observed": {
+    "carried": true
+   }
+  },
+  {
+   "path": "evidence/capture/strip-ask-b/07_marker-state-post-claim_ch10-transit.png",
+   "bytes": 292330,
+   "ffprobe": {
+    "codec_name": "png",
+    "width": 1280,
+    "height": 720,
+    "pix_fmt": "rgb24"
+   },
+   "context": "strip-ask-b (CARRIED from draft-v6)",
+   "beat": "ch10-transit",
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/ab_cold-entry_A-hearth-close.wav",
-   "sha256": "a262a3975fbc45a2e9a40999f02b8bd73cefadcb1c66da4362bddc7eacb0559e",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "ab_cold-entry_A-hearth-close",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/ab_cold-entry_B-ch10-cold.wav",
-   "sha256": "75becbd015b8d74740b0b0ff98ba9ac88d37588d65f65128ba530ed2f810623d",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "ab_cold-entry_B-ch10-cold",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/carrier-illegal-control_no-carrier.wav",
-   "sha256": "3096a70884c55554c9618b6a88ee4d17c41e68ad363a9fcd2a2668680e5d9252",
-   "bytes": 1058444,
-   "formatName": "wav",
-   "durationSeconds": 6.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "bytes": 2822444,
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "16.000000",
+    "formatDuration": "16.000000"
    },
-   "label": "carrier-illegal-control_no-carrier",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/handback_release.wav",
-   "sha256": "ffb3ec825f5fc32213c099c6d06951e7c8cd781f87a164a426edf6e45b1c8ff0",
    "bytes": 1764044,
-   "formatName": "wav",
-   "durationSeconds": 10.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "10.000000",
+    "formatDuration": "10.000000"
    },
-   "label": "handback_release",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/relay-answer_metric.wav",
-   "sha256": "0049c63e223878a2ef90f63cbbfdf3f744dc0d4e4a67291f5c2b539cfedd1597",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "relay-answer_metric",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/relay-answer_ref-ch5-maw.wav",
-   "sha256": "e7901747a3cbfd9c2f1c8437fd5a0e63367191b1cca1de31f140b74d357b3968",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "relay-answer_ref-ch5-maw",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/relay_ask-figure.wav",
-   "sha256": "491ae0d3d753a74ed6e73d8ce0a14f402dcbcf8d81e4c50f00eb24d35c4878e0",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "relay_ask-figure",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/relay_ask-through-answer_combined.wav",
-   "sha256": "c8ec2edcc794ade9b56719b75d8e01bcf5bdd20eb066722a7ececf19f75a6934",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "relay_ask-through-answer_combined",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/resolved_ref-a4-exhale-authored.wav",
-   "sha256": "fb2ddbf017b098fdbdc151bdceb2bbd765f7a6eb00623ac811620093e7638504",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "resolved_ref-a4-exhale-authored",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/resolved_ref-a4-exhale.wav",
-   "sha256": "713e1aace5f80e9ca8178c5178a446d0041d541da266fc53f867ab9ff6fa8139",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "resolved_ref-a4-exhale",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/station-resolved_combined.wav",
-   "sha256": "3e15b045fb6376ca7425c35bd23f49b1838d7367fe7c98dc7740dddce19707e9",
    "bytes": 2116844,
-   "formatName": "wav",
-   "durationSeconds": 12.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "12.000000",
+    "formatDuration": "12.000000"
    },
-   "label": "station-resolved_combined",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   },
   {
    "path": "evidence/score/transit_seam-ebb_combined.wav",
-   "sha256": "6bcf893b5b00be49594e4bd1797acbaa326042cca613c8305969d560045e273c",
    "bytes": 2469644,
-   "formatName": "wav",
-   "durationSeconds": 14.0,
-   "video": null,
-   "audio": {
-    "codec": "pcm_s16le",
-    "sampleRate": "44100",
-    "channels": 2
+   "ffprobe": {
+    "codec_name": "pcm_s16le",
+    "sample_rate": "44100",
+    "channels": 2,
+    "duration": "14.000000",
+    "formatDuration": "14.000000"
    },
-   "label": "transit_seam-ebb_combined",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/ch8-crossing-control_t195.png",
-   "sha256": "af549ea1a26b598c38949575f0f10b46e9ba21408e33c9d4b17c11de1ab0d7a0",
-   "bytes": 274460,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "ch8-crossing-control_t195",
-   "beatLabel": "ch8-crossing-control"
-  },
-  {
-   "path": "evidence/verification/crash-frames/ch8-crossing-control_t197.png",
-   "sha256": "01253a5cdf8b202a009c418344001f644ba44e6d81e2472ec4994b4857543f37",
-   "bytes": 276392,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "ch8-crossing-control_t197",
-   "beatLabel": "ch8-crossing-control"
-  },
-  {
-   "path": "evidence/verification/crash-frames/ch8-crossing-control_t199.png",
-   "sha256": "bbcdcb2716b54b384de84838e5b5032328844b43193105503432550695919eba",
-   "bytes": 277390,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "ch8-crossing-control_t199",
-   "beatLabel": "ch8-crossing-control"
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-baseline_t194.png",
-   "sha256": "e52bcedba4d1703c4de3cd0a2d596bb4f891634b69582396228eef68fd56cb1b",
-   "bytes": 333735,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "low-baseline_t194",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-baseline_t196.png",
-   "sha256": "693f20ad27276786dd84ede7322c7d5b779dc2a5dc076cf6190daa5258fe22de",
-   "bytes": 334599,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "low-baseline_t196",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-baseline_t199.png",
-   "sha256": "9eba8e5cce726af50ce1a0b44a30999ef63b0dbb88f195b14afc722a3c1f154e",
-   "bytes": 510594,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "low-baseline_t199",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-half-viewport_t195.png",
-   "sha256": "6b9a5c8087b28ddcc09a298144d4d14f8b8ff383015be632fe4d4b48d4bc9982",
-   "bytes": 131949,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 640,
-    "height": 360
-   },
-   "audio": null,
-   "label": "low-half-viewport_t195",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-half-viewport_t197.png",
-   "sha256": "164f2da692a4290a8c5e1cde18e2e30586c7212176cf780c9846554f6fb7d021",
-   "bytes": 132500,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 640,
-    "height": 360
-   },
-   "audio": null,
-   "label": "low-half-viewport_t197",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-half-viewport_t199.png",
-   "sha256": "733a2253f7daab00b6a823cfaf39d1fa6193d231b9631dc09e7f54756dcc6895",
-   "bytes": 132146,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 640,
-    "height": 360
-   },
-   "audio": null,
-   "label": "low-half-viewport_t199",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-no-companions_t195.png",
-   "sha256": "5daad17ce38c676c54c91c020b295f813151799fcaf4680e720ce024a58a592b",
-   "bytes": 334787,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "low-no-companions_t195",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-no-companions_t198.png",
-   "sha256": "46e26b6da5acff1ec5b8c14dd940b8c425a313e26c994925b00a80c6855ac2ea",
-   "bytes": 488064,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "low-no-companions_t198",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/low-no-companions_t200.png",
-   "sha256": "09e2d7944f8603af85618341183e085ddf4f03da5ae0735a58cb8826b5c09483",
-   "bytes": 329619,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "low-no-companions_t200",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/potato-full_t194.png",
-   "sha256": "0a97865b149cd46cca6cb18d0a2bcbb0b1c9b16ea6215504a0f3122a24ff5948",
-   "bytes": 105564,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "potato-full_t194",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/potato-full_t196.png",
-   "sha256": "da6f5eea73146af052f53fddad31d19146109d17552ab225c6c7fb81dbaaf58d",
-   "bytes": 330768,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "potato-full_t196",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/potato-full_t198.png",
-   "sha256": "e8868edde9709434a76a79edb0d9e6aa35c8341c5c03fb9d12e95e6a91edc6f1",
-   "bytes": 331679,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 1280,
-    "height": 720
-   },
-   "audio": null,
-   "label": "potato-full_t198",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/potato-half_t194.png",
-   "sha256": "9e6d2d676f8635a55a8aed8835b38609e796a5f5f8bcaef0d743d43114ca8d66",
-   "bytes": 131304,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 640,
-    "height": 360
-   },
-   "audio": null,
-   "label": "potato-half_t194",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/potato-half_t196.png",
-   "sha256": "2c5068176f9fe2470f83361ea8babf5e222e8e8539634816429d8220b6459a66",
-   "bytes": 132873,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 640,
-    "height": 360
-   },
-   "audio": null,
-   "label": "potato-half_t196",
-   "beatLabel": null
-  },
-  {
-   "path": "evidence/verification/crash-frames/potato-half_t198.png",
-   "sha256": "e132a9ea705b5bdc9f977bedfa31e6b723b9593d9b12a4ed0cd57bc9415031b1",
-   "bytes": 132084,
-   "formatName": "png_pipe",
-   "durationSeconds": 0,
-   "video": {
-    "codec": "png",
-    "width": 640,
-    "height": 360
-   },
-   "audio": null,
-   "label": "potato-half_t198",
-   "beatLabel": null
+   "context": "deterministic offline render (CARRIED from draft-v6)",
+   "beat": null,
+   "observed": {
+    "carried": true
+   }
   }
  ]
 }
