@@ -2,43 +2,101 @@
   "schema": "paravoxia.directorRepairDirection.v1",
   "director": "chapter",
   "runId": "2026-08-11-ch10-station-introduction",
-  "contractVersion": "draft-v4",
-  "contractSha256": "8e0b2230e452a8951d8ea54b4e604fe536573d057a4d7c192bf52849ae548bd3",
-  "defectIds": [
-    "story-audit-f1",
-    "story-audit-f2",
-    "story-audit-f3",
-    "story-audit-f4",
-    "story-audit-f5",
-    "story-audit-f6",
-    "story-audit-f7",
-    "story-audit-f8"
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "defectRegisterRef": "defects.json",
+  "reissuedAt": "2026-08-12T00:00:00Z",
+  "reissueNote": "Re-binding only, not a re-decision. Every ruling below is preserved verbatim from the direction filed at draft-v3/draft-v4; only the contract binding, the defect vocabulary (now the canonical defects.json IDs — the superseded story-audit-f1..f8 local vocabulary is retired), the explicit owner fields, and the post-amendment contractChangeRequired values are new.",
+  "defectIds": ["F1", "UX-1", "UX-2", "F8", "NV-1", "OD-1"],
+  "contractChangeRequired": false,
+  "contractChangeRequiredRationale": "FALSE as of draft-v9: every chapter-lane direction that required a contract change has been discharged by a landed amendment (draft-v4 and draft-v7, cited per direction below). The two open items in this lane (NV-1, OD-1) are owner-taste decisions; OD-1 would require a fresh amendment cycle only if the owner commissions the authored line, and that determination is the owner's, not this direction's.",
+  "directions": [
+    {
+      "defectIds": ["F1"],
+      "owner": "chapter",
+      "severity": "major",
+      "anchor": "anc.ch10.relay-answer",
+      "contractChangeRequired": false,
+      "status": "discharged",
+      "dischargedBy": "Score's D2 ask-figure realization (implementation conformance to contract text already frozen at draft-v3's barIntent); no contract clause moved for F1 at any revision.",
+      "ruling": "RULING (verbatim, as filed): K9 SURVIVES AS-IS, CONDITIONAL ON SCORE'S D2 REPAIR; THE AUDITOR'S TIMING PROPOSAL IS REJECTED. The auditor's fix (CH10_RELAY_ANSWER_BEATS 2 to 1, drop the reveal guard so K8 cuts K7 mid-reveal) would introduce a mid-typewriter overwrite — the exact defect class the 2026-08-10 run existed to kill — and break two tri-reconciled contract terms (the shared-anchor simultaneity binding and the tempo inequality that guarantees K7's 1.21s reveal completes before the answer) for a gain the musical repair achieves without collateral. The correct reading: K9's referent is the ASKING — the transmitted request, contracted as a two-bar sounding square-fifth figure at anc.ch10.relay-ask — not the caption paint. With D2 repaired, the answer at ask + 2 beats enters INSIDE the still-sounding two-bar question, the pause is filled by the asking itself, and the player hears the asking unfinished when the answer lands. The pillar spend becomes observation (audible) and K9 confirms it.",
+      "boundedAction": "None remaining in the chapter lane. K9 ships unchanged. The optional row-stacking presentation (K8 arriving beneath a still-standing K7 on the ch8 audit-stack precedent) remains approved-for-assessment only, adoptable solely if it violates no frozen contract sentence; if any sentence would change, it returns to the triad as an amendment, not a patch.",
+      "verificationRoute": "Onset measurement of the ask-through-answer render against the ch5-maw grammar reference: answer onset = ask onset + 2 beats with the ask figure still sounding across the answer onset."
+    },
+    {
+      "defectIds": ["UX-1"],
+      "owner": "chapter",
+      "severity": "high",
+      "anchor": "anc.ch10.bearing-claimed",
+      "contractChangeRequired": false,
+      "status": "discharged",
+      "dischargedBy": "draft-v7 (sha 32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860): the station:transit:reboard guidance object was added and T1's precondition restated; story-intent.md carries the rung at source.",
+      "ruling": "RULING (verbatim, as filed): accepted. The claim is performed on foot at the relay, so the beat's first instruction must be a locator to the ship she must find, never an input she cannot press. ch8's reboard → ignite grammar is the shipped pattern and is reused verbatim, because boarding the Kestrel always looks the same.",
+      "boundedAction": "Contracted at draft-v7 and complete in the contract: objective id station:transit:reboard, kind travel, marker label KESTREL HATCH · REBOARD, work order 'RETURN TO THE KESTREL.' then 'FOLLOW THE HATCH MARKER AND [F] BOARD.' (travel-verb vocabulary satisfied by FOLLOW), marker resolved from the Kestrel's live pose via chapter10FabricatorPosition (getShipPosition, verified), one enter cue per activation, replaced in place by station:transit:ignite only once aboard; T1 never publishes on foot, so HOLD [SPACE] is never shown to a player who cannot press it. Both-readings audit: pure guidance grammar, no new narrative surface. Runtime wiring belongs to Integration.",
+      "verificationRoute": "Manual-lane guidance trace on both entry paths (continuous and deep link), asserting [SPACE] absent on every on-foot rung and no stale marker across the reboard-to-ignite replacement."
+    },
+    {
+      "defectIds": ["UX-2"],
+      "owner": "human",
+      "severity": "medium",
+      "anchor": "anc.ch10.cold-noticed",
+      "contractChangeRequired": false,
+      "status": "accepted-exception-recorded",
+      "dischargedBy": "draft-v7: the accepted exception is recorded as a contract acceptance clause.",
+      "ruling": "RULING (verbatim, as filed): a ch10-scoped affordance is declined — forking guidance per chapter is a worse defect than the collapse it would patch. The mobile-potato JOURNAL collapse is the shipped whole-game baseline, routed as a whole-game packet; on touch the chapter's arrival is carried by the K1 caption, which mounts independently of the work-order surface.",
+      "boundedAction": "None in this run. The whole-game mobile guidance packet carries it.",
+      "verificationRoute": "Deferred to the packet."
+    },
+    {
+      "defectIds": ["F8"],
+      "owner": "human",
+      "severity": "medium",
+      "anchor": null,
+      "contractChangeRequired": false,
+      "status": "routed",
+      "ruling": "RULING (verbatim, as filed): split by lock boundary. main/story-authority.json is in allowedPaths and routes to Integration; main/STORY.md is NOT in allowedPaths and routes to the orchestrator as a lock question — either a recorded lock revision adds it for the truthful beat-table update this run's own docs law requires, or the debt rides the closeout packet explicitly.",
+      "boundedAction": "No chapter-lane action. Recorded acceptance stands: retargeting activeProduction today would drop the signed A4-to-ch9 coverage, so a second registered production (schema, gate design, its own lock revision) is the correct vehicle.",
+      "verificationRoute": "Deferred to the follow-on."
+    },
+    {
+      "defectIds": ["NV-1"],
+      "owner": "human",
+      "severity": "medium",
+      "anchor": "anc.ch10.station-resolved",
+      "contractChangeRequired": false,
+      "status": "open-owner-taste",
+      "ruling": "Chapter-lane position, unchanged: the withholding at the resolve is authored, not accidental — no awe-mediant, no lead entrance, the station's key banked for the docking run — and K11's geometry ('both fires behind you; ahead, a light someone else keeps alive') is written for a shape at the threshold, not a spectacle. I do not overrule three independent reviewers on a taste read. This is an owner ear call between accepting the restraint and commissioning a reveal packet.",
+      "boundedAction": "None taken. If the owner commissions a reveal packet, the chapter-lane constraint I attach is that the reveal may not spend the station's first REGULATION voice, may not make the station the actor, and may not require K11 to change — the image may grow, the claim may not.",
+      "verificationRoute": "Owner audition of the two renders; if a packet is commissioned it re-enters the triad with fresh signatures."
+    },
+    {
+      "defectIds": ["OD-1"],
+      "owner": "human",
+      "severity": "high",
+      "anchor": "anc.ch10.station-resolved",
+      "contractChangeRequired": false,
+      "status": "open-owner-decision",
+      "ruling": "Chapter-lane position: the owner's headed read is legitimate and it is exactly the risk my corridor-silence ruling accepted — silence is the coldest form of menace-by-procedure, but silence a player cannot distinguish from unfinished work has failed at the only place it matters. Note the ruling that produced it (CH-N1, preserved verbatim in chapter-reconciliation.jsonl) refused a REGULATION refusal line on the grounds that a refusal is an act and the station is never the actor, and that the station's first utterance is banked for the apron's traffic-control irony. Those grounds still hold; what they did not anticipate is that legibility of the closed door can be carried by the PLAYER'S OWN voice rather than the station's.",
+      "boundedAction": "If and only if the owner commissions it: one authored line in the chapter's own low register at the corridor threshold — the player noticing the absence, never the station producing a refusal — subject to the both-readings audit, no station voice, no new anchor, and the copy table's zero-station-lines term preserved. That is new copy and a new amendment cycle with fresh triad signatures; nothing is drafted or landed here.",
+      "verificationRoute": "Owner decision, then a chapter-authored line, a both-readings audit, and a headed re-check."
+    }
   ],
-  "contractChangeRequired": true,
   "boundedActions": [
-    "F1 (MAJOR) — RULING: K9 SURVIVES AS-IS, CONDITIONAL ON SCORE'S D2 REPAIR; THE AUDITOR'S TIMING PROPOSAL IS REJECTED. The auditor's fix (CH10_RELAY_ANSWER_BEATS 2 to 1, drop the reveal guard so K8 cuts K7 mid-reveal) would introduce a mid-typewriter overwrite — the exact defect class the 2026-08-10 run existed to kill — and break two tri-reconciled contract terms (the shared-anchor simultaneity binding and the tempo inequality that guarantees K7's 1.21s reveal completes before the answer) for a gain the musical repair achieves without collateral. The correct reading: K9's referent is the ASKING — the transmitted request, contracted as a two-bar sounding square-fifth figure at anc.ch10.relay-ask — not the caption paint. Score's D2 finds that figure was never realized (the audible event is a timbre change, so the shipped 0.55s pause reads as assertion); with D2 repaired, the answer at ask + 2 beats enters INSIDE the still-sounding two-bar question, the pause is filled by the asking itself, and the player hears the asking unfinished when the answer lands. The pillar spend becomes observation (audible) and K9 confirms it. This is implementation catching up to signed contract text (barIntent already specifies the figure), so contractChangeRequired FALSE for F1 itself. OPTIONAL ENHANCEMENT, approved for assessment, routed to Integration + Cinematography: if the RELAY caption band supports row-stacking (the ch8 audit-stack precedent), K8 arrives as a second row beneath a still-standing K7 instead of replacing it — the request visibly never closes before the answer arrives, doubling the witness without cutting any text. Adopt only if it violates no frozen contract sentence; if any sentence would change, it returns to the triad as an amendment, not a patch. Verification: score deliverable 2 re-rendered WITH the ask figure and real onsets (the audit found relay-answer_onsets.json empty and the ch5-maw reference uncompared — that evidence debt must actually be paid this time).",
-    "F2 (moderate) — ACCEPT, copy re-cut, contractChangeRequired TRUE. 'FIRST WORLD · COURSE' / 'FIND THE FIRST WORLD.' pattern-matches development-tier discourse in caps on a HUD; timelessness law violation, my miss. Re-cut with marker/work-order noun parity preserved (the ch8 SIBLING WORLD precedent): marker 'ORIGIN WORLD · COURSE', work order line 1 'FIND THE ORIGIN WORLD.', final line 'CENTER IT AND CROSS.' UNCHANGED — it already carries the travel-verb vocabulary from the draft-v2 re-cut and must not be touched again. The auditor's suggested 'FIND THE WORLD YOU CAME FROM.' is declined on marker-parity grounds (label noun and order noun must match exactly). Both-readings audit: naive, the world you started on; deduced, the world she was poured into a suit on — 'origin' carries the embodiment reading for free. Amend everywhere the coinage appears: contract (marker, work order, any prose 'first world' in beat/agency text), story-intent.md, storyObjectiveGuidance.ts, test pins. Prose references to 'the first fire' in captions/intent narrative are NOT in scope — 'fire' is the hearth ladder, not a world name, and K-copy is untouched by this finding.",
-    "F3 (moderate) — ACCEPT, K5 gains a header, contractChangeRequired TRUE. Attribution symmetry: K2 self-identifies (HAB CORE ·), K7/K8 carry WRECK RELAY; K5 painting headerless in the band that carried W-7744's orders is an unauthored ambiguity. K5 becomes header 'KESTREL FABRICATOR' with text 'PATTERN NOT HELD · CLASS: ISSUED COMPONENT · SOURCE NOT HELD LOCALLY' unchanged. Stripping K7/K8's headers is REJECTED: the WRECK RELAY header is shipped ch7/ch8 precedent and pillar-load-bearing (the auditor's own finding — channel, not party). Her own tooling identifies itself; only the unanswerable things stay nameless.",
-    "F4 (moderate, owner taste) — ROUTED TO OWNER, drafted for the closeout packet, decision deliberately not taken here. QUESTION FOR THE OWNER: ch10's awakening-voice lines are parenthetical second person ('a wall you sealed yourself', 'the going is still yours', 'both fires behind you'), continuous with the ch9 close they open from; the tri-signed 2026-08-10 repair moved ch7/ch8's movement voice to bare first person ('the scar remains. now it can carry me.'). Three options: (a) keep ch10 second person — continuity with the settlement voice, but at the stated agency peak K10's 'yours' places the voice outside the doer; (b) re-voice ch10 to first person — continuity with the lane's newest direction and the doer owns the claim, but it spends more 'i' against the hidden-pillar budget (first person intensifies the AI-biography reading) and breaks voice continuity with the ch9 close ch10 must not cheapen; (c) declare the split authored — second person for settled domestic movements (ch10-cold), first person crossing in at the threshold (K10/K11), making the chapter's own arc the transition between the two registers. My recommendation if asked: (c), with only K10 and K11 re-voiced and re-audited; but this is the owner's taste call and no line changes until it returns. contractChangeRequired TRUE IF the owner selects (b) or (c); FALSE for (a).",
-    "F5 (low) — ACCEPT, contractChangeRequired TRUE. 'RETURN TO THE SECOND HEARTH CORE.' fires while the player is standing inside the 12m notice radius — a standing order that lies at birth. Becomes 'STAND AT THE SECOND HEARTH CORE.', which is true at entry and remains a valid instruction if the player wanders before acting. Final line '[F] READ THE HEARTH FAULT.' unchanged (interact vocabulary intact). Marker label unchanged.",
-    "F6 (low) — ACCEPT, comment-only, routed to Integration, contractChangeRequired FALSE. The stale '[C] at the Kestrel Fabricator' comment at emergentStoryDirector.ts:1534 contradicts the draft-v3 glyph amendment; fix the comment to [F] in the same patch that executes F2/F3/F5.",
-    "F7 (low) — REJECT CHANGE, record as intended-accept, contractChangeRequired FALSE. 'HAB CORE' is the readout abbreviating its own name — REGULATION machines truncate (shipped precedent: 'ADVISORY CAPACITY EXCEE'), and a device's self-label being terser than the guidance system's full noun is authored texture, not drift. Record in the contract's intended-accept register at execution so reviewers find it pre-recorded.",
-    "F8 (moderate, doc drift) — ROUTED, split by lock boundary, contractChangeRequired FALSE. main/story-authority.json (activeProduction and dynamicSources activePath still naming the 2026-07-13 run) is in allowedPaths: route to Integration to register this run's tri-signed contract as the active authority in the same execution patch. main/STORY.md is NOT in allowedPaths: route to the orchestrator as a lock question — either a recorded lock revision adds it for the truthful beat-table update this run's own docs law requires, or the debt rides the closeout packet explicitly.",
-    "BOOKKEEPING, accepted: the auditor's unledgered seed (ch8 AUDIT NETWORK 'NO DESIGNATION RETURNED' / 'nothing answers. the query does not close.' paying off as formal-requests-answered, personal-ones-not) enters the seeds ledger at execution; the ten-item canon-debt register is adopted verbatim into the run-two commission packet — items 1 (ISSUING STATION must actually issue), 3 (K11 owes a keeper without a crowd individual), 5 (the degrading hearth owes the cell or an explicit non-worsening), and 10 (the first counter voice sets the pillar's exposure) are flagged as the four that can silently break canon if run two is commissioned without them.",
-    "AMENDMENT LINEAGE RECORD (cycle two, executed): draft-v3 (ad3cab3a8c7e6384dfa486cc967c8195b335a2a8888c8d169612db8b287c4ad8) to draft-v4 (8e0b2230e452a8951d8ea54b4e604fe536573d057a4d7c192bf52849ae548bd3) carries exactly F2 (ORIGIN WORLD marker/work-order re-cut), F3 (K5 KESTREL FABRICATOR header), F5 (STAND AT THE SECOND HEARTH CORE), Score D5 (carrier suspended-fourth/eleventh clause, degree 17, re-signed by Chapter as required by the frozen chapter-note-01 section-3 endorsement), Score D4a (eraFidelity velocity/drop/phrase wording), the version fields, and the lock reference re-bound LAST to post-R4/R5 bytes 2ffadb278370f9890c7773bcc01ed5e8bbcb51f181d044e612c701160c624eb2. F1 stays no-contract-change (D2 realization route, both directions aligned); F4 remains with the owner; F7 intended-accept; F6/F8 routed unchanged."
+    "Aggregate: F1 and UX-1 are discharged (F1 by Score's D2 realization with no contract clause moved; UX-1 by the station:transit:reboard rung landed at draft-v7). F2, F3 and F5 from the same original filing were discharged at draft-v4 and are absent from the canonical register because they are closed — recorded here for lineage: ORIGIN WORLD re-cut, K5's KESTREL FABRICATOR header, and STAND AT THE SECOND HEARTH CORE all shipped in that revision. UX-2 and F8 are recorded accepted exceptions. NV-1 and OD-1 are open owner-taste items with my chapter-lane positions and constraints stated but no decision taken."
   ],
   "evidenceRefs": [
-    "story-audit.md",
-    "score-audit.md#D2",
+    "defects.json",
     "scene-contract.json",
+    "snapshots/scene-contract.draft-v9.json",
     "story-intent.md",
     "chapter-reconciliation.jsonl",
-    "score-peer-notes.jsonl#SC10-N1",
-    "main/src/story/emergentStoryDirector.ts",
+    "story-audit.md",
+    "ux-audit.md",
+    "score-audit.md",
     "main/src/story/storyObjectiveGuidance.ts",
-    ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/chapter-reconciliation.jsonl"
+    "main/src/story/emergentStoryDirector.ts"
   ],
-  "verificationRoute": "F1: Score's D2 repair verified by re-rendered deliverable 2 with real onset tables (answer onset = ask onset + 2 beats, ask figure still sounding, ch5-maw comparison actually run); K9 unchanged so no copy re-audit needed; if the row-stacking option is adopted, a caption-band frame pair proves K7 standing when K8 arrives. F2/F3/F5/F6: single bounded execution patch amending contract (draft-v4, triad re-sign), story-intent.md, storyObjectiveGuidance.ts, emergentStoryDirector.ts, and test pins byte-exactly; npm --prefix main run story:ux:check plus the director/guidance suites; creative gate ux.contract-work-order stays green (F2 touches only the non-final line and the marker). F4: owner packet; no execution until it returns. F7: intended-accept register entry. F8: story-authority registration in the execution patch; STORY.md per the orchestrator's lock ruling.",
+  "verificationRoute": "Per-direction routes above. Nothing in this lane requires a further contract amendment; the two open items are owner decisions, and either one, if commissioned, reopens the full triad cycle with fresh signatures rather than being carried forward on these.",
   "authoredBy": "Chapter Director (Claude, creative triad run 2026-08-11-ch10-station-introduction)",
-  "authoredAt": "2026-08-12T02:10:00Z"
+  "authoredAt": "2026-08-12T00:00:00Z"
 }

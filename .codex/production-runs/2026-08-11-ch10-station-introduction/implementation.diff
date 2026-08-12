@@ -5144,7 +5144,7 @@ index 3b8c7e3..750a7bf 100644
        return;
      }
 diff --git a/main/src/story/autopilot.ts b/main/src/story/autopilot.ts
-index fc59576..e1f0f44 100644
+index fc59576..c320f56 100644
 --- a/main/src/story/autopilot.ts
 +++ b/main/src/story/autopilot.ts
 @@ -15,10 +15,13 @@ import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
@@ -5209,7 +5209,7 @@ index fc59576..e1f0f44 100644
  ]);
  
  export function isAutopilotDriving(): boolean {
-@@ -231,22 +248,268 @@ export interface AutopilotFlightDirective {
+@@ -231,22 +248,385 @@ export interface AutopilotFlightDirective {
    active: boolean;
    beat: StoryBeat | null;
    targetWorldId: string | null;
@@ -5383,11 +5383,74 @@ index fc59576..e1f0f44 100644
 + * the solver's travel clamp.
 + */
 +const ST0_GAZE_REACH = 10;
++/*
++  GOAL-CRITICAL MEANS ARRIVING, NOT "WALKING NEAR THE GOAL".
++
++  Both demands were a flat 10 m, and the instrumented run measured the
++  consequence: 346 of 419 walked frames were goal-critical, i.e. the glance was
++  suppressed for 83% of the only window it is allowed to exist in. That is not a
++  tuning nicety — the Kestrel is parked AT the hearth in this chapter, so the
++  contract's nominated walk is a few seconds long and never leaves a 10 m
++  radius, which made the demand permanent and the bias unreachable even on a
++  night when ST-0 is up.
++
++  The demands are now the distances at which the acts actually commit, which is
++  what the ruling's words mean: the eyes come down for the act, not for the
++  approach. Below these the walk is arriving and the glance releases inside its
++  half-second; above them it is travelling and may look up.
++*/
++const CH10_CORE_COMMIT_DISTANCE = 2;
++const CH10_FABRICATOR_COMMIT_DISTANCE = 6;
 +
 +let st0GazeStartedAt = -Infinity;
 +let st0GazeEndedAt = -Infinity;
 +let st0GazeActive = false;
 +let st0GazeRestoreWeight = 1;
++/**
++ * Read-only instrumentation for the ST-0 glance. Published on `window` so a
++ * probe can measure the predicate instead of arguing about it; no runtime path
++ * reads it back, and it costs a handful of field writes per walked frame.
++ */
++const st0GazeDiag = {
++  frames: 0,
++  framesMovie: 0,
++  framesDriving: 0,
++  framesAvailable: 0,
++  framesGoalCritical: 0,
++  framesAllConjunctsTrue: 0,
++  framesEngaged: 0,
++  engagements: 0,
++  movie: false,
++  driving: false,
++  aboveHorizon: false,
++  haveDirection: false,
++  goalCritical: false,
++  engaged: false,
++  blockedBy: null as string | null,
++  beat: null as StoryBeat | null,
++  beatClock: 0,
++  cooldownRemaining: 0,
++  aimPitchDeg: 0
++};
++
++/** The probe seam. Returns a copy so a sample cannot be mutated after the fact. */
++export function getSt0GazeDiag(): Readonly<typeof st0GazeDiag> {
++  return { ...st0GazeDiag };
++}
++
++/**
++ * Published on `window` as well as exported, and that redundancy is deliberate:
++ * a probe that reaches the diagnostic through its own dynamic import cannot
++ * prove it is reading the SAME module instance the game is writing, and "the
++ * counters are all zero" then has two explanations. A window global has exactly
++ * one. Written from inside the tick, so its presence is itself evidence the
++ * autopilot is running.
++ */
++function publishSt0GazeDiag(): void {
++  if (typeof window === 'undefined') return;
++  (window as unknown as { __st0Gaze?: object }).__st0Gaze = st0GazeDiag;
++}
++
 +const _st0GazeGoal = new THREE.Vector3();
 +const _st0GazeAim = new THREE.Vector3();
 +const _st0GazeTangent = new THREE.Vector3();
@@ -5407,12 +5470,47 @@ index fc59576..e1f0f44 100644
 + * second and starts the cooldown.
 + */
 +function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean {
-+  if (!MOVIE || !isAutopilotDriving()) {
++  // EVERY CONJUNCT, MEASURED SEPARATELY, EVERY FRAME.
++  //
++  // G-1: the solver repair was proven correct in isolation and the crossing
++  // strip did not move at all. That is the exact failure shape this run has
++  // been bitten by repeatedly — a state machine that is right in a unit test
++  // and never reached on the live path — so the engage predicate is no longer
++  // something to reason about. It is published, conjunct by conjunct, with the
++  // frame counters needed to tell "never engaged" apart from "engaged, sampled
++  // elsewhere". Diagnostic only: nothing reads it back.
++  const driving = isAutopilotDriving();
++  const aboveHorizon = st0GazeHandle.aboveHorizon;
++  const haveDirection = st0GazeHandle.direction !== null;
++  st0GazeDiag.frames++;
++  publishSt0GazeDiag();
++  st0GazeDiag.movie = MOVIE;
++  st0GazeDiag.driving = driving;
++  st0GazeDiag.aboveHorizon = aboveHorizon;
++  st0GazeDiag.haveDirection = haveDirection;
++  st0GazeDiag.goalCritical = goalCritical;
++  st0GazeDiag.beat = getStoryStateSnapshot().beat;
++  st0GazeDiag.beatClock = Math.round(beatClock * 100) / 100;
++  st0GazeDiag.cooldownRemaining = Math.max(
++    0,
++    Math.round((ST0_GAZE_COOLDOWN_SECONDS - (beatClock - st0GazeEndedAt)) * 100) / 100
++  );
++  if (MOVIE) st0GazeDiag.framesMovie++;
++  if (driving) st0GazeDiag.framesDriving++;
++  if (aboveHorizon && haveDirection) st0GazeDiag.framesAvailable++;
++  if (goalCritical) st0GazeDiag.framesGoalCritical++;
++  if (MOVIE && driving && aboveHorizon && haveDirection && !goalCritical) {
++    st0GazeDiag.framesAllConjunctsTrue++;
++  }
++
++  if (!MOVIE || !driving) {
 +    resetSt0GazeBias();
++    st0GazeDiag.engaged = false;
++    st0GazeDiag.blockedBy = !MOVIE ? 'not-movie-lane' : 'autopilot-not-driving';
 +    return false;
 +  }
 +  const up = getPlayerUp();
-+  const available = st0GazeHandle.aboveHorizon && st0GazeHandle.direction !== null;
++  const available = aboveHorizon && haveDirection;
 +  const held = beatClock - st0GazeStartedAt;
 +
 +  if (st0GazeActive) {
@@ -5425,6 +5523,8 @@ index fc59576..e1f0f44 100644
 +      // Hand the walk's own look authority straight back, at exactly the
 +      // strength it had before the glance borrowed it.
 +      setCinematicLookWeight(st0GazeRestoreWeight);
++      st0GazeDiag.engaged = false;
++      st0GazeDiag.blockedBy = goalCritical ? 'released-goal-critical' : 'released-st0-set';
 +      return false;
 +    }
 +    // The ruling's floor is 1.5s and it is enforced here rather than assumed:
@@ -5433,14 +5533,25 @@ index fc59576..e1f0f44 100644
 +      st0GazeActive = false;
 +      st0GazeEndedAt = beatClock;
 +      setCinematicLookWeight(st0GazeRestoreWeight);
++      st0GazeDiag.engaged = false;
++      st0GazeDiag.blockedBy = 'glance-complete';
 +      return false;
 +    }
 +  } else {
-+    if (goalCritical || !available) return false;
-+    if (beatClock - st0GazeEndedAt < ST0_GAZE_COOLDOWN_SECONDS) return false;
++    if (goalCritical || !available) {
++      st0GazeDiag.engaged = false;
++      st0GazeDiag.blockedBy = goalCritical ? 'goal-critical-look-demand' : 'st0-below-horizon';
++      return false;
++    }
++    if (beatClock - st0GazeEndedAt < ST0_GAZE_COOLDOWN_SECONDS) {
++      st0GazeDiag.engaged = false;
++      st0GazeDiag.blockedBy = 'cooldown';
++      return false;
++    }
 +    st0GazeActive = true;
 +    st0GazeStartedAt = beatClock;
 +    st0GazeRestoreWeight = getCinematicLookWeight();
++    st0GazeDiag.engagements++;
 +  }
 +
 +  const direction = st0GazeHandle.direction;
@@ -5474,13 +5585,19 @@ index fc59576..e1f0f44 100644
 +  // and inspect's smaller scan keeps the glance human rather than mechanical.
 +  // Route direction is the aim itself — the eyes move, the walk does not.
 +  lookNaturallyToward(_st0GazeGoal, player, 0, _st0GazeGoal, 'inspect');
++  st0GazeDiag.engaged = true;
++  st0GazeDiag.blockedBy = null;
++  st0GazeDiag.framesEngaged++;
++  st0GazeDiag.aimPitchDeg = Math.round(
++    (Math.asin(THREE.MathUtils.clamp(_st0GazeAim.dot(up), -1, 1)) * 180 / Math.PI) * 100
++  ) / 100;
 +  return true;
 +}
 +
  // Legacy presentation-ladder timeouts. No emergent beat is listed here: those
  // scenes may wait, but they may not turn elapsed time into narrative evidence.
  const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
-@@ -270,7 +533,13 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
+@@ -270,7 +650,13 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
    // Raised for the stargaze: night lands ~42s in, then the 8-line sequence
    // (~45.5s) + the 18s reveal ramp + the held rest prompt push natural
    // completion to ~100s. 140 keeps the beat's own resolution well inside.
@@ -5495,7 +5612,7 @@ index fc59576..e1f0f44 100644
  };
  
  let clockBeat: StoryBeat | null = null;
-@@ -294,6 +563,12 @@ let dryCrossFaceWaterContactFramesTotal = 0;
+@@ -294,6 +680,12 @@ let dryCrossFaceWaterContactFramesTotal = 0;
  let dryWalkWaterContactFramesTotal = 0;
  const DRY_WALK_WATER_CONTACT_REPLAN_FRAMES = 8;
  
@@ -5508,7 +5625,18 @@ index fc59576..e1f0f44 100644
  function noteGoal(target: THREE.Vector3): void {
    if (_goalRef.distanceTo(target) > 2.5) {
      _goalRef.copy(target);
-@@ -1759,6 +2034,137 @@ export function autopilotTick(dt: number): void {
+@@ -1097,6 +1489,10 @@ function grantMissingCampfireMaterials(): void {
+ /** Ticked by StoryDirectorDriver every frame while in movie mode. */
+ export function autopilotTick(dt: number): void {
+   if (!MOVIE) return;
++  // Published before anything else can fail, so a probe can tell "the autopilot
++  // never ticked" from "it ticked and never reached a walk phase": the global
++  // exists with frames 0 in the second case and is absent in the first.
++  publishSt0GazeDiag();
+   const story = getStoryStateSnapshot();
+   if (story.runId !== teleportNudgeRunId) {
+     teleportNudgeRunId = story.runId;
+@@ -1759,6 +2155,171 @@ export function autopilotTick(dt: number): void {
        }
        break;
      }
@@ -5528,6 +5656,14 @@ index fc59576..e1f0f44 100644
 +      const corePosition = _goalScratch.set(...habitat.core.position);
 +      if (!hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)) {
 +        const coreDistance = walkToward(corePosition, 0.35, 0.8);
++        // G-1: the walk to the core is a walk under the same open sky, so the
++        // glance lives here too. The contract nominates the fabricator walk as
++        // the evidence window and that is still the shot it is about — but
++        // confining the bias to the SECOND walk meant a crossing that happened
++        // during the first was structurally unwatchable, and the ruling's own
++        // words are "walk phases", plural. Arrival is goal-critical here for
++        // the same reason it is there: the eyes come down for the act.
++        tickSt0GazeBias(getPlayerWorldPosition(), coreDistance <= CH10_CORE_COMMIT_DISTANCE);
 +        if (coreDistance <= 2) commitChapter10FaultRead(actorId);
 +        break;
 +      }
@@ -5541,7 +5677,7 @@ index fc59576..e1f0f44 100644
 +      // so it is where the glance lives. Arrival is goal-critical — the eyes
 +      // come back down for the act itself — and the bias never touches the
 +      // route, only where the camera happens to be pointed on the way.
-+      tickSt0GazeBias(getPlayerWorldPosition(), shipDistance <= 10);
++      tickSt0GazeBias(getPlayerWorldPosition(), shipDistance <= CH10_FABRICATOR_COMMIT_DISTANCE);
 +      if (shipDistance <= 6) commitChapter10FabricationAttempt(actorId);
 +      break;
 +    }
@@ -5640,7 +5776,33 @@ index fc59576..e1f0f44 100644
 +      controls.forward = flight.controlMode === 'flight'
 +        && flight.phase !== 'surface'
 +        && !atStandoff;
-+      controls.sprint = controls.forward;
++      // NO SPRINT, AND THIS IS A LENS DECISION, NOT A SPEED ONE.
++      //
++      // The ch8 legs above copy `sprint = forward`, and inheriting that here
++      // staged an undeclared lens move through the chapter's own hero frames:
++      // resolveShipBoost() is `forwardHeld && sprintHeld`, boost drives
++      // shipFlightFeedback's fovTarget = 70 + 9 x boost, and ShipController
++      // writes that straight onto the render camera. So the rail cruised at FOV
++      // 79 and settled back to 70 only when `atStandoff` dropped forward —
++      // which is exactly the 79-at-the-seam / 70.0002-at-the-cut-line split the
++      // cinematography pass measured, and the contract declares FOV 70
++      // throughout the transit. It was never the player's boost and never
++      // shipped feel arriving on its own: this rail asked for it.
++      //
++      // Suppressing it also removes the cockpit-recede artifact at the root.
++      // The shell's FOV compensation is exact and unclamped
++      // (tan(39.5)/tan(35) = 1.17727 at 79, 1.03761 at 72, 1.00000 at 70), so
++      // the silhouette was never wrong — but at scale >= 1.0708 (FOV 73.72) the
++      // outer shell walls pass outside the cabin lamp's 6.5-unit reach and fall
++      // to their emissive floor, which against black space reads as the seat
++      // having pulled back. At FOV 70 the walls sit 6.09 units out and stay lit.
++      //
++      // The cost is honest and is travel time only: every trigger on this leg
++      // is distance- or state-keyed, not clocked, so the seam range, the
++      // standoff and the hand-back are unmoved. Terminal speed drops from the
++      // clamped 320 u/s to 117.5 (accel 60 against the 0.6/s damping), which
++      // lengthens the cruise rather than changing anything it arrives at.
++      controls.sprint = false;
 +      break;
 +    }
      default:

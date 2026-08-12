@@ -111,3 +111,29 @@ final micro-amendment). **Taste risks for the judge:** the answer enters ~6dB un
 ask's own mean (third independent flag of the same perception); resolve sits +0.10dB
 over the equal-intensity a4 control. **Hygiene:** carrier-illegal-control_no-carrier.wav
 and carrier-legality.json predate the re-pitch.
+
+
+---
+
+## Review structure (index added by the orchestrator; no reviewer text altered)
+
+**Independence.** The score auditor ran as a fresh opus-tier instance that took
+no part in composing the ch10 material, measuring the rendered evidence and the
+shipped source directly rather than accepting the Score Director's account. Its
+delta re-check was run by a second fresh instance and re-derived the numbers
+rather than confirming them — including one case (D4a) where it verified the
+fix against shipped source and found the original claim distinguished nothing.
+
+**Findings.** D1–D7 above with per-dimension verdicts, then the delta re-check's
+per-defect closures with the measurements that justify each. Two taste risks
+are recorded unresolved and routed to the judge rather than absorbed: the answer
+entering roughly 6 dB under the ask's own mean, and the resolve sitting 0.10 dB
+over its equal-intensity control. They are carried in `defects.json` as NV-1.
+
+**Contract version audited:** draft-v3 `ad3cab3a…` (original audit) and draft-v6 `4202e38b…` (delta re-check); repairs re-verified against the frozen contract version draft-v9 `0336a4f2…`
+
+**First wave attestation.** This was a first-wave report: the score auditor delivered its findings before seeing any peer review, and the delta re-check was run by a second fresh instance which re-derived every number rather than confirming the first.
+
+Contract revision: `draft-v9`
+
+First report completed before reading peer conclusions: `yes`

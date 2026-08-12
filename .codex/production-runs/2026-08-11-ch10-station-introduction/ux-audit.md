@@ -86,3 +86,44 @@ Manual, non-movie, headed: claim the bearing, then stand still — a locator to
 the Kestrel must exist before any ignite instruction. Automated: re-run the
 variant-anchor probe post-repair at all four profiles across ch10-cold/ask,
 and one manual-lane stamp path.
+
+
+---
+
+## Review structure (index added by the orchestrator; no reviewer text altered)
+
+**Independence.** The player-experience auditor ran as a fresh opus-tier
+instance with no part in authoring the guidance, judging from the executable UX
+contract, the signed scene contract and runtime traces rather than from any
+director's description of intent.
+
+**Contract and baseline.** Judged against `main/src/story/ux/README.md`, the
+signed scene contract's guidance section, and `shipped-ux-baseline.json` for
+what the player already knew entering ch10.
+
+**Objective lifecycle.** The ten-rung matrix above carries a per-objective
+verdict across identify / reach / perform / understand. One-shot entry is
+structural, and the enter-change-clear semantics were traced rather than
+assumed.
+
+**Marker exactness.** Label parity is structural: the marker driver compares the
+objective's own label, so a drifted string cannot silently pass. Verified live
+for every marker-bearing rung.
+
+**Feedback and progression.** One cue per activation, no rung asserting false
+progress; the auditor's explicit judgement is that guidance never lies, with the
+single exception it names at T1.
+
+**Variants and accessibility.** UX-2 records the mobile work-order collapse as
+an accepted exception with its reasons; UX-3 records that the four-profile
+matrix predated the deferral fix and required re-proof.
+
+**Reset and stale state.** The reset matrix is clean — sandbox and free play
+mount no HUD, and all three deep links reconstruct the correct rung.
+
+**Findings.** UX-1 through UX-6 above with severity, evidence and routing; UX-1
+and UX-2 are carried in the canonical register at `defects.json`.
+
+**Contract version audited:** draft-v6 `4202e38b…`; findings carried against the frozen contract version draft-v9 `0336a4f2…`
+
+**First wave attestation.** This was a first-wave report: the player-experience auditor delivered its findings before seeing any peer review, judging from the executable UX contract and runtime traces rather than any director's account.

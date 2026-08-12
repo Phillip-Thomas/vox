@@ -106,3 +106,31 @@ Close **D-A1** first: instrument the render camera on every ch10 flight frame
 at all four profiles. Until the LOW and HIGH families share one lens, every
 composition verdict in verification-report.json — including the 31.8%
 deviation — is unfounded.
+
+
+---
+
+## Review structure (index added by the orchestrator; no reviewer text altered)
+
+**Independence.** The cinematography auditor ran as a fresh opus-tier instance
+with no role in staging the chapter, measuring captured frames and the shipped
+rail directly. Its most consequential finding (D-A1) was subsequently disproved
+by instrumentation, and the auditor's own lane then refused to treat that
+reclassification as re-measurement — holding every composition verdict
+suspended until fresh strips existed. That refusal is the model behaviour here.
+
+**Findings.** D-A1 through D-A8 above with severity, category and owner, plus
+the two weighed deviations, the continuity matrix, the protected strengths that
+must not be "fixed", and the evidence gaps. Three of these findings (the
+occupancy band, the gaze-bias frame count, the bright-disc exclusion) turned out
+to be terms no implementation could satisfy; each is now superseded in the
+contract with its cause recorded inline. They are carried in `defects.json` as
+D-A2, D-A3, D-A5, D-A6, D-A8 with their runtime-open status.
+
+**Contract version audited:** draft-v6 `4202e38b…`; findings carried against the frozen contract version draft-v9 `0336a4f2…`
+
+**First wave attestation.** This was a first-wave report: the cinematography auditor delivered its findings before seeing any peer review. Its D-A1 finding was later disproved by instrumentation, and its own lane held the dependent verdicts suspended rather than accepting the reclassification as re-measurement.
+
+Contract revision: `draft-v9`
+
+First report completed before reading peer conclusions: `yes`

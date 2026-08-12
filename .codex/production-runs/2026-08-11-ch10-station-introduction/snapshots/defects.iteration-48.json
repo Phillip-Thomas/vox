@@ -1,0 +1,185 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v5",
+  "contractSha256": "ae0f6dd4242cc704a1fddb6f3a204af9180fccd91b7ffe8251c67200a3465446",
+  "compiledAt": "2026-08-12T19:10:00Z",
+  "compiledBy": "closeout archivist (Claude Opus 5) — DERIVED RECONSTRUCTION, not a contemporaneous record",
+  "requiresHumanTaste": true,
+  "reconstructedFrom": "defects.json@5bae8fcdc81997cf87180789c99abe577c439c4ce6226a5919b08b2671b1e669",
+  "reconstructionNote": "NOT a contemporaneous record. No defect-register bytes were captured at this iteration during the run: every recorded row bound the same defects.json hash (256a4b72...), which was the unfilled template. This file states the register as it is now known to have stood at ledger index 48, derived from the canonical register's reconstructed iterationIntroduced and iterationResolved fields. The counts are honest with respect to those two numbers, but every statement, repair, route and resolution string is the closing-compile wording, and the owner's acceptance decisions (UX-2, D-12, F8) are shown as open before ledger index 57, which is where human-decision.json lands. Two caveats the gate's own counter creates: F1, D1 and D3 carry the reviewers' severity words ('major', 'blocking') rather than the gate's four-value enum, so they contribute zero to every count below while genuinely open; and where a defect's introduction iteration was derived from an artifact write time rather than from a ledger row that names it, the true introduction may be one row earlier.",
+  "sourceReports": [
+    {
+      "path": "story-audit.md",
+      "sha256": "62e9190a1f3d77306a69dd00d6ada69fa2fc141399cf01e627b306a9fbbc4643"
+    },
+    {
+      "path": "score-audit.md",
+      "sha256": "50f74928fb7aa0083260c39968b0f726bd1ab2d3cf8e9cbd6e256d07dcfd56c3"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": "4e405f89055c78155f71945188fd3a950bf44eb0b8e2ac2fe4a214d531a7a6b2"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": "626c0ef4100cb8b7f38e0e64fc7e9e1cf2cb9c686e6e021756c0087a79aeb969"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "1868ffeb19e7e65a09f4750671ca1b522e9480e63d11a8440a0024b9568e0eee"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": "65ea8cc2481808a8b7d3d1c5b9b9772197379d76b9e19b86a3eb3889eb741bcb"
+    }
+  ],
+  "defects": [
+    {
+      "id": "F1",
+      "severity": "major",
+      "category": "narrative-alignment",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anc.ch10.relay-answer",
+      "statement": "K9 asserted 'the answer came back before the asking finished' while the implementation prevented the player from perceiving it: the ask anchor selected a mood with no question figure, so there was no sounding phrase for the answer to enter.",
+      "requestedRepair": "Realize the contract's own two-bar square-fifth ask figure so the answer enters inside a sounding question; K9 then confirms an observable.",
+      "verificationRoute": "Onset measurement of the ask-through-answer render vs the ch5-maw grammar reference.",
+      "evidenceRefs": [
+        "evidence/score/relay_ask-through-answer_combined.wav",
+        "evidence/score/relay-answer_onsets.json"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "resolution": "Closed: answer enters at beat 3, 25.0% into a 7.06s figure, gapless (0ms), unaccented (-25.99 to -27.06 dB), click-free (0.0187); [0,7] sounds through the boundary.",
+      "reportedStatus": "resolved",
+      "reportedSourceReportRefs": [
+        "story-audit.md",
+        "score-audit.md"
+      ],
+      "corroboratingReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 18,
+      "iterationResolved": 24,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "score-repair-direction.json authoredAt 2026-08-11T20:25-04:00 names F1-score-position; the first ledger row at or after that instant is index 18. Repaired at index 24, whose defectIds are score-audit-d2 and story-audit-f1 (the realized relay-ask figure).",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "D1",
+      "severity": "blocking",
+      "category": "score",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.relay-answer",
+      "statement": "Carrier and variant state were set on anchor edges, so a mid-transit reload restored the pulse the seam had ebbed away and dropped the resolve's octave double — losing both of the chapter's signature gestures.",
+      "requestedRepair": "Resolve variant and carrier purely from durable milestones in enterEmergentScoreBeat.",
+      "verificationRoute": "18-cell state matrix plus mid-transit reload equivalence test.",
+      "evidenceRefs": [
+        "evidence/score/carrier-legality.json"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "resolution": "Closed: resolveChapter10ScoreState reads beat + five durable milestones only; reload equivalence asserted.",
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 18,
+      "iterationResolved": 23,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Raised by the first-wave score audit that produced score-repair-direction.json at 2026-08-11T20:25-04:00; first ledger row at or after that instant is index 18. Repaired at index 23, which replaced the edge machine with resolveChapter10ScoreState over durable milestones.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D3",
+      "severity": "major",
+      "category": "score",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anc.ch10.station-resolved",
+      "statement": "The destination out-measured the A4 awakening on a steady-window comparison (pad 0.19 vs 0.18; -18.74 vs -18.84 dB), inverting the arc's intended weighting.",
+      "requestedRepair": "Pad to 0.17, sub to 0.10; re-measure on the 8-12s steady window.",
+      "verificationRoute": "Offline steady-window RMS/peak/sub comparison against the a4-authored control.",
+      "evidenceRefs": [
+        "evidence/score/resolved_vs_a4_rms.json"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "resolution": "Closed: -19.36 dB / peak 0.311 / sub -20.90 vs a4 -18.84 / 0.372 / -20.34 — strictly below on all three.",
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 18,
+      "iterationResolved": 25,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Same first-wave score audit as D1 (index 18). Repaired at index 25: station-resolved pad 0.19 to 0.17 and sub 0.12 to 0.10, re-measured on the 8-12s steady window.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D-12",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anc.ch10.relay-ask",
+      "statement": "The origin-side landfall leg intermittently never completed (2 of 4 crossings; worst 89.4s stand) because completion depended on arrival position rather than on an aimed descent.",
+      "requestedRepair": "Aim the origin-side descent at the derivable wreck site.",
+      "verificationRoute": "Repeated cold crossings; frequency and timing distribution.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "reportedStatus": "accepted-residual",
+      "reportedAnchor": "anc.ch10.landfall",
+      "reportedSourceReportRefs": [
+        "verification-report.json"
+      ],
+      "supplementalSourceRefs": [
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 45,
+      "iterationResolved": 49,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "First named in the ledger at index 45 (defectIds verifier-d-12, characterized-not-reproduced). Reproduced and repaired at index 47, then closed at index 49 on the 4-of-4 post-fix sample.",
+        "statusNormalisation": "Reviewer status 'accepted-residual' normalised to the gate enum value 'accepted-exception'; the reviewer's own word is kept in reportedStatus.",
+        "anchorCorrection": "The origin-side landfall leg is the descent that reaches the wreck relay, i.e. the relay-ask anchor's own approach; 'anc.ch10.landfall' is not a contract anchor id.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "F8",
+      "severity": "medium",
+      "category": "authority-governance",
+      "status": "open",
+      "owner": "human",
+      "anchor": null,
+      "statement": "story-authority.json raises the runtime story ceiling and evidence chain to ch10, but activeProduction still names the 2026-07-13 run; the gate pins production identity in five coupled literals.",
+      "requestedRepair": "A second registered production: schema, gate design, and its own lock revision.",
+      "verificationRoute": "Deferred to the follow-on.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "reportedStatus": "accepted-exception",
+      "iterationIntroduced": 24,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "chapter-repair-direction.json authoredAt 2026-08-12T02:10Z (2026-08-11 22:10-04:00) names story-audit-f8; the first ledger row at or after that instant is index 24. Routed at index 31 and accepted as an exception by the owner at index 57.",
+        "statusNormalisation": "Reviewer status 'accepted-exception' normalised to the gate enum value 'accepted-exception'; the reviewer's own word is kept in reportedStatus."
+      }
+    }
+  ]
+}

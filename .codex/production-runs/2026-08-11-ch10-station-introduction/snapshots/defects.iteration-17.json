@@ -1,0 +1,38 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v3",
+  "contractSha256": "ad3cab3a8c7e6384dfa486cc967c8195b335a2a8888c8d169612db8b287c4ad8",
+  "compiledAt": "2026-08-12T19:10:00Z",
+  "compiledBy": "closeout archivist (Claude Opus 5) — DERIVED RECONSTRUCTION, not a contemporaneous record",
+  "requiresHumanTaste": true,
+  "reconstructedFrom": "defects.json@5bae8fcdc81997cf87180789c99abe577c439c4ce6226a5919b08b2671b1e669",
+  "reconstructionNote": "NOT a contemporaneous record. No defect-register bytes were captured at this iteration during the run: every recorded row bound the same defects.json hash (256a4b72...), which was the unfilled template. This file states the register as it is now known to have stood at ledger index 17, derived from the canonical register's reconstructed iterationIntroduced and iterationResolved fields. The counts are honest with respect to those two numbers, but every statement, repair, route and resolution string is the closing-compile wording, and the owner's acceptance decisions (UX-2, D-12, F8) are shown as open before ledger index 57, which is where human-decision.json lands. Two caveats the gate's own counter creates: F1, D1 and D3 carry the reviewers' severity words ('major', 'blocking') rather than the gate's four-value enum, so they contribute zero to every count below while genuinely open; and where a defect's introduction iteration was derived from an artifact write time rather than from a ledger row that names it, the true introduction may be one row earlier.",
+  "sourceReports": [
+    {
+      "path": "story-audit.md",
+      "sha256": "62e9190a1f3d77306a69dd00d6ada69fa2fc141399cf01e627b306a9fbbc4643"
+    },
+    {
+      "path": "score-audit.md",
+      "sha256": "50f74928fb7aa0083260c39968b0f726bd1ab2d3cf8e9cbd6e256d07dcfd56c3"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": "4e405f89055c78155f71945188fd3a950bf44eb0b8e2ac2fe4a214d531a7a6b2"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": "626c0ef4100cb8b7f38e0e64fc7e9e1cf2cb9c686e6e021756c0087a79aeb969"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "1868ffeb19e7e65a09f4750671ca1b522e9480e63d11a8440a0024b9568e0eee"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": "65ea8cc2481808a8b7d3d1c5b9b9772197379d76b9e19b86a3eb3889eb741bcb"
+    }
+  ],
+  "defects": []
+}

@@ -1,14 +1,105 @@
 {
   "schema": "paravoxia.directorRepairDirection.v1",
   "director": "cinematography",
-  "runId": "{{RUN_ID}}",
-  "contractVersion": "draft-v0",
-  "contractSha256": "{{SHA256_OF_ACTIVE_SCENE_CONTRACT}}",
-  "defectIds": ["defect-{{NN}}"],
-  "contractChangeRequired": false,
-  "boundedActions": ["{{BOUNDED_SHOT_LENS_PALETTE_OR_RENDER_REPAIR}}"],
-  "evidenceRefs": ["{{EVIDENCE_REF}}"],
-  "verificationRoute": "{{MECHANICAL_AND_INDEPENDENT_REVIEW_ROUTE}}",
-  "authoredBy": "{{CINEMATOGRAPHY_DIRECTOR}}",
-  "authoredAt": "{{ISO_8601}}"
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "defectIds": ["D-A1", "D-A2", "D-A3", "D-A5", "D-A6", "D-A8"],
+  "contractChangeRequired": true,
+  "contractChangeNote": "TRUE, and already exercised. Four amendments were required because the defects touched lens intent, palette semantics, capture terms, and measurement conventions — none of which an integrator may reinterpret. Each reopened the full triad cycle and carries three fresh signatures: draft-v7 (audit rulings), draft-v8 (analytic occupancy law, tangent-correct spine convention, ask-lane boost qualifier, split gaze-bias acceptance), draft-v9 (warmth law and point-source law). Sha lineage: draft-v6 4202e38b, draft-v7 32122245, draft-v8 e75a814a, draft-v9 0336a4f2.",
+  "headlineLesson": "THE MOST TRANSFERABLE FINDING OF THIS RUN: three of my eight audit defects were not defects in the frame at all — they were acceptance criteria that no state of the shipped system could ever satisfy. They were signed because nobody asked whether they were achievable before freezing them. Every measurement term in this contract now carries either an inline derivation from run constants or an explicit reachability sentence answering 'is there any state of the shipped system in which this is true?'. Four supersessions carry their cause inline so a future team cannot revive a dead term by mistaking a record for a criterion. If this run leaves one durable practice behind, it is that check.",
+  "directions": [
+    {
+      "defectId": "D-A1",
+      "title": "Lens identity across LOW strips and HIGH stills",
+      "owner": "integration",
+      "status": "resolved-reclassified — stale evidence, not a lens defect",
+      "resolvedBy": "instrumentation, no contract change",
+      "boundedAction": "None outstanding. Closed by instrumenting the render camera on every ch10 flight frame at all four profiles — the probe my own audit named as decisive. Result: renderCamera fov identical to flightFeedback fov to 0.0000 deg across 24 frames, shell scale exactly reciprocal, aperture 613-789px (median 730) on regenerated strips. The 300px readings never reproduced; they existed only in strips captured at 01:20Z, before the D-10/D-13 autopilot fixes.",
+      "whyTheFindingStillMattered": "The measurement was right and the inference was wrong. My audit correctly observed two incompatible pixel families and correctly refused to accept any composition verdict measured across them; the cause was a stale capture, not a broken rig. The suspension I placed on every composition verdict in verification-report.json was the correct response to genuinely unfounded evidence, and it was lifted only once the strips were regenerated — not when the diagnosis arrived. Reclassifying a defect is not the same as re-measuring, and the re-measurement is what closed it.",
+      "contractChangeRequired": false,
+      "evidenceRefs": ["ch10-lens-divergence-probe.mjs", "evidence/verification/ch10-v7-cutline.json", "cinematography-audit.md#D-A1"]
+    },
+    {
+      "defectId": "D-A2",
+      "title": "The seam still is not the seam",
+      "owner": "verifier",
+      "status": "OPEN — pure capture",
+      "boundedAction": "Re-shoot HIGH hero still two at a true FOV 70 (now that the autopilot rail's sprint=forward boost assertion is suppressed), shutter on the frame where story:ch10-seam-passed latches in the 5,100-5,200 band, with the paired LOW frame at the same latch edge. Judge against the tangent-correct theta = 7.85-8.00 deg, thickness <= 2.4 deg, ratio >= 2.8, and the warmth law. No staging change: the camera, range and framing were always right.",
+      "whyTheTermRatherThanTheFrameWasPartlyWrong": "The original finding was a true frame defect — still-seam-of-light.png was shot at range 955 with the station already resolved, so the three-distance thesis (dot -> line -> place) had no middle distance. That half stands. But the criterion I wrote to replace it, a 7.5-8.2 deg absolute band, was itself an observation rather than a derivation, and the re-derivation at the true FOV straddled it (7.911 deg linear, 8.249 deg tangent-correct on the same frame). Draft-v8 replaced it with theta(Z) = 2·atan(L·sin psi / 2Z) evaluated over the contracted latch window, plus an explicit declaration that all spine angles in this contract are tangent-correct — because the two conventions disagree at the boundary and the next reader could not otherwise know which was meant.",
+      "contractChangeRequired": true,
+      "dischargedByRevision": "draft-v8 (convention and band), draft-v9 (warmth law replacing the yaw exclusion)",
+      "evidenceRefs": ["evidence/capture/still-seam-of-light.png", "evidence/verification/ch10-v7-seam.json", "evidence/capture/still-seam-of-light-low.png"]
+    },
+    {
+      "defectId": "D-A3",
+      "title": "ST-0 gaze bias unimplemented and its acceptance unsatisfiable",
+      "owner": "integration",
+      "status": "OPEN — part (c) only, pure capture; mechanism and recurrence proven",
+      "boundedAction": "Take the dedicated night-dwell LOW capture: start scheduled from the phase trace's predicted rise, camera at the hearth on the claimed bearing +/-20 deg, ST-0 in frustum on >= 4 of 8 frames. The movie-lane bias itself is built and proven; two real defects were fixed underneath the bad acceptance (the bias ran on only one of ch10-cold's two walks, and the goal-critical test was a flat 10m on a walk that never leaves 10m).",
+      "whyTheTermRatherThanTheFrameWasTheError": "THE CLEAREST CASE IN THE RUN. My acceptance — ST-0 in frustum on >= 4 of 8 strip frames and >= 60 of 432 trace samples — was measured against the movie walk, which lasts seconds against a 90-second ellipse. ST-0 was above the horizon on 0 of 419 walk frames. No implementation could ever have satisfied it; the term was asking a walk to contain a crossing that does not fit inside it. Worse, the strip probe opened without movie=1 while recording its URL as movie=1, so the acceptance was being measured in the manual lane, where my own ruling forbids the bias. Draft-v8 split it into three reachable parts — MECHANISM proven by suppressed-frame telemetry with no visibility required, RECURRENCE proven by phase telemetry (four periods 89.68/90.21/90.21/89.66s against 90, peak elevation 16.32 deg), VISIBILITY proven by a dedicated dwell — and states the reachability argument inline: every night carries a rise with >= 29s of arc before dawn, and 8 frames at 4s span 28s, so the five above-horizon frames exist by construction.",
+      "contractChangeRequired": true,
+      "dischargedByRevision": "draft-v8",
+      "evidenceRefs": ["ch10-gap-strip-st0.json", "evidence/capture/strip-st0-crossing/", "cinematography-audit.md#D-A3"]
+    },
+    {
+      "defectId": "D-A5",
+      "title": "Cut-line color script — berth ring and false brightness claim",
+      "owner": "integration",
+      "status": "OPEN in its wiring half — berth-ring suppression plus re-proof",
+      "boundedAction": "Wire dock-offer geometry — the berth ring and any approach-invitation chrome — to be suppressed in story worlds under the story:station-docking-authorized milestone predicate, leaving the sandbox surface untouched; then re-shoot the cut line and re-prove. A cyan hexagonal berth ring still renders below the dock in a run whose entire claim is that no door is offered.",
+      "whyTheTermRatherThanTheFrameWasHalfWrong": "Split verdict, and the split is the point. The berth ring is a REAL frame defect: geometry that offers a door in a run that offers none, and it needs wiring, not words. But the brightness half of my repair — 'the amber rows are the brightest cluster, no disc/nebula region exceeds them, pixel-measured', and its sibling 'ST-0's peak luminance is the frame maximum above the horizon band' — was unsatisfiable by construction. I measured the moon at 24.56 deg off-axis in both regenerated stills while the exclusion permitted only +/-10 deg of yaw, so exclusion-by-framing was geometrically impossible at the contracted camera positions, and no yaw could have cleared it without breaking the seam's own +/-5 deg centering. Draft-v9 replaced both with framing-independent property tests: within the aperture the subject is the only WARM source (hue separation is a property of the palette, not of framing, so it holds at every yaw, seed, tier and instant), and ST-0's peak luminance is the maximum among POINT sources (angular extent <= 8px, 3.3x its own 2.4px clamp and an order of magnitude below any resolved disc — discs excluded by size, not framing). Both already-captured stills satisfy both tests as shot. The craft ruling behind it: the moon was never the defect. It earns its place in both frames as a cold light beside the one kept fire, which is K11 made literal.",
+      "contractChangeRequired": true,
+      "dischargedByRevision": "draft-v9 (brightness half); wiring half remains open",
+      "evidenceRefs": ["evidence/capture/still-station-resolved.png", "evidence/capture/still-st0-sighting.png", "evidence/verification/ch10-v7-cutline.json"]
+    },
+    {
+      "defectId": "D-A6",
+      "title": "The thrust-cold hold withholds nothing in manual flight",
+      "owner": "integration",
+      "status": "OPEN — wiring plus re-proof",
+      "boundedAction": "Make setStoryMoveScale(0) actually reach manual flight — nothing in ShipController.tsx reads moveSpeedScale, so the 2.5s diegetic hold is real only in the movie lane, where it is the autopilot's own deceleration. Then run the manual-lane probe proving thrust suppressed for HOLD_DURATION_MS from anc.ch10.station-resolved while attitude and look remain live.",
+      "whyThisOneIsARealRuntimeDefect": "No term was wrong here — the contract described the hold correctly and the runtime simply did not implement it. What the contract lacked was falsifiability: the hold was asserted rather than probed, so a completely inert implementation passed for the whole run. Draft-v7 added the manual-probe acceptance, which is why this is now catchable. The owner taste question it raises is sharper than before: no shipped build has ever actually withheld the input, so nobody has yet felt whether the hold reads as engines-cold or as a stolen input.",
+      "contractChangeRequired": true,
+      "dischargedByRevision": "draft-v7 (acceptance made falsifiable); wiring remains open",
+      "evidenceRefs": ["main/src/story/emergentStoryDirector.ts:2022", "main/src/components/ShipController.tsx", "cinematography-audit.md#D-A6"]
+    },
+    {
+      "defectId": "D-A8",
+      "title": "ST-0 quad draws through terrain",
+      "owner": "integration",
+      "status": "OPEN — wiring plus re-proof",
+      "boundedAction": "Repair the ST-0 quad's occlusion: it draws with depthTest false, depthWrite false, frustumCulled false, renderOrder 2, gated only on the analytic horizon, so it draws through ridges and shelter between that and the roughly 7 deg terrain horizon. Also remove the dead ST0_MAX_PIXELS path. ST0_MIN_PIXELS = 2.4 is a frozen constant and the repair must not move it — the clamp is what makes ST-0 findable at all, and st0ClampedPixels pinning 2.4 forever is correct behavior, not the bug.",
+      "whyThisOneIsARealRuntimeDefect": "A pure rendering defect with no contract error behind it. It matters disproportionately for a 2.4px object: ST-0's entire dramatic function is that it is a real body keeping time in a real sky, and a point that shines through a ridge is a decal. The fix is occlusion correctness, not visibility tuning.",
+      "contractChangeRequired": false,
+      "evidenceRefs": ["cinematography-audit.md#D-A8", "main/src/components/SpaceStationExterior.tsx"]
+    }
+  ],
+  "foldedFindings": [
+    {
+      "auditId": "D-A4",
+      "foldedInto": "D-A5 / capture backlog",
+      "note": "The ST-0 hero still re-shoot. Not carried as a separate id in the canonical register; it remains OPEN as pure capture against the draft-v7 staging deltas (camera <= 25 units from the habitat-core handle, hearth emissive in the bottom 20%, deep night, no interaction prompt at shutter, arc frame with elevation >= 10 deg, +/-15 deg yaw) and the draft-v9 point-source law. As captured it violated its own spec — camera at the Kestrel with no hearth in frame, so 'the dot and home in one frame' was simply absent. Re-shoot, do not re-word."
+    },
+    {
+      "auditId": "D-A7",
+      "foldedInto": "draft-v7 and draft-v8 contract text",
+      "note": "Doc drift, and the thread that led to the run's central lesson. The shot said spine approximately 31% while its own evidence term demanded 38-47%; the blocking said 'outside CORRIDOR_RANGE 1,400' while the evidence shot at 1,000-1,300; arrivalStandoff was cited as staging and never called. Draft-v7 repaired the prose and the citation. Draft-v8 then removed the underlying failure: spineQuaternion seeds the spine's azimuth and elevation, so projected extent is L·sin psi and NO fixed percentage can hold. Because the ch10 leg flies the station centre in a straight line, psi is constant for the leg and occupancy collapses to f = K/Z — this run K = 286.57 from L = 865.0 and psi = 55.572 deg, giving 22.0-28.7% across the contracted window. The formula predicts all eight strip frames at 0.973-0.980 of measured, a constant mask edge bias rather than drift. The superseded 28-34% band was first reachable at Z approximately 965, outside the contracted window, which is why it failed measurement three times. The four mobile echoes of 'about 26%' are gone, replaced by the same law with K re-derived at the mobile aspect."
+    }
+  ],
+  "routing": {
+    "objectiveMeaning": "chapter",
+    "audibleAcknowledgement": "score",
+    "labelLifecycleAndResetWiring": "integration",
+    "playerExperienceAuditor": "read-only, never a repair owner",
+    "note": "All six directions are owned by integration or the verifier. None requires further authored staging from cinematography — every criterion they close against is already written into draft-v9."
+  },
+  "openObligationsOnOtherLanes": [
+    "PROBE DEFECT: the cut-line capture's hull and light instance counts are inverted, because the corrective swap at ch10-v7-final-probe.mjs:262 is guarded on !hull.instanceColor, which never fires — both meshes call setColorAt. stationSpineGeom at the cut line is therefore measured over the 613 emissive instances rather than the 126 hull boxes. The differential mask channel is unaffected and is the instrument the occupancy law is written against, so the contract is sound, but the geom channel cannot be cited for the cut line until the guard is fixed.",
+    "EVIDENCE GAP BLOCKING EVALUATION: no spine axis, spine quaternion, or aspect angle psi is recorded anywhere in the run directory — the recorded offAxisDeg is the camera-to-centre angle, not a spine aspect. Until the probe logs psi at each shutter, the occupancy and seam laws cannot be evaluated by the verifier at all. This must land with the D-A2 and D-A4 re-shoots.",
+    "CABIN LAMP, enumerated and deliberately left alone: a lamp mounted outside the scaled shell loses reach at scale 1.0708 (FOV 73.72) in ShipCockpit.tsx. Out of lock scope, now unreachable in transit after the boost suppression, still reachable in the ask lane."
+  ],
+  "verificationRoute": "story-verifier runs the three outstanding captures (D-A2 seam re-shoot at true FOV 70 with paired LOW, D-A3c night-dwell strip, D-A4 ST-0 still) and the manual-lane hold probe, with psi logged at every shutter; integration lands the berth-ring suppression, the ShipController thrust wiring, the ST-0 occlusion repair, and the probe instance-count guard; cinematography-continuity-auditor then re-audits the regenerated frames against draft-v9; player-experience-auditor remains read-only throughout. No frame may be failed against a superseded term — all four are recorded inline as history, with their cause attached, precisely so this cannot happen.",
+  "authoredBy": "Cinematography Director (Opus 5, verification instance; lane opened by Fable 5)",
+  "authoredAt": "2026-08-12T15:55:00-04:00"
 }

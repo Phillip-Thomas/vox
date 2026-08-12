@@ -6,10 +6,10 @@
  "supersedesContractVersion": "draft-v6",
  "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
  "phase": "implementation",
- "iteration": 45,
- "route": "da5-berth-ring-suppression-under-r9",
+ "iteration": 46,
+ "route": "g1-gaze-engagement-measured-s1-undeclared-lens-move",
  "recordedBy": "integration-engineer",
- "recordedAt": "2026-08-12T12:45:00-04:00",
+ "recordedAt": "2026-08-12T14:35:00-04:00",
  "productionScope": {
   "status": "pass",
   "summary": "42 changed files against sourceRevision 929e3d0a, every one inside allowedPaths at lock R9; zero protected-path bytes (main/public/audio/, main/src/audio/, main/src/components/audio/, firebase.json, .firebaserc all untouched). R9 granted the four paths this round needed for D-A5 and nothing else. The signed-rail refs are pinned to draft-v7 (32122245) against all three lane signatures. One item remains routed rather than repaired: the story/ShipController FOV contention (see storyFovSecondWriter); the coordinator has ruled it not worth widening the lock for.",
@@ -51,7 +51,7 @@
  },
  "tests": {
   "status": "pass",
-  "summary": "277 test files, 2270 tests, all passing (2261 at the start of this batch: 9 new cases). UX-1 adds the on-foot/aboard ignite regression on both entry paths and the pure-resolver ch10 ladder case; D-A8 replaces a tautological clamp test with a 144-combination measurement of the rendered ST-0 footprint; D-A5 adds seven cases covering the dock-offer tag, its exact extent, the survivors' byte-identity, the two render-time skips, the shipped mount's predicate, the sandbox's structural byte-identity, and the predicate's non-story answer.",
+  "summary": "277 test files, 2270 tests, all passing. Two runs of npm run verify failed first on load flakes — agentSurfaceNavigationRuntime \"publishes stable occupancy...\" and emergentStoryDirector \"waits at the rite forever\", both pre-existing tests that already ran at 2.2s and 3.9-4.2s against vitest's 5s default. Both pass in isolation and both passed on the clean re-run recorded here; neither file's behaviour is touched by this round. Machine load average was 8.5-11 from the operator's own browser, not from this run.",
   "evidenceRefs": [
    "evidence/implementation/tests.log",
    "evidence/implementation/verify.log"
@@ -231,6 +231,40 @@
    "score-contract-signoff.json",
    "cinematography-contract-signoff.json",
    "evidence/implementation/scene-av-check.log"
+  ]
+ },
+ "g1GazeEngagement": {
+  "status": "measured-acceptance-moves-to-sampling",
+  "summary": "G-1. The solver repair is correct and IS reached; the bias still never engages, and the reason is measured per frame rather than reasoned about. The engage predicate now publishes every conjunct separately on window.__st0Gaze, written from inside the tick so a probe cannot mistake a second module instance for silence, and published once at the top of autopilotTick so \"never ticked\" is distinguishable from \"ticked, never reached a walk\". MEASURED (ch10-st0-gaze-engage.json, both lanes, same ch10-cold entry): MANUAL LANE — autopilot ticking 0 of 1,218 samples, __st0Gaze absent, ST-0 in frustum on 76 samples. The bias is structurally incapable of running there, and THAT IS THE LANE THE CROSSING STRIP IS SHOT IN: ch10-gap-strip-probe.mjs opens ?story=ch10-cold&profile=LOW with no movie=1 while recording the url as ?story=ch10-cold&movie=1&profile=LOW. The acceptance was measuring a lane in which the ruling that created the bias forbids it to run, so no code change could ever have moved it. MOVIE LANE — 419 walked frames, movie true on 419, autopilot driving on 419, so the branch is reached; but ST-0 above the analytic horizon with a direction on 0 of 419, and engagements 0. The movie ch10-cold walk is a few seconds long (the Kestrel is parked at the hearth) against ST-0's 90s ellipse at roughly 40% duty, so that window can contain a crossing only by luck and can never contain eight crossing frames. The two halves of the acceptance are therefore mutually exclusive as written: an 8-frame full-arc strip needs >=90s (manual, bias forbidden), and the glance can only exist inside a short movie walk. THE ACCEPTANCE MOVES TO THE SAMPLING: measure in-frustum over the movie-lane ch10-cold walk frames with the ellipse phased so ST-0 is up during the walk, not over a full ellipse in a held manual beat. TWO CODE DEFECTS WERE FOUND BY THE INSTRUMENTATION AND FIXED. (1) The bias ran only on the second ch10-cold walk, so a crossing during the walk to the hearth core was structurally unwatchable; the ruling says \"walk phases\", plural, and it now runs on both. (2) The goal-critical demand was a flat 10m on both walks, and the Kestrel is parked AT the hearth, so the contract's nominated walk never leaves that radius: 346 of 419 walked frames (83%) were goal-critical, which would have kept the bias suppressed even on a night when ST-0 is up. The demand is now the distance at which each act actually commits (2m core, 6m fabricator), which is what \"the eyes come down for the act\" means. Re-measured after the change: 118 of 418 (28%). The strip probe's recorded url is corrected, and its report now carries the lane, gazeBiasPermittedInLane, and the live gaze diagnostic, so the evidence states for itself whether the mechanism under test was permitted to run.",
+  "evidenceRefs": [
+   "evidence/ch10-st0-gaze-engage.json",
+   "evidence/ch10-st0-gaze-solver.json",
+   "cinematography-audit.md"
+  ]
+ },
+ "s1UndeclaredLensMove": {
+  "status": "pass",
+  "summary": "S-1 and the seam still's renderCameraFov 79 are ONE defect, and it is a real unauthored lens move, not shipped feel the contract forgot to declare. Evidence: fov is not speed-coupled at all. shipFlightFeedback.ts computes fovTarget = SHIP_BASE_FOV + (SHIP_BOOST_FOV - SHIP_BASE_FOV) x boost, i.e. 70 + 9 x boost, where boost is a damped key state; resolveShipBoost() is forwardHeld && sprintHeld. The 190 u/s threshold is not a constant anywhere — it is a proxy for \"boost held\", because unboosted terminal speed is 60/-ln(0.6) = 117.5 u/s so any higher speed implies boost. And the sprint was not the player's: THIS RUN'S OWN ch10-transit rail asserted controls.sprint = controls.forward, copied from the ch8 legs. So the rail cruised at FOV 79 and fell back to 70 only when atStandoff dropped forward, which is exactly the 79-at-the-seam / 70.0002-at-the-cut-line split, against a contract that declares FOV 70 throughout the transit. Suppressed in ch10-transit. MEASURED AFTER, per beat: ch10-transit over 621 samples holds feedbackFov 70.0 to 70.0, boost max 0, shell scale max 1.00000, zero frames above the 73.72 threshold, and the leg still completes to done. ch10-ask over 231 samples still reaches 79 with shell scale 1.17727 on 90 frames — LEFT AS IS AND FLAGGED: the ask beat's return crossing is contracted as ch8 grammar reused verbatim \"by shipped vehicle state and no authored move\", so its boost is the shipped crossing behaviour rather than a ch10 invention. Cinematography should rule whether that leg wants the same treatment. THE COCKPIT COMPENSATION IS NOT BROKEN. tan(fov/2)/tan(35 deg) is applied every frame to shell and instruments with no clamp, threshold or early return, and it reproduces the measured 1.17727 at 79, 1.03761 at 72 and 1.00000 at 70 exactly, so the silhouette is FOV-invariant by construction. The sky-past-the-shell artifact is a LIGHTING threshold: the cabin pointLight (position [0,0.35,-1.5], distance 6.5, decay 2) sits outside the scaled shell group, and the outer shell walls at |x| = 5.925 are 6.091 units from it at scale 1.0 but 7.117 at scale 1.17727. Solving for the 6.5 cutoff gives scale 1.0708, i.e. FOV 73.72 — squarely inside the 72-79 boost band and reachable only under boost. Above it the walls fall to their emissive floor and, against black space, read as the seat having pulled back. Pinning ch10-transit at FOV 70 removes it from this run's frames entirely; the underlying shipped defect is enumerated below.",
+  "evidenceRefs": [
+   "evidence/ch10-st0-gaze-engage.json",
+   "cinematography-audit.md",
+   "implementation.diff"
+  ]
+ },
+ "cockpitCabinLightEnumeration": {
+  "status": "enumerated-and-stopped",
+  "summary": "The residual shipped defect behind S-1, unreachable in ch10 after the lens fix but still live in free flight whenever the player holds boost. The cabin pointLight is declared at ShipCockpit.tsx:196-203 INSIDE the vibration root and OUTSIDE shellRef, so the FOV compensation applied at ShipCockpit.tsx:115 scales the shell away from a lamp that does not move with it. Above shell scale 1.0708 (FOV 73.72) the outer walls leave the 6.5-unit reach and go dark. Minimal honest fix: scale the lamp's distance by the same fovScale already computed at ShipCockpit.tsx:111-112, so cabin lighting is FOV-invariant like the geometry. A second, smaller mechanism sits alongside it: ShipCockpit's useFrame is subscribed before ShipController's at equal priority, so the shell scales with the previous frame's fov and under-scales by up to ~1.8% during the boost ramp; reading the camera's own fov instead of the feedback singleton removes it by construction. main/src/components/ShipCockpit.tsx is NOT in allowedPaths and no bytes were changed in it. Routed to the orchestrator.",
+  "evidenceRefs": [
+   "production-lock.json",
+   "implementation.diff"
+  ]
+ },
+ "seamSpineArithmetic": {
+  "status": "routed-to-verifier",
+  "summary": "The seam still's spine was measured at 7.010 degrees against a 7.5-8.2 term while the render camera was at FOV 79, not the 70 the measurement assumed. Both corrections, explicitly, so the verifier re-measures rather than inherits either: LINEAR rescale 7.010 x 79/70 = 7.911 degrees, INSIDE the band. TANGENT-CORRECT reprojection — recover the pixel fraction p/H = tan(7.010/2)/tan(35) = 0.087474, then reproject at the true lens, 2 x atan(0.087474 x tan(39.5)) = 8.249 degrees, marginally OUTSIDE the 8.2 ceiling. The two differ by 0.34 degrees and they straddle the boundary, so the criterion cannot be called either way from the existing capture: which is right depends on whether the original measurement converted pixels to angle linearly or through the tangent. THE HONEST ANSWER IS TO RE-SHOOT, not to re-derive — and after the lens fix the seam frame is at FOV 70 by construction, so the re-shot still needs no correction at all and the ambiguity disappears. Recorded here because the criterion may never have been violated and the verifier must not carry forward a 7.010 that was measured through the wrong lens.",
+  "evidenceRefs": [
+   "cinematography-audit.md",
+   "evidence/ch10-st0-gaze-engage.json"
   ]
  }
 }

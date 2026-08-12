@@ -78,3 +78,32 @@ strip-st0-crossing/00 is the moon setting — ST-0 itself is a 2.4px
 constant-luminance dot by signed design, legible in motion (7× star drift) but
 near-invisible in stills. These contexts do not dismiss the findings: strip
 evidence that requires context to read is itself a finding.*
+
+
+---
+
+## Read structure (index added by the orchestrator; no reviewer text altered)
+
+**Isolation.** The viewer received only the frame strips, the two hero stills,
+the rendered audio, and intent-free playback metadata — file names, durations
+and beat labels. It was given no contract, no treatment, no source, no canon and
+no agent notes, and it had no repository access. Nothing in its report was
+informed by knowing what the scene was trying to do.
+
+**Cold read.** Its account of "the story I think I'm being told" is the whole
+value of the exercise: an uninstructed reading of the sequence, in order, from
+images and sound alone.
+
+**Variant.** The strips it viewed include `strip-rm-transit`, the reduced-motion
+capture, alongside the standard-tier strips; its comments on caption truncation
+span both.
+
+**Verdict.** Recorded verbatim, including its two hero-still titles and its
+single highest-leverage fix. Two of its observations were confirmed
+independently by instrumented review — ST-0 not actually appearing in the
+crossing strip, and the reveal reading as under-scaled — and are carried in
+`defects.json` as D-A3 and NV-1.
+
+**Contract version audited:** no contract revision was shown to the reviewer by design; the read is carried against the frozen contract version draft-v9 `0336a4f2…`
+
+**First wave attestation.** This was a first-wave report in the strictest sense: the blind viewer saw no contract, no peer review, and no agent notes at any point, and reported before any other reviewer's conclusions existed in its context.

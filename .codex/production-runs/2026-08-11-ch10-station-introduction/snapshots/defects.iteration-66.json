@@ -1,0 +1,517 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v7",
+  "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+  "compiledAt": "2026-08-12T19:10:00Z",
+  "compiledBy": "closeout archivist (Claude Opus 5) — DERIVED RECONSTRUCTION, not a contemporaneous record",
+  "requiresHumanTaste": true,
+  "reconstructedFrom": "defects.json@5bae8fcdc81997cf87180789c99abe577c439c4ce6226a5919b08b2671b1e669",
+  "reconstructionNote": "NOT a contemporaneous record. No defect-register bytes were captured at this iteration during the run: every recorded row bound the same defects.json hash (256a4b72...), which was the unfilled template. This file states the register as it is now known to have stood at ledger index 66, derived from the canonical register's reconstructed iterationIntroduced and iterationResolved fields. The counts are honest with respect to those two numbers, but every statement, repair, route and resolution string is the closing-compile wording, and the owner's acceptance decisions (UX-2, D-12, F8) are shown as open before ledger index 57, which is where human-decision.json lands. Two caveats the gate's own counter creates: F1, D1 and D3 carry the reviewers' severity words ('major', 'blocking') rather than the gate's four-value enum, so they contribute zero to every count below while genuinely open; and where a defect's introduction iteration was derived from an artifact write time rather than from a ledger row that names it, the true introduction may be one row earlier.",
+  "sourceReports": [
+    {
+      "path": "story-audit.md",
+      "sha256": "62e9190a1f3d77306a69dd00d6ada69fa2fc141399cf01e627b306a9fbbc4643"
+    },
+    {
+      "path": "score-audit.md",
+      "sha256": "50f74928fb7aa0083260c39968b0f726bd1ab2d3cf8e9cbd6e256d07dcfd56c3"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": "4e405f89055c78155f71945188fd3a950bf44eb0b8e2ac2fe4a214d531a7a6b2"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": "626c0ef4100cb8b7f38e0e64fc7e9e1cf2cb9c686e6e021756c0087a79aeb969"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "1868ffeb19e7e65a09f4750671ca1b522e9480e63d11a8440a0024b9568e0eee"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": "65ea8cc2481808a8b7d3d1c5b9b9772197379d76b9e19b86a3eb3889eb741bcb"
+    }
+  ],
+  "defects": [
+    {
+      "id": "F1",
+      "severity": "major",
+      "category": "narrative-alignment",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anc.ch10.relay-answer",
+      "statement": "K9 asserted 'the answer came back before the asking finished' while the implementation prevented the player from perceiving it: the ask anchor selected a mood with no question figure, so there was no sounding phrase for the answer to enter.",
+      "requestedRepair": "Realize the contract's own two-bar square-fifth ask figure so the answer enters inside a sounding question; K9 then confirms an observable.",
+      "verificationRoute": "Onset measurement of the ask-through-answer render vs the ch5-maw grammar reference.",
+      "evidenceRefs": [
+        "evidence/score/relay_ask-through-answer_combined.wav",
+        "evidence/score/relay-answer_onsets.json"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "resolution": "Closed: answer enters at beat 3, 25.0% into a 7.06s figure, gapless (0ms), unaccented (-25.99 to -27.06 dB), click-free (0.0187); [0,7] sounds through the boundary.",
+      "reportedStatus": "resolved",
+      "reportedSourceReportRefs": [
+        "story-audit.md",
+        "score-audit.md"
+      ],
+      "corroboratingReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 18,
+      "iterationResolved": 24,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "score-repair-direction.json authoredAt 2026-08-11T20:25-04:00 names F1-score-position; the first ledger row at or after that instant is index 18. Repaired at index 24, whose defectIds are score-audit-d2 and story-audit-f1 (the realized relay-ask figure).",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "D1",
+      "severity": "blocking",
+      "category": "score",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.relay-answer",
+      "statement": "Carrier and variant state were set on anchor edges, so a mid-transit reload restored the pulse the seam had ebbed away and dropped the resolve's octave double — losing both of the chapter's signature gestures.",
+      "requestedRepair": "Resolve variant and carrier purely from durable milestones in enterEmergentScoreBeat.",
+      "verificationRoute": "18-cell state matrix plus mid-transit reload equivalence test.",
+      "evidenceRefs": [
+        "evidence/score/carrier-legality.json"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "resolution": "Closed: resolveChapter10ScoreState reads beat + five durable milestones only; reload equivalence asserted.",
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 18,
+      "iterationResolved": 23,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Raised by the first-wave score audit that produced score-repair-direction.json at 2026-08-11T20:25-04:00; first ledger row at or after that instant is index 18. Repaired at index 23, which replaced the edge machine with resolveChapter10ScoreState over durable milestones.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D3",
+      "severity": "major",
+      "category": "score",
+      "status": "resolved",
+      "owner": "score",
+      "anchor": "anc.ch10.station-resolved",
+      "statement": "The destination out-measured the A4 awakening on a steady-window comparison (pad 0.19 vs 0.18; -18.74 vs -18.84 dB), inverting the arc's intended weighting.",
+      "requestedRepair": "Pad to 0.17, sub to 0.10; re-measure on the 8-12s steady window.",
+      "verificationRoute": "Offline steady-window RMS/peak/sub comparison against the a4-authored control.",
+      "evidenceRefs": [
+        "evidence/score/resolved_vs_a4_rms.json"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "resolution": "Closed: -19.36 dB / peak 0.311 / sub -20.90 vs a4 -18.84 / 0.372 / -20.34 — strictly below on all three.",
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 18,
+      "iterationResolved": 25,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Same first-wave score audit as D1 (index 18). Repaired at index 25: station-resolved pad 0.19 to 0.17 and sub 0.12 to 0.10, re-measured on the 8-12s steady window.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "UX-1",
+      "severity": "high",
+      "category": "player-experience",
+      "status": "resolved",
+      "owner": "chapter",
+      "anchor": "anc.ch10.bearing-claimed",
+      "statement": "The manual player claims the bearing on foot at the relay and is then told 'HOLD [SPACE] TO IGNITE' with no locator to the Kestrel and a jetpack glyph on touch. The movie lane passed only because its autopilot was given a bespoke walk-and-board step, masking the missing rung.",
+      "requestedRepair": "Author and wire station:transit:reboard on ch8's boarding grammar; ignite publishes only once aboard.",
+      "verificationRoute": "Manual-lane guidance trace on both entry paths; assert [SPACE] absent on every on-foot rung.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "resolution": "Closed in draft-v7 and wired; disembarking pre-ignition returns to the locator with a fresh cue.",
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 53,
+      "iterationResolved": 58,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "ux-audit.md was written at 2026-08-12 06:58-04:00; the first ledger row at or after that instant is index 53. Repaired at index 58, whose defectIds field is exactly UX-1 (the station:transit:reboard rung).",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D-A1",
+      "severity": "critical",
+      "category": "cinematography",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.transit-ignite",
+      "statement": "LOW strips and HIGH stills appeared to render through different lenses (cockpit aperture 300px vs 705px), which would have invalidated every composition verdict.",
+      "requestedRepair": "Instrument the render camera on every ch10 flight frame at all four profiles.",
+      "verificationRoute": "Per-frame camera.fov / flight fov / drawing-buffer size / pixel ratio at four profiles.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "resolution": "Not a lens defect: all four profiles bit-identical, canopy ~690px everywhere. The 300px frames were captured before the autopilot fixes and no longer reproduce. Cinematography accepts the diagnosis but holds all composition verdicts SUSPENDED until the strips are regenerated and re-measured.",
+      "reportedStatus": "resolved-reclassified",
+      "iterationIntroduced": 53,
+      "iterationResolved": 56,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "cinematography-audit.md was written at 2026-08-12 06:58-04:00; first ledger row at or after is index 53. Closed as a diagnosis at index 56, whose defectIds field is cinematography-d-a1.",
+        "statusNormalisation": "Reviewer status 'resolved-reclassified' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D-A2",
+      "severity": "critical",
+      "category": "cinematography",
+      "status": "open",
+      "owner": "verifier",
+      "anchor": "anc.ch10.seam-of-light",
+      "statement": "The seam hero still is a second resolve frame (range 955, seam and resolve already latched) — the dot-to-line-to-place thesis has no line, and the still carried no acceptance criterion.",
+      "requestedRepair": "Re-shoot at the seam latch (5,100-5,200) against the new draft-v7 criterion stated in visual-angle units.",
+      "verificationRoute": "Anchor-triggered HIGH capture plus a paired LOW frame at the same latch edge.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "reportedStatus": "open-evidence",
+      "reportedSourceReportRefs": [
+        "cinematography-audit.md",
+        "naive-audience-report.md"
+      ],
+      "corroboratingReportRefs": [
+        "naive-audience-report.md"
+      ],
+      "iterationIntroduced": 53,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "cinematography-audit.md, index 53 as above. Still open: the seam re-shoot sits with the verifier.",
+        "statusNormalisation": "Reviewer status 'open-evidence' normalised to the gate enum value 'open'; the reviewer's own word is kept in reportedStatus.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "D-A3",
+      "severity": "high",
+      "category": "cinematography",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.cold-noticed",
+      "statement": "ST-0 was in frustum on 1 of 8 crossing-strip frames (7/432 samples) — the strip proved the state machine, not the crossing. A blind viewer independently reported 'nothing crosses; it reads as a frozen game'.",
+      "requestedRepair": "Implement the movie-lane gaze bias to Cinematography's bounded spec.",
+      "verificationRoute": "In-frustum acceptance: at least 4/8 strip frames and 60/432 samples.",
+      "evidenceRefs": [
+        "evidence/ch10-st0-gaze-solver.json",
+        "naive-audience-report.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "resolution": "Root cause was the gaze solver, not the state machine: it aimed 240m out in travel mode and clamped pitch to +15deg, solving 0.00deg at every elevation ST-0 occupies. Worst error now 0.00deg. In-frustum acceptance is the verifier's to confirm.",
+      "reportedStatus": "resolved",
+      "reportedAnchor": "ST-0",
+      "reportedSourceReportRefs": [
+        "cinematography-audit.md",
+        "naive-audience-report.md"
+      ],
+      "corroboratingReportRefs": [
+        "naive-audience-report.md"
+      ],
+      "iterationIntroduced": 53,
+      "iterationResolved": 59,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "cinematography-audit.md, index 53 as above. Repaired at index 59, whose defectIds field is exactly D-A3 (gaze-bias solver made effective).",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus.",
+        "anchorCorrection": "cinematography-audit.md files D-A3 against the ch10-cold walk strip (ST-0 in-frustum over the crossing arc), which is the cold-noticed anchor's own evidence; 'ST-0' is an entity id, not a contract anchor.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "D-A5",
+      "severity": "high",
+      "category": "cinematography",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.station-resolved",
+      "statement": "A cyan hexagonal berth ring rendered below the dock in the cut-line hero frame, violating the contract's 'no dock offer geometry' term in the one shot whose thesis is a closed door.",
+      "requestedRepair": "Suppress dock-offer geometry in story worlds under story:station-docking-authorized; sandbox byte-identical.",
+      "verificationRoute": "Story-mode vs sandbox comparison frames; exact-count tests on the suppressed elements.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "resolution": "Closed under lock R9: the offer (4 guide arms, 28 chase lamps, 36 threshold strips) is fenced at the mount; the dock's jamb, mouth and glow are architecture and untouched; sandbox proven by exact-count tests.",
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 53,
+      "iterationResolved": 64,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "cinematography-audit.md, index 53 as above. Enumerated-and-stopped at index 61, then closed at index 64 under lock revision R9; index 64's defectIds field is exactly D-A5.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D-A6",
+      "severity": "medium",
+      "category": "player-agency",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.station-resolved",
+      "statement": "The contracted 2.5s thrust-cold hold withheld nothing in manual flight: setStoryMoveScale(0) is read by nothing in ShipController, so the hold existed only in the movie lane.",
+      "requestedRepair": "Wire thrust-input suppression for HOLD_DURATION_MS with attitude and look left live.",
+      "verificationRoute": "Manual-flight probe: thrust suppressed for the window, attitude live, suppression ends at handback.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "resolution": "Wired; manual-probe acceptance added to draft-v7. Verifier confirmation outstanding.",
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 53,
+      "iterationResolved": 53,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "cinematography-audit.md, index 53 as above. Index 53's defectIds field includes cinematography-d-a6 and it is the row that wired thrust suppression; introduction and repair fall in the same ledger row.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D-A8",
+      "severity": "medium",
+      "category": "cinematography",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.cold-noticed",
+      "statement": "The ST-0 quad drew through ridges and shelter geometry, and ST0_MAX_PIXELS was dead while the clamp pinned 2.4px forever.",
+      "requestedRepair": "Honest occlusion within the one-draw-call budget; wire or delete the dead constant.",
+      "verificationRoute": "Low-elevation draw-through check plus device-projected size against the 3px ceiling at four profiles.",
+      "evidenceRefs": [
+        "cinematography-audit.md"
+      ],
+      "sourceReportRefs": [
+        "cinematography-audit.md"
+      ],
+      "resolution": "Closed: depthTest live; clamp replaced by st0DeviceProjectedPixels() measured across 144 tier/DPR/viewport/distance cases.",
+      "reportedStatus": "resolved",
+      "reportedAnchor": "ST-0",
+      "iterationIntroduced": 53,
+      "iterationResolved": 60,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "cinematography-audit.md, index 53 as above. Occlusion half landed at index 53 (defectIds includes cinematography-d-a8); the pixel-ceiling half closed at index 60, whose defectIds field is exactly D-A8.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus.",
+        "anchorCorrection": "cinematography-audit.md files D-A8 against the ST-0 quad as drawn during the ch10-cold walk; 'ST-0' is an entity id, not a contract anchor."
+      }
+    },
+    {
+      "id": "D-12",
+      "severity": "high",
+      "category": "implementation-fidelity",
+      "status": "resolved",
+      "owner": "integration",
+      "anchor": "anc.ch10.relay-ask",
+      "statement": "The origin-side landfall leg intermittently never completed (2 of 4 crossings; worst 89.4s stand) because completion depended on arrival position rather than on an aimed descent.",
+      "requestedRepair": "Aim the origin-side descent at the derivable wreck site.",
+      "verificationRoute": "Repeated cold crossings; frequency and timing distribution.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "resolution": "Closed on frequency: 8/8 post-fix completions at 5.1-7.8s. Residual: no post-fix run observed off this headless SwiftShader box.",
+      "reportedStatus": "accepted-residual",
+      "reportedAnchor": "anc.ch10.landfall",
+      "reportedSourceReportRefs": [
+        "verification-report.json"
+      ],
+      "supplementalSourceRefs": [
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 45,
+      "iterationResolved": 49,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions[1]",
+      "reconstruction": {
+        "iterationDerivation": "First named in the ledger at index 45 (defectIds verifier-d-12, characterized-not-reproduced). Reproduced and repaired at index 47, then closed at index 49 on the 4-of-4 post-fix sample.",
+        "statusNormalisation": "Reviewer status 'accepted-residual' normalised to the gate enum value 'accepted-exception'; the reviewer's own word is kept in reportedStatus.",
+        "anchorCorrection": "The origin-side landfall leg is the descent that reaches the wreck relay, i.e. the relay-ask anchor's own approach; 'anc.ch10.landfall' is not a contract anchor id.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "D-15",
+      "severity": "medium",
+      "category": "implementation-fidelity",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anc.ch10.bearing-claimed",
+      "statement": "The station target telemetry reads null for 1.81s between the bearing claim and the beat flip.",
+      "requestedRepair": "Publish the committed target in the same frame as the claim receipt, or record the gap as authored.",
+      "verificationRoute": "Telemetry pin trace across the claim.",
+      "evidenceRefs": [
+        "verification-report.json"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "reportedStatus": "open",
+      "reportedSourceReportRefs": [
+        "verification-report.json"
+      ],
+      "supplementalSourceRefs": [
+        "verification-report.json"
+      ],
+      "iterationIntroduced": 53,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Carried in ux-audit.md (2026-08-12 06:58-04:00) and in verification-report.json; first ledger row at or after the audit is index 53. Still open.",
+        "statusNormalisation": "Reviewer status 'open' normalised to the gate enum value 'open'; the reviewer's own word is kept in reportedStatus.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "NV-1",
+      "severity": "medium",
+      "category": "audiovisual-alignment",
+      "status": "open",
+      "owner": "human",
+      "anchor": "anc.ch10.station-resolved",
+      "statement": "Three independent reviewers read the station reveal as under-scaled: the blind viewer ('too small for the biggest image; nothing you would remember'), the canon auditor (the answer's continuation reads as thinning), and the score auditor (the answer enters ~6dB under the ask's own mean). The score lane's position is that the withholding is the point and the station's key is banked for the docking run.",
+      "requestedRepair": "Owner ear on the two renders; either accept the restraint or commission a reveal packet.",
+      "verificationRoute": "Owner listening session; no machine route can settle it.",
+      "evidenceRefs": [
+        "evidence/score/station-resolved_combined.wav",
+        "evidence/score/relay_ask-through-answer_combined.wav",
+        "naive-audience-report.md"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "reportedStatus": "open-taste",
+      "reportedSourceReportRefs": [
+        "naive-audience-report.md",
+        "story-audit.md",
+        "score-audit.md"
+      ],
+      "corroboratingReportRefs": [
+        "naive-audience-report.md",
+        "story-audit.md",
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 53,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "naive-audience-report.md was written at 2026-08-12 06:45-04:00; the first ledger row at or after that instant is index 53. Open as a taste question for the owner.",
+        "statusNormalisation": "Reviewer status 'open-taste' normalised to the gate enum value 'open'; the reviewer's own word is kept in reportedStatus.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "OD-1",
+      "severity": "high",
+      "category": "player-experience",
+      "status": "open",
+      "owner": "human",
+      "anchor": "anc.ch10.station-resolved",
+      "statement": "Owner-reported from headed play: flying to the station and receiving complete silence inside the corridor is contract-correct, but reads as an unfinished game rather than as a deliberately closed door.",
+      "requestedRepair": "One authored beat, in the chapter's own voice, that makes the withholding legible as a choice.",
+      "verificationRoute": "Owner decision, then a chapter-authored line and a headed re-check.",
+      "evidenceRefs": [
+        "human-decision.json"
+      ],
+      "sourceReportRefs": [
+        "critic-report.md"
+      ],
+      "reportedStatus": "open-taste",
+      "reportedSourceReportRefs": [
+        "human-decision.json"
+      ],
+      "supplementalSourceRefs": [
+        "human-decision.json"
+      ],
+      "iterationIntroduced": 57,
+      "iterationResolved": null,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Owner-reported from headed play; the durable record is human-decision.json, written 2026-08-12 12:17-04:00. The first ledger row at or after that instant is index 57. Open as a taste question.",
+        "statusNormalisation": "Reviewer status 'open-taste' normalised to the gate enum value 'open'; the reviewer's own word is kept in reportedStatus.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "UX-2",
+      "severity": "medium",
+      "category": "player-experience",
+      "status": "accepted-exception",
+      "owner": "human",
+      "anchor": "anc.ch10.cold-noticed",
+      "statement": "On mobile-potato the entire ch10 work order renders as a JOURNAL button at all six anchors, so the chapter's unannounced arrival is a small button on touch.",
+      "requestedRepair": "Whole-game mobile guidance packet; a ch10-scoped affordance was rejected as forking guidance.",
+      "verificationRoute": "Deferred to the packet.",
+      "evidenceRefs": [
+        "ux-audit.md"
+      ],
+      "sourceReportRefs": [
+        "ux-audit.md"
+      ],
+      "resolution": "Accepted exception: shipped baseline, HUD surfaces outside this lock; the mobile arrival is carried by the K1 caption.",
+      "reportedStatus": "accepted-exception",
+      "iterationIntroduced": 53,
+      "iterationResolved": null,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions[0]",
+      "reconstruction": {
+        "iterationDerivation": "ux-audit.md, index 53 as above. Accepted as an exception by the owner in human-decision.json (2026-08-12 12:17-04:00), which lands at index 57.",
+        "statusNormalisation": "Reviewer status 'accepted-exception' normalised to the gate enum value 'accepted-exception'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "F8",
+      "severity": "medium",
+      "category": "authority-governance",
+      "status": "accepted-exception",
+      "owner": "human",
+      "anchor": null,
+      "statement": "story-authority.json raises the runtime story ceiling and evidence chain to ch10, but activeProduction still names the 2026-07-13 run; the gate pins production identity in five coupled literals.",
+      "requestedRepair": "A second registered production: schema, gate design, and its own lock revision.",
+      "verificationRoute": "Deferred to the follow-on.",
+      "evidenceRefs": [
+        "story-audit.md"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "resolution": "Accepted as coherent: no artifact claims otherwise, and retargeting today would drop the signed A4-to-ch9 contract out of gate coverage.",
+      "reportedStatus": "accepted-exception",
+      "iterationIntroduced": 24,
+      "iterationResolved": null,
+      "acceptedExceptionRef": "human-decision.json#acceptedExceptions[2]",
+      "reconstruction": {
+        "iterationDerivation": "chapter-repair-direction.json authoredAt 2026-08-12T02:10Z (2026-08-11 22:10-04:00) names story-audit-f8; the first ledger row at or after that instant is index 24. Routed at index 31 and accepted as an exception by the owner at index 57.",
+        "statusNormalisation": "Reviewer status 'accepted-exception' normalised to the gate enum value 'accepted-exception'; the reviewer's own word is kept in reportedStatus."
+      }
+    }
+  ]
+}

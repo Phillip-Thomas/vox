@@ -1,0 +1,473 @@
+{
+  "capturedAt": "2026-08-12T18:52:03.033Z",
+  "base": "http://localhost:5174",
+  "mode": "cutline",
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "pageErrors": [],
+  "raisedAtDistance": 5180,
+  "appliedProfile": "HIGH",
+  "still": {
+    "id": "still-station-resolved",
+    "file": "evidence/capture/still-station-resolved.png",
+    "tier": "HIGH",
+    "armedAt": {
+      "at": 81280,
+      "distance": 1410
+    },
+    "rangeSpec": [
+      1000,
+      1300
+    ],
+    "rangeAtShutter": 1406,
+    "stationCentreRange": 1681.2,
+    "renderCameraFov": 70,
+    "avFov": null,
+    "spineSpec": [
+      22,
+      28.7
+    ],
+    "spineLaw": {
+      "hullInstances": 126,
+      "spineAxisWorld": [
+        0.52239,
+        -0.36598,
+        0.77018
+      ],
+      "spineGroupQuaternion": [
+        -0.47762,
+        -0.25292,
+        0.83608,
+        0.09419
+      ],
+      "spineCentreWorld": [
+        -6761.2,
+        -1113.06,
+        -1117.81
+      ],
+      "L": 850.98,
+      "L_contract": 865,
+      "psiDeg": 56.061,
+      "psiDeg_contract": 55.572,
+      "sinPsi": 0.82963,
+      "Z": 1649.1,
+      "fovV": 70,
+      "aspect": 1.7778,
+      "fovH": 102.4479,
+      "K": 283.58,
+      "K_contract": 286.57,
+      "predictedOccupancyPercent": 17.2,
+      "predictedThetaDeg": 24.164,
+      "tolerance": 0.05
+    },
+    "hullPickedBy": "aStationStyle",
+    "exteriorDiag": {
+      "range": 1681.4,
+      "hullInstances": 126,
+      "hullTotal": 226,
+      "lightInstances": 15
+    },
+    "hullPickAgreesWithDiag": true,
+    "stationMask": {
+      "spineAngleTangentDeg": 27.8,
+      "thicknessAngleTangentDeg": 8.709,
+      "spineToThicknessRatio": 3.19,
+      "spineToThicknessRatioPx": 3.25,
+      "maskPixels": 10204,
+      "spineLengthPx": 254.7,
+      "spineThicknessPx": 78.5,
+      "spinePercentOfFrameWidth": 19.9,
+      "thicknessPercentOfFrameWidth": 6.13,
+      "spineVisualAngleDeg": 24.764,
+      "thicknessVisualAngleDeg": 7.627,
+      "silhouetteBBox": [
+        510,
+        300,
+        241,
+        156
+      ],
+      "centroidPx": [
+        654,
+        385.9
+      ],
+      "centroidPercentX": 51.09,
+      "centroidOffsetFromViewCenterDeg": 2.861
+    },
+    "stationSpineGeom": {
+      "instances": 126,
+      "spineLengthPx": 253.8,
+      "spineThicknessPx": 76.1,
+      "spinePercentOfFrameWidth": 19.83,
+      "screenBBoxPx": [
+        240.5,
+        155.5
+      ],
+      "bboxPercentOfFrameWidth": 18.79,
+      "centroidPx": [
+        613.6,
+        344.6
+      ],
+      "centroidPercentX": 47.94,
+      "spineVisualAngleDeg": 27.673,
+      "thicknessVisualAngleDeg": 7.402,
+      "offAxisDeg": 0
+    },
+    "cockpitMask": {
+      "borderCoveragePercent": 99.98,
+      "maskPixels": 637564,
+      "silhouetteBBox": [
+        0,
+        0,
+        1280,
+        720
+      ],
+      "apertureWidthPx": 646,
+      "apertureRow": 403,
+      "apertureSpanPx": [
+        317,
+        962
+      ],
+      "apertureWidthAt1280": 646,
+      "aperturePercentOfFrameWidth": 50.47
+    },
+    "stationHullInstances": 126,
+    "stationLightInstances": 15,
+    "k11Painted": true,
+    "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+    "objectiveId": null,
+    "hudText": null,
+    "resetReason": "completion",
+    "galaxyInFrame": 0,
+    "companionsInFrame": 0,
+    "canDock": false,
+    "dockingAuthorized": false,
+    "state": {
+      "href": "http://localhost:5174/?story=ch10-transit&movie=1&profile=LOW",
+      "lane": "movie",
+      "urlStory": "ch10-transit",
+      "urlProfile": "LOW",
+      "autopilotTicking": true,
+      "wallMs": 81735,
+      "beat": "done",
+      "objectiveId": null,
+      "markerLabel": null,
+      "health": null,
+      "requiresMarker": null,
+      "hudText": null,
+      "feedObjectiveId": null,
+      "feedHealth": null,
+      "feedText": null,
+      "caption": "(both fires behind you now. ahead, a light someone else keeps alive.)",
+      "cueCount": 1,
+      "flight": {
+        "phase": "deep_space",
+        "controlMode": "flight"
+      },
+      "system": {
+        "activePlanetId": "-1,-1",
+        "locationMode": "local_space",
+        "targetWorldId": "-1,-1:a0",
+        "targetKind": "space_station",
+        "pos": [
+          -5144,
+          -871,
+          -904
+        ],
+        "speed": 16.2
+      },
+      "av": {
+        "active": false,
+        "beat": null,
+        "anchorId": null,
+        "history": [
+          "anc.ch10.transit-ignite",
+          "anc.ch10.seam-of-light",
+          "anc.ch10.station-resolved",
+          "anc.ch10.threshold-handback"
+        ],
+        "authority": null,
+        "fov": null,
+        "agency": null,
+        "letterbox": null,
+        "postFx": [],
+        "reset": "completion"
+      },
+      "milestones": {
+        "faultRead": true,
+        "fabricationRefused": true,
+        "relayAsked": true,
+        "relayAnswered": true,
+        "bearingClaimed": true,
+        "transitIgnited": true,
+        "seamPassed": true,
+        "stationResolved": true,
+        "ch10Complete": true,
+        "dockingAuthorized": false
+      },
+      "guidance": {
+        "beat": null,
+        "objectiveId": null,
+        "markerLabel": null,
+        "workOrder": [],
+        "requiresMarker": null,
+        "health": "idle",
+        "markerTargetLabel": null,
+        "markerTargetPosition": null,
+        "aboard": true,
+        "flightPhase": "deep_space",
+        "activePlanetId": "-1,-1",
+        "receipts": {
+          "faultRead": true,
+          "fabricationRefused": true,
+          "relayAsked": true,
+          "relayAnswered": true,
+          "bearingClaimed": true,
+          "transitIgnited": true,
+          "seamPassed": true
+        }
+      },
+      "qualityProfile": "HIGH",
+      "inputPolicy": {
+        "targetFov": 75,
+        "moveSpeedScale": 1,
+        "targetDpr": null
+      },
+      "flightFeedback": {
+        "fov": 70,
+        "boost": 0,
+        "speed": 16.2,
+        "reducedMotion": false,
+        "active": true
+      },
+      "dayPhase": 0.0291,
+      "daylight": 1,
+      "isNight": false,
+      "score": {
+        "variant": null,
+        "carrierAlive": false,
+        "intensity": 0.28,
+        "maxIntensity": 0.44
+      },
+      "contacts": {
+        "phase": "deep_space",
+        "ship": [
+          -5143.994910415648,
+          -870.9371017123245,
+          -904.1962337103007
+        ],
+        "stations": [
+          {
+            "worldId": "-1,-1:a0",
+            "distance": 1406,
+            "phase": "detected",
+            "canDock": false
+          }
+        ]
+      },
+      "autopilot": {
+        "beat": "ch10-transit",
+        "clock": 76.7,
+        "pos": [
+          8,
+          53.85,
+          -6
+        ],
+        "stillTime": 0,
+        "teleportNudgesTotal": 0,
+        "keys": []
+      }
+    }
+  },
+  "coastTrace": [
+    {
+      "t": 0.07,
+      "contactDistance": 1405,
+      "spineLawZ": 1648.2,
+      "K": 283.58,
+      "predictedPercent": 17.21,
+      "measuredPercent": 19.9,
+      "fov": 70,
+      "speed": 15.57
+    },
+    {
+      "t": 0.82,
+      "contactDistance": 1396,
+      "spineLawZ": 1638.5,
+      "K": 283.6,
+      "predictedPercent": 17.31,
+      "measuredPercent": 20,
+      "fov": 70,
+      "speed": 10.71
+    },
+    {
+      "t": 1.59,
+      "contactDistance": 1390,
+      "spineLawZ": 1632.1,
+      "K": 283.61,
+      "predictedPercent": 17.38,
+      "measuredPercent": 20.07,
+      "fov": 70,
+      "speed": 7.31
+    },
+    {
+      "t": 2.38,
+      "contactDistance": 1386,
+      "spineLawZ": 1627.6,
+      "K": 283.62,
+      "predictedPercent": 17.43,
+      "measuredPercent": 20.18,
+      "fov": 70,
+      "speed": 4.99
+    },
+    {
+      "t": 3.15,
+      "contactDistance": 1383,
+      "spineLawZ": 1624.5,
+      "K": 283.62,
+      "predictedPercent": 17.46,
+      "measuredPercent": 20.18,
+      "fov": 70,
+      "speed": 3.42
+    },
+    {
+      "t": 3.92,
+      "contactDistance": 1381,
+      "spineLawZ": 1622.4,
+      "K": 283.63,
+      "predictedPercent": 17.48,
+      "measuredPercent": 20.18,
+      "fov": 70,
+      "speed": 2.33
+    },
+    {
+      "t": 4.67,
+      "contactDistance": 1380,
+      "spineLawZ": 1621,
+      "K": 283.63,
+      "predictedPercent": 17.5,
+      "measuredPercent": 20.25,
+      "fov": 70,
+      "speed": 1.6
+    },
+    {
+      "t": 5.43,
+      "contactDistance": 1379,
+      "spineLawZ": 1620,
+      "K": 283.63,
+      "predictedPercent": 17.51,
+      "measuredPercent": 20.25,
+      "fov": 70,
+      "speed": 1.11
+    },
+    {
+      "t": 6.18,
+      "contactDistance": 1378,
+      "spineLawZ": 1619.3,
+      "K": 283.63,
+      "predictedPercent": 17.52,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.76
+    },
+    {
+      "t": 6.97,
+      "contactDistance": 1378,
+      "spineLawZ": 1618.9,
+      "K": 283.63,
+      "predictedPercent": 17.52,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.52
+    },
+    {
+      "t": 7.76,
+      "contactDistance": 1377,
+      "spineLawZ": 1618.6,
+      "K": 283.63,
+      "predictedPercent": 17.52,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.36
+    },
+    {
+      "t": 8.51,
+      "contactDistance": 1377,
+      "spineLawZ": 1618.3,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.24
+    },
+    {
+      "t": 9.25,
+      "contactDistance": 1377,
+      "spineLawZ": 1618.2,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.17
+    },
+    {
+      "t": 10.01,
+      "contactDistance": 1377,
+      "spineLawZ": 1618.1,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.12
+    },
+    {
+      "t": 10.76,
+      "contactDistance": 1377,
+      "spineLawZ": 1618,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.08
+    },
+    {
+      "t": 11.51,
+      "contactDistance": 1377,
+      "spineLawZ": 1618,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.05
+    },
+    {
+      "t": 12.31,
+      "contactDistance": 1377,
+      "spineLawZ": 1617.9,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.04
+    },
+    {
+      "t": 13.05,
+      "contactDistance": 1377,
+      "spineLawZ": 1617.9,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.03
+    },
+    {
+      "t": 13.81,
+      "contactDistance": 1377,
+      "spineLawZ": 1617.9,
+      "K": 283.64,
+      "predictedPercent": 17.53,
+      "measuredPercent": 20.28,
+      "fov": 70,
+      "speed": 0.02
+    }
+  ]
+}

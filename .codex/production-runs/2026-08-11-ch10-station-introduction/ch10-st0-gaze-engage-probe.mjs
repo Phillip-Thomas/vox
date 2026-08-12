@@ -57,6 +57,28 @@ const READ = async () => {
       } else out.st0 = null;
     }
   } catch (e) { out.st0Error = String(e).slice(0, 140); }
+  // S-1 / the undeclared lens move, measured on the same timeline: the render
+  // camera's own fov, the flight feedback's fov target, and the cockpit shell's
+  // compensation scale, so "FOV 79 at the seam, 70.0002 at the cut line" can be
+  // confirmed or refuted per frame rather than inferred from two stills.
+  try {
+    const live = w.__voxLive;
+    const fb = await import(/* @vite-ignore */ '/src/state/shipFlightFeedback.ts');
+    const f = fb.getShipFlightFeedback();
+    let shellScale = null;
+    if (live?.scene) {
+      live.scene.traverse(o => {
+        if (o.name === 'ship-cockpit-pressure-shell') shellScale = Math.round(o.scale.y * 100000) / 100000;
+      });
+    }
+    out.lens = {
+      cameraFov: live?.camera?.fov != null ? Math.round(live.camera.fov * 10000) / 10000 : null,
+      feedbackFov: Math.round(f.fov * 10000) / 10000,
+      boost: Math.round(f.boost * 1000) / 1000,
+      speed: Math.round((f.speed ?? 0) * 10) / 10,
+      shellScale
+    };
+  } catch (e) { out.lensError = String(e).slice(0, 140); }
   return out;
 };
 
@@ -137,10 +159,50 @@ for (const lane of [
     st0InFrustumSamples: samples.filter(s => s.st0?.inFrustum).length,
     st0Samples: samples.filter(s => s.st0).length,
     pageErrors: errs.slice(0, 6),
-    finalDiag: last
+    finalDiag: last,
+    lens: (() => {
+      const rows = samples.filter(s => s.lens && s.lens.feedbackFov != null);
+      if (!rows.length) return null;
+      const fovs = rows.map(r => r.lens.feedbackFov);
+      const cams = rows.filter(r => r.lens.cameraFov != null).map(r => r.lens.cameraFov);
+      const scales = rows.filter(r => r.lens.shellScale != null).map(r => r.lens.shellScale);
+      return {
+        samples: rows.length,
+        feedbackFovMin: Math.min(...fovs),
+        feedbackFovMax: Math.max(...fovs),
+        cameraFovMin: cams.length ? Math.min(...cams) : null,
+        cameraFovMax: cams.length ? Math.max(...cams) : null,
+        boostMax: Math.max(...rows.map(r => r.lens.boost)),
+        speedMax: Math.max(...rows.map(r => r.lens.speed)),
+        shellScaleMin: scales.length ? Math.min(...scales) : null,
+        shellScaleMax: scales.length ? Math.max(...scales) : null,
+        framesAboveFov73_72: fovs.filter(v => v > 73.72).length,
+        // PER BEAT, because the lanes share a timeline: ch10-ask's return
+        // crossing deliberately reuses ch8's boosted grammar, while
+        // ch10-transit is the leg whose own shot ladder declares FOV 70.
+        // A whole-run maximum cannot tell those apart.
+        byBeat: Object.fromEntries([...new Set(rows.map(r => r.beat))].map(beat => {
+          const b = rows.filter(r => r.beat === beat);
+          const bf = b.map(r => r.lens.feedbackFov);
+          const bc = b.filter(r => r.lens.cameraFov != null).map(r => r.lens.cameraFov);
+          const bs = b.filter(r => r.lens.shellScale != null).map(r => r.lens.shellScale);
+          return [String(beat), {
+            samples: b.length,
+            feedbackFovMin: Math.min(...bf),
+            feedbackFovMax: Math.max(...bf),
+            cameraFovMin: bc.length ? Math.min(...bc) : null,
+            cameraFovMax: bc.length ? Math.max(...bc) : null,
+            boostMax: Math.max(...b.map(r => r.lens.boost)),
+            speedMax: Math.max(...b.map(r => r.lens.speed)),
+            shellScaleMax: bs.length ? Math.max(...bs) : null,
+            framesAboveFov73_72: bf.filter(v => v > 73.72).length
+          }];
+        }))
+      };
+    })()
   };
   fs.writeFileSync(path.join(OUT_DIR, 'ch10-st0-gaze-engage.json'), JSON.stringify(report, null, 2) + '\n');
-  console.log(`[${lane.id}] ticking=${report.lanes[lane.id].samplesWithAutopilotTicking}/${samples.length} beats=${report.lanes[lane.id].beats} ${JSON.stringify(report.lanes[lane.id].counters)} blocked=${JSON.stringify(blockers)} inFrustum=${report.lanes[lane.id].st0InFrustumSamples}/${report.lanes[lane.id].st0Samples}`);
+  console.log(`[${lane.id}] ticking=${report.lanes[lane.id].samplesWithAutopilotTicking}/${samples.length} beats=${report.lanes[lane.id].beats} ${JSON.stringify(report.lanes[lane.id].counters)} blocked=${JSON.stringify(blockers)} inFrustum=${report.lanes[lane.id].st0InFrustumSamples}/${report.lanes[lane.id].st0Samples} lensByBeat=${JSON.stringify(report.lanes[lane.id].lens?.byBeat)}`);
 }
 
 await browser.close();

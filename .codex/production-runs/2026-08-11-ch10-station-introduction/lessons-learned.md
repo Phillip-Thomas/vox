@@ -3,6 +3,23 @@
 Written for a future production team with no access to this conversation.
 Ordered by how much time each one cost, most expensive first.
 
+## Reusable lessons
+
+The ten numbered lessons below are the reusable ones; each ends with a **Rule**
+stated so a team that never saw this run can apply it. They sort into three
+kinds, and the sort is only an index — no lesson is repeated or reworded here.
+
+- **Workflow learning** — how the run was governed, routed and recorded:
+  lessons 2, 7, 9 and 10.
+- **Craft learning** — how the chapter itself was authored, staged and
+  measured: lessons 1, 3 and 4.
+- **Tooling learning** — how the probes and evidence behaved: lessons 5, 6
+  and 8.
+
+*Section headings in this file were added by the closeout archivist to index
+existing text against the gate's required structure. No lesson was added,
+removed or reworded.*
+
 ## 1. A contract term can be unsatisfiable, and the run will read that as bad craft
 
 The cut-line occupancy term failed measurement three times across three
@@ -16,8 +33,21 @@ The 28–34% band was **first reachable at Z≈965 — outside the contracted
 [1,000–1,300] window**. It was never satisfiable. Three rounds of "the frame
 must be wrong" were actually "the number was impossible."
 
+This happened **three times in one run**. The gaze-bias acceptance ("ST-0 in
+frustum on ≥4/8 crossing-strip frames") was equally impossible: the movie
+lane's walk lasts seconds against a 90-second orbital ellipse, so ST-0 was
+above the horizon on 0 of 419 walk frames. No implementation could have
+satisfied it. And the seam still's angular band straddles the boundary
+depending on whether you measure the spine linearly (7.911°) or
+tangent-correctly (8.249°) — a term whose verdict depends on an unstated
+convention is the same disease in milder form.
+
 **Rule:** any contract term expressed as a measured quantity must ship with its
-derivation in the contract text, not just its result. If a term fails twice,
+derivation in the contract text, not just its result. Before signing a
+numeric acceptance, ask the cheap question nobody asked here: *is there any
+state of the shipped system in which this is true?* State the measurement
+convention explicitly when two reasonable conventions disagree at the
+boundary. If a term fails twice,
 stop adjusting it and derive it. Prefer a formula the verifier evaluates at
 capture time (with a stated relative tolerance) over a fixed band, because a
 fixed band silently outlives the geometry it came from. Watch for the
@@ -75,8 +105,20 @@ pristine module instance**. The probe then measures a runtime nobody is
 playing: the signed AV rail reads inactive while the app is mid-beat, free-play
 timers read zero while the app is running. This voided several hours of
 evidence twice. After any source edit, resolve through the app's own
-HMR-timestamped specifier (`/src/...?t=<timestamp>`); the newer probes in this
-run show the idiom and say why.
+HMR-timestamped specifier (`/src/...?t=` plus the HMR timestamp Vite stamped on
+the module); the newer probes in this run show the idiom and say why.
+
+Worse than measuring the wrong instance is measuring the wrong *lane*: the
+crossing-strip probe opened the page **without** `movie=1` while recording its
+URL as `movie=1` in the evidence. Every downstream reader — two auditors, the
+verifier, and this orchestrator — reasoned about a movie-lane measurement that
+had been taken in the manual lane, where the behaviour under test is forbidden
+by ruling. An evidence file that reports its own inputs incorrectly is worse
+than a missing one, because it is trusted.
+
+**Rule:** probes must record the URL they actually opened, read back from the
+page (`location.href`), never the string they intended to open. Assert the
+lane inside the page before measuring anything that depends on it.
 
 Related: **one browser page at a time.** Five to seven concurrent pages caused
 renderer deaths that looked exactly like a scene defect and sent the run
@@ -119,8 +161,9 @@ state).
 Three separate gate/tool bugs cost real time: the creative-triad gate compared
 `typeof value` against an *array* of types, so every scalar journey-contract
 assertion failed (reproduced on the previously "passing" run); the diff
-placeholder scan applied an angle-bracket rule to TypeScript, flagging every
-generic; the scene-AV generator was pinned to a single signed contract, so
+`PLACEHOLDER_PATTERN` scan applied an angle-bracket rule to TypeScript,
+flagging every generic; the scene-AV generator was pinned to a single signed
+contract, so
 adding a second one made the checked-in runtime "stale". Also: a probe guard
 that never fired measured 613 emissive lights instead of the hull.
 
@@ -154,3 +197,29 @@ than no artifact.
 document the same hour, with the honest details. Also: a deploy hook that skips
 the repo's own verification is a structural hole — fix the hook, not the
 incident.
+
+## Next-run guidance
+
+The ten Rules above, restated as the order a next team will need them. Each is
+a pointer back to its lesson; nothing new is claimed here.
+
+1. Before signing any numeric acceptance term, derive it and ask whether any
+   state of the shipped system satisfies it (lesson 1).
+2. Commission the independent player-experience audit before the movie lane is
+   trusted as proof that a beat is playable (lesson 2).
+3. Treat "the mechanism is implemented" and "the mechanism runs in the shipped
+   lane" as two separate proofs (lesson 3).
+4. Grep for chapter enumerations whenever a chapter is added; an ordering test
+   is not an enumeration (lesson 4).
+5. Resolve probe modules through the app's own specifier, and record the lane
+   the probe actually opened (lesson 5).
+6. Purge and regenerate evidence after the code that produced it changes, and
+   date every capture (lesson 6).
+7. Defer rather than publish an unprovable claim; a routed question costs less
+   than a retracted verdict (lesson 7).
+8. Maintain verification tooling as production code, with its own tests
+   (lesson 8).
+9. Route one concrete headed question to the human early, and commission the
+   blind read every time (lesson 9).
+10. When a governed step is bypassed, write it into the governing document the
+    same hour, with the honest details (lesson 10).

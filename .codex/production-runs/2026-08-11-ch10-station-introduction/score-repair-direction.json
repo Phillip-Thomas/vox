@@ -2,11 +2,98 @@
   "schema": "paravoxia.directorRepairDirection.v1",
   "director": "score",
   "runId": "2026-08-11-ch10-station-introduction",
-  "contractVersion": "draft-v3",
-  "contractSha256": "ad3cab3a8c7e6384dfa486cc967c8195b335a2a8888c8d169612db8b287c4ad8",
-  "defectIds": ["D2", "D3", "D4", "D5", "D6-score", "D7", "F1-score-position"],
-  "contractChangeRequired": true,
-  "boundedActions": [
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "supersedesBinding": {
+    "contractVersion": "draft-v3",
+    "contractSha256": "ad3cab3a8c7e6384dfa486cc967c8195b335a2a8888c8d169612db8b287c4ad8",
+    "reason": "This document bound a superseded revision and used the first-wave audit vocabulary (D2, D4, D5, D6-score, D7, F1-score-position), which is not the vocabulary of the canonical register in defects.json. Re-issued against the currently signed draft-v9. THIS IS A RE-BINDING, NOT A RE-DECISION: every original disposition is preserved verbatim in preservedOriginalDispositions below, and no judgement, route, objection or acceptance has been altered, softened or withdrawn."
+  },
+  "defectIds": [
+    "D1",
+    "F1",
+    "D3",
+    "NV-1"
+  ],
+  "contractChangeRequired": false,
+  "contractChangeRequiredHistory": "Was TRUE at the draft-v3 binding, driven by exactly two one-clause score-block text corrections. BOTH ARE NOW DISCHARGED, so the value is now FALSE and this direction requests no contract text change of any kind. (1) The carrier-colour clause (former D5) landed in DRAFT-V4: SCORE FREEZE 'a legal ninth/sixth colour of both home keys' became 'a legal suspended-fourth/eleventh colour of both home keys', with 'chord tone of neither' standing and becoming true; Chapter's required re-signature over that section 3 term was issued. (2) The eraFidelity honesty clause (former D4a) also landed in DRAFT-V4, naming the true distinguishers in score.eraFidelity. The wording correction was NOT complete at v4, however: three further sites still asserted the false 'humanize' distinguisher and were finally corrected in DRAFT-V7 (story.nonNegotiableCanon[17], syncAnchors[1].score[0].musicalIntent, score.cues[1].phraseIntent), verified by me at that signature against the shipped engine — humanizeOffsetMs is reachable only from bedEngine, never from the REGULATION path, exactly as main/src/story/storyScore.ts:151 records. Nothing in the score block has changed since: byte-identical v7 to v8 and v8 to v9.",
+  "directions": [
+    {
+      "id": "SRD-1",
+      "owner": "integration",
+      "defectIds": [
+        "D1"
+      ],
+      "canonicalRegisterOwner": "integration",
+      "contractVersion": "draft-v9",
+      "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+      "contractChangeRequired": false,
+      "status": "discharged",
+      "originalDispositionRef": "preservedOriginalDispositions[0]",
+      "boundedAction": "Not mine to repair; mine to sign off. Chapter-10 variant AND carrier presence must be a pure function of (beat, durable milestones) evaluated at enterEmergentScoreBeat — an edge machine is a contract violation. The ch10 test suite is the sign-off vehicle. DISCHARGED: resolveChapter10ScoreState reads beat plus five durable milestones only, reload equivalence asserted over an 18-cell matrix. My acceptance criteria were met as written.",
+      "evidenceRoute": "18-cell state matrix plus mid-transit reload equivalence test; evidence/score/carrier-legality.json, re-rendered against the degree-17 carrier with all ten assertions true."
+    },
+    {
+      "id": "SRD-2",
+      "owner": "chapter",
+      "defectIds": [
+        "F1"
+      ],
+      "canonicalRegisterOwner": "chapter",
+      "contractVersion": "draft-v9",
+      "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+      "contractChangeRequired": false,
+      "status": "discharged",
+      "originalDispositionRef": "preservedOriginalDispositions[1], preservedOriginalDispositions[2]",
+      "vocabularyRebind": "The first-wave audit split this as 'D2' (realize the ask figure) plus 'F1-score-position' (my objection to the auditor's proposed fix). The canonical register carries them as the single defect F1, whose own reconstruction names index 24's defectIds as score-audit-d2 and story-audit-f1 — the register agrees with my original position that F1 and D2 are one defect.",
+      "boundedAction": "Realize the contract's own two-bar square-fifth ask figure so the answer enters inside a sounding question; the contract was right and the code was false to it. MY OBJECTION-IN-ADVANCE IS PRESERVED UNCHANGED AND REMAINS LIVE: I rejected, and still reject, moving the answer below the guard or deleting the guard — that reopens the simultaneity term SC-V2-C1, requires the full amendment cycle and my re-signature, and a sound that scoops text is the exact defect SC10-N1 was written to prevent. DISCHARGED on my route, not on the rejected one: the answer enters at beat 3, 25.0 percent into a 7.06s figure, gapless, unaccented, click-free, with the [0,7] cell sounding through the boundary. No signed term was changed to achieve it.",
+      "evidenceRoute": "Onset measurement of the ask-through-answer render against the ch5-maw grammar reference; evidence/score/relay_ask-through-answer_combined.wav, evidence/score/relay-answer_onsets.json."
+    },
+    {
+      "id": "SRD-3",
+      "owner": "score",
+      "defectIds": [
+        "D3"
+      ],
+      "canonicalRegisterOwner": "score",
+      "contractVersion": "draft-v9",
+      "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+      "contractChangeRequired": false,
+      "status": "discharged",
+      "originalDispositionRef": "preservedOriginalDispositions[3]",
+      "boundedAction": "Ceiling restored by knob, not by contract: the terms (0.44 intensity, strictly below the a4-exhale reference) were already correct and the mood values are code. Station-resolved pad 0.19 to 0.17, sub 0.12 to 0.10, re-measured on the 8-12s steady window. DISCHARGED: steady RMS -19.36 dB, peak 0.311, sub -20.90 against a4's -18.84, 0.372, -20.34 — strictly below on all three.",
+      "evidenceRoute": "Offline steady-window RMS/peak/sub comparison against the a4-authored control; evidence/score/resolved_vs_a4_rms.json."
+    },
+    {
+      "id": "SRD-4",
+      "owner": "score",
+      "defectIds": [],
+      "canonicalRegisterOwner": "score",
+      "contractVersion": "draft-v9",
+      "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+      "contractChangeRequired": false,
+      "status": "discharged-no-canonical-id",
+      "originalDispositionRef": "preservedOriginalDispositions[4], [5], [6], [7]",
+      "vocabularyRebind": "The first-wave items D5 (carrier re-pitch), D4a (eraFidelity honesty), D4b (dead export), D7 (flat riser, dead pulse) and D6-score (tests, deliverable 6, count errata) carry NO canonical register ID: they were discharged before defects.json was compiled and were correctly not carried into it. They are recorded here for lineage only, and none of them requests anything further.",
+      "boundedAction": "All five discharged, with the two that touched contract text citing their discharging revision: D5's carrier re-pitch to degree 17 (pitch class 5, the suspended-fourth/eleventh colour, chord tone of neither home voicing) with its one-clause amendment landing in DRAFT-V4 and now proven as encoded by the re-rendered carrier-legality.json; D4a's eraFidelity clause landing in DRAFT-V4 with the residual humanize wording at three further sites finally corrected in DRAFT-V7; D4b's dead CH10_SEAM_EBB_SLEW_SECONDS export deleted, the real engine-owned SCORE_OST_GAIN_SLEW_S named in the errata, no contract text touched; D7's riser flattened to one constant across all three transit variants and station-resolved ost to 0; D6-score's ch10 suite, deliverable 6 regression snapshot, and the 'eleven signed cues' errata corrected to ten. My rejection of adding real timing humanize to world voices stands verbatim: it is an engine mutation under the protected audio paths.",
+      "evidenceRoute": "evidence/score/carrier-legality.json (ten of ten assertions true, first audible divergence at the progression turn, 6.98s), the transit-hold-to-seam-ebb transition render, the ch10 suite plus regression_ch1-ch9_moods.json, and full npm run verify."
+    },
+    {
+      "id": "SRD-5",
+      "owner": "human",
+      "defectIds": [
+        "NV-1"
+      ],
+      "canonicalRegisterOwner": "human",
+      "contractVersion": "draft-v9",
+      "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+      "contractChangeRequired": false,
+      "status": "open-taste",
+      "boundedAction": "NO REPAIR IS DIRECTED AND NONE SHOULD BE INFERRED. MY TWO TASTE RISKS REMAIN OPEN, ROUTED TO THE COHESION JUDGE AND THE OWNER'S EAR, AND WERE NOT ABSORBED, SETTLED OR SILENTLY CLOSED BY ANY AMENDMENT v4 THROUGH v9: (i) the relay answer enters roughly 6 dB under the ask's own mean — carried canonically as NV-1, where three independent reviewers read the station reveal as under-scaled; (ii) the resolve sits +0.10 dB over the equal-intensity a4 control, which carries NO canonical register ID and is recorded here so it cannot be lost. Both are audition questions no measurement can settle, and every measurement that could be run has already passed. THE SCORE LANE'S POSITION IS UNCHANGED AND ON THE RECORD: the withholding is the point — the station keeps no key this run, its tonal identity is unspent inventory banked for the docking run, and sc.ch10.bearing-claimed's authored choice to give the wait no build at all is deliberate. If the owner's ear disagrees, the answer is a commissioned reveal packet, NOT a knob turn: raising the answer or the resolve inside these signed terms would flatten the arc that the 0.44 ceiling and the strictly-below-a4 term exist to protect, and any such change reopens SC-V2-C3 and SC-V2-C5 and requires my re-signature. I also note the adjacent owner-reported OD-1 (corridor silence reading as unfinished rather than closed) is CHAPTER'S repair — an authored line, not a cue; I do not claim it and I would object to answering it with music that spends the banked key early.",
+      "evidenceRoute": "Owner listening session on evidence/score/station-resolved_combined.wav and evidence/score/relay_ask-through-answer_combined.wav; no machine route can settle it."
+    }
+  ],
+  "preservedOriginalDispositions": [
     "OWNERSHIP NOTE: D1 (reload loses the seam ebb and the resolve octave-double) is owned by Integration per the audit routing; this document does not own it but records the score sign-off criteria D1's repair must meet, and my D6-score tests are the sign-off vehicle: chapter-10 variant AND carrier presence must be a pure function of (beat, ch10RelayAnswered, ch10SeamPassed durable milestones) evaluated at enterEmergentScoreBeat — an edge machine is a contract violation, the contract promises 'a pure reload-safe resolver from durable milestones'. Acceptance: a mid-transit reload renders state-identical to the continuous run at the same milestones (ost stays 0 post-seam; degree CH10_CARRIER_OCTAVE_DEGREE present at the resolve; the audit's own control comparison carrier-illegal-control_no-carrier.wav flips from matching the reload to matching nothing).",
     "D2 (BLOCKING, mine) — REALIZE THE ASK FIGURE; the contract is right and the code is false to it, so contractChangeRequired FALSE for this defect. Bounded action: add a fourth ch10-ask variant 'relay-ask' to CH10_MOODS (square wave, the two-bar quantized square-fifth question figure built on the [0,7] REGULATION cell, entering at anc.ch10.relay-ask exactly as the contract's barIntent already states), selected by the resolver on the relay-query commit; the existing 'relay-answer' variant then enters at ask + 2 beats INSIDE the sounding two-bar figure (approximately 7.06s at 68 bpm), and its progression already retains the [0,7] cell so the question keeps sounding through the variant boundary — the answer is an added voice at the same level and timbre, not a replacement. Surface: storyScore.ts CH10_MOODS + variant union, emergentScoreDirector.ts resolver arm, tests. Evidence: (a) re-render the relay sequence and produce a REAL relay-answer_onsets.json — ask-figure onset, answer onset at +2 beats, spectral presence of the [0,7] cell across the answer onset proving the question was still sounding; (b) actually compute the ch5-maw call/response comparison (shipped gap at least one bar) that was rendered and never compared; (c) combined-bus excerpt of ask-through-answer.",
     "F1-SCORE-POSITION — F1 AND D2 ARE ONE DEFECT AND D2'S REPAIR IS THE F1 FIX; I REJECT the auditor's specific proposal (CH10_RELAY_ANSWER_BEATS 2 to 1 and dropping the guard so K8 cuts K7 mid-reveal) from the score side: it violates two tri-signed terms (the guard inequality 2 beats at least 1.36s, and the SC10-N1 law that sound must not scoop text) and it is unnecessary. As shipped the 'asking' had no perceptual body except the caption, so 'before the asking finished' could only bind to text that had visibly finished — that is why the pillar read as told. With D2 realized, the asking acquires a sounding two-bar body: the answer at +1.76s lands deep inside the still-sounding question figure, the player HEARS the answer arrive before the asking finishes, K8 paints at the same anchor frame the answer sounds, and K9 confirms an observed phenomenon. This is not a reinterpretation — it is the reading Chapter already froze in chapter-note-01 §1: 'the answer sounds AFTER the request has finished painting but INSIDE the two-bar figure still sounding — text-complete, phrase-incomplete — which is precisely K9's claim (before the asking finished = the figure, not the paint).' No signed term changes on this route; contractChangeRequired FALSE for F1 via D2. Boundary conditions recorded for Chapter's parallel ruling: (1) 2 beats (1.76s) is the earliest beat-grid point satisfying the 1.36s guard at 68 bpm, so no within-terms earlier placement exists on the grid; (2) if Chapter still wants the reply to also cut K7's PAINT mid-reveal, the only term-respecting lever is shortening K7 itself (their copy lane, which lowers the guard floor and could legalize a 1.5-beat placement) — moving my answer below the guard or deleting the guard reopens the simultaneity term, requires the full amendment cycle and my re-signature, and I record my objection-in-advance to deleting the guard outright: a sound that scoops text is the exact defect SC10-N1 was written to prevent.",
@@ -17,6 +104,7 @@
     "D6-SCORE (MINOR, mine) — TESTS, DELIVERABLE 6, COUNT ERRATA; contractChangeRequired FALSE. Bounded action: add a chapter-10 suite to emergentScoreDirector.test.ts exercising getChapter10ScoreMood / noteChapter10ScoreAnchor / releaseChapter10Score — pure-resolver determinism over the full (beat x milestone) matrix INCLUDING the reload rows that encode my D1 sign-off criteria, carrier lifecycle bounds (absent before relay-answer in every reachable variant, present in every variant after, dead after release), and ch7 non-regression byte-identity. Produce deliverable 6 regression_ch1-ch9_moods.json (getStoryScoreMood snapshot hash for every shipped beat, additive-only MOODS diff). Treatment errata: 'eleven signed cues' corrected to ten (the rail's count is right; my prose was wrong).",
     "AMENDMENT SCOPE SUMMARY: top-level contractChangeRequired is TRUE, driven by exactly two one-clause score-block text corrections — D5's carrier-colour wording (ninth/sixth becomes suspended-fourth/eleventh; a frozen §3 term, so Chapter re-signature required) and D4(a)'s eraFidelity humanize clause (semantic honesty; no term of force changes). D2, D3, D7, D6-score are implementation-conformance repairs to a contract that is already correct. F1 needs NO score-side contract change on my recommended route (D2 realization); if Chapter's parallel ruling instead moves the answer below the guard or deletes the guard, that is a separate amendment reopening the simultaneity term with fresh signatures, and my objection-in-advance to guard deletion is recorded above. Whatever compile carries these clauses also carries the D4/D5/D6 treatment errata references, and all signatures re-issue over the new sha per the amendment cycle."
   ],
+  "preservationStatement": "The nine strings above are the draft-v3 boundedActions array copied byte-for-byte, in its original order, with no edit, elision or reordering. Where the re-issued directions above summarise them, the original text governs on any discrepancy.",
   "evidenceRefs": [
     "score-audit.md",
     "story-audit.md",
@@ -30,5 +118,7 @@
   ],
   "verificationRoute": "All renders and measurements route to story-verifier as deterministic OfflineAudioContext / combined-bus jobs within the lock's lean budget (no realtime soak): (1) relay ask-through-answer render + relay-answer_onsets.json + the ch5-maw gap comparison (D2/F1); (2) steady-window resolve-vs-a4 pair (D3); (3) carrier-legality.json with the added chord-membership check + carrier-bearing re-renders (D5); (4) the transit-hold-to-seam-ebb transition render with flat riser envelope (D7, closes open measurement 2); (5) the ch10 test suite + regression_ch1-ch9_moods.json + full npm run verify (D6-score, D1 sign-off vehicle). Repairs D2/D3/D5/D7 mutate only main/src/story/storyScore.ts + emergentScoreDirector.ts + tests — inside allowedPaths, zero protected-audio surface. Code patches begin only after this direction is accepted and Chapter's F1 ruling lands; if their ruling adopts my D2 route, repairs proceed under draft-v3 plus the two-clause amendment compile; owner audition follows verifier pass for the re-pitched carrier and the realized ask figure (both are taste surfaces).",
   "authoredBy": "score-director (Claude Fable 5), run 2026-08-11-ch10-station-introduction",
-  "authoredAt": "2026-08-11T20:25:00-04:00"
+  "authoredAt": "2026-08-11T20:25:00-04:00",
+  "reissuedBy": "score-director (Claude Opus 5, 1M context) on behalf of the score lane, after the fable-tier instance hit a capacity limit; bookkeeping re-binding only, no re-decision",
+  "reissuedAt": "2026-08-12T14:05:00-04:00"
 }

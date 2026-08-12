@@ -1,0 +1,123 @@
+{
+  "schema": "paravoxia.creativeDefectRegister.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v4",
+  "contractSha256": "8e0b2230e452a8951d8ea54b4e604fe536573d057a4d7c192bf52849ae548bd3",
+  "compiledAt": "2026-08-12T19:10:00Z",
+  "compiledBy": "closeout archivist (Claude Opus 5) — DERIVED RECONSTRUCTION, not a contemporaneous record",
+  "requiresHumanTaste": true,
+  "reconstructedFrom": "defects.json@5bae8fcdc81997cf87180789c99abe577c439c4ce6226a5919b08b2671b1e669",
+  "reconstructionNote": "NOT a contemporaneous record. No defect-register bytes were captured at this iteration during the run: every recorded row bound the same defects.json hash (256a4b72...), which was the unfilled template. This file states the register as it is now known to have stood at ledger index 22, derived from the canonical register's reconstructed iterationIntroduced and iterationResolved fields. The counts are honest with respect to those two numbers, but every statement, repair, route and resolution string is the closing-compile wording, and the owner's acceptance decisions (UX-2, D-12, F8) are shown as open before ledger index 57, which is where human-decision.json lands. Two caveats the gate's own counter creates: F1, D1 and D3 carry the reviewers' severity words ('major', 'blocking') rather than the gate's four-value enum, so they contribute zero to every count below while genuinely open; and where a defect's introduction iteration was derived from an artifact write time rather than from a ledger row that names it, the true introduction may be one row earlier.",
+  "sourceReports": [
+    {
+      "path": "story-audit.md",
+      "sha256": "62e9190a1f3d77306a69dd00d6ada69fa2fc141399cf01e627b306a9fbbc4643"
+    },
+    {
+      "path": "score-audit.md",
+      "sha256": "50f74928fb7aa0083260c39968b0f726bd1ab2d3cf8e9cbd6e256d07dcfd56c3"
+    },
+    {
+      "path": "cinematography-audit.md",
+      "sha256": "4e405f89055c78155f71945188fd3a950bf44eb0b8e2ac2fe4a214d531a7a6b2"
+    },
+    {
+      "path": "ux-audit.md",
+      "sha256": "626c0ef4100cb8b7f38e0e64fc7e9e1cf2cb9c686e6e021756c0087a79aeb969"
+    },
+    {
+      "path": "naive-audience-report.md",
+      "sha256": "1868ffeb19e7e65a09f4750671ca1b522e9480e63d11a8440a0024b9568e0eee"
+    },
+    {
+      "path": "critic-report.md",
+      "sha256": "65ea8cc2481808a8b7d3d1c5b9b9772197379d76b9e19b86a3eb3889eb741bcb"
+    }
+  ],
+  "defects": [
+    {
+      "id": "F1",
+      "severity": "major",
+      "category": "narrative-alignment",
+      "status": "open",
+      "owner": "chapter",
+      "anchor": "anc.ch10.relay-answer",
+      "statement": "K9 asserted 'the answer came back before the asking finished' while the implementation prevented the player from perceiving it: the ask anchor selected a mood with no question figure, so there was no sounding phrase for the answer to enter.",
+      "requestedRepair": "Realize the contract's own two-bar square-fifth ask figure so the answer enters inside a sounding question; K9 then confirms an observable.",
+      "verificationRoute": "Onset measurement of the ask-through-answer render vs the ch5-maw grammar reference.",
+      "evidenceRefs": [
+        "evidence/score/relay_ask-through-answer_combined.wav",
+        "evidence/score/relay-answer_onsets.json"
+      ],
+      "sourceReportRefs": [
+        "story-audit.md"
+      ],
+      "reportedStatus": "resolved",
+      "reportedSourceReportRefs": [
+        "story-audit.md",
+        "score-audit.md"
+      ],
+      "corroboratingReportRefs": [
+        "score-audit.md"
+      ],
+      "iterationIntroduced": 18,
+      "iterationResolved": 24,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "score-repair-direction.json authoredAt 2026-08-11T20:25-04:00 names F1-score-position; the first ledger row at or after that instant is index 18. Repaired at index 24, whose defectIds are score-audit-d2 and story-audit-f1 (the realized relay-ask figure).",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus.",
+        "sourceRebind": "sourceReportRefs narrowed to the report(s) that literally carry this defect ID, as the gate requires; every displaced reference is preserved in corroboratingReportRefs or supplementalSourceRefs."
+      }
+    },
+    {
+      "id": "D1",
+      "severity": "blocking",
+      "category": "score",
+      "status": "open",
+      "owner": "integration",
+      "anchor": "anc.ch10.relay-answer",
+      "statement": "Carrier and variant state were set on anchor edges, so a mid-transit reload restored the pulse the seam had ebbed away and dropped the resolve's octave double — losing both of the chapter's signature gestures.",
+      "requestedRepair": "Resolve variant and carrier purely from durable milestones in enterEmergentScoreBeat.",
+      "verificationRoute": "18-cell state matrix plus mid-transit reload equivalence test.",
+      "evidenceRefs": [
+        "evidence/score/carrier-legality.json"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 18,
+      "iterationResolved": 23,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Raised by the first-wave score audit that produced score-repair-direction.json at 2026-08-11T20:25-04:00; first ledger row at or after that instant is index 18. Repaired at index 23, which replaced the edge machine with resolveChapter10ScoreState over durable milestones.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    },
+    {
+      "id": "D3",
+      "severity": "major",
+      "category": "score",
+      "status": "open",
+      "owner": "score",
+      "anchor": "anc.ch10.station-resolved",
+      "statement": "The destination out-measured the A4 awakening on a steady-window comparison (pad 0.19 vs 0.18; -18.74 vs -18.84 dB), inverting the arc's intended weighting.",
+      "requestedRepair": "Pad to 0.17, sub to 0.10; re-measure on the 8-12s steady window.",
+      "verificationRoute": "Offline steady-window RMS/peak/sub comparison against the a4-authored control.",
+      "evidenceRefs": [
+        "evidence/score/resolved_vs_a4_rms.json"
+      ],
+      "sourceReportRefs": [
+        "score-audit.md"
+      ],
+      "reportedStatus": "resolved",
+      "iterationIntroduced": 18,
+      "iterationResolved": 25,
+      "acceptedExceptionRef": null,
+      "reconstruction": {
+        "iterationDerivation": "Same first-wave score audit as D1 (index 18). Repaired at index 25: station-resolved pad 0.19 to 0.17 and sub 0.12 to 0.10, re-measured on the 8-12s steady window.",
+        "statusNormalisation": "Reviewer status 'resolved' normalised to the gate enum value 'resolved'; the reviewer's own word is kept in reportedStatus."
+      }
+    }
+  ]
+}

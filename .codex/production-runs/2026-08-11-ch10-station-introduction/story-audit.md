@@ -152,3 +152,31 @@ out-of-lock. **Unexpected:** check-results.json:70 stale prose says registry @dr
 (registry is v6); the ch8→ch10 "formal asks answered, personal ones not" seed remains
 unledgered. Delta scope confirmed: exactly four copy-bearing changes v3→v6, no shipped
 string removed or altered.
+
+
+---
+
+## Review structure (index added by the orchestrator; no reviewer text altered)
+
+**Independence.** The canon auditor ran as a fresh opus-tier instance with no
+role in authoring the chapter, reading the shipped runtime and full canon
+corpus directly rather than any director's account of it. The delta re-check
+below was run by a second fresh instance against the repaired build.
+
+**Findings.** F1–F8 above, each with its severity, the exact file and line it
+was observed at, and its routing. F1 is the only major and is closed by the
+relay-ask realization, with the closure measured rather than asserted.
+
+**Defects.** These findings are carried into the run's canonical register at
+`defects.json` (F1, F8 by ID), which holds their lifecycle fields and
+acceptance state. The canon-debt register in §canon-debt is not a defect list:
+it is a set of obligations this chapter's shipped lines place on the docking
+run, and it should be read before that run is scoped.
+
+**Contract version audited:** draft-v3 `ad3cab3a…` (original audit) and draft-v6 `4202e38b…` (delta re-check); findings re-verified against the frozen contract version draft-v9 `0336a4f2…`
+
+**First wave attestation.** This was a first-wave report: the canon auditor delivered its findings before seeing any peer review, and its delta re-check was run by a second fresh instance that likewise saw no peer conclusions before reporting.
+
+Contract revision: `draft-v9`
+
+First report completed before reading peer conclusions: `yes`

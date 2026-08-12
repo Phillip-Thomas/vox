@@ -2,10 +2,10 @@
   "schema": "paravoxia.creativeRunQualityReport.v1",
   "runPath": "/home/thomasphillip/Projects/vox/.codex/production-runs/2026-08-11-ch10-station-introduction",
   "phase": "final",
-  "checkedAt": "2026-08-12T17:56:24.415Z",
+  "checkedAt": "2026-08-12T18:56:42.380Z",
   "passed": false,
-  "checkCount": 7946,
-  "failureCount": 427,
+  "checkCount": 8023,
+  "failureCount": 120,
   "warningCount": 0,
   "checks": [
     {
@@ -370,25 +370,25 @@
       "message": "naive-audience-report.md cannot contain template placeholders"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "naive-audience-report.md must contain its isolation section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "naive-audience-report.md must contain its cold read section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "naive-audience-report.md must contain its variant section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "naive-audience-report.md must contain its verdict section"
@@ -400,7 +400,7 @@
       "message": "naive-audience-report.md must identify its fresh reviewer"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.independence",
       "message": "naive-audience-report.md must attest independent or blind first-pass isolation"
@@ -430,19 +430,19 @@
       "message": "story-audit.md cannot contain template placeholders"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "story-audit.md must contain its independence section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "story-audit.md must contain its findings section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "story-audit.md must contain its defects section"
@@ -460,7 +460,7 @@
       "message": "story-audit.md must identify its fresh reviewer"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.independence",
       "message": "story-audit.md must attest independent or blind first-pass isolation"
@@ -490,13 +490,13 @@
       "message": "score-audit.md cannot contain template placeholders"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "score-audit.md must contain its independence section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "score-audit.md must contain its findings section"
@@ -550,13 +550,13 @@
       "message": "cinematography-audit.md cannot contain template placeholders"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "cinematography-audit.md must contain its independence section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "cinematography-audit.md must contain its findings section"
@@ -580,7 +580,7 @@
       "message": "cinematography-audit.md must identify its fresh reviewer"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.independence",
       "message": "cinematography-audit.md must attest independent or blind first-pass isolation"
@@ -790,49 +790,49 @@
       "message": "ux-audit.md cannot contain template placeholders"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its independence section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its contract and baseline section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its objective lifecycle section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its marker exactness section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its feedback and progression section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its variants and accessibility section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its reset and stale state section"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "artifact.section",
       "message": "ux-audit.md must contain its findings section"
@@ -850,7 +850,7 @@
       "message": "ux-audit.md must identify its fresh reviewer"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.independence",
       "message": "ux-audit.md must attest independent or blind first-pass isolation"
@@ -7508,7 +7508,7 @@
       "message": "Objective lifecycle evidence must target the production-lock run and source revision"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "ux.lifecycle-contract",
       "message": "Objective lifecycle evidence must bind the exact signed scene contract"
@@ -21364,13 +21364,13 @@
       "message": "Check results must use paravoxia.checkResults.v1"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "checks.identity",
       "message": "Check results must target the locked run, contract, and source revision"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "checks.contract-hash",
       "message": "Check results must bind the exact signed scene contract"
@@ -22122,11 +22122,141 @@
     {
       "passed": true,
       "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-solver.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-solver.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "production-lock.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: production-lock.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
       "code": "artifact.exists",
       "message": "human-decision.json is required for flagship or headed-taste work"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "artifact.contract-version",
       "message": "verification must target the frozen contract version"
@@ -22138,7 +22268,7 @@
       "message": "verification must target the production-lock run ID"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "artifact.contract-version",
       "message": "raw-audiovisual-evidence must target the frozen contract version"
@@ -22150,7 +22280,7 @@
       "message": "raw-audiovisual-evidence must target the production-lock run ID"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "artifact.contract-version",
       "message": "objective-lifecycle-evidence must target the frozen contract version"
@@ -22234,7 +22364,7 @@
       "message": "Verification report must use paravoxia.sceneVerificationReport.v1"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "verification.contract-hash",
       "message": "Verification must bind the exact signed scene contract"
@@ -22312,13 +22442,13 @@
       "message": "Raw audiovisual manifest must use paravoxia.rawAudiovisualEvidence.v1"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "raw-evidence.contract",
       "message": "Raw audiovisual evidence must target the frozen contract revision"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "raw-evidence.contract-hash",
       "message": "Raw audiovisual evidence must bind the exact signed scene contract"
@@ -23754,7 +23884,7 @@
       "message": "Registered evidence needs a SHA-256 hash: artifact:chapter-repair-direction-json"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: artifact:chapter-repair-direction-json"
@@ -23816,7 +23946,7 @@
       "message": "Registered evidence needs a SHA-256 hash: document:cinematography-audit-md"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: document:cinematography-audit-md"
@@ -23940,7 +24070,7 @@
       "message": "Registered evidence needs a SHA-256 hash: artifact:cinematography-repair-direction-json"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: artifact:cinematography-repair-direction-json"
@@ -24064,7 +24194,7 @@
       "message": "Registered evidence needs a SHA-256 hash: artifact:creative-run-quality-report-json"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: artifact:creative-run-quality-report-json"
@@ -24126,7 +24256,7 @@
       "message": "Registered evidence needs a SHA-256 hash: artifact:defects-json"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: artifact:defects-json"
@@ -24963,7 +25093,7 @@
       "message": "Registered evidence needs a SHA-256 hash: frame:evidence-capture-still-seam-of-light-low-png"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: frame:evidence-capture-still-seam-of-light-low-png"
@@ -24994,7 +25124,7 @@
       "message": "Registered evidence needs a SHA-256 hash: frame:evidence-capture-still-seam-of-light-png"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: frame:evidence-capture-still-seam-of-light-png"
@@ -25056,7 +25186,7 @@
       "message": "Registered evidence needs a SHA-256 hash: frame:evidence-capture-still-station-resolved-png"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: frame:evidence-capture-still-station-resolved-png"
@@ -30326,7 +30456,7 @@
       "message": "Registered evidence needs a SHA-256 hash: artifact:human-decision-json"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: artifact:human-decision-json"
@@ -30481,7 +30611,7 @@
       "message": "Registered evidence needs a SHA-256 hash: document:naive-audience-report-md"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: document:naive-audience-report-md"
@@ -30729,7 +30859,7 @@
       "message": "Registered evidence needs a SHA-256 hash: document:score-audit-md"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: document:score-audit-md"
@@ -30853,7 +30983,7 @@
       "message": "Registered evidence needs a SHA-256 hash: artifact:score-repair-direction-json"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: artifact:score-repair-direction-json"
@@ -31349,7 +31479,7 @@
       "message": "Registered evidence needs a SHA-256 hash: document:story-audit-md"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: document:story-audit-md"
@@ -31411,7 +31541,7 @@
       "message": "Registered evidence needs a SHA-256 hash: document:ux-audit-md"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "registry.hash",
       "message": "Registered evidence hash must match: document:ux-audit-md"
@@ -31956,13 +32086,13 @@
       "details": "story-canon-auditor (opus), fresh, delta mode, 2026-08-11"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.contract-version",
       "message": "story-audit.md must target the frozen contract version"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.first-wave",
       "message": "story-audit.md must attest that its first report preceded peer conclusions"
@@ -31975,13 +32105,13 @@
       "details": "score-continuity-auditor (opus), fresh, 2026-08-11"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.contract-version",
       "message": "score-audit.md must target the frozen contract version"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.first-wave",
       "message": "score-audit.md must attest that its first report preceded peer conclusions"
@@ -31994,13 +32124,13 @@
       "details": "cinematography-continuity-auditor (opus), fresh, 2026-08-12"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.contract-version",
       "message": "cinematography-audit.md must target the frozen contract version"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "review.first-wave",
       "message": "cinematography-audit.md must attest that its first report preceded peer conclusions"
@@ -32108,7 +32238,7 @@
       "message": "Defect register must explicitly state whether human taste is required"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.sources",
       "message": "Canonical defects must cite exactly the five independent reports and critic synthesis"
@@ -32204,16 +32334,22 @@
       "message": "Defect source hash must match: naive-audience-report.md"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.source-path",
       "message": "Defect source report must resolve inside the run: critic-report.md"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.source-hash-format",
       "message": "Defect source needs a SHA-256 hash: critic-report.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "defects.source-hash",
+      "message": "Defect source hash must match: critic-report.md"
     },
     {
       "passed": true,
@@ -32271,25 +32407,19 @@
       "message": "Source report story-audit.md must contain defect ID F1"
     },
     {
-      "passed": false,
-      "level": "error",
-      "code": "defects.lossless-source",
-      "message": "Source report score-audit.md must contain defect ID F1"
-    },
-    {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect F1 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect F1 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect F1 cannot carry an exception reference"
@@ -32344,19 +32474,19 @@
       "message": "Source report score-audit.md must contain defect ID D1"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D1 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect D1 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D1 cannot carry an exception reference"
@@ -32411,19 +32541,19 @@
       "message": "Source report score-audit.md must contain defect ID D3"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D3 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect D3 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D3 cannot carry an exception reference"
@@ -32478,19 +32608,19 @@
       "message": "Source report ux-audit.md must contain defect ID UX-1"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect UX-1 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect UX-1 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect UX-1 cannot carry an exception reference"
@@ -32503,7 +32633,7 @@
       "details": "D-A1"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.status",
       "message": "Defect D-A1 needs a valid status"
@@ -32545,13 +32675,19 @@
       "message": "Source report cinematography-audit.md must contain defect ID D-A1"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-A1 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
+      "level": "error",
+      "code": "defects.iteration-resolved",
+      "message": "Resolved defect D-A1 needs a valid resolution iteration"
+    },
+    {
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D-A1 cannot carry an exception reference"
@@ -32564,7 +32700,7 @@
       "details": "D-A2"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.status",
       "message": "Defect D-A2 needs a valid status"
@@ -32606,19 +32742,13 @@
       "message": "Source report cinematography-audit.md must contain defect ID D-A2"
     },
     {
-      "passed": false,
-      "level": "error",
-      "code": "defects.lossless-source",
-      "message": "Source report naive-audience-report.md must contain defect ID D-A2"
-    },
-    {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-A2 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D-A2 cannot carry an exception reference"
@@ -32643,7 +32773,7 @@
       "message": "Defect D-A3 needs a valid owner"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.anchor",
       "message": "Defect D-A3 must resolve to a contract anchor"
@@ -32673,25 +32803,19 @@
       "message": "Source report cinematography-audit.md must contain defect ID D-A3"
     },
     {
-      "passed": false,
-      "level": "error",
-      "code": "defects.lossless-source",
-      "message": "Source report naive-audience-report.md must contain defect ID D-A3"
-    },
-    {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-A3 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect D-A3 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D-A3 cannot carry an exception reference"
@@ -32746,19 +32870,19 @@
       "message": "Source report cinematography-audit.md must contain defect ID D-A5"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-A5 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect D-A5 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D-A5 cannot carry an exception reference"
@@ -32813,19 +32937,19 @@
       "message": "Source report cinematography-audit.md must contain defect ID D-A6"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-A6 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect D-A6 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D-A6 cannot carry an exception reference"
@@ -32850,7 +32974,7 @@
       "message": "Defect D-A8 needs a valid owner"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.anchor",
       "message": "Defect D-A8 must resolve to a contract anchor"
@@ -32880,19 +33004,19 @@
       "message": "Source report cinematography-audit.md must contain defect ID D-A8"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-A8 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-resolved",
       "message": "Resolved defect D-A8 needs a valid resolution iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D-A8 cannot carry an exception reference"
@@ -32905,7 +33029,7 @@
       "details": "D-12"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.status",
       "message": "Defect D-12 needs a valid status"
@@ -32917,7 +33041,7 @@
       "message": "Defect D-12 needs a valid owner"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.anchor",
       "message": "Defect D-12 must resolve to a contract anchor"
@@ -32935,28 +33059,28 @@
       "message": "Defect D-12 needs evidence"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.source-refs",
       "message": "Defect D-12 must cite its source report(s)"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "defects.lossless-source",
-      "message": "Source report verification-report.json must contain defect ID D-12"
+      "message": "Source report critic-report.md must contain defect ID D-12"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-12 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
-      "code": "defects.exception-null",
-      "message": "Non-exception defect D-12 cannot carry an exception reference"
+      "code": "defects.exception",
+      "message": "Accepted exception D-12 must resolve to the scoped human decision"
     },
     {
       "passed": true,
@@ -32996,7 +33120,7 @@
       "message": "Defect D-15 needs evidence"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.source-refs",
       "message": "Defect D-15 must cite its source report(s)"
@@ -33005,16 +33129,16 @@
       "passed": true,
       "level": "error",
       "code": "defects.lossless-source",
-      "message": "Source report verification-report.json must contain defect ID D-15"
+      "message": "Source report ux-audit.md must contain defect ID D-15"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect D-15 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect D-15 cannot carry an exception reference"
@@ -33027,7 +33151,7 @@
       "details": "NV-1"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.status",
       "message": "Defect NV-1 needs a valid status"
@@ -33066,28 +33190,16 @@
       "passed": false,
       "level": "error",
       "code": "defects.lossless-source",
-      "message": "Source report naive-audience-report.md must contain defect ID NV-1"
+      "message": "Source report critic-report.md must contain defect ID NV-1"
     },
     {
-      "passed": false,
-      "level": "error",
-      "code": "defects.lossless-source",
-      "message": "Source report story-audit.md must contain defect ID NV-1"
-    },
-    {
-      "passed": false,
-      "level": "error",
-      "code": "defects.lossless-source",
-      "message": "Source report score-audit.md must contain defect ID NV-1"
-    },
-    {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect NV-1 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect NV-1 cannot carry an exception reference"
@@ -33100,7 +33212,7 @@
       "details": "OD-1"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.status",
       "message": "Defect OD-1 needs a valid status"
@@ -33130,7 +33242,7 @@
       "message": "Defect OD-1 needs evidence"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.source-refs",
       "message": "Defect OD-1 must cite its source report(s)"
@@ -33139,16 +33251,16 @@
       "passed": false,
       "level": "error",
       "code": "defects.lossless-source",
-      "message": "Source report human-decision.json must contain defect ID OD-1"
+      "message": "Source report critic-report.md must contain defect ID OD-1"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect OD-1 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception-null",
       "message": "Non-exception defect OD-1 cannot carry an exception reference"
@@ -33203,13 +33315,13 @@
       "message": "Source report ux-audit.md must contain defect ID UX-2"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect UX-2 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception",
       "message": "Accepted exception UX-2 must resolve to the scoped human decision"
@@ -33264,13 +33376,13 @@
       "message": "Source report story-audit.md must contain defect ID F8"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.iteration-introduced",
       "message": "Defect F8 needs an introduction iteration"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "defects.exception",
       "message": "Accepted exception F8 must resolve to the scoped human decision"
@@ -33288,9 +33400,9 @@
           "low": 0
         },
         "computed": {
-          "critical": 0,
-          "high": 0,
-          "mediumUnaccepted": 1,
+          "critical": 1,
+          "high": 1,
+          "mediumUnaccepted": 2,
           "low": 0
         }
       }
@@ -33301,9 +33413,9 @@
       "code": "defects.blocking",
       "message": "No critical, high, or unaccepted medium defect may remain open",
       "details": {
-        "critical": 0,
-        "high": 0,
-        "mediumUnaccepted": 1,
+        "critical": 1,
+        "high": 1,
+        "mediumUnaccepted": 2,
         "low": 0
       }
     },
@@ -33380,7 +33492,7 @@
       "message": "Only one final repair direction may exist for chapter"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "repair.direction-identity",
       "message": "chapter-repair-direction.json must bind the locked run and exact active contract"
@@ -33416,100 +33528,76 @@
       "message": "chapter-repair-direction.json must be authored by the signing director with a timestamp"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f1"
+      "message": "chapter-repair-direction.json may only direct chapter-owned defects: F1"
     },
     {
       "passed": true,
       "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f1 may have one owning director direction"
+      "message": "Defect F1 may have one owning director direction"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f2"
+      "message": "chapter-repair-direction.json may only direct chapter-owned defects: UX-1"
     },
     {
       "passed": true,
       "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f2 may have one owning director direction"
+      "message": "Defect UX-1 may have one owning director direction"
     },
     {
       "passed": false,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f3"
+      "message": "chapter-repair-direction.json may only direct chapter-owned defects: UX-2"
     },
     {
       "passed": true,
       "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f3 may have one owning director direction"
+      "message": "Defect UX-2 may have one owning director direction"
     },
     {
       "passed": false,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f4"
+      "message": "chapter-repair-direction.json may only direct chapter-owned defects: F8"
     },
     {
       "passed": true,
       "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f4 may have one owning director direction"
+      "message": "Defect F8 may have one owning director direction"
     },
     {
       "passed": false,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f5"
+      "message": "chapter-repair-direction.json may only direct chapter-owned defects: NV-1"
     },
     {
       "passed": true,
       "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f5 may have one owning director direction"
+      "message": "Defect NV-1 may have one owning director direction"
     },
     {
       "passed": false,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f6"
+      "message": "chapter-repair-direction.json may only direct chapter-owned defects: OD-1"
     },
     {
       "passed": true,
       "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f6 may have one owning director direction"
-    },
-    {
-      "passed": false,
-      "level": "error",
-      "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f7"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f7 may have one owning director direction"
-    },
-    {
-      "passed": false,
-      "level": "error",
-      "code": "repair.direction-owner",
-      "message": "chapter-repair-direction.json may only direct chapter-owned defects: story-audit-f8"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "repair.direction-duplicate-defect",
-      "message": "Defect story-audit-f8 may have one owning director direction"
+      "message": "Defect OD-1 may have one owning director direction"
     },
     {
       "passed": true,
@@ -33542,7 +33630,7 @@
       "message": "Only one final repair direction may exist for score"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "repair.direction-identity",
       "message": "score-repair-direction.json must bind the locked run and exact active contract"
@@ -33560,7 +33648,7 @@
       "message": "score-repair-direction.json must name unique defect IDs"
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "repair.direction-actions",
       "message": "score-repair-direction.json must contain bounded repair actions"
@@ -33581,13 +33669,25 @@
       "passed": false,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "score-repair-direction.json may only direct score-owned defects: D2"
+      "message": "score-repair-direction.json may only direct score-owned defects: D1"
     },
     {
       "passed": true,
       "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect D2 may have one owning director direction"
+      "message": "Defect D1 may have one owning director direction"
+    },
+    {
+      "passed": false,
+      "level": "error",
+      "code": "repair.direction-owner",
+      "message": "score-repair-direction.json may only direct score-owned defects: F1"
+    },
+    {
+      "passed": false,
+      "level": "error",
+      "code": "repair.direction-duplicate-defect",
+      "message": "Defect F1 may have one owning director direction"
     },
     {
       "passed": true,
@@ -33605,61 +33705,13 @@
       "passed": false,
       "level": "error",
       "code": "repair.direction-owner",
-      "message": "score-repair-direction.json may only direct score-owned defects: D4"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "repair.direction-duplicate-defect",
-      "message": "Defect D4 may have one owning director direction"
+      "message": "score-repair-direction.json may only direct score-owned defects: NV-1"
     },
     {
       "passed": false,
       "level": "error",
-      "code": "repair.direction-owner",
-      "message": "score-repair-direction.json may only direct score-owned defects: D5"
-    },
-    {
-      "passed": true,
-      "level": "error",
       "code": "repair.direction-duplicate-defect",
-      "message": "Defect D5 may have one owning director direction"
-    },
-    {
-      "passed": false,
-      "level": "error",
-      "code": "repair.direction-owner",
-      "message": "score-repair-direction.json may only direct score-owned defects: D6-score"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "repair.direction-duplicate-defect",
-      "message": "Defect D6-score may have one owning director direction"
-    },
-    {
-      "passed": false,
-      "level": "error",
-      "code": "repair.direction-owner",
-      "message": "score-repair-direction.json may only direct score-owned defects: D7"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "repair.direction-duplicate-defect",
-      "message": "Defect D7 may have one owning director direction"
-    },
-    {
-      "passed": false,
-      "level": "error",
-      "code": "repair.direction-owner",
-      "message": "score-repair-direction.json may only direct score-owned defects: F1-score-position"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "repair.direction-duplicate-defect",
-      "message": "Defect F1-score-position may have one owning director direction"
+      "message": "Defect NV-1 may have one owning director direction"
     },
     {
       "passed": true,
@@ -33673,12 +33725,11 @@
       "code": "repair.direction-coverage",
       "message": "Every director-owned defect in the canonical history needs its owning director direction",
       "details": [
-        "F1",
-        "UX-1"
+        "F1"
       ]
     },
     {
-      "passed": true,
+      "passed": false,
       "level": "error",
       "code": "repair.derived-contract-change",
       "message": "Producer cannot override director contract-change classifications"
@@ -33732,7 +33783,7 @@
       "message": "Iteration 0 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 0"
@@ -33756,25 +33807,25 @@
       "message": "Iteration 0 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 0 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 0 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 0 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 0 defect snapshot must match its contract and counts"
@@ -33816,25 +33867,25 @@
       "message": "Iteration 1 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 1 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 1 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 1 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 1 defect snapshot must match its contract and counts"
@@ -33852,7 +33903,7 @@
       "message": "Iteration 2 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 2"
@@ -33876,25 +33927,25 @@
       "message": "Iteration 2 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 2 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 2 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 2 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 2 defect snapshot must match its contract and counts"
@@ -33912,7 +33963,7 @@
       "message": "Iteration 3 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 3"
@@ -33936,25 +33987,25 @@
       "message": "Iteration 3 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 3 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 3 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 3 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 3 defect snapshot must match its contract and counts"
@@ -33972,7 +34023,7 @@
       "message": "Iteration 4 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 4"
@@ -33996,25 +34047,25 @@
       "message": "Iteration 4 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 4 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 4 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 4 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 4 defect snapshot must match its contract and counts"
@@ -34032,7 +34083,7 @@
       "message": "Iteration 5 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 5"
@@ -34056,25 +34107,25 @@
       "message": "Iteration 5 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 5 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 5 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 5 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 5 defect snapshot must match its contract and counts"
@@ -34092,7 +34143,7 @@
       "message": "Iteration 6 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 6"
@@ -34116,25 +34167,25 @@
       "message": "Iteration 6 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 6 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 6 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 6 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 6 defect snapshot must match its contract and counts"
@@ -34152,7 +34203,7 @@
       "message": "Iteration 7 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 7"
@@ -34176,25 +34227,25 @@
       "message": "Iteration 7 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 7 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 7 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 7 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 7 defect snapshot must match its contract and counts"
@@ -34212,7 +34263,7 @@
       "message": "Iteration 8 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 8"
@@ -34236,25 +34287,25 @@
       "message": "Iteration 8 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 8 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 8 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 8 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 8 defect snapshot must match its contract and counts"
@@ -34272,7 +34323,7 @@
       "message": "Iteration 9 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 9"
@@ -34296,25 +34347,25 @@
       "message": "Iteration 9 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 9 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 9 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 9 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 9 defect snapshot must match its contract and counts"
@@ -34332,7 +34383,7 @@
       "message": "Iteration 10 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 10"
@@ -34356,25 +34407,25 @@
       "message": "Iteration 10 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 10 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 10 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 10 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 10 defect snapshot must match its contract and counts"
@@ -34392,7 +34443,7 @@
       "message": "Iteration 11 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 11"
@@ -34416,25 +34467,25 @@
       "message": "Iteration 11 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 11 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 11 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 11 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 11 defect snapshot must match its contract and counts"
@@ -34452,7 +34503,7 @@
       "message": "Iteration 12 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 12"
@@ -34476,25 +34527,25 @@
       "message": "Iteration 12 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 12 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 12 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 12 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 12 defect snapshot must match its contract and counts"
@@ -34512,7 +34563,7 @@
       "message": "Iteration 13 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 13"
@@ -34536,25 +34587,25 @@
       "message": "Iteration 13 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 13 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 13 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 13 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 13 defect snapshot must match its contract and counts"
@@ -34572,7 +34623,7 @@
       "message": "Iteration 14 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 14"
@@ -34596,25 +34647,25 @@
       "message": "Iteration 14 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 14 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 14 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 14 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 14 defect snapshot must match its contract and counts"
@@ -34632,7 +34683,7 @@
       "message": "Iteration 15 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 15"
@@ -34656,25 +34707,25 @@
       "message": "Iteration 15 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 15 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 15 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 15 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 15 defect snapshot must match its contract and counts"
@@ -34692,7 +34743,7 @@
       "message": "Iteration 16 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 16"
@@ -34716,25 +34767,25 @@
       "message": "Iteration 16 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 16 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 16 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 16 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 16 defect snapshot must match its contract and counts"
@@ -34752,7 +34803,7 @@
       "message": "Iteration 17 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 17"
@@ -34776,25 +34827,25 @@
       "message": "Iteration 17 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 17 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 17 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 17 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 17 defect snapshot must match its contract and counts"
@@ -34812,7 +34863,7 @@
       "message": "Iteration 18 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 18"
@@ -34836,25 +34887,25 @@
       "message": "Iteration 18 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 18 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 18 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 18 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 18 defect snapshot must match its contract and counts"
@@ -34872,7 +34923,7 @@
       "message": "Iteration 19 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 19"
@@ -34896,25 +34947,25 @@
       "message": "Iteration 19 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 19 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 19 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 19 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 19 defect snapshot must match its contract and counts"
@@ -34932,7 +34983,7 @@
       "message": "Iteration 20 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 20"
@@ -34956,25 +35007,25 @@
       "message": "Iteration 20 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 20 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 20 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 20 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 20 defect snapshot must match its contract and counts"
@@ -34992,7 +35043,7 @@
       "message": "Iteration 21 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 21"
@@ -35016,25 +35067,25 @@
       "message": "Iteration 21 defect snapshot must resolve inside the run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-hash",
       "message": "Iteration 21 contract snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.contract-snapshot-version",
       "message": "Iteration 21 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 21 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 21 defect snapshot must match its contract and counts"
@@ -35052,7 +35103,7 @@
       "message": "Iteration 22 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 22"
@@ -35088,13 +35139,13 @@
       "message": "Iteration 22 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 22 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 22 defect snapshot must match its contract and counts"
@@ -35112,7 +35163,7 @@
       "message": "Iteration 23 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 23"
@@ -35148,13 +35199,13 @@
       "message": "Iteration 23 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 23 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 23 defect snapshot must match its contract and counts"
@@ -35172,7 +35223,7 @@
       "message": "Iteration 24 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 24"
@@ -35208,13 +35259,13 @@
       "message": "Iteration 24 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 24 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 24 defect snapshot must match its contract and counts"
@@ -35232,7 +35283,7 @@
       "message": "Iteration 25 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 25"
@@ -35268,13 +35319,13 @@
       "message": "Iteration 25 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 25 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 25 defect snapshot must match its contract and counts"
@@ -35292,7 +35343,7 @@
       "message": "Iteration 26 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 26"
@@ -35328,13 +35379,13 @@
       "message": "Iteration 26 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 26 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 26 defect snapshot must match its contract and counts"
@@ -35352,7 +35403,7 @@
       "message": "Iteration 27 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 27"
@@ -35388,13 +35439,13 @@
       "message": "Iteration 27 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 27 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 27 defect snapshot must match its contract and counts"
@@ -35412,7 +35463,7 @@
       "message": "Iteration 28 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 28"
@@ -35448,13 +35499,13 @@
       "message": "Iteration 28 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 28 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 28 defect snapshot must match its contract and counts"
@@ -35472,7 +35523,7 @@
       "message": "Iteration 29 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 29"
@@ -35508,13 +35559,13 @@
       "message": "Iteration 29 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 29 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 29 defect snapshot must match its contract and counts"
@@ -35532,7 +35583,7 @@
       "message": "Iteration 30 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 30"
@@ -35568,13 +35619,13 @@
       "message": "Iteration 30 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 30 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 30 defect snapshot must match its contract and counts"
@@ -35592,7 +35643,7 @@
       "message": "Iteration 31 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 31"
@@ -35628,13 +35679,13 @@
       "message": "Iteration 31 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 31 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 31 defect snapshot must match its contract and counts"
@@ -35652,7 +35703,7 @@
       "message": "Iteration 32 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 32"
@@ -35688,13 +35739,13 @@
       "message": "Iteration 32 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 32 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 32 defect snapshot must match its contract and counts"
@@ -35712,7 +35763,7 @@
       "message": "Iteration 33 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 33"
@@ -35748,13 +35799,13 @@
       "message": "Iteration 33 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 33 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 33 defect snapshot must match its contract and counts"
@@ -35772,7 +35823,7 @@
       "message": "Iteration 34 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 34"
@@ -35808,13 +35859,13 @@
       "message": "Iteration 34 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 34 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 34 defect snapshot must match its contract and counts"
@@ -35832,7 +35883,7 @@
       "message": "Iteration 35 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 35"
@@ -35868,13 +35919,13 @@
       "message": "Iteration 35 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 35 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 35 defect snapshot must match its contract and counts"
@@ -35892,7 +35943,7 @@
       "message": "Iteration 36 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 36"
@@ -35928,13 +35979,13 @@
       "message": "Iteration 36 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 36 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 36 defect snapshot must match its contract and counts"
@@ -35952,7 +36003,7 @@
       "message": "Iteration 37 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 37"
@@ -35988,13 +36039,13 @@
       "message": "Iteration 37 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 37 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 37 defect snapshot must match its contract and counts"
@@ -36012,7 +36063,7 @@
       "message": "Iteration 38 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 38"
@@ -36048,13 +36099,13 @@
       "message": "Iteration 38 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 38 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 38 defect snapshot must match its contract and counts"
@@ -36072,7 +36123,7 @@
       "message": "Iteration 39 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 39"
@@ -36108,13 +36159,13 @@
       "message": "Iteration 39 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 39 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 39 defect snapshot must match its contract and counts"
@@ -36132,7 +36183,7 @@
       "message": "Iteration 40 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 40"
@@ -36168,13 +36219,13 @@
       "message": "Iteration 40 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 40 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 40 defect snapshot must match its contract and counts"
@@ -36192,7 +36243,7 @@
       "message": "Iteration 41 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 41"
@@ -36228,13 +36279,13 @@
       "message": "Iteration 41 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 41 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 41 defect snapshot must match its contract and counts"
@@ -36252,7 +36303,7 @@
       "message": "Iteration 42 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 42"
@@ -36288,13 +36339,13 @@
       "message": "Iteration 42 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 42 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 42 defect snapshot must match its contract and counts"
@@ -36312,7 +36363,7 @@
       "message": "Iteration 43 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 43"
@@ -36348,13 +36399,13 @@
       "message": "Iteration 43 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 43 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 43 defect snapshot must match its contract and counts"
@@ -36372,7 +36423,7 @@
       "message": "Iteration 44 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 44"
@@ -36408,13 +36459,13 @@
       "message": "Iteration 44 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 44 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 44 defect snapshot must match its contract and counts"
@@ -36432,7 +36483,7 @@
       "message": "Iteration 45 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 45"
@@ -36468,13 +36519,13 @@
       "message": "Iteration 45 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 45 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 45 defect snapshot must match its contract and counts"
@@ -36492,7 +36543,7 @@
       "message": "Iteration 46 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 46"
@@ -36528,13 +36579,13 @@
       "message": "Iteration 46 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 46 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 46 defect snapshot must match its contract and counts"
@@ -36552,7 +36603,7 @@
       "message": "Iteration 47 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 47"
@@ -36588,13 +36639,13 @@
       "message": "Iteration 47 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 47 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 47 defect snapshot must match its contract and counts"
@@ -36612,7 +36663,7 @@
       "message": "Iteration 48 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 48"
@@ -36648,13 +36699,13 @@
       "message": "Iteration 48 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 48 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 48 defect snapshot must match its contract and counts"
@@ -36672,7 +36723,7 @@
       "message": "Iteration 49 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 49"
@@ -36708,13 +36759,13 @@
       "message": "Iteration 49 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 49 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 49 defect snapshot must match its contract and counts"
@@ -36732,7 +36783,7 @@
       "message": "Iteration 50 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 50"
@@ -36768,13 +36819,13 @@
       "message": "Iteration 50 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 50 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 50 defect snapshot must match its contract and counts"
@@ -36792,7 +36843,7 @@
       "message": "Iteration 51 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 51"
@@ -36828,13 +36879,13 @@
       "message": "Iteration 51 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 51 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 51 defect snapshot must match its contract and counts"
@@ -36852,7 +36903,7 @@
       "message": "Iteration 52 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 52"
@@ -36888,13 +36939,13 @@
       "message": "Iteration 52 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 52 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 52 defect snapshot must match its contract and counts"
@@ -36912,7 +36963,7 @@
       "message": "Iteration 53 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 53"
@@ -36948,13 +36999,13 @@
       "message": "Iteration 53 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 53 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 53 defect snapshot must match its contract and counts"
@@ -36972,7 +37023,7 @@
       "message": "Iteration 54 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 54"
@@ -37008,13 +37059,13 @@
       "message": "Iteration 54 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 54 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 54 defect snapshot must match its contract and counts"
@@ -37032,7 +37083,7 @@
       "message": "Iteration 55 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 55"
@@ -37068,13 +37119,13 @@
       "message": "Iteration 55 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 55 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 55 defect snapshot must match its contract and counts"
@@ -37092,7 +37143,7 @@
       "message": "Iteration 56 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 56"
@@ -37128,13 +37179,13 @@
       "message": "Iteration 56 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 56 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 56 defect snapshot must match its contract and counts"
@@ -37152,7 +37203,7 @@
       "message": "Iteration 57 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 57"
@@ -37188,13 +37239,13 @@
       "message": "Iteration 57 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 57 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 57 defect snapshot must match its contract and counts"
@@ -37212,7 +37263,7 @@
       "message": "Iteration 58 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 58"
@@ -37248,13 +37299,13 @@
       "message": "Iteration 58 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 58 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 58 defect snapshot must match its contract and counts"
@@ -37272,7 +37323,7 @@
       "message": "Iteration 59 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 59"
@@ -37308,13 +37359,13 @@
       "message": "Iteration 59 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 59 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 59 defect snapshot must match its contract and counts"
@@ -37332,7 +37383,7 @@
       "message": "Iteration 60 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 60"
@@ -37368,13 +37419,13 @@
       "message": "Iteration 60 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 60 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 60 defect snapshot must match its contract and counts"
@@ -37392,7 +37443,7 @@
       "message": "Iteration 61 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 61"
@@ -37428,13 +37479,13 @@
       "message": "Iteration 61 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 61 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 61 defect snapshot must match its contract and counts"
@@ -37452,7 +37503,7 @@
       "message": "Iteration 62 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 62"
@@ -37488,13 +37539,13 @@
       "message": "Iteration 62 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 62 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 62 defect snapshot must match its contract and counts"
@@ -37512,7 +37563,7 @@
       "message": "Iteration 63 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 63"
@@ -37548,13 +37599,13 @@
       "message": "Iteration 63 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 63 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 63 defect snapshot must match its contract and counts"
@@ -37572,7 +37623,7 @@
       "message": "Iteration 64 must target the locked run"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.sequence",
       "message": "Iteration ledger must be contiguous from zero; expected 64"
@@ -37608,13 +37659,13 @@
       "message": "Iteration 64 contract snapshot version must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-hash",
       "message": "Iteration 64 defect snapshot hash must match"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.defect-snapshot-counts",
       "message": "Iteration 64 defect snapshot must match its contract and counts"
@@ -37624,6 +37675,186 @@
       "level": "error",
       "code": "iterations.time",
       "message": "Iteration 64 needs a timestamp"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.identity",
+      "message": "Iteration 65 must target the locked run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.sequence",
+      "message": "Iteration ledger must be contiguous from zero; expected 65"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.hash-shape",
+      "message": "Iteration 65 must bind contract and defect-register hashes"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot",
+      "message": "Iteration 65 contract snapshot must resolve inside the run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot",
+      "message": "Iteration 65 defect snapshot must resolve inside the run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot-hash",
+      "message": "Iteration 65 contract snapshot hash must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot-version",
+      "message": "Iteration 65 contract snapshot version must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot-hash",
+      "message": "Iteration 65 defect snapshot hash must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot-counts",
+      "message": "Iteration 65 defect snapshot must match its contract and counts"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.time",
+      "message": "Iteration 65 needs a timestamp"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.identity",
+      "message": "Iteration 66 must target the locked run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.sequence",
+      "message": "Iteration ledger must be contiguous from zero; expected 66"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.hash-shape",
+      "message": "Iteration 66 must bind contract and defect-register hashes"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot",
+      "message": "Iteration 66 contract snapshot must resolve inside the run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot",
+      "message": "Iteration 66 defect snapshot must resolve inside the run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot-hash",
+      "message": "Iteration 66 contract snapshot hash must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot-version",
+      "message": "Iteration 66 contract snapshot version must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot-hash",
+      "message": "Iteration 66 defect snapshot hash must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot-counts",
+      "message": "Iteration 66 defect snapshot must match its contract and counts"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.time",
+      "message": "Iteration 66 needs a timestamp"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.identity",
+      "message": "Iteration 67 must target the locked run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.sequence",
+      "message": "Iteration ledger must be contiguous from zero; expected 67"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.hash-shape",
+      "message": "Iteration 67 must bind contract and defect-register hashes"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot",
+      "message": "Iteration 67 contract snapshot must resolve inside the run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot",
+      "message": "Iteration 67 defect snapshot must resolve inside the run"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot-hash",
+      "message": "Iteration 67 contract snapshot hash must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.contract-snapshot-version",
+      "message": "Iteration 67 contract snapshot version must match"
+    },
+    {
+      "passed": false,
+      "level": "error",
+      "code": "iterations.defect-snapshot-hash",
+      "message": "Iteration 67 defect snapshot hash must match"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.defect-snapshot-counts",
+      "message": "Iteration 67 defect snapshot must match its contract and counts"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "iterations.time",
+      "message": "Iteration 67 needs a timestamp"
     },
     {
       "passed": true,
@@ -37638,7 +37869,7 @@
       "message": "Final iteration must bind the canonical defect register bytes"
     },
     {
-      "passed": false,
+      "passed": true,
       "level": "error",
       "code": "iterations.final-counts",
       "message": "Final iteration defect counts must match defects.json exactly"
@@ -40551,6 +40782,136 @@
       "level": "error",
       "code": "evidence.path",
       "message": "Evidence path must resolve: evidence/implementation/scene-av-check.log"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-solver.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-solver.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "production-lock.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: production-lock.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
     },
     {
       "passed": true,
@@ -48253,26 +48614,13 @@
       "level": "error",
       "code": "evidence.ref",
       "message": "Evidence references must be nonempty strings",
-      "details": "story-audit.md"
+      "details": "defects.json"
     },
     {
       "passed": true,
       "level": "error",
       "code": "evidence.path",
-      "message": "Evidence path must resolve: story-audit.md"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "evidence.ref",
-      "message": "Evidence references must be nonempty strings",
-      "details": "score-audit.md#D2"
-    },
-    {
-      "passed": true,
-      "level": "error",
-      "code": "evidence.path",
-      "message": "Evidence path must resolve: score-audit.md#D2"
+      "message": "Evidence path must resolve: defects.json"
     },
     {
       "passed": true,
@@ -48286,6 +48634,19 @@
       "level": "error",
       "code": "evidence.path",
       "message": "Evidence path must resolve: scene-contract.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "snapshots/scene-contract.draft-v9.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: snapshots/scene-contract.draft-v9.json"
     },
     {
       "passed": true,
@@ -48318,26 +48679,39 @@
       "level": "error",
       "code": "evidence.ref",
       "message": "Evidence references must be nonempty strings",
-      "details": "score-peer-notes.jsonl#SC10-N1"
+      "details": "story-audit.md"
     },
     {
       "passed": true,
       "level": "error",
       "code": "evidence.path",
-      "message": "Evidence path must resolve: score-peer-notes.jsonl#SC10-N1"
+      "message": "Evidence path must resolve: story-audit.md"
     },
     {
       "passed": true,
       "level": "error",
       "code": "evidence.ref",
       "message": "Evidence references must be nonempty strings",
-      "details": "main/src/story/emergentStoryDirector.ts"
+      "details": "ux-audit.md"
     },
     {
       "passed": true,
       "level": "error",
       "code": "evidence.path",
-      "message": "Evidence path must resolve: main/src/story/emergentStoryDirector.ts"
+      "message": "Evidence path must resolve: ux-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "score-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: score-audit.md"
     },
     {
       "passed": true,
@@ -48357,13 +48731,13 @@
       "level": "error",
       "code": "evidence.ref",
       "message": "Evidence references must be nonempty strings",
-      "details": ".codex/production-runs/2026-08-10-ch7-ch8-voice-repair/chapter-reconciliation.jsonl"
+      "details": "main/src/story/emergentStoryDirector.ts"
     },
     {
       "passed": true,
       "level": "error",
       "code": "evidence.path",
-      "message": "Evidence path must resolve: .codex/production-runs/2026-08-10-ch7-ch8-voice-repair/chapter-reconciliation.jsonl"
+      "message": "Evidence path must resolve: main/src/story/emergentStoryDirector.ts"
     },
     {
       "passed": true,
@@ -50847,6 +51221,123 @@
       "level": "error",
       "code": "evidence.path",
       "message": "Evidence path must resolve: implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-solver.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-solver.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence/ch10-st0-gaze-engage.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: cinematography-audit.md"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: implementation.diff"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "iteration-ledger.jsonl"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: iteration-ledger.jsonl"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "defects.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: defects.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "snapshots/"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: snapshots/"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.ref",
+      "message": "Evidence references must be nonempty strings",
+      "details": "evidence-registry.json"
+    },
+    {
+      "passed": true,
+      "level": "error",
+      "code": "evidence.path",
+      "message": "Evidence path must resolve: evidence-registry.json"
     },
     {
       "passed": true,

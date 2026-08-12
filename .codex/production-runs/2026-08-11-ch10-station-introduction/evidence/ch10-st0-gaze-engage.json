@@ -1,11 +1,11 @@
 {
   "probe": "ch10-st0-gaze-engage",
-  "capturedAt": "2026-08-12T18:05:29.384Z",
+  "capturedAt": "2026-08-12T18:22:55.848Z",
   "base": "http://localhost:5176",
   "lanes": {
     "manual": {
       "url": "?story=ch10-cold&profile=LOW",
-      "samples": 570,
+      "samples": 485,
       "samplesWithGazeDiag": 0,
       "samplesWithAutopilotTicking": 0,
       "beats": [
@@ -15,43 +15,67 @@
       "blockedByHistogram": {},
       "st0VisibleSamples": 0,
       "st0InFrustumSamples": 0,
-      "st0Samples": 570,
+      "st0Samples": 485,
       "pageErrors": [],
-      "finalDiag": null
+      "finalDiag": null,
+      "lens": {
+        "samples": 485,
+        "feedbackFovMin": 70,
+        "feedbackFovMax": 70,
+        "cameraFovMin": 75,
+        "cameraFovMax": 75,
+        "boostMax": 0,
+        "speedMax": 0,
+        "shellScaleMin": null,
+        "shellScaleMax": null,
+        "framesAboveFov73_72": 0,
+        "byBeat": {
+          "ch10-cold": {
+            "samples": 485,
+            "feedbackFovMin": 70,
+            "feedbackFovMax": 70,
+            "cameraFovMin": 75,
+            "cameraFovMax": 75,
+            "boostMax": 0,
+            "speedMax": 0,
+            "shellScaleMax": null,
+            "framesAboveFov73_72": 0
+          }
+        }
+      }
     },
     "movie": {
       "url": "?story=ch10-cold&movie=1&profile=LOW",
-      "samples": 559,
-      "samplesWithGazeDiag": 559,
-      "samplesWithAutopilotTicking": 559,
+      "samples": 467,
+      "samplesWithGazeDiag": 467,
+      "samplesWithAutopilotTicking": 467,
       "beats": [
         "ch10-ask",
-        "ch10-transit",
-        "done"
+        "ch10-transit"
       ],
       "counters": {
-        "frames": 420,
-        "framesMovie": 420,
-        "framesDriving": 420,
+        "frames": 418,
+        "framesMovie": 418,
+        "framesDriving": 418,
         "framesAvailable": 0,
-        "framesGoalCritical": 341,
+        "framesGoalCritical": 118,
         "framesAllConjunctsTrue": 0,
         "framesEngaged": 0,
         "engagements": 0
       },
       "blockedByHistogram": {
-        "goal-critical-look-demand": 559
+        "goal-critical-look-demand": 467
       },
       "st0VisibleSamples": 0,
       "st0InFrustumSamples": 11,
       "st0Samples": 467,
       "pageErrors": [],
       "finalDiag": {
-        "frames": 420,
-        "framesMovie": 420,
-        "framesDriving": 420,
+        "frames": 418,
+        "framesMovie": 418,
+        "framesDriving": 418,
         "framesAvailable": 0,
-        "framesGoalCritical": 341,
+        "framesGoalCritical": 118,
         "framesAllConjunctsTrue": 0,
         "framesEngaged": 0,
         "engagements": 0,
@@ -63,9 +87,45 @@
         "engaged": false,
         "blockedBy": "goal-critical-look-demand",
         "beat": "ch10-cold",
-        "beatClock": 8.09,
+        "beatClock": 8.05,
         "cooldownRemaining": 0,
         "aimPitchDeg": 0
+      },
+      "lens": {
+        "samples": 467,
+        "feedbackFovMin": 70,
+        "feedbackFovMax": 79,
+        "cameraFovMin": 70,
+        "cameraFovMax": 79,
+        "boostMax": 1,
+        "speedMax": 320,
+        "shellScaleMin": 1,
+        "shellScaleMax": 1.17727,
+        "framesAboveFov73_72": 91,
+        "byBeat": {
+          "ch10-ask": {
+            "samples": 361,
+            "feedbackFovMin": 70,
+            "feedbackFovMax": 79,
+            "cameraFovMin": 70,
+            "cameraFovMax": 79,
+            "boostMax": 1,
+            "speedMax": 320,
+            "shellScaleMax": 1.17727,
+            "framesAboveFov73_72": 91
+          },
+          "ch10-transit": {
+            "samples": 106,
+            "feedbackFovMin": 70,
+            "feedbackFovMax": 70,
+            "cameraFovMin": 70,
+            "cameraFovMax": 75,
+            "boostMax": 0,
+            "speedMax": 101.8,
+            "shellScaleMax": 1,
+            "framesAboveFov73_72": 0
+          }
+        }
       }
     }
   }
