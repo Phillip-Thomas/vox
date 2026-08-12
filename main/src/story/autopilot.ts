@@ -384,12 +384,38 @@ export function chapter10AskDescentSystemTarget(): readonly [number, number, num
 // film crew's own camera operator is.
 const ST0_GAZE_WEIGHT = 0.35;
 const ST0_GAZE_MIN_SECONDS = 1.5;
-/** A glance, not a stare: it ends on its own well before the walk does. */
-const ST0_GAZE_MAX_SECONDS = 3;
+/**
+ * A glance, not a stare — but long enough to actually arrive.
+ *
+ * At weight 0.35 the shipped look-rate clamp (`pull * 3 * dt` in
+ * CameraControls) is an exponential approach with a ~0.95 s time constant, so
+ * the first second of any glance is spent in transit and photographs the way
+ * there rather than the thing. A 3 s window therefore spent a third of itself
+ * off-target and could not meet the ruling's own crossing-frame acceptance.
+ * 4.5 s is still well short of the walk and still reads as a look away and
+ * back; the ruling's floors — 1.5 s minimum, 0.5 s release, 10 s cooldown —
+ * are untouched.
+ */
+const ST0_GAZE_MAX_SECONDS = 4.5;
 const ST0_GAZE_RELEASE_SECONDS = 0.5;
 const ST0_GAZE_COOLDOWN_SECONDS = 10;
 const ST0_GAZE_PITCH_CAP_RADIANS = (25 * Math.PI) / 180;
-const ST0_GAZE_REACH = 240;
+/**
+ * The aim point is a PROXY on the ST-0 ray a few metres out, not a far point in
+ * the sky, and that is load-bearing rather than cosmetic.
+ *
+ * `solveSurfaceGaze` only lets the true subject own pitch when the subject is
+ * on the viewer's own cube face AND within `inspectRange` tangentially;
+ * otherwise it keeps the eyes on the travel bearing with a small seeded scan
+ * and clamps pitch to +15°. A goal 240 m along the ray has ~217 m of tangential
+ * range, so the glance yawed toward ST-0's azimuth and then never pitched up at
+ * all — the state machine engaged (D-A3's 7/432 samples) while the dot stayed
+ * out of frame. Ten metres puts the proxy inside the direct band on the
+ * viewer's own face, so the solver aims at the true elevation, and the +25° cap
+ * below is enforced on the ray BEFORE the proxy is built rather than left to
+ * the solver's travel clamp.
+ */
+const ST0_GAZE_REACH = 10;
 
 let st0GazeStartedAt = -Infinity;
 let st0GazeEndedAt = -Infinity;
@@ -397,6 +423,7 @@ let st0GazeActive = false;
 let st0GazeRestoreWeight = 1;
 const _st0GazeGoal = new THREE.Vector3();
 const _st0GazeAim = new THREE.Vector3();
+const _st0GazeTangent = new THREE.Vector3();
 
 function resetSt0GazeBias(): void {
   if (st0GazeActive) setCinematicLookWeight(st0GazeRestoreWeight);
@@ -455,18 +482,31 @@ function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean 
     return false;
   }
   // Pitch cap: look UP toward the dot, but never crane past +25 degrees, so the
-  // walk keeps its footing in frame and the horizon never leaves the shot.
+  // walk keeps its footing in frame and the horizon never leaves the shot. The
+  // capped ray is REBUILT from its own tangent at exactly the cap angle;
+  // clipping the up-component and re-normalizing (the earlier spelling) lands
+  // above the cap, because normalizing grows the tangent back and the elevation
+  // with it — measurably +25.4 degrees rather than +25.
   _st0GazeAim.copy(direction).normalize();
-  const rise = _st0GazeAim.dot(up);
-  const cap = Math.sin(ST0_GAZE_PITCH_CAP_RADIANS);
-  if (rise > cap) {
-    _st0GazeAim.addScaledVector(up, cap - rise);
-    if (_st0GazeAim.lengthSq() < 1e-6) return false;
-    _st0GazeAim.normalize();
+  const rise = THREE.MathUtils.clamp(_st0GazeAim.dot(up), -1, 1);
+  if (Math.asin(rise) > ST0_GAZE_PITCH_CAP_RADIANS) {
+    _st0GazeTangent.copy(_st0GazeAim).addScaledVector(up, -rise);
+    if (_st0GazeTangent.lengthSq() < 1e-8) return false;
+    _st0GazeTangent.normalize();
+    _st0GazeAim
+      .copy(_st0GazeTangent)
+      .multiplyScalar(Math.cos(ST0_GAZE_PITCH_CAP_RADIANS))
+      .addScaledVector(up, Math.sin(ST0_GAZE_PITCH_CAP_RADIANS))
+      .normalize();
   }
   _st0GazeGoal.copy(player).addScaledVector(_st0GazeAim, ST0_GAZE_REACH);
   setCinematicLookWeight(ST0_GAZE_WEIGHT);
-  lookNaturallyToward(_st0GazeGoal, player, 0, _st0GazeGoal, 'travel');
+  // `inspect`, not `travel`: travel's +15° pitch ceiling sits below the ruling's
+  // own +25° cap and would silently overrule it. Inspect's ±30° band contains
+  // the cap, so the cap enforced on the ray above is the only one that binds,
+  // and inspect's smaller scan keeps the glance human rather than mechanical.
+  // Route direction is the aim itself — the eyes move, the walk does not.
+  lookNaturallyToward(_st0GazeGoal, player, 0, _st0GazeGoal, 'inspect');
   return true;
 }
 

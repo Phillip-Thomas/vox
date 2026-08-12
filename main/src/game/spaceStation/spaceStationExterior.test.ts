@@ -1,5 +1,10 @@
+import { readFileSync } from 'node:fs';
 import { describe, expect, it } from 'vitest';
 import { spaceStationBody, systemToStationLocal } from './spaceStationBody.ts';
+import {
+  isStorySpaceStationContext,
+  spaceStationDockingAuthorized
+} from './spaceStationDevFlag.ts';
 import { buildSpaceStationDescriptor } from './spaceStationDescriptor.ts';
 import {
   buildSpaceStationExterior,
@@ -207,5 +212,104 @@ describe('the berth you fly into is the airlock you walk out of', () => {
         Math.abs(box.center[2] - berthLocal[2]) < box.size[2] / 2;
       expect(onAxis, `jamb sits on the corridor: ${JSON.stringify(box)}`).toBe(false);
     }
+  });
+});
+
+describe('D-A5: the station never offers a berth it has not authorized', () => {
+  // Suppression is a render-time skip over a builder-time tag, so both halves are
+  // provable without a renderer: the tag is asserted here on the built exterior,
+  // and the skip is asserted against the two loops that consume it.
+  const rendererSource = readFileSync(
+    new URL('../../components/spaceStation/SpaceStationExterior.tsx', import.meta.url),
+    'utf8'
+  );
+  const shippedMountSource = readFileSync(
+    new URL('../../components/SystemSpaceStations.tsx', import.meta.url),
+    'utf8'
+  );
+  const sandboxMountSource = readFileSync(
+    new URL('../../components/spaceStation/SpaceStationApproach.tsx', import.meta.url),
+    'utf8'
+  );
+
+  const offerBoxes = exterior.boxes.filter(box => box.dockOffer);
+  const offerLights = exterior.lights.filter(light => light.dockOffer);
+
+  it('tags exactly the offer — the guide arms, their chase lamps, and the threshold strips', () => {
+    // Four splayed arms; seven lamps down each; nine strip pairs on each of two
+    // axes, both sides. The counts are asserted rather than bounded, because a
+    // tag that silently grew to cover the hull would still "suppress the ring".
+    expect(offerBoxes).toHaveLength(4);
+    expect(offerLights).toHaveLength(4 * 7 + 9 * 2 * 2);
+    expect(offerBoxes.every(box => box.tier === 'structure')).toBe(true);
+    const offerTones = new Set(offerLights.map(light => light.tone));
+    expect(offerTones).toEqual(new Set([
+      EXTERIOR_LIGHT_TONE.navRed,
+      EXTERIOR_LIGHT_TONE.navGreen,
+      EXTERIOR_LIGHT_TONE.dockWhite
+    ]));
+  });
+
+  it('never tags the dock itself — the door is architecture, not an invitation', () => {
+    // The lit mouth and its recessed inner glow are the station having a door.
+    // A station that loses its door in story mode is a different station, and
+    // the contract asked for no dock OFFER geometry, not for no dock.
+    const mouthLights = exterior.lights.filter(
+      light =>
+        Math.abs(light.center[0] - exterior.mouth[0]) < 4 &&
+        Math.abs(light.center[1] - exterior.mouth[1]) < 1 &&
+        Math.abs(light.center[2] - exterior.mouth[2]) < 1
+    );
+    expect(mouthLights.length).toBeGreaterThanOrEqual(2);
+    expect(mouthLights.some(light => light.dockOffer)).toBe(false);
+    // Nor the jamb frame, which is pressure hull.
+    expect(exterior.boxes.some(box => box.tier === 'mass' && box.dockOffer)).toBe(false);
+  });
+
+  it('suppresses only the offer, leaving every other instance byte-identical', () => {
+    // The renderer's skip, applied here to the same arrays it walks.
+    const keptBoxes = exterior.boxes.filter(box => !box.dockOffer);
+    const keptLights = exterior.lights.filter(light => !light.dockOffer);
+    expect(keptBoxes).toHaveLength(exterior.boxes.length - offerBoxes.length);
+    expect(keptLights).toHaveLength(exterior.lights.length - offerLights.length);
+    // Byte-identity of the survivors, in order: suppression must not renumber,
+    // reorder, or re-tone anything it keeps.
+    const untouched = buildSpaceStationExterior(descriptor.graph, descriptor.seed);
+    expect(keptBoxes).toEqual(untouched.boxes.filter(box => !box.dockOffer));
+    expect(keptLights).toEqual(untouched.lights.filter(light => !light.dockOffer));
+    expect(untouched.mouth).toEqual(exterior.mouth);
+  });
+
+  it('holds the skip at both instancing loops, behind a default-off prop', () => {
+    expect(rendererSource).toContain('suppressDockOffer = false');
+    expect(rendererSource).toContain('if (suppressDockOffer && box.dockOffer) continue;');
+    expect(rendererSource).toContain('if (suppressDockOffer && light.dockOffer) continue;');
+  });
+
+  it('gates the shipped mount on the same predicate as the advisory and [F]', () => {
+    expect(shippedMountSource).toContain('spaceStationDockingAuthorized');
+    expect(shippedMountSource).toContain('suppressDockOffer={!spaceStationDockingAuthorized()}');
+  });
+
+  it('leaves the ?spacestation= sandbox byte-identical, structurally', () => {
+    // THE SANDBOX IS A SHIPPED SURFACE, so this is proven rather than argued.
+    // Three independent reasons, any one of which would be enough:
+    // 1. the sandbox reaches the exterior through SpaceStationApproach, which
+    //    neither passes the prop nor knows the predicate exists;
+    expect(sandboxMountSource).toContain('<SpaceStationExterior descriptor={descriptor} body={body} />');
+    expect(sandboxMountSource).not.toContain('suppressDockOffer');
+    expect(sandboxMountSource).not.toContain('spaceStationDockingAuthorized');
+    // 2. it never mounts the shipped game's SystemSpaceStations at all, which is
+    //    the only component that raises the flag;
+    expect(sandboxMountSource).not.toContain('SystemSpaceStations');
+    // 3. and the prop defaults to false, so an unpassed prop draws everything.
+    expect(rendererSource).toContain('suppressDockOffer = false');
+  });
+
+  it('answers "authorized" wherever the story is not the context, so free flight is unchanged', () => {
+    // The predicate short-circuits on non-story context (which includes the
+    // sandbox), so every non-story surface keeps the offer it always had.
+    expect(isStorySpaceStationContext()).toBe(false);
+    expect(spaceStationDockingAuthorized()).toBe(true);
   });
 });

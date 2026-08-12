@@ -36,8 +36,8 @@ export const SIGNED_SCENE_AV_REVISION = 'intent-v1';
  * exact bytes or the runtime refuses to load.
  */
 export const CH10_SCENE_AV_SHA256 =
-  '4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94';
-export const CH10_SCENE_AV_REVISION = 'draft-v6';
+  '32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860';
+export const CH10_SCENE_AV_REVISION = 'draft-v7';
 export const SIGNED_SCENE_AV_SOURCES: readonly {
   readonly sceneId: string;
   readonly contractVersion: string;

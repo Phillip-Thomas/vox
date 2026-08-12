@@ -93,8 +93,14 @@ export type Ch10AskObjectiveState =
   | 'landfall'
   | 'relay-query'
   | 'bearing-claim';
-/** T1 → T3. Only the middle rung carries a marker; the other two are cards. */
-export type Ch10TransitObjectiveState = 'ignite' | 'hold' | 'resolve';
+/**
+ * The boarding rung, then T1 → T3. The claim is performed on foot at the relay,
+ * so the beat opens with a locator to the Kestrel; `ignite` is state-derived and
+ * only ever reached once the player is aboard, which is why `HOLD [SPACE]` can
+ * never be shown to a player standing on the ground (it renders as the jetpack
+ * glyph there). Only `reboard` and `hold` carry markers.
+ */
+export type Ch10TransitObjectiveState = 'reboard' | 'ignite' | 'hold' | 'resolve';
 
 /**
  * Presentation facts only. None of these values is evidence that gameplay
@@ -138,7 +144,9 @@ export const DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS: Readonly<StoryObjectiveGuid
     ch8LandfallState: 'descent',
     ch10ColdState: 'fault-read',
     ch10AskState: 'reboard',
-    ch10TransitState: 'ignite'
+    // The beat is entered on foot at the wreck relay, so its default rung is the
+    // locator, not the cockpit input.
+    ch10TransitState: 'reboard'
   });
 
 type ObjectiveResolver = (
@@ -669,6 +677,16 @@ function ch10AskObjective(state: Ch10AskObjectiveState): GuidedStoryObjective {
 
 function ch10TransitObjective(state: Ch10TransitObjectiveState): GuidedStoryObjective {
   switch (state) {
+    case 'reboard':
+      // Grammar identical to ch8:launch:reboard and station:return:reboard —
+      // boarding the Kestrel always looks the same. The marker resolves from the
+      // ship's live pose, so the locator is honest wherever she landed.
+      return objective(
+        'station:transit:reboard',
+        'travel',
+        'KESTREL HATCH · REBOARD',
+        ['RETURN TO THE KESTREL.', 'FOLLOW THE HATCH MARKER AND [F] BOARD.']
+      );
     case 'ignite':
       return objective(
         'station:transit:ignite',

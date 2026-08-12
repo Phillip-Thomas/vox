@@ -53,7 +53,6 @@ import {
   EXACT_TERRAIN_BATCH_SIZE,
   EXACT_WATER_BATCH_SIZE,
   SURFACE_SKY_INNER_RADIUS,
-  st0ClampedPixels,
   st0NightVisibility,
   st0QuadScale,
   st0RenderPredicate,
@@ -1122,12 +1121,17 @@ export default function SystemCompanionBodies({
           const placement = companionCelestialPlacement(input, work0.placement);
           const perspective = camera as THREE.PerspectiveCamera;
           const drawingHeight = gl.getDrawingBufferSize(work.framebufferSize).y;
+          // The authored size, straight through: ST0_MIN_PIXELS is a frozen
+          // contract constant, and `drawingHeight` is already the DEVICE
+          // buffer height, so the DPR argument is 1 and 2.4 means 2.4 device
+          // pixels on every tier and viewport. (A clamp used to stand here whose
+          // only argument was this same constant — see ST0_MIN_PIXELS.)
           const scale = st0QuadScale(
             placement.centerDistance,
             THREE.MathUtils.degToRad(perspective.fov),
             drawingHeight,
             1,
-            st0ClampedPixels(ST0_MIN_PIXELS)
+            ST0_MIN_PIXELS
           );
           st0.position
             .copy(work.cameraPosition)

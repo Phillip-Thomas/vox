@@ -2,7 +2,10 @@ import { useMemo } from 'react';
 import { spaceStationBody } from '../game/spaceStation/spaceStationBody.ts';
 import { buildSpaceStationDescriptor } from '../game/spaceStation/spaceStationDescriptor.ts';
 import { systemSpaceStations } from '../game/spaceStation/spaceStationBody.ts';
-import { forcedSpaceStationCount } from '../game/spaceStation/spaceStationDevFlag.ts';
+import {
+  forcedSpaceStationCount,
+  spaceStationDockingAuthorized
+} from '../game/spaceStation/spaceStationDevFlag.ts';
 import type { SystemCoordinate } from '../game/starSystem.ts';
 import { useSystemFlight } from '../state/systemFlight.ts';
 import {
@@ -90,6 +93,14 @@ export default function SystemSpaceStations({
           descriptor={descriptor}
           body={body}
           renderOrigin={systemFlight.renderOrigin}
+          // D-A5. The berth ring is the station offering a berth, and in a story
+          // world where docking is unauthorized the station addresses the player
+          // in nothing — not in the advisory register, not on [F], and not in
+          // geometry either. Same predicate as both of those, evaluated here at
+          // the shipped game's mount: the sandbox reaches the exterior through
+          // SpaceStationApproach and never renders this component at all, so it
+          // cannot be reached by this flag.
+          suppressDockOffer={!spaceStationDockingAuthorized()}
         />
       ))}
     </>

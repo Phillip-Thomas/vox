@@ -38,14 +38,37 @@ export interface ExteriorBox {
   tier: ExteriorTier;
   /** Index into the hull palette. */
   tone: number;
+  /** See `DOCK OFFER` below. Absent means ordinary station architecture. */
+  dockOffer?: boolean;
 }
 
+/*
+  DOCK OFFER.
+
+  A station has a dock the way a building has a door: it is architecture, and it
+  is there whether or not you are welcome. What is NOT architecture is the
+  equipment that *offers* you a berth — the four splayed guide arms, the
+  sequenced nav lamps that chase inward along them, and the threshold strips
+  that outline the mouth. Those exist to say "come in, line up on this", which
+  is an act of address, and in a story world where docking is not authorized the
+  station never addresses the player at all. That fence is already enforced for
+  the advisory register and for [F]; the same fence now governs the geometry,
+  because a cyan berth ring floating under the dock in the cut-line frame is the
+  station making the offer in pictures instead of in words.
+
+  Tagged rather than removed, and tagged HERE rather than pattern-matched
+  downstream, because the builder is the only place that still knows which boxes
+  are the offer: it pushes everything into two flat arrays and nothing after
+  this point can tell a guide arm from a radiator fin.
+*/
 export interface ExteriorLight {
   center: Vec3Tuple;
   size: Vec3Tuple;
   rotation?: Vec3Tuple;
   /** Index into the emissive palette. */
   tone: number;
+  /** See `DOCK OFFER` above. Absent means ordinary station architecture. */
+  dockOffer?: boolean;
   /** Seconds per blink cycle. Absent or 0 is a steady light. */
   blink?: number;
   /** Offset into the blink cycle so a row of beacons does not pulse in unison. */
@@ -532,7 +555,8 @@ function berthStructure(
       size: [reach, 3.4, 3.4],
       rotation: [0, dy * 0.09, dz * 0.09],
       tier: 'structure',
-      tone: 2
+      tone: 2,
+      dockOffer: true
     });
 
     // Sequenced approach lights running back toward the mouth. Nav convention:
@@ -551,7 +575,8 @@ function berthStructure(
         blink: 1.5,
         // Phase runs with distance, so the lights chase inward toward the mouth.
         phase: (1 - t) * 1.5,
-        duty: 0.3
+        duty: 0.3,
+        dockOffer: true
       });
     }
   }
@@ -587,12 +612,14 @@ function berthStructure(
       lights.push({
         center: [mouth[0] - 3.4, mouth[1] + t * halfHeight * 2, mouth[2] + side * (halfWidth + 1)],
         size: [1.4, 2.2, 1.4],
-        tone: EXTERIOR_LIGHT_TONE.dockWhite
+        tone: EXTERIOR_LIGHT_TONE.dockWhite,
+        dockOffer: true
       });
       lights.push({
         center: [mouth[0] - 3.4, mouth[1] + side * (halfHeight + 1), mouth[2] + t * halfWidth * 2],
         size: [1.4, 1.4, 2.6],
-        tone: EXTERIOR_LIGHT_TONE.dockWhite
+        tone: EXTERIOR_LIGHT_TONE.dockWhite,
+        dockOffer: true
       });
     }
   }

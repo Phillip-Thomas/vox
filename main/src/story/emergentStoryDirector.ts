@@ -129,11 +129,14 @@ import {
   clearGuidedStoryObjective,
   observeGuidedStoryMarker,
   getActiveGuidedStoryObjective,
-  type GuidedStoryObjective
+  getGuidedStoryObjectiveHealth,
+  type GuidedStoryObjective,
+  type ObjectiveHealth
 } from './ux/objectiveDirector.ts';
 import {
   resolveStoryObjectiveGuidance,
-  type Ch10AskObjectiveState
+  type Ch10AskObjectiveState,
+  type Ch10TransitObjectiveState
 } from './storyObjectiveGuidance.ts';
 import {
   advanceFlightGuidanceDwell,
@@ -545,11 +548,7 @@ function syncEmergentObjectiveGuidance(beat: StoryBeat | null): void {
         });
       case 'ch10-transit':
         return resolveStoryObjectiveGuidance(beat, {
-          ch10TransitState: hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)
-            ? 'resolve'
-            : hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId)
-              ? 'hold'
-              : 'ignite'
+          ch10TransitState: chapter10TransitState(actorId)
         });
       default:
         return null;
@@ -603,6 +602,25 @@ function chapter10AskState(actorId: string): Ch10AskObjectiveState {
   if (flight.phase !== 'surface' || flight.controlMode === 'flight') return 'landfall';
   if (hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId)) return 'bearing-claim';
   return 'relay-query';
+}
+
+/**
+ * The ch10-transit ladder. The bearing is claimed on foot at the wreck relay, so
+ * the beat cannot open with `HOLD [SPACE] TO IGNITE` — on foot that glyph is the
+ * jetpack, and the instruction names an input the player cannot press from where
+ * the game put her. `station:transit:reboard` carries the locator to the
+ * Kestrel's live pose; `station:transit:ignite` is derived from being aboard, so
+ * it publishes only in the cockpit and never on the ground. Disembarking before
+ * ignition returns to the boarding rung exactly as ch8's launch ladder does,
+ * with a fresh one-shot enter cue.
+ *
+ * Receipts are read before flight facts here — once the seam is passed or the
+ * transit is ignited the rung is a durable fact of the story, not a pose.
+ */
+function chapter10TransitState(actorId: string): Ch10TransitObjectiveState {
+  if (hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)) return 'resolve';
+  if (hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId)) return 'hold';
+  return getSpaceFlightSnapshot().controlMode === 'flight' ? 'ignite' : 'reboard';
 }
 
 interface AuditRouteRuntime {
@@ -1734,7 +1752,8 @@ export function getChapter10MarkerTarget(
       return core ? { position: core.clone(), label } : null;
     }
     case 'station:fabrication-attempt':
-    case 'station:return:reboard': {
+    case 'station:return:reboard':
+    case 'station:transit:reboard': {
       const fabricator = chapter10FabricatorPosition();
       return fabricator ? { position: fabricator.clone(), label } : null;
     }
@@ -1951,6 +1970,71 @@ export function chapter10SeamConditionMet(facts: Chapter10SeamFacts): boolean {
   const withinFallback = facts.stationDistance !== null
     && facts.stationDistance <= SEAM_FALLBACK_RANGE;
   return withinCone || withinFallback;
+}
+
+export interface Chapter10GuidanceTrace {
+  beat: StoryBeat | null;
+  objectiveId: string | null;
+  markerLabel: string | null;
+  workOrder: readonly string[];
+  requiresMarker: boolean | null;
+  health: ObjectiveHealth;
+  markerTargetLabel: string | null;
+  markerTargetPosition: [number, number, number] | null;
+  /** The pose facts that select a rung — the ones the movie lane used to hide. */
+  aboard: boolean;
+  flightPhase: string;
+  activePlanetId: string | null;
+  /** The durable receipts the ladder reads, so a sample explains itself. */
+  receipts: Record<string, boolean>;
+}
+
+/**
+ * A LANE-AGNOSTIC, READ-ONLY sample of chapter 10's guidance state.
+ *
+ * UX-3/UX-4: every stamp path in this run was `movie=1&profile=LOW`, and the
+ * only reason was reach — the verifier scraped the HUD's DOM attributes, and
+ * driving the ladder far enough to see a rung meant letting the autopilot fly.
+ * That made the invariant a movie-lane claim about a manual-lane law. This is
+ * the seam that removes the excuse: it observes exactly what the HUD observes,
+ * from outside the DOM, in whichever lane the page is running, and it reports
+ * the pose and receipt facts that SELECTED the rung so a manual sample is
+ * self-explaining rather than a bare id.
+ *
+ * It mutates nothing, publishes nothing, and drives nothing. Probes step the
+ * ladder the way they already do — the shipped commit seams above, and
+ * `enterShip`/`exitShip` for the boarding rung — and read the result here.
+ */
+export function chapter10GuidanceTrace(): Chapter10GuidanceTrace {
+  const actorId = getLocalActorId();
+  const beat = runtime.beat;
+  const objective = getActiveGuidedStoryObjective();
+  const target = getChapter10MarkerTarget(beat, objective ?? undefined);
+  const flight = getSpaceFlightSnapshot();
+  return {
+    beat,
+    objectiveId: objective?.id ?? null,
+    markerLabel: objective?.markerLabel ?? null,
+    workOrder: objective?.workOrder ?? [],
+    requiresMarker: objective?.requiresMarker ?? null,
+    health: getGuidedStoryObjectiveHealth(),
+    markerTargetLabel: target?.label ?? null,
+    markerTargetPosition: target
+      ? [target.position.x, target.position.y, target.position.z]
+      : null,
+    aboard: flight.controlMode === 'flight',
+    flightPhase: flight.phase,
+    activePlanetId: getSystemFlightSnapshot().activePlanetId ?? null,
+    receipts: {
+      faultRead: hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId),
+      fabricationRefused: hasMilestone(STORY_MILESTONES.ch10FabricationRefused, actorId),
+      relayAsked: hasMilestone(STORY_MILESTONES.ch10RelayAsked, actorId),
+      relayAnswered: hasMilestone(STORY_MILESTONES.ch10RelayAnswered, actorId),
+      bearingClaimed: hasMilestone(STORY_MILESTONES.ch10BearingClaimed, actorId),
+      transitIgnited: hasMilestone(STORY_MILESTONES.ch10TransitIgnited, actorId),
+      seamPassed: hasMilestone(STORY_MILESTONES.ch10SeamPassed, actorId)
+    }
+  };
 }
 
 const _stationBearing = new THREE.Vector3();

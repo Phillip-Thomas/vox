@@ -100,6 +100,7 @@ import {
   chapter10ColdEntryReady,
   chapter10ClaimedStationBody,
   chapter10WreckSitePosition,
+  chapter10GuidanceTrace,
   getChapter10MarkerTarget,
   reconcileChapter10StationTarget,
   chapter10SeamConditionMet,
@@ -1672,6 +1673,121 @@ describe('chapter 10 — the station introduction', () => {
     expect(marker?.label).toBe('WRECK RELAY · CLAIM THE BEARING');
     observeGuidedStoryMarker(marker?.label ?? null);
     expect(getGuidedStoryObjectiveHealth()).toBe('ready');
+  });
+
+  it('never instructs a player on foot to ignite, on either entry path', () => {
+    // UX-1. The bearing is claimed ON FOOT at the wreck relay, and ch10-transit
+    // then published `HOLD [SPACE] TO IGNITE AND LIFT.` with no marker at all —
+    // an input she cannot press (on foot [SPACE] is the jetpack) pointing at a
+    // Kestrel parked wherever she happened to land. The beat now opens with the
+    // ch8 boarding rung and only reaches ignite from the cockpit.
+    const cues: string[] = [];
+    const stop = subscribeStoryUxFeedback(cue => {
+      if (cue.type === 'objective-enter') cues.push(cue.objectiveId);
+    });
+    setShipPosition([12, 10, 4]);
+    resetSystemFlightForInterstellarArrival({
+      system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
+      locationMode: 'surface',
+      activePlanetId: STORY_PRIMARY_WORLD_ID,
+      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+    });
+    markMilestone(STORY_MILESTONES.ch10RelayAsked, ACTOR_ID);
+    markMilestone(STORY_MILESTONES.ch10RelayAnswered, ACTOR_ID);
+    markMilestone(STORY_MILESTONES.ch10BearingClaimed, ACTOR_ID);
+
+    // ENTRY PATH ONE — continuous play, standing at the relay the instant the
+    // beat opens.
+    advanceToBeat('ch10-transit');
+    enterEmergentStoryBeat('ch10-transit');
+    const onFoot = getActiveGuidedStoryObjective();
+    expect(onFoot?.id).toBe('station:transit:reboard');
+    expect(onFoot?.markerLabel).toBe('KESTREL HATCH · REBOARD');
+    expect(onFoot?.workOrder).toEqual([
+      'RETURN TO THE KESTREL.',
+      'FOLLOW THE HATCH MARKER AND [F] BOARD.'
+    ]);
+    expect(onFoot?.requiresMarker).toBe(true);
+    expect(onFoot?.workOrder.join(' ')).not.toContain('[SPACE]');
+    // The locator is the Kestrel's LIVE pose, so it is honest at any landfall.
+    const marker = getChapter10MarkerTarget('ch10-transit');
+    expect(marker?.label).toBe('KESTREL HATCH · REBOARD');
+    expect(marker && [marker.position.x, marker.position.y, marker.position.z])
+      .toEqual([12, 10, 4]);
+    observeGuidedStoryMarker(marker?.label ?? null);
+    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
+    expect(cues).toEqual(['station:transit:reboard']);
+
+    // UX-3/UX-4: the same sample the verifier takes, with no movie lane and no
+    // DOM — and it explains WHY this rung and not the other one.
+    const onFootTrace = chapter10GuidanceTrace();
+    expect(onFootTrace).toMatchObject({
+      beat: 'ch10-transit',
+      objectiveId: 'station:transit:reboard',
+      markerLabel: 'KESTREL HATCH · REBOARD',
+      requiresMarker: true,
+      health: 'ready',
+      markerTargetLabel: 'KESTREL HATCH · REBOARD',
+      aboard: false
+    });
+    expect(onFootTrace.markerTargetPosition).toEqual([12, 10, 4]);
+    expect(onFootTrace.receipts.bearingClaimed).toBe(true);
+    expect(onFootTrace.receipts.transitIgnited).toBe(false);
+
+    // Aboard, and only aboard, the ignite card may speak.
+    expect(enterShip()).toBe(true);
+    emergentStoryDirectorTick(0.016);
+    const aboard = getActiveGuidedStoryObjective();
+    expect(aboard?.id).toBe('station:transit:ignite');
+    expect(aboard?.workOrder).toEqual([
+      'BRING THE KESTREL ONLINE.',
+      'HOLD [SPACE] TO IGNITE AND LIFT.'
+    ]);
+    expect(aboard?.requiresMarker).toBe(false);
+    expect(getChapter10MarkerTarget('ch10-transit')).toBeNull();
+    expect(cues).toEqual(['station:transit:reboard', 'station:transit:ignite']);
+    expect(chapter10GuidanceTrace()).toMatchObject({
+      objectiveId: 'station:transit:ignite',
+      requiresMarker: false,
+      markerTargetLabel: null,
+      aboard: true
+    });
+
+    // Disembarking before ignition returns to the locator with a fresh cue —
+    // exactly what ch8's launch ladder does.
+    expect(exitShip()).toBe(true);
+    emergentStoryDirectorTick(0.016);
+    expect(getActiveGuidedStoryObjective()?.id).toBe('station:transit:reboard');
+    expect(cues).toEqual([
+      'station:transit:reboard',
+      'station:transit:ignite',
+      'station:transit:reboard'
+    ]);
+
+    // ENTRY PATH TWO — the `?story=ch10-transit` deep link / reload: the claim
+    // is durable, there is no session history, and the player is on foot.
+    clearGuidedStoryObjective();
+    observeGuidedStoryMarker(null);
+    advanceToBeat('ch10-transit');
+    enterEmergentStoryBeat('ch10-transit');
+    const deepLinked = getActiveGuidedStoryObjective();
+    expect(deepLinked?.id).toBe('station:transit:reboard');
+    expect(getGuidedStoryObjectiveHealth()).not.toBe('missing-marker');
+
+    // And the receipt still outranks the pose: once ignited, standing on foot
+    // cannot walk the ladder backwards.
+    markMilestone(STORY_MILESTONES.ch10TransitIgnited, ACTOR_ID);
+    emergentStoryDirectorTick(0.016);
+    expect(getActiveGuidedStoryObjective()?.id).toBe('station:transit:hold');
+    stop();
+    // The claimed bearing reconciles into the flight store as the beat ticks;
+    // hand the next test back the untargeted system it is entitled to.
+    resetSystemFlightForInterstellarArrival({
+      system: parsePlanetWorldId(TIDEGARDEN_WORLD_ID)!.system,
+      locationMode: 'surface',
+      activePlanetId: STORY_PRIMARY_WORLD_ID,
+      pose: { position: [0, 0, 0], velocity: [0, 0, 0], quaternion: [0, 0, 0, 1] }
+    });
   });
 
   it('flies the claimed bearing from durable state, on both entry paths', () => {

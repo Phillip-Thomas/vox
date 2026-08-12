@@ -435,12 +435,24 @@ export const ST0_LONGITUDE_AMPLITUDE_RADIANS = 1.0;
 /** ±34° of latitude: from a −6.8° mean the track peaks near +27° elevation. */
 export const ST0_LATITUDE_AMPLITUDE_RADIANS = 0.6;
 /**
- * The shipped MIN_BEACON_PIXELS precedent, in DEVICE pixels. Distance would
- * otherwise shrink the dot below a pixel; the clamp keeps it findable and the
- * ceiling below keeps it from ever reading as a disc.
+ * The shipped MIN_BEACON_PIXELS precedent, in DEVICE pixels, and — since D-A8 —
+ * the whole story: ST-0's on-screen size is this AUTHORED constant, not a
+ * projection of the station's true extent. Distance would otherwise shrink the
+ * dot below a pixel, and a station rendered at its real angular size would read
+ * as a disc rather than a point.
+ *
+ * The contract's companion term, "never exceeding ~3 px at any tier/DPR/
+ * viewport", is therefore satisfied by construction rather than by a runtime
+ * clamp: the size is a constant, so no tier, DPR or viewport can move it. A
+ * `st0ClampedPixels(ST0_MIN_PIXELS)` ceiling stood here and could not bind —
+ * its only argument was this constant — so it and its ST0_MAX_PIXELS ceiling
+ * were dead code asserting a guarantee they never made. `st0DeviceProjectedPixels`
+ * below is the executable form of the term instead: it measures what the quad
+ * actually occupies, and the model test holds it to the ceiling across the tier,
+ * DPR and viewport matrix.
  */
 export const ST0_MIN_PIXELS = 2.4;
-/** It may never exceed ~3 px at any tier, DPR or viewport. */
+/** The contract's ceiling, kept as the value the measurement is held against. */
 export const ST0_MAX_PIXELS = 3;
 /** Warm sodium-family amber: the station's kept light, at its first distance. */
 export const ST0_COLOR = '#ffb45a';
@@ -514,10 +526,23 @@ export function st0QuadScale(
   return Math.max(1e-4, centerDistance * angular);
 }
 
-/** Never smaller than findable, never large enough to read as a disc. */
-export function st0ClampedPixels(naturalPixels: number): number {
-  if (!Number.isFinite(naturalPixels)) return ST0_MIN_PIXELS;
-  return Math.min(ST0_MAX_PIXELS, Math.max(ST0_MIN_PIXELS, naturalPixels));
+/**
+ * The inverse of `st0QuadScale`: what the quad ACTUALLY occupies on screen, in
+ * device pixels, for a given scale/distance/lens/viewport. This is the honest
+ * expression of the "never exceeding ~3 px" ceiling — a measurement of the
+ * rendered result rather than a clamp on an input that was already a constant.
+ */
+export function st0DeviceProjectedPixels(
+  quadScale: number,
+  centerDistance: number,
+  verticalFovRadians: number,
+  viewportHeightPixels: number,
+  devicePixelRatio: number
+): number {
+  const safeHeight = Math.max(1, viewportHeightPixels * Math.max(1, devicePixelRatio));
+  const pixelsPerRadian = safeHeight / Math.max(1e-6, verticalFovRadians);
+  const angular = Math.max(0, quadScale) / Math.max(1e-6, centerDistance);
+  return angular * pixelsPerRadian;
 }
 
 /**

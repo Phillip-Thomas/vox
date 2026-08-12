@@ -14,7 +14,7 @@ import {
   companionPresentationMotionWeight,
   companionSystemMotionProfile,
   companionVisualBudget,
-  st0ClampedPixels,
+  st0DeviceProjectedPixels,
   st0NightVisibility,
   st0QuadScale,
   st0RenderPredicate,
@@ -484,11 +484,36 @@ describe('ST-0 — the point that keeps time', () => {
     expect(st0RenderPredicate({ ...live, storyWorld: false })).toBe(false);
   });
 
-  it('clamps to a findable point that can never read as a disc', () => {
-    expect(st0ClampedPixels(0.2)).toBe(ST0_MIN_PIXELS);
-    expect(st0ClampedPixels(2.6)).toBeCloseTo(2.6, 6);
-    expect(st0ClampedPixels(40)).toBe(ST0_MAX_PIXELS);
-    expect(st0ClampedPixels(Number.NaN)).toBe(ST0_MIN_PIXELS);
+  it('renders a findable point that can never read as a disc, at every tier, DPR and viewport', () => {
+    // D-A8. The ceiling used to live in a clamp whose only argument was
+    // ST0_MIN_PIXELS itself, so it could not bind and proved nothing. The term
+    // is now measured on the rendered result: build the quad exactly as the
+    // component does, then read back what it occupies on screen.
+    const fovs = [60, 70, 75, 90];
+    const heights = [360, 720, 1080, 2160];
+    const dprs = [1, 2, 3];
+    const distances = [120, 5_000, 250_000];
+    for (const fovDeg of fovs) {
+      for (const height of heights) {
+        for (const dpr of dprs) {
+          for (const distance of distances) {
+            const fov = THREE.MathUtils.degToRad(fovDeg);
+            // The component passes the DEVICE buffer height, so DPR is folded
+            // into `height` there and is 1 at the call; both spellings must
+            // land on the same device-pixel footprint.
+            const scale = st0QuadScale(distance, fov, height * dpr, 1, ST0_MIN_PIXELS);
+            const pixels = st0DeviceProjectedPixels(scale, distance, fov, height, dpr);
+            const label = `${fovDeg}deg/${height}px/dpr${dpr}/${distance}`;
+            expect(pixels, label).toBeCloseTo(ST0_MIN_PIXELS, 6);
+            expect(pixels, label).toBeLessThanOrEqual(ST0_MAX_PIXELS);
+            expect(pixels, label).toBeGreaterThanOrEqual(ST0_MIN_PIXELS - 1e-6);
+          }
+        }
+      }
+    }
+    // And the authored constant itself honours the ceiling, so no viewport can
+    // ever put the dot above it.
+    expect(ST0_MIN_PIXELS).toBeLessThanOrEqual(ST0_MAX_PIXELS);
   });
 
   it('means DEVICE pixels, so the clamp survives every DPR', () => {

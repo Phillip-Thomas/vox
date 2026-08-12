@@ -26,11 +26,11 @@
       ]
     },
     {
-      "id": "ch10-station-introduction@draft-v6",
+      "id": "ch10-station-introduction@draft-v7",
       "sceneId": "ch10-station-introduction",
-      "contractVersion": "draft-v6",
+      "contractVersion": "draft-v7",
       "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json",
-      "sha256": "4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94",
+      "sha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
       "coversBeats": [
         "ch10-cold",
         "ch10-ask",
@@ -2015,51 +2015,51 @@
         "runtime:src/story/emergentStoryDirector.ts#chapter-10-guidance"
       ],
       "revealRefs": [
-        "scene:ch10-station-introduction@draft-v6#reveal:r1",
-        "scene:ch10-station-introduction@draft-v6#reveal:r2",
-        "scene:ch10-station-introduction@draft-v6#reveal:r3",
-        "scene:ch10-station-introduction@draft-v6#reveal:r4",
-        "scene:ch10-station-introduction@draft-v6#reveal:r5-non-spends"
+        "scene:ch10-station-introduction@draft-v7#reveal:r1",
+        "scene:ch10-station-introduction@draft-v7#reveal:r2",
+        "scene:ch10-station-introduction@draft-v7#reveal:r3",
+        "scene:ch10-station-introduction@draft-v7#reveal:r4",
+        "scene:ch10-station-introduction@draft-v7#reveal:r5-non-spends"
       ],
       "avBoundary": {
         "sceneContractRefs": [
-          "ch10-station-introduction@draft-v6"
+          "ch10-station-introduction@draft-v7"
         ],
         "entry": {
           "anchorRefs": [
-            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.cold-noticed"
+            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.cold-noticed"
           ],
           "scoreRefs": [
-            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.cold-step"
+            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.cold-step"
           ],
           "cameraRefs": [
-            "scene:ch10-station-introduction@draft-v6#camera:cin.cold.01-hum-drop"
+            "scene:ch10-station-introduction@draft-v7#camera:cin.cold.01-hum-drop"
           ],
           "paletteRefs": [
-            "scene:ch10-station-introduction@draft-v6#palette:pal.ch10.fire-night-and-station-amber"
+            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
           ]
         },
         "exit": {
           "anchorRefs": [
-            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.station-resolved",
-            "scene:ch10-station-introduction@draft-v6#anchor:anc.ch10.threshold-handback"
+            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.station-resolved",
+            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.threshold-handback"
           ],
           "scoreRefs": [
-            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.station-resolved",
-            "scene:ch10-station-introduction@draft-v6#score:sc.ch10.threshold-release"
+            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.station-resolved",
+            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.threshold-release"
           ],
           "cameraRefs": [
-            "scene:ch10-station-introduction@draft-v6#camera:cin.transit.04-resolve",
-            "scene:ch10-station-introduction@draft-v6#camera:cin.transit.05-threshold-handback"
+            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.04-resolve",
+            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.05-threshold-handback"
           ],
           "paletteRefs": [
-            "scene:ch10-station-introduction@draft-v6#palette:pal.ch10.fire-night-and-station-amber"
+            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
           ]
         }
       },
       "acceptance": {
         "evidenceRefs": [
-          "scene:ch10-station-introduction@draft-v6#evidence",
+          "scene:ch10-station-introduction@draft-v7#evidence",
           "runtime:src/story/emergentStoryDirector.test.ts#chapter-10-guidance",
           "runtime:src/story/storyBoundaryTelemetry.test.ts#chapter-10-station-claims"
         ],

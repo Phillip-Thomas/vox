@@ -18,8 +18,8 @@ const SIGNED_SOURCES = [
   },
   {
     contractPath: '../.codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json',
-    sha256: '4202e38b3a595cae5b39bf65cf6ec0603892bf4046a420db0d96362eeb883c94',
-    contractVersion: 'draft-v6',
+    sha256: '32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860',
+    contractVersion: 'draft-v7',
     anchorCount: 10
   }
 ];

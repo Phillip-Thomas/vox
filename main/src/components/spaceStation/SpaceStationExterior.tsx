@@ -95,6 +95,19 @@ export interface SpaceStationExteriorProps {
    * coloured dots on the sky — which reads as fireflies, not as a destination.
    */
   maxRange?: number;
+  /**
+   * Withhold the geometry that OFFERS a berth — the splayed guide arms, their
+   * sequenced approach lamps, and the threshold strips outlining the mouth.
+   *
+   * Defaults to false, which is the sandbox's case and the shipped free-flight
+   * case: the station is drawn exactly as it always has been, instance for
+   * instance. The shipped game's mount raises it in story worlds where
+   * `story:station-docking-authorized` is unheld, so the same fence that already
+   * withholds the advisory register and [F] also withholds the offer's picture.
+   * The dock itself — jamb frame, lit mouth, inner glow — is architecture and is
+   * never suppressed; a station with no door would be a different station.
+   */
+  suppressDockOffer?: boolean;
 }
 
 const DEFAULT_MAX_RANGE = 26_000;
@@ -104,7 +117,8 @@ export function SpaceStationExterior({
   descriptor,
   body: suppliedBody,
   renderOrigin = ORIGIN,
-  maxRange = DEFAULT_MAX_RANGE
+  maxRange = DEFAULT_MAX_RANGE,
+  suppressDockOffer = false
 }: SpaceStationExteriorProps) {
   const hullRef = useRef<THREE.InstancedMesh>(null);
   const lightRef = useRef<THREE.InstancedMesh>(null);
@@ -194,6 +208,7 @@ export function SpaceStationExterior({
 
     let hullIndex = 0;
     for (const box of exterior.boxes) {
+      if (suppressDockOffer && box.dockOffer) continue;
       if (range > TIER_RANGE[box.tier]) continue;
       scratch.position.set(box.center[0], box.center[1], box.center[2]);
       if (box.rotation) {
@@ -217,6 +232,7 @@ export function SpaceStationExterior({
 
     let lightIndex = 0;
     for (const light of exterior.lights) {
+      if (suppressDockOffer && light.dockOffer) continue;
       const beacon = isBeacon(light.tone);
       // Window rows are the station's texture, not its signal. Once they fall below
       // a pixel they stop being rows and become static, so they are dropped and the

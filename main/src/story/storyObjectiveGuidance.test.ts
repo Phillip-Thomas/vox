@@ -168,6 +168,43 @@ describe('story objective guidance authoring', () => {
     expect(landfallObjectives.map(entry => entry.requiresMarker)).toEqual([false, false, false]);
   });
 
+  it('authors the ch10 ladders, and never puts a cockpit input on a rung reached on foot', () => {
+    const cold = ['fault-read', 'fabrication-attempt'] as const;
+    const ask = ['reboard', 'crossing', 'landfall', 'relay-query', 'bearing-claim'] as const;
+    const transit = ['reboard', 'ignite', 'hold', 'resolve'] as const;
+
+    const coldObjectives = cold.map(ch10ColdState => resolve('ch10-cold', { ch10ColdState })!);
+    const askObjectives = ask.map(ch10AskState => resolve('ch10-ask', { ch10AskState })!);
+    const transitObjectives = transit.map(ch10TransitState => resolve('ch10-transit', { ch10TransitState })!);
+
+    for (const objectives of [coldObjectives, askObjectives, transitObjectives]) {
+      expect(new Set(objectives.map(entry => entry.id)).size).toBe(objectives.length);
+    }
+
+    // UX-1: the boarding rung leads the transit ladder, carries a marker, and
+    // reuses the ch8/ch10-ask reboard grammar verbatim.
+    expect(transitObjectives[0]).toMatchObject({
+      id: 'station:transit:reboard',
+      kind: 'travel',
+      markerLabel: 'KESTREL HATCH · REBOARD',
+      requiresMarker: true
+    });
+    expect(transitObjectives[0]!.workOrder).toEqual([
+      'RETURN TO THE KESTREL.',
+      'FOLLOW THE HATCH MARKER AND [F] BOARD.'
+    ]);
+    expect(transitObjectives[0]!.markerLabel).toBe(askObjectives[0]!.markerLabel);
+    expect(transitObjectives[0]!.workOrder).toEqual(askObjectives[0]!.workOrder);
+    expect(transitObjectives.map(entry => entry.requiresMarker))
+      .toEqual([true, false, true, false]);
+    // [SPACE] belongs to exactly one rung, and it is the one reached aboard.
+    expect(transitObjectives.filter(entry => entry.workOrder.join(' ').includes('[SPACE]')))
+      .toHaveLength(1);
+    expect(transitObjectives[1]?.id).toBe('station:transit:ignite');
+    // And the beat's default entry state is the locator, not the cockpit input.
+    expect(resolve('ch10-transit')?.id).toBe('station:transit:reboard');
+  });
+
   it('returns complete actionable contracts for every default objective beat', () => {
     const objectiveBeats = Object.entries(STORY_OBJECTIVE_GUIDANCE_CLASSIFICATION)
       .filter(([, disposition]) => disposition === 'objective')
