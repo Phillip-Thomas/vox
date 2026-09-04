@@ -46,7 +46,8 @@ const SUPPORTED_STATE_REF_PATTERNS = Object.freeze([
   // Chapter 10's durable station facts. Producers land with the patterns
   // (storyBoundaryTelemetry#deriveStoryBoundaryState): the claimed bearing is
   // the targeting fence, the seam is a one-shot latch with two trigger paths,
-  // and the docking authorization is DEFINED but granted by nothing this run.
+  // and docking authorization is granted only by Chapter 10's threshold
+  // hand-back, after the signed reveal has completed.
   /^state:story\/ch10-(?:bearing-claimed|seam-passed)$/,
   /^state:station\/docking-authorized$/
 ]);

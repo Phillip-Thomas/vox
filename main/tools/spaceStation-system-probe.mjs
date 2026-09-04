@@ -81,8 +81,12 @@ const start = contacts?.stations?.[0]?.distance ?? 0;
 const end = closed?.stations?.[0]?.distance ?? 0;
 check('the ship actually moved relative to the station', Math.abs(end - start) > 500,
   `${start} -> ${end}`);
-const hud = await page.evaluate(() =>
-  document.querySelector('[data-testid="spaceStation-approach-hud"]')?.textContent ?? null);
+const hud = await page.evaluate(() => {
+  const cockpit = document.querySelector(
+    '[data-testid="cockpit-readout"][data-station-approach="integrated"]'
+  );
+  return cockpit?.textContent ?? null;
+});
 check('station reads on the ship instruments once inside scan range',
   hud !== null || end > 5200,
   hud ? hud.replace(/\s+/g, ' ').slice(0, 80) : `still ${end} out, beyond the 5200 scan range`);

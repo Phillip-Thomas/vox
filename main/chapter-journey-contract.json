@@ -2020,7 +2020,9 @@
           "state:story/ch10-bearing-claimed",
           "milestone:story:ch10-transit-ignited",
           "state:story/ch10-seam-passed",
-          "milestone:story:ch10-station-resolved"
+          "milestone:story:ch10-station-resolved",
+          "milestone:story:station-docking-authorized",
+          "state:station/docking-authorized"
         ],
         "requiredSignedAnchorIds": [
           "anc.ch10.cold-noticed",
@@ -2123,7 +2125,7 @@
           "beat": "ch10-transit",
           "criticality": "mandatory",
           "interaction": {
-            "intent": "Launch on the claimed bearing and hold course until the source resolves at standoff.",
+            "intent": "Launch on the claimed bearing and hold course until the source resolves at standoff; after the threshold hand-back, close the final corridor and request docking clearance if desired.",
             "completionEvidenceRefs": [
               "milestone:story:ch10-transit-ignited",
               "milestone:story:ch10-seam-passed",
@@ -2140,13 +2142,13 @@
           "placementFitness": {
             "whyNow": "The bearing was issued but the going is the player's, so the last act of the chapter is a flight nobody ordered.",
             "capability": "ch8 launch and cruise grammar aimed at a non-planet target for the first time in the story.",
-            "storyFunction": "Scale and smallness, then threshold restraint: the station resolves into a place and is never entered.",
+            "storyFunction": "Scale and smallness, then threshold restraint: the station resolves before the hand-back opens the already-earned bearing into a real place the player may enter.",
             "expectedPlayerSeconds": {
               "min": 120,
               "max": 600
             },
             "spatialTolerance": "Travel objectives do not fail if course drifts; the seam latch fires once from either its view-cone or its look-independent range condition.",
-            "recovery": "Shipped ch8 flight rescue applies unchanged; a rescue never claims, never docks, and never counts as having flown the bearing.",
+            "recovery": "Shipped ch8 flight rescue applies unchanged; a rescue never claims or docks on the player's behalf. After the hand-back, normal approach alignment, range, and speed gates remain player-owned.",
             "blocking": true,
             "reviewOwners": [
               "story",
@@ -2160,7 +2162,7 @@
       "lifecycleContracts": [],
       "interactionContracts": [
         {
-          "id": "interaction:ch10-threshold-instrument-silence",
+          "id": "interaction:ch10-threshold-docking-handback",
           "beat": "ch10-transit",
           "type": "prompt-arbitration",
           "requiredInteractionIds": [
@@ -2171,7 +2173,9 @@
           "successEvidenceRefs": [
             "milestone:story:ch10-relay-asked",
             "milestone:story:ch10-bearing-claimed",
-            "milestone:story:ch10-station-resolved"
+            "milestone:story:ch10-station-resolved",
+            "milestone:story:station-docking-authorized",
+            "state:station/docking-authorized"
           ],
           "rules": {
             "requiredWins": true,

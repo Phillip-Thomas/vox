@@ -81,6 +81,8 @@ import {
 } from '../state/spaceFlight.ts';
 import { getSystemFlightSnapshot } from '../state/systemFlight.ts';
 import { getCurrentDayPhase } from '../game/worldClock.ts';
+import { isHabitatNight } from './tidegardenSettlement.ts';
+import { setStoryForcedDayPhase } from './storyDayPhase.ts';
 import {
   buildAndCertifyEmergentMovieShelter,
   completeEmergentMovieSafeRest,
@@ -101,7 +103,8 @@ import {
   commitChapter10RelayRequest,
   STATION_STANDOFF_DISTANCE
 } from './emergentStoryDirector.ts';
-import { spaceStationApproachGeometry } from '../components/SpaceStationApproachDriver.tsx';
+import { commitSpaceStationDock, spaceStationApproachGeometry } from '../components/SpaceStationApproachDriver.tsx';
+import { spaceStationDockingAuthorized } from '../game/spaceStation/spaceStationDevFlag.ts';
 import {
   getTidegardenChosenHabitatSite,
   TIDEGARDEN_SETTLEMENT_MILESTONES
@@ -196,8 +199,10 @@ const DRIVEN_BEATS: ReadonlySet<StoryBeat> = new Set([
 export function isAutopilotDriving(): boolean {
   if (!MOVIE) return false;
   const story = getStoryStateSnapshot();
-  return story.active && !!story.beat && DRIVEN_BEATS.has(story.beat)
-    && getAppStateSnapshot().phase === 'playing';
+  if (story.active && !!story.beat && DRIVEN_BEATS.has(story.beat)
+    && getAppStateSnapshot().phase === 'playing') return true;
+  // The post-terminal bridges drive the body too.
+  return movieDoneBridgeActive() || movieStationBridgeActive();
 }
 
 export function getAutopilotControls(): Readonly<AutopilotControls> {
@@ -416,11 +421,74 @@ const ST0_GAZE_PITCH_CAP_RADIANS = (25 * Math.PI) / 180;
  * the solver's travel clamp.
  */
 const ST0_GAZE_REACH = 10;
+/*
+  GOAL-CRITICAL MEANS ARRIVING, NOT "WALKING NEAR THE GOAL".
+
+  Both demands were a flat 10 m, and the instrumented run measured the
+  consequence: 346 of 419 walked frames were goal-critical, i.e. the glance was
+  suppressed for 83% of the only window it is allowed to exist in. That is not a
+  tuning nicety — the Kestrel is parked AT the hearth in this chapter, so the
+  contract's nominated walk is a few seconds long and never leaves a 10 m
+  radius, which made the demand permanent and the bias unreachable even on a
+  night when ST-0 is up.
+
+  The demands are now the distances at which the acts actually commit, which is
+  what the ruling's words mean: the eyes come down for the act, not for the
+  approach. Below these the walk is arriving and the glance releases inside its
+  half-second; above them it is travelling and may look up.
+*/
+const CH10_CORE_COMMIT_DISTANCE = 2;
+const CH10_FABRICATOR_COMMIT_DISTANCE = 6;
 
 let st0GazeStartedAt = -Infinity;
 let st0GazeEndedAt = -Infinity;
 let st0GazeActive = false;
 let st0GazeRestoreWeight = 1;
+/**
+ * Read-only instrumentation for the ST-0 glance. Published on `window` so a
+ * probe can measure the predicate instead of arguing about it; no runtime path
+ * reads it back, and it costs a handful of field writes per walked frame.
+ */
+const st0GazeDiag = {
+  frames: 0,
+  framesMovie: 0,
+  framesDriving: 0,
+  framesAvailable: 0,
+  framesGoalCritical: 0,
+  framesAllConjunctsTrue: 0,
+  framesEngaged: 0,
+  engagements: 0,
+  movie: false,
+  driving: false,
+  aboveHorizon: false,
+  haveDirection: false,
+  goalCritical: false,
+  engaged: false,
+  blockedBy: null as string | null,
+  beat: null as StoryBeat | null,
+  beatClock: 0,
+  cooldownRemaining: 0,
+  aimPitchDeg: 0
+};
+
+/** The probe seam. Returns a copy so a sample cannot be mutated after the fact. */
+export function getSt0GazeDiag(): Readonly<typeof st0GazeDiag> {
+  return { ...st0GazeDiag };
+}
+
+/**
+ * Published on `window` as well as exported, and that redundancy is deliberate:
+ * a probe that reaches the diagnostic through its own dynamic import cannot
+ * prove it is reading the SAME module instance the game is writing, and "the
+ * counters are all zero" then has two explanations. A window global has exactly
+ * one. Written from inside the tick, so its presence is itself evidence the
+ * autopilot is running.
+ */
+function publishSt0GazeDiag(): void {
+  if (typeof window === 'undefined') return;
+  (window as unknown as { __st0Gaze?: object }).__st0Gaze = st0GazeDiag;
+}
+
 const _st0GazeGoal = new THREE.Vector3();
 const _st0GazeAim = new THREE.Vector3();
 const _st0GazeTangent = new THREE.Vector3();
@@ -440,12 +508,47 @@ function resetSt0GazeBias(): void {
  * second and starts the cooldown.
  */
 function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean {
-  if (!MOVIE || !isAutopilotDriving()) {
+  // EVERY CONJUNCT, MEASURED SEPARATELY, EVERY FRAME.
+  //
+  // G-1: the solver repair was proven correct in isolation and the crossing
+  // strip did not move at all. That is the exact failure shape this run has
+  // been bitten by repeatedly — a state machine that is right in a unit test
+  // and never reached on the live path — so the engage predicate is no longer
+  // something to reason about. It is published, conjunct by conjunct, with the
+  // frame counters needed to tell "never engaged" apart from "engaged, sampled
+  // elsewhere". Diagnostic only: nothing reads it back.
+  const driving = isAutopilotDriving();
+  const aboveHorizon = st0GazeHandle.aboveHorizon;
+  const haveDirection = st0GazeHandle.direction !== null;
+  st0GazeDiag.frames++;
+  publishSt0GazeDiag();
+  st0GazeDiag.movie = MOVIE;
+  st0GazeDiag.driving = driving;
+  st0GazeDiag.aboveHorizon = aboveHorizon;
+  st0GazeDiag.haveDirection = haveDirection;
+  st0GazeDiag.goalCritical = goalCritical;
+  st0GazeDiag.beat = getStoryStateSnapshot().beat;
+  st0GazeDiag.beatClock = Math.round(beatClock * 100) / 100;
+  st0GazeDiag.cooldownRemaining = Math.max(
+    0,
+    Math.round((ST0_GAZE_COOLDOWN_SECONDS - (beatClock - st0GazeEndedAt)) * 100) / 100
+  );
+  if (MOVIE) st0GazeDiag.framesMovie++;
+  if (driving) st0GazeDiag.framesDriving++;
+  if (aboveHorizon && haveDirection) st0GazeDiag.framesAvailable++;
+  if (goalCritical) st0GazeDiag.framesGoalCritical++;
+  if (MOVIE && driving && aboveHorizon && haveDirection && !goalCritical) {
+    st0GazeDiag.framesAllConjunctsTrue++;
+  }
+
+  if (!MOVIE || !driving) {
     resetSt0GazeBias();
+    st0GazeDiag.engaged = false;
+    st0GazeDiag.blockedBy = !MOVIE ? 'not-movie-lane' : 'autopilot-not-driving';
     return false;
   }
   const up = getPlayerUp();
-  const available = st0GazeHandle.aboveHorizon && st0GazeHandle.direction !== null;
+  const available = aboveHorizon && haveDirection;
   const held = beatClock - st0GazeStartedAt;
 
   if (st0GazeActive) {
@@ -458,6 +561,8 @@ function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean 
       // Hand the walk's own look authority straight back, at exactly the
       // strength it had before the glance borrowed it.
       setCinematicLookWeight(st0GazeRestoreWeight);
+      st0GazeDiag.engaged = false;
+      st0GazeDiag.blockedBy = goalCritical ? 'released-goal-critical' : 'released-st0-set';
       return false;
     }
     // The ruling's floor is 1.5s and it is enforced here rather than assumed:
@@ -466,14 +571,25 @@ function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean 
       st0GazeActive = false;
       st0GazeEndedAt = beatClock;
       setCinematicLookWeight(st0GazeRestoreWeight);
+      st0GazeDiag.engaged = false;
+      st0GazeDiag.blockedBy = 'glance-complete';
       return false;
     }
   } else {
-    if (goalCritical || !available) return false;
-    if (beatClock - st0GazeEndedAt < ST0_GAZE_COOLDOWN_SECONDS) return false;
+    if (goalCritical || !available) {
+      st0GazeDiag.engaged = false;
+      st0GazeDiag.blockedBy = goalCritical ? 'goal-critical-look-demand' : 'st0-below-horizon';
+      return false;
+    }
+    if (beatClock - st0GazeEndedAt < ST0_GAZE_COOLDOWN_SECONDS) {
+      st0GazeDiag.engaged = false;
+      st0GazeDiag.blockedBy = 'cooldown';
+      return false;
+    }
     st0GazeActive = true;
     st0GazeStartedAt = beatClock;
     st0GazeRestoreWeight = getCinematicLookWeight();
+    st0GazeDiag.engagements++;
   }
 
   const direction = st0GazeHandle.direction;
@@ -507,6 +623,12 @@ function tickSt0GazeBias(player: THREE.Vector3, goalCritical: boolean): boolean 
   // and inspect's smaller scan keeps the glance human rather than mechanical.
   // Route direction is the aim itself — the eyes move, the walk does not.
   lookNaturallyToward(_st0GazeGoal, player, 0, _st0GazeGoal, 'inspect');
+  st0GazeDiag.engaged = true;
+  st0GazeDiag.blockedBy = null;
+  st0GazeDiag.framesEngaged++;
+  st0GazeDiag.aimPitchDeg = Math.round(
+    (Math.asin(THREE.MathUtils.clamp(_st0GazeAim.dot(up), -1, 1)) * 180 / Math.PI) * 100
+  ) / 100;
   return true;
 }
 
@@ -545,6 +667,114 @@ const BEAT_TIMEOUT: Partial<Record<StoryBeat, number>> = {
 let clockBeat: StoryBeat | null = null;
 let beatClock = 0;
 let interactPulseAt = 0;
+
+// --- Screening cadence ---------------------------------------------------------------
+//
+// A rail that satisfies every gate the instant it is reachable does not read as
+// someone playing; it reads as a script being executed. Several stretches —
+// the gather chain, the audit, the ch10 rungs — commit two or three acts inside
+// a second, and the screening blinks through them before a viewer can register
+// that anything happened.
+//
+// So committed acts are spaced, and the pilot holds still briefly afterwards,
+// the way a person pauses on the thing they just did. The dwell is deliberately
+// short: this is a watchability fix, not a slow-motion mode, and a viewer who
+// already understood the beat should never be waiting on it.
+//
+// The clock is the screening's own elapsed time, NOT `beatClock`, so the cadence
+// survives a beat change — otherwise the first act of a new beat always fires
+// on the same frame as the last act of the old one, which is exactly the seam
+// that reads worst.
+let screeningClock = 0;
+let lastScreeningActionAt = -10;
+
+/** Minimum spacing between two committed acts. */
+const SCREENING_ACTION_DWELL_SECONDS = 0.85;
+/** Stillness after an act, so the frame can register what just happened. */
+const SCREENING_SETTLE_SECONDS = 0.4;
+
+/** True when enough has elapsed since the last committed act to perform another. */
+function screeningActionReady(): boolean {
+  return screeningClock - lastScreeningActionAt >= SCREENING_ACTION_DWELL_SECONDS;
+}
+
+/** Record a committed act; starts both the dwell and the settle. */
+function noteScreeningAction(): void {
+  lastScreeningActionAt = screeningClock;
+}
+
+/** True during the brief hold immediately after an act. */
+function screeningSettling(): boolean {
+  return screeningClock - lastScreeningActionAt < SCREENING_SETTLE_SECONDS;
+}
+
+// --- Screening wait state ------------------------------------------------------------
+//
+// The screening spends real time waiting on conditions it cannot hurry: a day
+// phase, a settle, a hold, a cutscene playing itself out. On screen that is
+// indistinguishable from a hang, and a viewer who thinks the movie has broken
+// stops watching. This publishes what the rail is waiting FOR, so the overlay
+// can say so — and so a debugging viewer can see which gate is holding.
+export interface ScreeningWaitState {
+  /** True once the pilot has been asserting nothing for long enough to notice. */
+  waiting: boolean;
+  seconds: number;
+  beat: StoryBeat | null;
+  /** Short human phrase naming the gate, when one is known. */
+  reason: string | null;
+}
+
+/** Below this, a pause is just the cadence doing its job — not a wait. */
+const SCREENING_WAIT_NOTICE_SECONDS = 2.5;
+
+let waitingSince = -1;
+
+const WAIT_REASONS: Partial<Record<StoryBeat, string>> = {
+  'ch1-track': 'TRACKING VIEW REASSIGNING',
+  'ch1-lift': 'PERSPECTIVE TRANSFER',
+  'ch3-await-rest': 'WAITING FOR NIGHT',
+  'ch3-dusk': 'DUSK',
+  'a3-dawn': 'DAWN',
+  'ch4-vigil': 'KEEPING THE VIGIL',
+  'ch10-transit': 'HOLDING THE BEARING'
+};
+
+function tickScreeningWaitState(moving: boolean): void {
+  if (moving) {
+    waitingSince = -1;
+    return;
+  }
+  waitingSince = waitingSince < 0 ? screeningClock : waitingSince;
+}
+
+export function getScreeningWaitState(): ScreeningWaitState {
+  const story = getStoryStateSnapshot();
+  const beat = story.active ? story.beat : null;
+  const seconds = waitingSince < 0 ? 0 : screeningClock - waitingSince;
+  const bridging = movieDoneBridgeActive();
+  return {
+    waiting: seconds >= SCREENING_WAIT_NOTICE_SECONDS || bridging,
+    seconds: Math.round(seconds * 10) / 10,
+    beat,
+    reason: bridging
+      ? 'NIGHT FALLING OVER THE SETTLEMENT'
+      : movieStationBridgeActive()
+        ? 'APPROACHING THE STATION'
+        : (beat ? WAIT_REASONS[beat] ?? null : null)
+  };
+}
+
+export function getScreeningCadenceDiag(): {
+  clock: number;
+  sinceAction: number;
+  settling: boolean;
+} {
+  return {
+    clock: Math.round(screeningClock * 10) / 10,
+    sinceAction: Math.round((screeningClock - lastScreeningActionAt) * 10) / 10,
+    settling: screeningSettling()
+  };
+}
 const _target = new THREE.Vector3();
 const _goalScratch = new THREE.Vector3();
 const _wreckInteractionScratch = new THREE.Vector3();
@@ -690,21 +920,49 @@ function clearControls(): void {
 
 const _toGoal = new THREE.Vector3();
 
+/** A rise this walker climbs with ordinary step assist, so it is already "here". */
+export const GAIT_STEP_UP = 1.0;
 /**
- * Gait distance to a goal: HORIZONTAL range plus any un-climbed height beyond
- * a step. Pure 3D distance strands the pilot "close" to elevated goals (it
- * stops walking while still at the foot of the rise); pure horizontal releases
- * it directly UNDER them. This keeps the intent alive until both close.
+ * A drop this walker simply steps down. Deliberately the SAME bound the
+ * waypoint consumer below uses for "an extreme perch is off-route, not
+ * arrived" — the two measures must agree about what counts as underfoot.
  */
+export const GAIT_STEP_DOWN = 3.4;
+
+/**
+ * Gait distance to a goal, measured in the walker's own gravity frame:
+ * TANGENTIAL range, plus any rise it has not yet climbed, plus any drop it
+ * cannot simply step down.
+ *
+ * Pure 3D distance strands the pilot "close" to elevated goals (it stops
+ * walking at the foot of the rise); pure tangential range releases it directly
+ * under — or, worse, directly OVER — them. Both vertical terms are load-bearing.
+ *
+ * The rise term alone is what shipped, and it hid an owner-reported defect: a
+ * habitat core buried 45.8 units straight down measured 6.8 and satisfied every
+ * arrival gate in chapter 10, while the player-facing interaction prompt —
+ * euclidean, and correct — refused to appear at all. A goal below the floor is
+ * as unreached as a goal above the ceiling, and this now says so.
+ */
+export function surfaceGaitDistance(
+  target: THREE.Vector3,
+  player: THREE.Vector3,
+  up: THREE.Vector3,
+  scratch: THREE.Vector3 = new THREE.Vector3()
+): number {
+  scratch.copy(target).sub(player);
+  const vertical = scratch.dot(up);
+  scratch.addScaledVector(up, -vertical);
+  return scratch.length()
+    + Math.max(0, vertical - GAIT_STEP_UP)
+    + Math.max(0, -vertical - GAIT_STEP_DOWN);
+}
+
 function gaitDistance(target: THREE.Vector3, player: THREE.Vector3): number {
   if (surfaceFaceFromUp(getPlayerUp()) !== dominantFaceForPosition(target)) {
     return player.distanceTo(target);
   }
-  _toGoal.copy(target).sub(player);
-  const up = getPlayerUp();
-  const vertical = _toGoal.dot(up);
-  _toGoal.addScaledVector(up, -vertical);
-  return _toGoal.length() + Math.max(0, vertical - 1.0);
+  return surfaceGaitDistance(target, player, getPlayerUp(), _toGoal);
 }
 
 /** Base gaze lift over a goal: the camera aims at the SUBJECT, not its base. */
@@ -1052,6 +1310,20 @@ function walkToward(
   lookNaturallyToward(gazeTarget, player, lookLift, step?.waypoint ?? target, gazeMode);
   setCinematicLookWeight(1);
   noteGoal(target);
+  // Post-act stillness. The gaze above still holds the subject — only the feet
+  // wait — so the shot stays on the thing that just happened instead of
+  // whipping away from it on the same frame.
+  if (screeningSettling()) {
+    _target.copy(target);
+    walkTargetLive = true;
+    controls.forward = false;
+    controls.backward = false;
+    controls.left = false;
+    controls.right = false;
+    controls.jump = false;
+    navigationAction = 'idle';
+    return distance;
+  }
   if (distance <= stop) {
     _target.copy(target);
     walkTargetLive = true;
@@ -1278,7 +1550,10 @@ function committedDebrisTarget(): number {
 /** Pulse F once a second (the resolver decides whether anything happens). */
 function pulseInteract(): void {
   controls.interact = beatClock - interactPulseAt < 0.15;
-  if (beatClock - interactPulseAt > 1) interactPulseAt = beatClock;
+  if (beatClock - interactPulseAt > 1 && screeningActionReady()) {
+    interactPulseAt = beatClock;
+    noteScreeningAction();
+  }
 }
 
 /**
@@ -1288,9 +1563,12 @@ function pulseInteract(): void {
  */
 function performStoryInteraction(expectedId?: string): boolean {
   if (beatClock - emergentInteractionAt < 0.65) return false;
+  // The shared cadence spaces acts across beats as well as within one.
+  if (!screeningActionReady()) return false;
   const interaction = resolveStoryInteraction(null, getPlayerWorldPosition());
   if (!interaction || (expectedId && interaction.id !== expectedId)) return false;
   emergentInteractionAt = beatClock;
+  noteScreeningAction();
   interaction.perform();
   return true;
 }
@@ -1370,12 +1648,151 @@ function grantMissingCampfireMaterials(): void {
 }
 
 /** Ticked by StoryDirectorDriver every frame while in movie mode. */
+
+// --- The screening's `done` bridge ---------------------------------------------------
+//
+// Chapter 10 is a RE-ACTIVATION out of `done`, not a continuation: `ch9-hearth`
+// hands the world back with `active: false, beat: 'done'`, and the fault is
+// NOTICED rather than announced — the player has to be home, at night, inside
+// the hearth's footprint, after a free-play grace. That is the right shape for
+// a player and a dead end for a screening: `isAutopilotDriving()` requires
+// `story.active`, so at `done` the pilot has no driver at all and simply stands
+// where the hearth left them, forever. A full movie run ended at the shelter.
+//
+// `emergentStoryDirector` already assumed this was solved — its entry comment
+// says chapter 10 "is also reachable by ... the movie lane" — but no bridge was
+// ever built. This is it. It deliberately drives the pilot to satisfy the REAL
+// authored gate rather than jumping the beat, so the screening keeps exercising
+// the same entry condition a player does, which is exactly what the movie owes
+// its second job as a debugging instrument.
+const doneBridge = { phase: -1, active: false };
+
+/** Night, comfortably past the ~0.505 sunset edge `isHabitatNight` opens on. */
+const MOVIE_BRIDGE_NIGHT_PHASE = 0.62;
+/** A whole day in ~25s: a visible dusk-to-night time-lapse, not a snap cut. */
+const MOVIE_BRIDGE_PHASE_PER_SECOND = 0.04;
+
+/**
+ * True while the screening is standing in `done` with chapter 10 still ahead of
+ * it. Part of `isAutopilotDriving()` so the player body accepts the bridge's
+ * controls; every other consumer of that predicate treats the bridge exactly
+ * like any other driven beat, which is what we want.
+ */
+function movieDoneBridgeActive(): boolean {
+  if (!MOVIE) return false;
+  const story = getStoryStateSnapshot();
+  if (story.active || story.beat !== 'done') return false;
+  if (getAppStateSnapshot().phase !== 'playing') return false;
+  const actorId = getLocalActorId();
+  return hasMilestone(STORY_MILESTONES.ch9Hearth, actorId)
+    && !hasMilestone(STORY_MILESTONES.ch10Complete, actorId);
+}
+
+export function isMovieDoneBridgeActive(): boolean {
+  return movieDoneBridgeActive();
+}
+
+/**
+ * Phase two of the screening's post-terminal run: chapter 10 is finished, the
+ * threshold hand-back has granted `story:station-docking-authorized`, and the
+ * station is now a place the player may actually enter. The chapter itself
+ * deliberately ends at a 1,500-unit standoff and refuses the invitation — that
+ * ending is unchanged. This carries the SCREENING past it, because a movie that
+ * stops outside the door of the thing it spent a chapter travelling to is not
+ * the movie the owner asked for.
+ */
+function movieStationBridgeActive(): boolean {
+  if (!MOVIE) return false;
+  const story = getStoryStateSnapshot();
+  if (story.active || story.beat !== 'done') return false;
+  if (getAppStateSnapshot().phase !== 'playing') return false;
+  const actorId = getLocalActorId();
+  return hasMilestone(STORY_MILESTONES.ch10Complete, actorId)
+    && spaceStationDockingAuthorized();
+}
+
+export function isMovieStationBridgeActive(): boolean {
+  return movieStationBridgeActive();
+}
+
+/**
+ * Close the last of the bearing and commit the dock.
+ *
+ * Docking is the same procedure a player performs: the approach driver's own
+ * contact, its own `canDock`, its own authorization fence. The screening does
+ * not teleport into the station and does not bypass a gate — it presses the
+ * button. That is what keeps this lane usable as evidence.
+ */
+function tickMovieStationBridge(): void {
+  clearControls();
+  const flight = getSpaceFlightSnapshot();
+  if (flight.controlMode !== 'flight') {
+    const parked = getShipPosition();
+    if (!parked) return;
+    const hatch = _goalScratch.set(parked[0], parked[1], parked[2]);
+    walkToward(hatch, 2.4, 1.1);
+    if (getPlayerWorldPosition().distanceTo(hatch) <= 3.5) enterShip();
+    return;
+  }
+  const contact = spaceStationApproachGeometry();
+  if (contact?.readout.canDock) {
+    // Hold still on the threshold for a breath before committing, so the cut
+    // into the station is not the same frame the corridor opens.
+    if (screeningActionReady()) {
+      noteScreeningAction();
+      commitSpaceStationDock();
+    }
+    return;
+  }
+  // Fly in. No sprint: the ch10 transit established FOV 70 for this approach
+  // and boost would re-open the same undeclared lens move that pass removed.
+  controls.jump = flight.phase === 'surface';
+  controls.forward = flight.phase !== 'surface';
+  controls.sprint = false;
+}
+
+/** Seconds of forced phase advance so far, for the waiting-state readout. */
+export function getMovieDoneBridgePhase(): number | null {
+  return doneBridge.active ? doneBridge.phase : null;
+}
+
+/**
+ * Walk home and let the night come. The pilot heads for the hearth core; the
+ * sky is run forward at a visible rate until it is night and then held there,
+ * so the wait reads as time passing rather than as a hang. Once both facts are
+ * true the authored watch in `tickChapter10FreePlayEntry` opens the chapter on
+ * its own — this function never marks a milestone or advances a beat.
+ */
+function tickMovieDoneBridge(dt: number): void {
+  clearControls();
+  doneBridge.active = true;
+  const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+  if (!habitat) return;
+  if (doneBridge.phase < 0) doneBridge.phase = getCurrentDayPhase();
+  const core = _goalScratch.set(...habitat.core.position);
+  walkToward(core, 0.5, 0.9);
+  // Hold the sky at night once it arrives; before that, run it forward.
+  if (!isHabitatNight(doneBridge.phase)) {
+    doneBridge.phase = (doneBridge.phase + MOVIE_BRIDGE_PHASE_PER_SECOND * Math.max(0, dt)) % 1;
+    setStoryForcedDayPhase(doneBridge.phase);
+    return;
+  }
+  doneBridge.phase = MOVIE_BRIDGE_NIGHT_PHASE;
+  setStoryForcedDayPhase(MOVIE_BRIDGE_NIGHT_PHASE);
+}
+
 export function autopilotTick(dt: number): void {
   if (!MOVIE) return;
+  // Published before anything else can fail, so a probe can tell "the autopilot
+  // never ticked" from "it ticked and never reached a walk phase": the global
+  // exists with frames 0 in the second case and is absent in the first.
+  publishSt0GazeDiag();
   const story = getStoryStateSnapshot();
   if (story.runId !== teleportNudgeRunId) {
     teleportNudgeRunId = story.runId;
     teleportNudgesTotal = 0;
+    screeningClock = 0;
+    lastScreeningActionAt = -10;
     dryCrossFaceWaterContactFramesTotal = 0;
     dryWalkWaterContactFramesTotal = 0;
   }
@@ -1416,6 +1833,17 @@ export function autopilotTick(dt: number): void {
     clearControls();
     return;
   }
+  if (!beat && movieDoneBridgeActive()) {
+    tickMovieDoneBridge(dt);
+    tickScreeningWaitState(false);
+    return;
+  }
+  if (!beat && movieStationBridgeActive()) {
+    tickMovieStationBridge();
+    tickScreeningWaitState(controls.forward || controls.jump);
+    return;
+  }
+  if (beat) doneBridge.active = false;
   if (!beat || !isAutopilotDriving()) {
     clearControls();
     setCinematicGazeIntent(null);
@@ -1443,6 +1871,7 @@ export function autopilotTick(dt: number): void {
     return;
   }
   beatClock += dt;
+  screeningClock += dt;
   walkTargetLive = false; // walkToward re-asserts it below when a goal is live
   const timeout = BEAT_TIMEOUT[beat] ?? Infinity;
 
@@ -2050,6 +2479,14 @@ export function autopilotTick(dt: number): void {
       const corePosition = _goalScratch.set(...habitat.core.position);
       if (!hasMilestone(STORY_MILESTONES.ch10FaultRead, actorId)) {
         const coreDistance = walkToward(corePosition, 0.35, 0.8);
+        // G-1: the walk to the core is a walk under the same open sky, so the
+        // glance lives here too. The contract nominates the fabricator walk as
+        // the evidence window and that is still the shot it is about — but
+        // confining the bias to the SECOND walk meant a crossing that happened
+        // during the first was structurally unwatchable, and the ruling's own
+        // words are "walk phases", plural. Arrival is goal-critical here for
+        // the same reason it is there: the eyes come down for the act.
+        tickSt0GazeBias(getPlayerWorldPosition(), coreDistance <= CH10_CORE_COMMIT_DISTANCE);
         if (coreDistance <= 2) commitChapter10FaultRead(actorId);
         break;
       }
@@ -2063,7 +2500,7 @@ export function autopilotTick(dt: number): void {
       // so it is where the glance lives. Arrival is goal-critical — the eyes
       // come back down for the act itself — and the bias never touches the
       // route, only where the camera happens to be pointed on the way.
-      tickSt0GazeBias(getPlayerWorldPosition(), shipDistance <= 10);
+      tickSt0GazeBias(getPlayerWorldPosition(), shipDistance <= CH10_FABRICATOR_COMMIT_DISTANCE);
       if (shipDistance <= 6) commitChapter10FabricationAttempt(actorId);
       break;
     }
@@ -2162,12 +2599,42 @@ export function autopilotTick(dt: number): void {
       controls.forward = flight.controlMode === 'flight'
         && flight.phase !== 'surface'
         && !atStandoff;
-      controls.sprint = controls.forward;
+      // NO SPRINT, AND THIS IS A LENS DECISION, NOT A SPEED ONE.
+      //
+      // The ch8 legs above copy `sprint = forward`, and inheriting that here
+      // staged an undeclared lens move through the chapter's own hero frames:
+      // resolveShipBoost() is `forwardHeld && sprintHeld`, boost drives
+      // shipFlightFeedback's fovTarget = 70 + 9 x boost, and ShipController
+      // writes that straight onto the render camera. So the rail cruised at FOV
+      // 79 and settled back to 70 only when `atStandoff` dropped forward —
+      // which is exactly the 79-at-the-seam / 70.0002-at-the-cut-line split the
+      // cinematography pass measured, and the contract declares FOV 70
+      // throughout the transit. It was never the player's boost and never
+      // shipped feel arriving on its own: this rail asked for it.
+      //
+      // Suppressing it also removes the cockpit-recede artifact at the root.
+      // The shell's FOV compensation is exact and unclamped
+      // (tan(39.5)/tan(35) = 1.17727 at 79, 1.03761 at 72, 1.00000 at 70), so
+      // the silhouette was never wrong — but at scale >= 1.0708 (FOV 73.72) the
+      // outer shell walls pass outside the cabin lamp's 6.5-unit reach and fall
+      // to their emissive floor, which against black space reads as the seat
+      // having pulled back. At FOV 70 the walls sit 6.09 units out and stay lit.
+      //
+      // The cost is honest and is travel time only: every trigger on this leg
+      // is distance- or state-keyed, not clocked, so the seam range, the
+      // standoff and the hand-back are unmoved. Terminal speed drops from the
+      // clamped 320 u/s to 117.5 (accel 60 against the 0.6/s damping), which
+      // lengthens the cruise rather than changing anything it arrives at.
+      controls.sprint = false;
       break;
     }
     default:
       break;
   }
+
+  // One place, after the beat switch has decided this frame's controls.
+  tickScreeningWaitState(controls.forward || controls.backward
+    || controls.left || controls.right || controls.jump);
 
   const surfaceContact = getLocalPlayerSurfaceContact();
   const purportedDryCrossFaceMovement = navigationReason === 'cross-face-edge-crossing'

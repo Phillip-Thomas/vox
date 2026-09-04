@@ -32,16 +32,38 @@ export interface SpaceStationContact {
 }
 
 let latestContact: SpaceStationContact | null = null;
+/**
+ * The live dock handler, hoisted so the commit can be performed by something
+ * other than a keystroke. The screening has no keyboard: docking was a window
+ * `KeyF` listener and nothing else, so the movie could fly to the berth and
+ * then sit outside it forever. Both callers now go through
+ * `commitSpaceStationDock` and therefore through the same fences.
+ */
+let latestDockHandler: ((body: SpaceStationContact['body']) => void) | null = null;
+
+/**
+ * Commit the docking the current contact allows, if any. Returns whether it
+ * committed. Applies the identical gates as the [F] path — a live contact,
+ * `canDock`, and the story docking authorization — so this cannot be used to
+ * enter the station earlier than a player could.
+ */
+export function commitSpaceStationDock(): boolean {
+  const contact = latestContact;
+  if (!contact?.readout.canDock) return false;
+  if (!spaceStationDockingAuthorized()) return false;
+  if (!latestDockHandler) return false;
+  commitSpaceStationTarget(contact.body.address);
+  latestDockHandler(contact.body);
+  return true;
+}
 
 /**
  * Nearest station within instrument range, or null. Read by the HUD's own loop.
  *
  * The advisory register ("hold for approach", "on the corridor · N to the
- * berth") is implied-dock copy and is embargoed from story mode until the
- * docking era: while docking is unauthorized this publishes NOTHING, so a player
- * who noses inside the corridor receives instrument silence — no advisory, no
- * dock offer, no refusal line. Silence is the canon, because the station is
- * never the actor and a refusal would be an act.
+ * berth") is implied-dock copy and stays embargoed until Chapter 10 completes
+ * its station reveal. The threshold hand-back grants docking; from that point
+ * this publishes the normal procedural guidance and KeyF clearance path.
  */
 export function spaceStationContact(): SpaceStationContact | null {
   return spaceStationDockingAuthorized() ? latestContact : null;
@@ -76,21 +98,16 @@ export default function SpaceStationApproachDriver({
   );
   const dockRef = useRef(onDock);
   dockRef.current = onDock;
+  latestDockHandler = onDock ?? null;
 
   useEffect(() => {
     if (bodies.length === 0) return undefined;
 
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.code !== 'KeyF') return;
-      const contact = latestContact;
-      if (!contact?.readout.canDock) return;
-      // The story fence: until docking is authorized, [F] neither commits nor
-      // navigates. Sandbox membership is tested inside the predicate.
-      if (!spaceStationDockingAuthorized()) return;
-      // Publish the target before handing off, so anything watching the flight
-      // store sees where the player went rather than inferring it afterwards.
-      commitSpaceStationTarget(contact.body.address);
-      dockRef.current?.(contact.body);
+      // The story fence (docking authorization), the live contact and the
+      // `canDock` gate all live in the shared commit.
+      commitSpaceStationDock();
     };
 
     window.addEventListener('keydown', onKeyDown);

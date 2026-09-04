@@ -104,7 +104,28 @@
     "main/src/game/spaceStation/spaceStationExterior.ts",
     "main/src/components/spaceStation/SpaceStationExterior.tsx",
     "main/src/components/SystemSpaceStations.tsx",
-    "main/src/game/spaceStation/spaceStationExterior.test.ts"
+    "main/src/game/spaceStation/spaceStationExterior.test.ts",
+    "main/src/App.tsx",
+    "main/src/components/spaceStation/SpaceStationSandbox.tsx",
+    "main/src/components/spaceStation/SpaceStationApproach.tsx",
+    "main/src/components/hud/SpaceStationApproachHud.tsx",
+    "shared/economyCatalog.json",
+    "main/src/game/data/generatedEconomyCatalog.ts",
+    "server/src/generated/economyCatalog.ts",
+    "main/src/game/data/items.ts",
+    "main/src/game/data/economyCatalog.test.ts",
+    "main/src/game/spaceStation/spaceStationVendors.ts",
+    "main/src/game/spaceStation/spaceStationStory.ts",
+    "main/src/game/spaceStation/spaceStationStory.test.ts",
+    "main/src/game/spaceStation/spaceStationUndock.ts",
+    "main/src/game/spaceStation/spaceStationUndock.test.ts",
+    "main/src/components/spaceStation/StationStoryPanel.tsx",
+    "main/src/components/spaceStation/VendorPanel.tsx",
+    "main/src/story/stationReturnStory.ts",
+    "main/src/story/stationReturnStory.test.ts",
+    "main/src/story/StoryOverlays.tsx",
+    "main/src/story/world/TidegardenSettlementWorld.tsx",
+    "main/src/story/tidegardenSettlement.ts"
   ],
   "protectedPaths": [
     "main/public/audio/",
@@ -128,7 +149,6 @@
       "main/src/components/audio/"
     ],
     "openGateRefs": [
-      "ch10-docking-architecture-owner-packet",
       "score-continuous-pedal-packet",
       "st3-fov-owner-taste",
       "headed-taste-final",

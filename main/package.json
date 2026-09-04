@@ -50,6 +50,7 @@
     "story:emergent:probe": "node tools/emergent-story-runtime-probe.mjs",
     "story:objective-hud:probe": "node tools/objective-hud-probe.mjs",
     "story:mobile-hud:capture": "node tools/mobile-hud-capture.mjs",
+    "story:hud:sweep": "node tools/hud-overlap-sweep.mjs",
     "story:ux:check": "vitest run src/story/ux",
     "chapter:registry:check": "node tools/chapter-registry-gate.mjs",
     "chapter:registry:smoke": "node tools/chapter-registry-gate.mjs --self-test",

@@ -45,6 +45,7 @@ import type { SpaceStationAddress, CellId } from '../../game/spaceStation/spaceS
 import { SpaceStationInterior, spaceStationInteriorDiagnostics } from './SpaceStationInterior.tsx';
 import { SpaceStationCrowd, crowdSize } from './SpaceStationCrowd.tsx';
 import { VendorPanel } from './VendorPanel.tsx';
+import { StationStoryPanel } from './StationStoryPanel.tsx';
 import {
   spaceStationVendorSites,
   buildSpaceStationVendors,
@@ -56,6 +57,21 @@ import {
   vendorInReach,
   type TraderState
 } from '../../game/spaceStation/spaceStationTrade.ts';
+import {
+  STATION_STORY_MILESTONES,
+  bootstrapStationStorySession,
+  commitBondedCellStowed,
+  commitConcourseEntered,
+  commitStationDeparted,
+  commitStationDocked,
+  deriveStationStoryStep,
+  persistStationStory,
+  stationStoryObjective,
+  stationStoryProbeSnapshot,
+  stationVendorTopics,
+  type StationStoryObjective
+} from '../../game/spaceStation/spaceStationStory.ts';
+import { hasMilestone } from '../../game/systems/progressionSystem.ts';
 import { SpaceStationLighting } from './SpaceStationLighting.tsx';
 import { ApproachScene } from './SpaceStationApproach.tsx';
 import { spaceStationBody } from '../../game/spaceStation/spaceStationBody.ts';
@@ -64,15 +80,18 @@ import {
   SCAN_RANGE,
   type ApproachReadout
 } from '../../game/spaceStation/spaceStationApproach.ts';
+import { isTouchActive, isTouchDevice } from '../../utils/mobileInput.ts';
 import PostFX from '../effects/PostFX.tsx';
+import TouchControls from '../mobile/TouchControls.tsx';
 
 /**
- * The spaceStation development sandbox.
+ * The spaceStation renderer and its isolated development sandbox.
  *
- * A standalone scene with its own canvas — no story runtime, no physics world, no
- * shared scene graph. Isolation is the point: it answers "does the interior read,
- * does it hold frame rate, and is it worth walking around" without entangling any of
- * those questions with the shipped game.
+ * A standalone scene with its own canvas — no planet physics world and no shared
+ * scene graph. Bare `?spacestation=` remains the ephemeral development sandbox.
+ * The shipped `from=game` handoff layers one milestone-derived station visit on
+ * this same renderer and restores/persists the global player stores at the hard
+ * page seam.
  *
  * Two scenes live here, and only ever one at a time: the approach, where you fly a
  * ship to a station a kilometre long, and the interior, where you walk around
@@ -97,7 +116,12 @@ const SPRINT_SPEED = 11;
 const LOOK_SENSITIVITY = 0.0022;
 
 export default function SpaceStationSandbox({ address }: { address: SpaceStationAddress }) {
+  const isTouch = useMemo(() => isTouchDevice(), []);
   const descriptor = useMemo(() => buildSpaceStationDescriptor(address), [address]);
+  // Must run before any story-facing state initializer. App is not mounted on a
+  // station URL, so this is the sole restore point across the hard page seam.
+  const [storySession] = useState(() => bootstrapStationStorySession(address));
+  const storyMode = storySession !== null;
   const problems = useMemo(
     () => [...validateSpaceStationGraph(descriptor.graph), ...validateSpaceStationShell(descriptor.graph)],
     [descriptor]
@@ -116,6 +140,10 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
   const [trader, setTrader] = useState<TraderState>(() => createTrader());
   const [nearVendorId, setNearVendorId] = useState<string | null>(null);
   const [openVendorId, setOpenVendorId] = useState<string | null>(null);
+  const [storyRevision, setStoryRevision] = useState(0);
+  const [nearStoryTargetId, setNearStoryTargetId] = useState<string | null>(null);
+  const [openStoryKind, setOpenStoryKind] = useState<'registry' | 'issuer' | null>(null);
+  const [storyDistance, setStoryDistance] = useState<number | null>(null);
 
   const dockRoute = useMemo(() => spaceStationDockRoute(descriptor), [descriptor]);
   /*
@@ -190,10 +218,20 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
 
     const params = new URLSearchParams(window.location.search);
     if (params.get('from') === 'game') {
+      if (storySession) {
+        commitStationDeparted();
+        persistStationStory(storySession);
+      }
       const { system, index } = descriptor.address;
       const next = new URLSearchParams(params);
-      next.delete('spaceStation');
+      // The parser and entry path use lowercase `spacestation`. The old
+      // camel-case delete left the real flag behind and reloaded this sandbox
+      // forever instead of returning the player to their ship.
+      next.delete('spacestation');
+      next.delete('spaceStation'); // clean legacy/manual URLs too
       next.delete('from');
+      next.delete('approach');
+      next.delete('dock');
       next.set('undock', `${system.x},${system.y},${index}`);
       next.set('fly', '1');
       window.location.assign(`${window.location.pathname}?${next.toString()}`);
@@ -205,10 +243,38 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
     dock.current = createDockState();
     setUndockedAt(body.berth);
     setScene('approach');
-  }, [body, descriptor]);
+  }, [body, descriptor, storySession]);
 
   const nearVendor = vendors.find(entry => entry.id === nearVendorId) ?? null;
   const openVendor = vendors.find(entry => entry.id === openVendorId) ?? null;
+  const storyObjective = useMemo(
+    () => storyMode ? stationStoryObjective(descriptor, vendors) : null,
+    [descriptor, storyMode, storyRevision, vendors]
+  );
+  const storyIssuer = storyObjective?.vendorId
+    ? vendors.find(entry => entry.id === storyObjective.vendorId) ?? null
+    : null;
+
+  const recordStoryReceipt = useCallback((receipt: { changed: boolean }) => {
+    if (!storySession || !receipt.changed) return;
+    persistStationStory(storySession);
+    setStoryRevision(value => value + 1);
+  }, [storySession]);
+
+  const activateStoryTarget = useCallback((
+    objective: StationStoryObjective,
+    position: [number, number, number]
+  ) => {
+    if (objective.targetKind === 'airlock') {
+      const stowed = commitBondedCellStowed();
+      if (!stowed.ok) return;
+      recordStoryReceipt(stowed);
+      leaveStation(position);
+      return;
+    }
+    setOpenVendorId(null);
+    setOpenStoryKind(objective.targetKind);
+  }, [leaveStation, recordStoryReceipt]);
 
   // Markets are brought current on entry rather than ticked. Closed-form catch-up
   // means an arrival after a long absence sees prices that moved while you were
@@ -216,7 +282,24 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
   useEffect(() => {
     if (occupiedCellId !== 'concourse') return;
     setVendors(current => advanceVendors(current, performance.now() / 1000));
-  }, [occupiedCellId]);
+    if (storySession) recordStoryReceipt(commitConcourseEntered());
+  }, [occupiedCellId, recordStoryReceipt, storySession]);
+
+  // Arrival receipt lands only after the docking choreography has handed the
+  // camera back. `dock=0` uses the same effect and therefore remains playable.
+  useEffect(() => {
+    if (!storySession || scene !== 'interior' || docking) return;
+    recordStoryReceipt(commitStationDocked());
+  }, [docking, recordStoryReceipt, scene, storySession]);
+
+  useEffect(() => {
+    if (!storyMode) return;
+    const devWindow = window as typeof window & {
+      __spaceStationStory?: () => Record<string, unknown>;
+    };
+    devWindow.__spaceStationStory = stationStoryProbeSnapshot;
+    return () => { delete devWindow.__spaceStationStory; };
+  }, [storyMode, storyRevision]);
 
   return (
     <div style={{ position: 'fixed', inset: 0, background: '#050607' }}>
@@ -269,6 +352,7 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
             <SpaceStationLighting descriptor={descriptor} occupiedCellId={occupiedCellId} />
             <SpaceStationInterior descriptor={descriptor} occupiedCellId={occupiedCellId} />
             <SpaceStationCrowd descriptor={descriptor} />
+            {storyObjective && <StationStoryMarker objective={storyObjective} />}
             <WalkController
               descriptor={descriptor}
               spawn={spawn}
@@ -277,7 +361,11 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
               vendors={vendors}
               onNearVendor={setNearVendorId}
               onOpenVendor={setOpenVendorId}
-              inputCaptured={openVendorId !== null}
+              storyObjective={storyObjective}
+              onNearStoryTarget={setNearStoryTargetId}
+              onStoryDistance={setStoryDistance}
+              onActivateStoryTarget={activateStoryTarget}
+              inputCaptured={openVendorId !== null || openStoryKind !== null}
               dock={dock}
               dockRoute={departRoute ?? dockRoute}
               airlock={dockRoute.lock}
@@ -295,21 +383,34 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
         <PostFX terrainSeed={descriptor.seed} />
       </Canvas>
       {docking && <DockOverlay dock={dock} onArrived={onSequenceComplete} />}
-      {scene === 'approach' && !docking && <ApproachHud readout={approach} />}
+      {scene === 'approach' && !docking && <ApproachHud readout={approach} touch={isTouch} />}
       {spaceStationHudVisible() && !openVendor && !docking && scene === 'interior' && (
-        <>
-          <SandboxHud descriptor={descriptor} problems={problems} population={population} />
-          <Crosshair />
-        </>
+        <SandboxHud descriptor={descriptor} problems={problems} population={population} />
       )}
-      {nearVendor && !openVendor && !docking && <InteractionPrompt vendor={nearVendor} />}
-      {nearAirlock && !openVendor && !docking && scene === 'interior' && (
-        <AirlockPrompt />
+      {storyMode && storyObjective && !openVendor && !openStoryKind && !docking && scene === 'interior' && (
+        <StationStoryHud objective={storyObjective} distance={storyDistance} />
+      )}
+      {(spaceStationHudVisible() || storyMode) && !openVendor && !openStoryKind && !docking && scene === 'interior' && (
+        <Crosshair />
+      )}
+      {nearStoryTargetId && storyObjective && !openVendor && !openStoryKind && !docking && (
+        <StoryInteractionPrompt objective={storyObjective} touch={isTouch} />
+      )}
+      {nearVendor && !nearStoryTargetId && !openVendor && !openStoryKind && !docking && (
+        <InteractionPrompt vendor={nearVendor} />
+      )}
+      {nearAirlock && !storyMode && !openVendor && !openStoryKind && !docking && scene === 'interior' && (
+        <AirlockPrompt touch={isTouch} />
+      )}
+      {isTouch && !docking && !openVendor && !openStoryKind && (
+        <TouchControls controlMode={scene === 'approach' ? 'flight' : 'fps'} />
       )}
       {openVendor && (
         <VendorPanel
           vendor={openVendor}
           trader={trader}
+          tradingEnabled={!storyMode || hasMilestone(STATION_STORY_MILESTONES.tradeUnlocked)}
+          authoredTopics={storyMode ? stationVendorTopics(openVendor) : []}
           onTrade={({ trader: nextTrader, vendor: nextVendor }) => {
             setTrader(nextTrader);
             setVendors(current =>
@@ -317,6 +418,14 @@ export default function SpaceStationSandbox({ address }: { address: SpaceStation
             );
           }}
           onClose={() => setOpenVendorId(null)}
+        />
+      )}
+      {openStoryKind && (
+        <StationStoryPanel
+          kind={openStoryKind}
+          vendor={openStoryKind === 'issuer' ? storyIssuer : null}
+          onReceipt={recordStoryReceipt}
+          onClose={() => setOpenStoryKind(null)}
         />
       )}
     </div>
@@ -331,6 +440,10 @@ function WalkController({
   vendors,
   onNearVendor,
   onOpenVendor,
+  storyObjective,
+  onNearStoryTarget,
+  onStoryDistance,
+  onActivateStoryTarget,
   inputCaptured,
   dock,
   dockRoute,
@@ -346,6 +459,13 @@ function WalkController({
   vendors: Vendor[];
   onNearVendor: (vendorId: string | null) => void;
   onOpenVendor: (vendorId: string | null) => void;
+  storyObjective: StationStoryObjective | null;
+  onNearStoryTarget: (targetId: string | null) => void;
+  onStoryDistance: (distance: number | null) => void;
+  onActivateStoryTarget: (
+    objective: StationStoryObjective,
+    position: [number, number, number]
+  ) => void;
   /** True while the vendor panel owns the keyboard. */
   inputCaptured: boolean;
   /** The arrival, advanced here because this is the only place with a delta. */
@@ -368,10 +488,16 @@ function WalkController({
   const right = useMemo(() => new THREE.Vector3(), []);
   const move = useMemo(() => new THREE.Vector3(), []);
   const nearRef = useRef<string | null>(null);
+  const nearStoryRef = useRef<string | null>(null);
+  const storyDistanceRef = useRef<number | null>(null);
   /** Probe-driven movement intent, in m/s. Null while the keyboard is in charge. */
   const scripted = useRef<{ forward: number; strafe: number } | null>(null);
   const vendorsRef = useRef<Vendor[]>(vendors);
   vendorsRef.current = vendors;
+  const storyObjectiveRef = useRef(storyObjective);
+  storyObjectiveRef.current = storyObjective;
+  const activateStoryRef = useRef(onActivateStoryTarget);
+  activateStoryRef.current = onActivateStoryTarget;
   const capturedRef = useRef(inputCaptured);
   capturedRef.current = inputCaptured;
   const nearAirlockRef = useRef(false);
@@ -407,6 +533,15 @@ function WalkController({
       }
       keys.current.add(event.code);
       if (event.code === 'Space') event.preventDefault();
+      if (event.code === 'KeyF' && nearStoryRef.current && storyObjectiveRef.current) {
+        keys.current.clear();
+        activateStoryRef.current(storyObjectiveRef.current, [
+          walk.current.position[0],
+          walk.current.position[1],
+          walk.current.position[2]
+        ]);
+        return;
+      }
       if (event.code === 'KeyF' && nearRef.current) {
         onOpenVendor(nearRef.current);
         keys.current.clear();
@@ -426,7 +561,7 @@ function WalkController({
     const onKeyUp = (event: KeyboardEvent) => keys.current.delete(event.code);
     const onClick = () => void canvas.requestPointerLock?.();
     const onMouseMove = (event: MouseEvent) => {
-      if (document.pointerLockElement !== canvas) return;
+      if (document.pointerLockElement !== canvas && !isTouchActive()) return;
       euler.current.y -= event.movementX * LOOK_SENSITIVITY;
       euler.current.x -= event.movementY * LOOK_SENSITIVITY;
       euler.current.x = Math.max(-Math.PI / 2 + 0.02, Math.min(Math.PI / 2 - 0.02, euler.current.x));
@@ -441,6 +576,13 @@ function WalkController({
       __spaceStationState?: () => { cellId: string | null; position: [number, number, number] };
       __spaceStationTeleport?: (cellId: string, u?: number, v?: number) => boolean;
       __spaceStationTeleportToVendor?: (index: number) => string | null;
+      __spaceStationTeleportToStoryTarget?: () => string | null;
+      __spaceStationVendors?: () => Array<{
+        id: string;
+        designation: string;
+        name: string;
+        specialty: string;
+      }>;
       __spaceStationWalk?: (forward: number, strafe: number) => void;
       __spaceStationStaffing?: () => { vendors: number; traders: number; blocked: number };
     };
@@ -448,6 +590,12 @@ function WalkController({
       cellId: walk.current.cellId,
       position: [walk.current.position[0], walk.current.position[1], walk.current.position[2]]
     });
+    devWindow.__spaceStationVendors = () => vendorsRef.current.map(vendor => ({
+      id: vendor.id,
+      designation: vendor.designation,
+      name: vendor.name,
+      specialty: vendor.specialty
+    }));
 
     /**
      * Drive movement directly, in metres per second.
@@ -506,6 +654,28 @@ function WalkController({
       return vendor.id;
     };
 
+    devWindow.__spaceStationTeleportToStoryTarget = () => {
+      const objective = storyObjectiveRef.current;
+      if (!objective) return null;
+      const target = objective.target;
+      const offset = objective.targetKind === 'airlock'
+        ? Math.min(3.5, objective.reach * 0.55)
+        : -Math.min(1.5, objective.reach * 0.35);
+      const standAt: [number, number, number] = [
+        target[0] + offset,
+        target[1],
+        target[2]
+      ];
+      walk.current = createWalkState(graph, standAt);
+      applyEye();
+      onCellChange(walk.current.cellId);
+      // Station cells run along +X; face the target from the approach side.
+      euler.current.y = -Math.PI / 2;
+      euler.current.x = 0;
+      camera.quaternion.setFromEuler(euler.current);
+      return objective.id;
+    };
+
     /**
      * Place the viewer inside a named cell at fractional footprint coordinates.
      *
@@ -545,6 +715,8 @@ function WalkController({
       delete devWindow.__spaceStationState;
       delete devWindow.__spaceStationTeleport;
       delete devWindow.__spaceStationTeleportToVendor;
+      delete devWindow.__spaceStationTeleportToStoryTarget;
+      delete devWindow.__spaceStationVendors;
       delete devWindow.__spaceStationWalk;
       delete devWindow.__spaceStationStaffing;
     };
@@ -610,6 +782,28 @@ function WalkController({
       onCellChange(walk.current.cellId);
     }
 
+    const activeStoryObjective = storyObjectiveRef.current;
+    const storyDistance = activeStoryObjective
+      ? Math.hypot(
+          walk.current.position[0] - activeStoryObjective.target[0],
+          walk.current.position[1] - activeStoryObjective.target[1],
+          walk.current.position[2] - activeStoryObjective.target[2]
+        )
+      : null;
+    const roundedDistance = storyDistance === null ? null : Math.round(storyDistance * 2) / 2;
+    if (roundedDistance !== storyDistanceRef.current) {
+      storyDistanceRef.current = roundedDistance;
+      onStoryDistance(roundedDistance);
+    }
+    const nextStoryNear = activeStoryObjective && storyDistance !== null
+      && storyDistance <= activeStoryObjective.reach
+      ? activeStoryObjective.id
+      : null;
+    if (nextStoryNear !== nearStoryRef.current) {
+      nearStoryRef.current = nextStoryNear;
+      onNearStoryTarget(nextStoryNear);
+    }
+
     // Who is the player facing across a counter? Distance alone would put you in
     // conversation with whoever is behind you across a four-metre aisle.
     const reach = vendorInReach(
@@ -617,7 +811,7 @@ function WalkController({
       walk.current.position,
       [forward.x, 0, forward.z]
     );
-    const nextNear = reach?.vendor.id ?? null;
+    const nextNear = nextStoryNear ? null : reach?.vendor.id ?? null;
     if (nextNear !== nearRef.current) {
       nearRef.current = nextNear;
       onNearVendor(nextNear);
@@ -674,7 +868,13 @@ function SceneDepthRange({ scene }: { scene: SandboxScene }): null {
  * actually refuses clearance. An instrument showing a value nobody can change is
  * decoration.
  */
-function ApproachHud({ readout }: { readout: React.MutableRefObject<ApproachReadout | null> }) {
+function ApproachHud({
+  readout,
+  touch
+}: {
+  readout: React.MutableRefObject<ApproachReadout | null>;
+  touch: boolean;
+}) {
   const [current, setCurrent] = useState<ApproachReadout | null>(null);
 
   useEffect(() => {
@@ -697,7 +897,7 @@ function ApproachHud({ readout }: { readout: React.MutableRefObject<ApproachRead
 
   return (
     <>
-      <div style={approachPanel} data-testid="spaceStation-approach-hud">
+      <div style={touch ? touchApproachPanel : approachPanel} data-testid="spaceStation-approach-hud">
         <div style={{ color: current.canDock ? '#46ff8c' : WARM_INK, letterSpacing: '0.1em' }}>
           {current.advisory.toUpperCase()}
         </div>
@@ -716,12 +916,19 @@ function ApproachHud({ readout }: { readout: React.MutableRefObject<ApproachRead
           warn={hot}
         />
         <div style={{ color: DIM_INK, marginTop: 10, fontSize: 11 }}>
-          WASD thrust · space/C up-down · shift boost · X hold station · mouse look
+          {touch
+            ? 'Left stick thrust · drag to look · LAND clearance'
+            : 'WASD thrust · space/C up-down · shift boost · X hold station · mouse look'}
         </div>
       </div>
       {current.canDock && (
-        <div style={clearancePrompt} data-testid="spaceStation-dock-prompt">
-          [F] request docking clearance
+        <div
+          style={clearancePrompt}
+          data-testid="spaceStation-dock-prompt"
+          role="status"
+          aria-live="polite"
+        >
+          {touch ? 'LAND · request docking clearance' : '[F] request docking clearance'}
         </div>
       )}
       <Crosshair />
@@ -773,6 +980,15 @@ const approachPanel: React.CSSProperties = {
   whiteSpace: 'nowrap'
 };
 
+const touchApproachPanel: React.CSSProperties = {
+  ...approachPanel,
+  top: 'calc(12px + env(safe-area-inset-top, 0px))',
+  bottom: 'auto',
+  left: 'calc(12px + env(safe-area-inset-left, 0px))',
+  right: 'calc(12px + env(safe-area-inset-right, 0px))',
+  whiteSpace: 'normal'
+};
+
 const clearancePrompt: React.CSSProperties = {
   position: 'absolute',
   left: '50%',
@@ -808,6 +1024,16 @@ function DockOverlay({
 }) {
   const [readout, setReadout] = useState<DockReadout>(() => dockReadout(dock.current));
   const arrived = useRef(false);
+  const touch = isTouchDevice();
+
+  const skipSequence = useCallback((event: React.PointerEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    if (!dockInputLocked(dock.current)) return;
+    // Same transition as the keyboard path in WalkController. The next frame
+    // observes `complete` and performs the normal arrival/departure callback;
+    // touch only chooses when the choreography finishes, never where it leads.
+    dock.current = skipDock(dock.current).state;
+  }, [dock]);
 
   useEffect(() => {
     let raf = 0;
@@ -831,7 +1057,13 @@ function DockOverlay({
   const departing = readout.direction === 'depart';
 
   return (
-    <div style={dockLayer} data-testid="spaceStation-dock-overlay">
+    <div
+      style={dockLayer}
+      data-testid="spaceStation-dock-overlay"
+      onPointerDown={skipSequence}
+      role="button"
+      aria-label={touch ? 'Tap to skip docking sequence' : 'Click or press any key to skip docking sequence'}
+    >
       <div style={{ ...dockBlackout, opacity: 1 - readout.reveal }} />
       <div style={{ ...dockLeaf, top: 0, height: leaf }} />
       <div style={{ ...dockLeaf, bottom: 0, height: leaf }} />
@@ -860,7 +1092,9 @@ function DockOverlay({
           value={readout.hatch}
           detail={departing ? (readout.hatch <= 0 ? 'sealed' : 'cycling') : (readout.hatch >= 1 ? 'open' : 'cycling')}
         />
-        <div style={{ color: DIM_INK, marginTop: 10, fontSize: 11 }}>any key to skip</div>
+        <div style={{ color: DIM_INK, marginTop: 10, fontSize: 11 }}>
+          {touch ? 'tap to skip' : 'any key or click to skip'}
+        </div>
       </div>
     </div>
   );
@@ -891,7 +1125,8 @@ function DockLine({ label, value, detail }: { label: string; value: number; deta
 const dockLayer: React.CSSProperties = {
   position: 'absolute',
   inset: 0,
-  pointerEvents: 'none',
+  pointerEvents: 'auto',
+  touchAction: 'manipulation',
   zIndex: 30,
   overflow: 'hidden'
 };
@@ -929,8 +1164,124 @@ const dockPanel: React.CSSProperties = {
 /** How near the lock you must stand before the way out is offered. */
 const AIRLOCK_REACH = 9;
 
+/** A single shared visual language for counter, issuer, and return-airlock goals. */
+function StationStoryMarker({ objective }: { objective: StationStoryObjective }) {
+  const ring = useRef<THREE.Mesh>(null);
+  useFrame(({ clock }) => {
+    if (!ring.current) return;
+    ring.current.rotation.z = clock.elapsedTime * 0.55;
+    const pulse = 1 + Math.sin(clock.elapsedTime * 2.4) * 0.08;
+    ring.current.scale.setScalar(pulse);
+  });
+
+  return (
+    <group position={[objective.target[0], objective.target[1] + 2.2, objective.target[2]]}>
+      <mesh ref={ring} renderOrder={1000}>
+        <torusGeometry args={[0.62, 0.045, 8, 32]} />
+        <meshBasicMaterial color="#ffb45a" transparent opacity={0.92} depthTest={false} />
+      </mesh>
+      <mesh renderOrder={1000}>
+        <octahedronGeometry args={[0.16, 0]} />
+        <meshBasicMaterial color="#fff2d8" depthTest={false} />
+      </mesh>
+      <mesh position={[0, -1.1, 0]} renderOrder={999}>
+        <cylinderGeometry args={[0.015, 0.015, 2, 6]} />
+        <meshBasicMaterial color="#ffb45a" transparent opacity={0.42} depthTest={false} />
+      </mesh>
+    </group>
+  );
+}
+
+function StationStoryHud({
+  objective,
+  distance
+}: {
+  objective: StationStoryObjective;
+  distance: number | null;
+}) {
+  const step = deriveStationStoryStep();
+  return (
+    <aside style={stationStoryHud} data-testid="spaceStation-story-objective">
+      <div style={{ color: DIM_INK, fontSize: 10, letterSpacing: '0.16em' }}>
+        STATION VISIT · ISSUED COMPONENT
+      </div>
+      <div style={{ color: WARM_INK, marginTop: 6, letterSpacing: '0.06em' }}>
+        {objective.markerLabel}
+        {distance !== null ? ` · ${Math.max(0, Math.round(distance))}m` : ''}
+      </div>
+      <div style={{ marginTop: 8 }}>
+        {objective.workOrder.map(line => <div key={line}>{line}</div>)}
+      </div>
+      {step === 'registry' && !hasMilestone(STATION_STORY_MILESTONES.designationPresented) && (
+        <div style={{ color: DIM_INK, marginTop: 9 }}>(your body takes its place before the marker does.)</div>
+      )}
+      {step === 'issuer' && hasMilestone(STATION_STORY_MILESTONES.concourseEntered) && (
+        <div style={{ color: DIM_INK, marginTop: 9 }}>(warmth you did not make.)</div>
+      )}
+      {step === 'depart' && (
+        <div style={{ color: DIM_INK, marginTop: 9 }}>(one fire waiting. carry back what the world could not give.)</div>
+      )}
+    </aside>
+  );
+}
+
+function StoryInteractionPrompt({
+  objective,
+  touch
+}: {
+  objective: StationStoryObjective;
+  touch: boolean;
+}) {
+  return (
+    <div
+      style={storyInteractionPrompt}
+      data-testid={objective.targetKind === 'registry'
+        ? 'spaceStation-registry-prompt'
+        : objective.targetKind === 'issuer'
+          ? 'spaceStation-issuer-prompt'
+          : 'spaceStation-story-airlock-prompt'}
+      role="status"
+      aria-live="polite"
+    >
+      {touch ? 'USE' : '[F]'} {objective.verb}
+    </div>
+  );
+}
+
+const stationStoryHud: React.CSSProperties = {
+  position: 'absolute',
+  top: 'calc(16px + env(safe-area-inset-top, 0px))',
+  left: 'calc(16px + env(safe-area-inset-left, 0px))',
+  width: 'min(420px, calc(100vw - 32px))',
+  padding: '12px 14px',
+  color: INK,
+  background: 'rgba(5,8,10,0.82)',
+  borderLeft: '2px solid rgba(255,180,90,0.86)',
+  borderTop: '1px solid rgba(228,236,231,0.13)',
+  font: '12px/1.5 ui-monospace, SFMono-Regular, Menlo, monospace',
+  pointerEvents: 'none',
+  zIndex: 34
+};
+
+const storyInteractionPrompt: React.CSSProperties = {
+  position: 'absolute',
+  left: '50%',
+  top: '58%',
+  transform: 'translateX(-50%)',
+  maxWidth: 'calc(100vw - 24px)',
+  padding: '6px 12px',
+  font: '12px/1.4 ui-monospace, SFMono-Regular, Menlo, monospace',
+  color: '#77f0a1',
+  background: 'rgba(6,8,10,0.82)',
+  border: '1px solid rgba(119,240,161,0.34)',
+  pointerEvents: 'none',
+  whiteSpace: 'normal',
+  textAlign: 'center',
+  zIndex: 35
+};
+
 /** The way out. Same idiom as the counter prompt, because it is the same verb. */
-function AirlockPrompt() {
+function AirlockPrompt({ touch }: { touch: boolean }) {
   return (
     <div
       style={{
@@ -947,14 +1298,16 @@ function AirlockPrompt() {
         whiteSpace: 'nowrap'
       }}
       data-testid="spaceStation-airlock-prompt"
+      role="status"
+      aria-live="polite"
     >
-      [F] return to ship
+      {touch ? 'USE · return to ship' : '[F] return to ship'}
     </div>
   );
 }
 
 /** The contextual prompt. One key, one verb, matching the shipped HUD idiom. */
-function InteractionPrompt({ vendor }: { vendor: Vendor }) {
+function InteractionPrompt({ vendor, touch = isTouchDevice() }: { vendor: Vendor; touch?: boolean }) {
   return (
     <div
       style={{
@@ -971,8 +1324,10 @@ function InteractionPrompt({ vendor }: { vendor: Vendor }) {
         whiteSpace: 'nowrap'
       }}
       data-testid="spaceStation-interaction-prompt"
+      role="status"
+      aria-live="polite"
     >
-      [F] talk to {vendor.name}
+      {touch ? 'USE' : '[F]'} talk to {vendor.name}
     </div>
   );
 }

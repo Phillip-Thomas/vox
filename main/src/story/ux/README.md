@@ -16,6 +16,17 @@ a second progression system.
   milestone, dispatch a gameplay command, or advance the story.
 - `StoryDirectorDriver.tsx` remains the bridge to the existing directional
   marker renderer. Do not introduce a competing marker language here.
+- `feed/surveyBrackets.ts` + `feed/SurveyBracketDriver.tsx` +
+  `feed/SurveyBracketOverlay.tsx` own the ch1 survey brackets: the site
+  designating the quota targets it is ordering the player to take. This is NOT
+  a second marker language — a bracket only ever rings a target already in
+  frame, never points off-screen, and never carries an objective. It exists
+  because `ch1-fixed`/`ch1-raster` name a thing to collect while `bare` reality
+  renders grass, dirt and hull debris as the same untextured grey slab and the
+  block-naming HUD is unmounted by `storyHudTakeover`. Mounting is decided in
+  `storyGuidancePresentation.ts` (`surveyBracketsMounted`) like every other
+  guidance surface, and the layer retires itself once the fidelity ladder
+  returns chroma. Do not extend it to beats that already publish a marker.
 - `inputGlyphs.ts` is the single presentation pass that swaps authored keyboard
   tokens (`[F]`, `[SPACE]`, …) for the labels a touch player sees on the mounted
   controls, per era context (`embodied` / `feed` / `prologue`). Authored copy
@@ -24,6 +35,39 @@ a second progression system.
   deflection minigame) routes through it at render time. Add a mobile variant by
   extending a token table here — never by forking the substitution or rewriting
   the canonical string.
+
+## The HUD overlap invariant
+
+Every screen-space surface declares itself in `src/ui/hudSurfaces.ts` with an id
+and a layer, and spreads `hudSurface(id, layer)` onto its root element.
+`npm run story:hud:sweep` (`tools/hud-overlap-sweep.mjs`) then drives a real
+browser across beats x breakpoints x input modes, measures every registered
+surface's actual rectangle, and **fails on any intersection** that is not on the
+short justified allow-list.
+
+Three things about it are load-bearing:
+
+1. **It is a browser sweep, not a unit test, and that is deliberate.** Only a
+   handful of surfaces expose geometry as pure functions; the rest are inline
+   styles using literal px, `top: 13.5%`, `bottom: 18%`, `min()`, `vw`, and
+   `calc(env(safe-area-inset-*))`, and almost none declare a height — captions,
+   ledgers, the work order and the audit band are all content-sized. A
+   solver-only check would be guessing at exactly the values that collide.
+2. **It fails on UNREGISTERED surfaces too.** A new HUD element that renders
+   without `data-hud-surface` is a surface the invariant silently stops
+   protecting, so the sweep names it and fails. Registering is not bookkeeping.
+3. **Clearances are measured, never copied.** `readTouchControlClearance()`
+   measures the mounted controls; `touchActionClusterMetrics()` derives the
+   action cluster's rect from the same template it renders;
+   `solveStoryFeedLedgerPlacement` derives from the D-pad's own constants. The
+   bug this replaced was a hand-copied `174` that was correct for a four-button
+   cluster and wrong the moment sprint added a row — captions were drawn across
+   the controls on most of the game before anyone noticed.
+
+When you add or move a HUD surface: register it, run the sweep, and if the
+sweep turns something else red, fix that too. Narrowing one surface makes it
+taller, which is how the second and third collisions in this file's history
+were created by fixing the first.
 
 ## Hard guardrails
 
@@ -100,6 +144,7 @@ The portable workflow and project-local bindings live under
 ## Checks
 
 ```bash
+npm --prefix main run story:hud:sweep
 npm --prefix main run story:ux:check
 npm --prefix main run chapter:journey:check
 npm --prefix main run chapter:journey:smoke

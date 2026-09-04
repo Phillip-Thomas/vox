@@ -27,6 +27,8 @@ import {
 } from './directionalMarker.ts';
 import { setSignedSceneAvPaused } from './signedSceneAvRuntime.ts';
 import {
+  activateGuidedStoryObjective,
+  clearGuidedStoryObjective,
   getActiveGuidedStoryObjective,
   observeGuidedStoryMarker
 } from './ux/objectiveDirector.ts';
@@ -39,8 +41,14 @@ import {
 import { publishStoryBoundaryTelemetry } from './storyBoundaryTelemetry.ts';
 import {
   getChapter10MarkerTarget,
-  tickChapter10FreePlayEntry
+  tickChapter10FreePlayEntry,
+  CH10_MOVIE_FREEPLAY_GRACE_SECONDS
 } from './emergentStoryDirector.ts';
+import {
+  stationReturnMarkerTarget,
+  stationReturnObjective,
+  stationReturnPending
+} from './stationReturnStory.ts';
 
 /**
  * In-Canvas tick for the story director. Lives INSIDE the R3F frame loop (and
@@ -159,6 +167,18 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
     }
 
     const playing = getAppStateSnapshot().phase === 'playing';
+    const dormantStationReturn = !story.active && !paused && playing && stationReturnPending();
+    if (dormantStationReturn) {
+      const objective = stationReturnObjective();
+      if (objective) activateGuidedStoryObjective(objective);
+    } else if (!story.active) {
+      const objective = getActiveGuidedStoryObjective();
+      if (objective?.id === 'station:return:tidegarden'
+        || objective?.id === 'hearth:return:install-cell') {
+        clearGuidedStoryObjective();
+        getFeedRuntime().marker.visible = false;
+      }
+    }
     const authoredSequence = story.beat === 'a4-exhale' || story.beat === 'ch5-maw';
     const inputDt = Math.min(rawDt, 0.1);
     const directorDt = authoredSequence
@@ -176,9 +196,21 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
       // exactly where the player is and the story is not. It accumulates the
       // grace and re-activates only with the player home, at night, at the
       // hearth; every other frame it does nothing at all.
-      if (!paused) tickChapter10FreePlayEntry(inputDt);
+      // The screening drives itself through this seam. `autopilotTick` is
+      // normally only reached with an active story, which is precisely why a
+      // movie run used to end at the shelter: at `done` nothing moved the
+      // pilot toward the hearth or let the night arrive, so the authored watch
+      // below could never come true. The bridge satisfies the real gate; the
+      // watch still decides.
+      if (!paused) {
+        if (isMovieMode()) autopilotTick(inputDt);
+        tickChapter10FreePlayEntry(
+          inputDt,
+          isMovieMode() ? CH10_MOVIE_FREEPLAY_GRACE_SECONDS : undefined
+        );
+      }
       publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
-      return;
+      if (!dormantStationReturn) return;
     }
     if (!playing) {
       publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
@@ -188,9 +220,11 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
     // amount of delayed foreground render time so a slow GPU cannot turn their
     // receipts into a rendered-frame-count deadlock. Player/agent controls keep
     // the conservative 100ms input step and never inherit that catch-up budget.
-    storyDirectorTick(directorDt, camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
-    if (isMovieMode()) autopilotTick(inputDt);
-    publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
+    if (story.active) {
+      storyDirectorTick(directorDt, camera.isPerspectiveCamera ? camera : null, state.clock.elapsedTime);
+      if (isMovieMode()) autopilotTick(inputDt);
+      publishStoryBoundaryTelemetry(camera.isPerspectiveCamera ? camera : null);
+    }
 
     const r = getFeedRuntime();
 
@@ -198,7 +232,11 @@ const StoryDirectorDriver: React.FC<StoryDirectorDriverProps> = ({
     // The feed designates whatever the work order demands: the next supply pod,
     // the active triangulation fix, the signal source, the uncharted mass — a
     // bracket when in frame, an edge chevron pointing at it when it isn't.
-    const markerTarget = playing ? surveyMarkerTarget(story.beat) : null;
+    const markerTarget = playing
+      ? dormantStationReturn
+        ? stationReturnMarkerTarget()
+        : surveyMarkerTarget(story.beat)
+      : null;
     if (markerTarget) {
       const playerPos = getPlayerWorldPosition();
       const playerUp = getPlayerUp();

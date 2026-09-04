@@ -12,10 +12,10 @@ import SystemCompanionBodies from './components/SystemCompanionBodies.tsx';
 import SystemSpaceStations from './components/SystemSpaceStations.tsx';
 import {
   requestedUndockAddress,
+  searchAfterUndockConsumed,
   undockedShipPose
 } from './game/spaceStation/spaceStationUndock.ts';
 import SpaceStationApproachDriver from './components/SpaceStationApproachDriver.tsx';
-import SpaceStationApproachHud from './components/hud/SpaceStationApproachHud.tsx';
 import SystemTravelProbe from './components/SystemTravelProbe.tsx';
 import SystemTravelDriver from './components/SystemTravelDriver.tsx';
 import TouchControls from './components/mobile/TouchControls.tsx';
@@ -163,7 +163,9 @@ import {
 } from './state/appState.ts';
 import LandingMenu from './components/ui/LandingMenu.tsx';
 import StoryOverlays from './story/StoryOverlays.tsx';
+import PointerLockRecovery from './components/hud/PointerLockRecovery.tsx';
 import StoryDirectorDriver from './story/StoryDirectorDriver.tsx';
+import SurveyBracketDriver from './story/feed/SurveyBracketDriver.tsx';
 import VehicleSceneAvDriver from './story/VehicleSceneAvDriver.tsx';
 import StoryDebugPanel, { storyDebugEnabled } from './story/StoryDebugPanel.tsx';
 import {
@@ -189,6 +191,7 @@ import {
 import { getStoryInputPolicy } from './story/storyInputPolicy.ts';
 import { subscribeStoryUiRequests } from './story/storyUiRequests.ts';
 import { setStoryPaused } from './story/storyClock.ts';
+import { stationReturnPending, subscribeStationReturn } from './story/stationReturnStory.ts';
 import { isStoryWorld, STORY_COORDINATE } from './story/world/storyWorld.ts';
 import {
   isTidegardenRouteOnline,
@@ -509,6 +512,11 @@ const App: React.FC = () => {
     return installGameAudioUnlockOnFirstTrustedGesture();
   }, [appPhase]);
   const story = useStoryState();
+  const stationReturnRouteOwned = useSyncExternalStore(
+    subscribeStationReturn,
+    stationReturnPending,
+    () => false
+  );
   // Milestone-gated HUD (the ch3 sense introductions) re-renders on progression.
   useSyncExternalStore(subscribeProgression, milestoneCount, milestoneCount);
   const tidegardenRouteOnline = isTidegardenRouteOnline();
@@ -1103,14 +1111,21 @@ const App: React.FC = () => {
    * unmounting the live planet runtime and rebuilding it on undock, which is a
    * multi-second stall and a real risk to the story runtime's state.
    *
-   * The interior this reaches is the shipped one, not a copy. What is missing is
-   * only the seamlessness: the trip out of the station is a reload rather than a
-   * hatch. That is the next piece of integration, and it is worth doing properly
-   * rather than doing badly now.
+   * The interior this reaches is the shipped one, not a copy. The owner chose
+   * this proven page-transition route for Chapter 10 on 2026-08-13; preserving
+   * the save while changing depth ranges is more important than pretending the
+   * two renderers are one scene.
    */
   const enterSpaceStation = useCallback((body: { address: { system: { x: number; y: number }; index: number } }) => {
     const { system, index } = body.address;
     const params = new URLSearchParams(window.location.search);
+    // The story has completed before docking is authorized. Do not carry its
+    // debug/rehearsal query into the station page: on undock, initStoryFromSave
+    // would otherwise interpret `?story=ch10-transit` as a fresh rehearsal and
+    // erase the completion and docking receipts we are crossing this seam with.
+    for (const key of ['story', 'movie', 'journeyprobe', 'systemprobe', 'agent', 'world', 'descent', 'fly', 'undock', 'keep']) {
+      params.delete(key);
+    }
     params.set('spacestation', `${system.x},${system.y},${index}`);
     // No approach: the ship already flew it. Arriving goes straight to the lock.
     params.delete('approach');
@@ -1118,8 +1133,12 @@ const App: React.FC = () => {
     // own approach scene. Without it, leaving the station strands the player in a
     // development harness they never asked for.
     params.set('from', 'game');
+    // The progression autosave is debounced. Persist synchronously at this hard
+    // navigation boundary so an immediate KeyF cannot outrun the new Chapter 10
+    // docking receipt.
+    saveGlobal(currentWorldIdentity, getCurrentDayPhase());
     window.location.assign(`${window.location.pathname}?${params.toString()}`);
-  }, []);
+  }, [currentWorldIdentity]);
 
   const prepareSystemTarget = useCallback(async (planet: PlanetDescriptor): Promise<boolean> => {
     if (hasWorldGenCacheEntry(planetSize, planet.seed, planet.worldId)) return true;
@@ -1412,6 +1431,14 @@ const App: React.FC = () => {
       pose: undockedShipPose(undockedFrom)
     });
     debugStartInSpace();
+    const consumedSearch = searchAfterUndockConsumed(window.location.search);
+    if (consumedSearch !== window.location.search) {
+      window.history.replaceState(
+        window.history.state,
+        '',
+        `${window.location.pathname}${consumedSearch}${window.location.hash}`
+      );
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1611,6 +1638,9 @@ const App: React.FC = () => {
           paused={paused || hudBlockingOverlayOpen || downed || storyCompleteOpen || storyCompletePreview}
           planetRadius={planetSize}
         />
+        {/* Survey brackets: projection half. Same placement rationale as the
+            story director — it must keep ticking across the world swap. */}
+        <SurveyBracketDriver paused={paused || hudBlockingOverlayOpen || downed || storyCompleteOpen || storyCompletePreview} />
         <SceneReadyProbe />
         <PoseRecorder coordinate={currentWorld.coordinate} />
 
@@ -1684,6 +1714,14 @@ const App: React.FC = () => {
       {/* Dev: beat teleporter (any ?story= session or ?debug=1). */}
       {storyDebugEnabled() && <StoryDebugPanel />}
 
+      {/* Dead-controls rescue. Deliberately OUTSIDE the story HUD takeover
+          gate below: the failure it covers is most likely on the very first
+          handoff out of the prologue, which is inside the feed era. */}
+      {!atlasCapture && <PointerLockRecovery
+          paused={paused || hudBlockingOverlayOpen || downed || storyCompleteOpen || storyCompletePreview}
+          suppressed={craftingOpen || storyDebugEnabled()}
+        />}
+
       {/* --- Minimal, diegetic in-game HUD (the story feed replaces it in Ch1-2) --- */}
       {appPhase === 'playing' && !atlasCapture && !storyHudTakeover(story) && (
         <>
@@ -1696,7 +1734,6 @@ const App: React.FC = () => {
           <CinematicHudVeil>
             {flight.controlMode === 'fps' && <Crosshair />}
             <TargetReticle />
-            {flight.controlMode === 'flight' && <SpaceStationApproachHud />}
             {flight.controlMode === 'fps' && <MiningProgress />}
             {flight.controlMode === 'fps' && !storyHudHideVitals() && <VitalsMeter />}
             {flight.controlMode === 'fps' && <BuildIndicator />}
@@ -1714,7 +1751,10 @@ const App: React.FC = () => {
                   worldId={currentWorldIdentity.worldId}
                   planetSize={planetSize}
                 />
-                <CockpitReadout coordinateLabel={currentWorldKey} />
+                <CockpitReadout
+                  coordinateLabel={currentWorldKey}
+                  suppressedByStoryRoute={stationReturnRouteOwned}
+                />
                 <MultiplayerStatusBadge />
               </>
             )}

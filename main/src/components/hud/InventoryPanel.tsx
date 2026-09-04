@@ -9,6 +9,7 @@ import {
   subscribeMobileHudDisclosure,
   toggleMobileHudDisclosure
 } from '../mobile/mobileHudDisclosure.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 /**
  * Held-item inventory (live, subscribes to inventorySystem). It starts as a
@@ -70,6 +71,7 @@ const InventoryPanel: React.FC<InventoryPanelProps> = ({ topOffset = HUD_EDGE })
   return (
     <div
       data-testid="inventory-panel"
+      {...hudSurface('inventory-panel', 'informational')}
       className={touch ? 'pv-mobile-inventory' : undefined}
       style={hudGlassPanelStyle({
       position: 'absolute',

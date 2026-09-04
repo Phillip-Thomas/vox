@@ -60,7 +60,7 @@ export type CraftedItemId =
   // modules — personal & ship upgrades
   | 'survey_lens_2' | 'survey_lens_3' | 'survey_lens_4'
   | 'lift_cell' | 'range_coil'
-  | 'habitat_core';
+  | 'habitat_core' | 'bonded_cell';
 
 export type ItemId = ResourceId | CraftedItemId;
 
@@ -308,6 +308,10 @@ const CRAFTED_ITEMS: Record<CraftedItemId, ItemDefinition> = {
   habitat_core: {
     id: 'habitat_core', name: 'Habitat Core', kind: 'placeable', tier: 2, stackable: false,
     description: 'A single carried ecology-and-shelter core. Install it on a dry, level foundation to power and certify one remote working habitat.'
+  },
+  bonded_cell: {
+    id: 'bonded_cell', name: 'Bonded Cell', kind: 'component', tier: 2, stackable: false,
+    description: 'A sealed habitat-grade cell carrying an issuance record the receiving core must accept. Not fabricable; keep the seal intact.'
   }
 };
 

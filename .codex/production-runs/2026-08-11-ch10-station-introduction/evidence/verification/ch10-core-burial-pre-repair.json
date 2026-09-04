@@ -1,0 +1,367 @@
+{
+  "capturedAt": "2026-08-12T21:10:32.599Z",
+  "phase": "pre-repair",
+  "base": "http://localhost:5176",
+  "defect": {
+    "id": "OD-habitat-core-burial",
+    "reportedBy": "owner",
+    "lockRevision": "existing-allowed-scope",
+    "report": "the read the fault interactable thing is in the middle of the planet when I start the chapter",
+    "expected": {
+      "worldId": "-1,-1:p1",
+      "seed": 1600321158
+    },
+    "coreInteractDistance": 4.2,
+    "voxelScale": 2
+  },
+  "scenarios": {
+    "ch10-cold": {
+      "url": "?story=ch10-cold&profile=LOW",
+      "pageErrors": [],
+      "spec": [
+        "storyState",
+        "tidegarden",
+        "voxelSystem",
+        "worldGen",
+        "systemFlight",
+        "storyWorld",
+        "playerFrame",
+        "settlement",
+        "interactions",
+        "habitat",
+        "director"
+      ],
+      "story": {
+        "chapter": "ch10",
+        "beat": "ch10-cold",
+        "active": true
+      },
+      "systemFlight": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "surface"
+      },
+      "playerWorld": [
+        10.5,
+        50.789,
+        -8
+      ],
+      "playerUp": [
+        0,
+        1,
+        0
+      ],
+      "habitatPresent": true,
+      "core": {
+        "shelterId": "ch10-debug-second-hearth",
+        "cell": [
+          0,
+          5,
+          0
+        ],
+        "supportCell": [
+          0,
+          4,
+          0
+        ],
+        "position": [
+          0.5,
+          5,
+          0.5
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ]
+      },
+      "shelterCertified": false,
+      "euclidToPlayer": 47.633,
+      "verticalOffset": -45.789,
+      "tangentialDistance": 13.124,
+      "legacyGaitDistance": 13.124,
+      "anchors": {
+        "planetSize": 50,
+        "terrainSeed": null,
+        "voxelWorldId": 1
+      },
+      "terrain": {
+        "worldId": "-1,-1:p1",
+        "column": [
+          0,
+          0
+        ],
+        "topSolidCell": 24,
+        "expectedCoreCellY": 25,
+        "surfaceWorldY": 50,
+        "coreCellY": 5,
+        "coreWorldY": 5,
+        "coreCellsBelowSurface": 20,
+        "playerColumn": [
+          5,
+          -4
+        ],
+        "playerColumnTopSolidCell": 24,
+        "playerColumnSurfaceWorldY": 50
+      },
+      "objective": null,
+      "markerTarget": null,
+      "prompts": [
+        "F Enter Ship"
+      ],
+      "promptActive": true,
+      "assertions": {
+        "coreReachableEuclid": true,
+        "coreNotBuried": false,
+        "coreOnSurface": false,
+        "gaitDisagreesWithEuclid": true,
+        "markerAgreesWithCore": null
+      }
+    },
+    "ch10-ask": {
+      "url": "?story=ch10-ask&profile=LOW",
+      "pageErrors": [],
+      "spec": [
+        "storyState",
+        "tidegarden",
+        "voxelSystem",
+        "worldGen",
+        "systemFlight",
+        "storyWorld",
+        "playerFrame",
+        "settlement",
+        "interactions",
+        "habitat",
+        "director"
+      ],
+      "story": {
+        "chapter": "ch10",
+        "beat": "ch10-ask",
+        "active": true
+      },
+      "systemFlight": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "surface"
+      },
+      "playerWorld": [
+        10.5,
+        50.789,
+        -8
+      ],
+      "playerUp": [
+        0,
+        1,
+        0
+      ],
+      "habitatPresent": true,
+      "core": {
+        "shelterId": "ch10-debug-second-hearth",
+        "cell": [
+          0,
+          5,
+          0
+        ],
+        "supportCell": [
+          0,
+          4,
+          0
+        ],
+        "position": [
+          0.5,
+          5,
+          0.5
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ]
+      },
+      "shelterCertified": false,
+      "euclidToPlayer": 47.633,
+      "verticalOffset": -45.789,
+      "tangentialDistance": 13.124,
+      "legacyGaitDistance": 13.124,
+      "anchors": {
+        "planetSize": 50,
+        "terrainSeed": null,
+        "voxelWorldId": 1
+      },
+      "terrain": {
+        "worldId": "-1,-1:p1",
+        "column": [
+          0,
+          0
+        ],
+        "topSolidCell": 24,
+        "expectedCoreCellY": 25,
+        "surfaceWorldY": 50,
+        "coreCellY": 5,
+        "coreWorldY": 5,
+        "coreCellsBelowSurface": 20,
+        "playerColumn": [
+          5,
+          -4
+        ],
+        "playerColumnTopSolidCell": 24,
+        "playerColumnSurfaceWorldY": 50
+      },
+      "objective": null,
+      "markerTarget": null,
+      "prompts": [
+        "F Enter Ship"
+      ],
+      "promptActive": true,
+      "assertions": {
+        "coreReachableEuclid": true,
+        "coreNotBuried": false,
+        "coreOnSurface": false,
+        "gaitDisagreesWithEuclid": true,
+        "markerAgreesWithCore": null
+      }
+    },
+    "ch10-transit": {
+      "url": "?story=ch10-transit&profile=LOW",
+      "pageErrors": [],
+      "spec": [
+        "storyState",
+        "tidegarden",
+        "voxelSystem",
+        "worldGen",
+        "systemFlight",
+        "storyWorld",
+        "playerFrame",
+        "settlement",
+        "interactions",
+        "habitat",
+        "director"
+      ],
+      "story": {
+        "chapter": "ch10",
+        "beat": "ch10-transit",
+        "active": true
+      },
+      "systemFlight": {
+        "activePlanetId": "-1,-1",
+        "locationMode": "surface"
+      },
+      "playerWorld": [
+        8,
+        53.85,
+        -6
+      ],
+      "playerUp": [
+        0,
+        1,
+        0
+      ],
+      "habitatPresent": true,
+      "core": {
+        "shelterId": "ch10-debug-second-hearth",
+        "cell": [
+          0,
+          5,
+          0
+        ],
+        "supportCell": [
+          0,
+          4,
+          0
+        ],
+        "position": [
+          0.5,
+          5,
+          0.5
+        ],
+        "up": [
+          0,
+          1,
+          0
+        ]
+      },
+      "shelterCertified": false,
+      "euclidToPlayer": 49.848,
+      "verticalOffset": -48.85,
+      "tangentialDistance": 9.925,
+      "legacyGaitDistance": 9.925,
+      "anchors": {
+        "planetSize": 50,
+        "terrainSeed": 3215739679,
+        "voxelWorldId": 1
+      },
+      "terrain": {
+        "worldId": "-1,-1:p1",
+        "column": [
+          0,
+          0
+        ],
+        "topSolidCell": 25,
+        "expectedCoreCellY": 26,
+        "surfaceWorldY": 52,
+        "coreCellY": 5,
+        "coreWorldY": 5,
+        "coreCellsBelowSurface": 21,
+        "playerColumn": [
+          4,
+          -3
+        ],
+        "playerColumnTopSolidCell": 25,
+        "playerColumnSurfaceWorldY": 52
+      },
+      "objective": null,
+      "markerTarget": null,
+      "prompts": [],
+      "promptActive": false,
+      "assertions": {
+        "coreReachableEuclid": true,
+        "coreNotBuried": false,
+        "coreOnSurface": false,
+        "gaitDisagreesWithEuclid": true,
+        "markerAgreesWithCore": null
+      }
+    },
+    "ch9-hearth": {
+      "url": "?story=ch9-hearth&profile=LOW",
+      "pageErrors": [],
+      "spec": [
+        "storyState",
+        "tidegarden",
+        "voxelSystem",
+        "worldGen",
+        "systemFlight",
+        "storyWorld",
+        "playerFrame",
+        "settlement",
+        "interactions",
+        "habitat",
+        "director"
+      ],
+      "story": {
+        "chapter": "ch9",
+        "beat": "ch9-hearth",
+        "active": true
+      },
+      "systemFlight": {
+        "activePlanetId": "-1,-1:p1",
+        "locationMode": "surface"
+      },
+      "playerWorld": [
+        10.5,
+        50.789,
+        -8
+      ],
+      "playerUp": [
+        0,
+        1,
+        0
+      ],
+      "habitatPresent": false,
+      "assertions": {
+        "coreReachableEuclid": false,
+        "coreNotBuried": true,
+        "coreOnSurface": null,
+        "gaitDisagreesWithEuclid": false,
+        "markerAgreesWithCore": null
+      }
+    }
+  }
+}

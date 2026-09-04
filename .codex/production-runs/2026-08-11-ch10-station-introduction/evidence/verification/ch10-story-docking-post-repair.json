@@ -1,0 +1,319 @@
+{
+  "schema": "paravoxia.ch10StoryDockingProbe.v1",
+  "capturedAt": "2026-08-13T19:37:09.489Z",
+  "base": "http://127.0.0.1:5176",
+  "checks": [
+    {
+      "name": "the transit starts fenced before the threshold hand-back",
+      "pass": true,
+      "detail": "{\"story\":{\"active\":true,\"chapter\":\"ch10\",\"beat\":\"ch10-transit\",\"runId\":1},\"milestones\":[\"story:started\",\"story:prologue-seen\",\"story:ch1:track\",\"story:ch1:quota\",\"story:debris:0\",\"story:debris:1\",\"story:debris:2\",\"story:debris:3\",\"story:ch1:depth\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\",\"story:a3\",\"story:sense:water\",\"story:ch3:drank\",\"story:sense:food\",\"story:ch3:ate\",\"story:ch3:signal\",\"story:sense:stamina\",\"story:ch4:vigil\",\"story:ch4:arrived\",\"story:ch4:audit-complete\",\"story:audit:fire-mismatch\",\"story:audit:life-mismatch\",\"story:audit:tree-mismatch\",\"story:ch4:compliance-complete\",\"story:comply:fire-doused\",\"story:comply:organics-resolved\",\"story:comply:regression-settled\",\"story:ch4:refusal-complete\",\"story:defy:refusal-committed\",\"story:a4\",\"story:a4:handback\",\"story:a4:field-pack-dropped\",\"story:ch5:maw-repaired\",\"maw_repaired\",\"story:maw:first-direction-resolved\",\"story:maw:pond-resonance-visible\",\"story:sense:maw\",\"story:ch6:keel-banked\",\"story:capability:oxygen-online\",\"story:sense:oxygen\",\"story:dive:waterline-entered\",\"story:dive:keel-sonar-revealed\",\"story:dive:surfaced-with-keel\",\"story:item:kestrel-keel-memory:acquired\",\"story:item:kestrel-keel-memory:banked\",\"story:ch7:flight-ready\",\"story:capability:jet-installed\",\"story:route:tidegarden:online\",\"story:board:pressure-boundary-sealed\",\"story:board:physical-transaction-complete\",\"story:ch7:boarded\",\"story:ch8:launched\",\"story:ch8:crossed\",\"story:ch8:landfall\",\"story:ch9:settled\",\"story:ch9:hearth\",\"story:complete\",\"story:tidegarden:relationship-attended\",\"story:tidegarden:habitat-core-online\",\"story:tidegarden:shelter-certified\",\"story:tidegarden:safe-rest-completed\",\"story:tidegarden:two-world-handoff\",\"story:ch10-cold-noticed\",\"story:ch10-fault-read\",\"story:ch10-fabrication-refused\",\"story:ch10-relay-asked\",\"story:ch10-relay-answered\",\"story:ch10-bearing-claimed\",\"story:ch10-transit-ignited\"],\"prompt\":null}"
+    },
+    {
+      "name": "Chapter 10 hand-back publishes the normal clearance prompt",
+      "pass": true,
+      "detail": "{\"story\":{\"active\":false,\"chapter\":\"complete\",\"beat\":\"done\",\"runId\":1},\"milestones\":[\"story:started\",\"story:prologue-seen\",\"story:ch1:track\",\"story:ch1:quota\",\"story:debris:0\",\"story:debris:1\",\"story:debris:2\",\"story:debris:3\",\"story:ch1:depth\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\",\"story:a3\",\"story:sense:water\",\"story:ch3:drank\",\"story:sense:food\",\"story:ch3:ate\",\"story:ch3:signal\",\"story:sense:stamina\",\"story:ch4:vigil\",\"story:ch4:arrived\",\"story:ch4:audit-complete\",\"story:audit:fire-mismatch\",\"story:audit:life-mismatch\",\"story:audit:tree-mismatch\",\"story:ch4:compliance-complete\",\"story:comply:fire-doused\",\"story:comply:organics-resolved\",\"story:comply:regression-settled\",\"story:ch4:refusal-complete\",\"story:defy:refusal-committed\",\"story:a4\",\"story:a4:handback\",\"story:a4:field-pack-dropped\",\"story:ch5:maw-repaired\",\"maw_repaired\",\"story:maw:first-direction-resolved\",\"story:maw:pond-resonance-visible\",\"story:sense:maw\",\"story:ch6:keel-banked\",\"story:capability:oxygen-online\",\"story:sense:oxygen\",\"story:dive:waterline-entered\",\"story:dive:keel-sonar-revealed\",\"story:dive:surfaced-with-keel\",\"story:item:kestrel-keel-memory:acquired\",\"story:item:kestrel-keel-memory:banked\",\"story:ch7:flight-ready\",\"story:capability:jet-installed\",\"story:route:tidegarden:online\",\"story:board:pressure-boundary-sealed\",\"story:board:physical-transaction-complete\",\"story:ch7:boarded\",\"story:ch8:launched\",\"story:ch8:crossed\",\"story:ch8:landfall\",\"story:ch9:settled\",\"story:ch9:hearth\",\"story:complete\",\"story:tidegarden:relationship-attended\",\"story:tidegarden:habitat-core-online\",\"story:tidegarden:shelter-certified\",\"story:tidegarden:safe-rest-completed\",\"story:tidegarden:two-world-handoff\",\"story:ch10-cold-noticed\",\"story:ch10-fault-read\",\"story:ch10-fabrication-refused\",\"story:ch10-relay-asked\",\"story:ch10-relay-answered\",\"story:ch10-bearing-claimed\",\"story:ch10-transit-ignited\",\"story:ch10-seam-passed\",\"story:ch10-station-resolved\",\"story:ch10-complete\",\"story:station-docking-authorized\"],\"contact\":{\"worldId\":\"-1,-1:a0\",\"distance\":60,\"phase\":\"cleared\",\"canDock\":true},\"prompt\":\"[F] request docking clearance\"}"
+    },
+    {
+      "name": "trusted KeyF enters the claimed station without replaying the debug story",
+      "pass": true,
+      "detail": "?profile=POTATO&spacestation=-1%2C-1%2C0&from=game"
+    },
+    {
+      "name": "station entry starts the shipped docking choreography",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "docking hands the player to the station apron",
+      "pass": true,
+      "detail": "{\"cellId\":\"apron\",\"position\":[7.4,0,0]}"
+    },
+    {
+      "name": "the station airlock remains reachable after story docking",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "undocking returns to the game instead of reopening the station sandbox",
+      "pass": true,
+      "detail": "?profile=POTATO&undock=-1%2C-1%2C0&fly=1"
+    },
+    {
+      "name": "the completed save still offers docking after the full station round trip",
+      "pass": true,
+      "detail": "{\"dockingAuthorized\":true,\"entry\":{\"chapter\":\"complete\",\"beat\":\"done\"},\"milestones\":[\"story:started\",\"story:prologue-seen\",\"story:ch1:track\",\"story:ch1:quota\",\"story:debris:0\",\"story:debris:1\",\"story:debris:2\",\"story:debris:3\",\"story:ch1:depth\",\"story:pod:0\",\"story:pod:1\",\"story:pod:2\",\"story:ch1:nav\",\"story:ch1:iso\",\"story:a1\",\"story:a2\",\"story:sense:health\",\"story:sense:inventory\",\"story:sense:temp\",\"story:a3\",\"story:sense:water\",\"story:ch3:drank\",\"story:sense:food\",\"story:ch3:ate\",\"story:ch3:signal\",\"story:sense:stamina\",\"story:ch4:vigil\",\"story:ch4:arrived\",\"story:ch4:audit-complete\",\"story:audit:fire-mismatch\",\"story:audit:life-mismatch\",\"story:audit:tree-mismatch\",\"story:ch4:compliance-complete\",\"story:comply:fire-doused\",\"story:comply:organics-resolved\",\"story:comply:regression-settled\",\"story:ch4:refusal-complete\",\"story:defy:refusal-committed\",\"story:a4\",\"story:a4:handback\",\"story:a4:field-pack-dropped\",\"story:ch5:maw-repaired\",\"maw_repaired\",\"story:maw:first-direction-resolved\",\"story:maw:pond-resonance-visible\",\"story:sense:maw\",\"story:ch6:keel-banked\",\"story:capability:oxygen-online\",\"story:sense:oxygen\",\"story:dive:waterline-entered\",\"story:dive:keel-sonar-revealed\",\"story:dive:surfaced-with-keel\",\"story:item:kestrel-keel-memory:acquired\",\"story:item:kestrel-keel-memory:banked\",\"story:ch7:flight-ready\",\"story:capability:jet-installed\",\"story:route:tidegarden:online\",\"story:board:pressure-boundary-sealed\",\"story:board:physical-transaction-complete\",\"story:ch7:boarded\",\"story:ch8:launched\",\"story:ch8:crossed\",\"story:ch8:landfall\",\"story:ch9:settled\",\"story:ch9:hearth\",\"story:complete\",\"story:tidegarden:relationship-attended\",\"story:tidegarden:habitat-core-online\",\"story:tidegarden:shelter-certified\",\"story:tidegarden:safe-rest-completed\",\"story:tidegarden:two-world-handoff\",\"story:ch10-cold-noticed\",\"story:ch10-fault-read\",\"story:ch10-fabrication-refused\",\"story:ch10-relay-asked\",\"story:ch10-relay-answered\",\"story:ch10-bearing-claimed\",\"story:ch10-transit-ignited\",\"story:ch10-seam-passed\",\"story:ch10-station-resolved\",\"story:ch10-complete\",\"story:station-docking-authorized\"],\"prompt\":\"[F] request docking clearance\"}"
+    },
+    {
+      "name": "touch clearance names LAND and keeps its instrument clear of the action cluster",
+      "pass": true,
+      "detail": "{\"prompt\":\"LAND · request docking clearance\",\"panel\":{\"left\":77.140625,\"top\":529,\"right\":376,\"bottom\":654},\"actions\":{\"left\":224,\"top\":672,\"right\":376,\"bottom\":824},\"overlaps\":false}"
+    },
+    {
+      "name": "touch LAND and tap-to-skip reach an explorable interior with movement and USE controls",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "touch USE and tap-to-skip return the player to the ship",
+      "pass": true,
+      "detail": "USE · return to ship"
+    }
+  ],
+  "runtimeProblems": [],
+  "placement": {
+    "address": {
+      "system": {
+        "x": -1,
+        "y": -1
+      },
+      "index": 0
+    },
+    "worldId": "-1,-1:a0",
+    "activePlanetId": "-1,-1",
+    "hold": [
+      -6410.549997487687,
+      -1375.3550342173862,
+      -614.1712333070856
+    ],
+    "local": [
+      -6410.549997487687,
+      -1375.3550342173862,
+      -614.1712333070856
+    ]
+  },
+  "cleared": {
+    "story": {
+      "active": false,
+      "chapter": "complete",
+      "beat": "done",
+      "runId": 1
+    },
+    "milestones": [
+      "story:started",
+      "story:prologue-seen",
+      "story:ch1:track",
+      "story:ch1:quota",
+      "story:debris:0",
+      "story:debris:1",
+      "story:debris:2",
+      "story:debris:3",
+      "story:ch1:depth",
+      "story:pod:0",
+      "story:pod:1",
+      "story:pod:2",
+      "story:ch1:nav",
+      "story:ch1:iso",
+      "story:a1",
+      "story:a2",
+      "story:sense:health",
+      "story:sense:inventory",
+      "story:sense:temp",
+      "story:a3",
+      "story:sense:water",
+      "story:ch3:drank",
+      "story:sense:food",
+      "story:ch3:ate",
+      "story:ch3:signal",
+      "story:sense:stamina",
+      "story:ch4:vigil",
+      "story:ch4:arrived",
+      "story:ch4:audit-complete",
+      "story:audit:fire-mismatch",
+      "story:audit:life-mismatch",
+      "story:audit:tree-mismatch",
+      "story:ch4:compliance-complete",
+      "story:comply:fire-doused",
+      "story:comply:organics-resolved",
+      "story:comply:regression-settled",
+      "story:ch4:refusal-complete",
+      "story:defy:refusal-committed",
+      "story:a4",
+      "story:a4:handback",
+      "story:a4:field-pack-dropped",
+      "story:ch5:maw-repaired",
+      "maw_repaired",
+      "story:maw:first-direction-resolved",
+      "story:maw:pond-resonance-visible",
+      "story:sense:maw",
+      "story:ch6:keel-banked",
+      "story:capability:oxygen-online",
+      "story:sense:oxygen",
+      "story:dive:waterline-entered",
+      "story:dive:keel-sonar-revealed",
+      "story:dive:surfaced-with-keel",
+      "story:item:kestrel-keel-memory:acquired",
+      "story:item:kestrel-keel-memory:banked",
+      "story:ch7:flight-ready",
+      "story:capability:jet-installed",
+      "story:route:tidegarden:online",
+      "story:board:pressure-boundary-sealed",
+      "story:board:physical-transaction-complete",
+      "story:ch7:boarded",
+      "story:ch8:launched",
+      "story:ch8:crossed",
+      "story:ch8:landfall",
+      "story:ch9:settled",
+      "story:ch9:hearth",
+      "story:complete",
+      "story:tidegarden:relationship-attended",
+      "story:tidegarden:habitat-core-online",
+      "story:tidegarden:shelter-certified",
+      "story:tidegarden:safe-rest-completed",
+      "story:tidegarden:two-world-handoff",
+      "story:ch10-cold-noticed",
+      "story:ch10-fault-read",
+      "story:ch10-fabrication-refused",
+      "story:ch10-relay-asked",
+      "story:ch10-relay-answered",
+      "story:ch10-bearing-claimed",
+      "story:ch10-transit-ignited",
+      "story:ch10-seam-passed",
+      "story:ch10-station-resolved",
+      "story:ch10-complete",
+      "story:station-docking-authorized"
+    ],
+    "contact": {
+      "worldId": "-1,-1:a0",
+      "distance": 60,
+      "phase": "cleared",
+      "canDock": true
+    },
+    "prompt": "[F] request docking clearance"
+  },
+  "stationEntryUrl": "http://127.0.0.1:5176/?profile=POTATO&spacestation=-1%2C-1%2C0&from=game",
+  "interior": {
+    "cellId": "apron",
+    "position": [
+      7.4,
+      0,
+      0
+    ]
+  },
+  "returnUrl": "http://127.0.0.1:5176/?profile=POTATO&undock=-1%2C-1%2C0&fly=1",
+  "restored": {
+    "dockingAuthorized": true,
+    "entry": {
+      "chapter": "complete",
+      "beat": "done"
+    },
+    "milestones": [
+      "story:started",
+      "story:prologue-seen",
+      "story:ch1:track",
+      "story:ch1:quota",
+      "story:debris:0",
+      "story:debris:1",
+      "story:debris:2",
+      "story:debris:3",
+      "story:ch1:depth",
+      "story:pod:0",
+      "story:pod:1",
+      "story:pod:2",
+      "story:ch1:nav",
+      "story:ch1:iso",
+      "story:a1",
+      "story:a2",
+      "story:sense:health",
+      "story:sense:inventory",
+      "story:sense:temp",
+      "story:a3",
+      "story:sense:water",
+      "story:ch3:drank",
+      "story:sense:food",
+      "story:ch3:ate",
+      "story:ch3:signal",
+      "story:sense:stamina",
+      "story:ch4:vigil",
+      "story:ch4:arrived",
+      "story:ch4:audit-complete",
+      "story:audit:fire-mismatch",
+      "story:audit:life-mismatch",
+      "story:audit:tree-mismatch",
+      "story:ch4:compliance-complete",
+      "story:comply:fire-doused",
+      "story:comply:organics-resolved",
+      "story:comply:regression-settled",
+      "story:ch4:refusal-complete",
+      "story:defy:refusal-committed",
+      "story:a4",
+      "story:a4:handback",
+      "story:a4:field-pack-dropped",
+      "story:ch5:maw-repaired",
+      "maw_repaired",
+      "story:maw:first-direction-resolved",
+      "story:maw:pond-resonance-visible",
+      "story:sense:maw",
+      "story:ch6:keel-banked",
+      "story:capability:oxygen-online",
+      "story:sense:oxygen",
+      "story:dive:waterline-entered",
+      "story:dive:keel-sonar-revealed",
+      "story:dive:surfaced-with-keel",
+      "story:item:kestrel-keel-memory:acquired",
+      "story:item:kestrel-keel-memory:banked",
+      "story:ch7:flight-ready",
+      "story:capability:jet-installed",
+      "story:route:tidegarden:online",
+      "story:board:pressure-boundary-sealed",
+      "story:board:physical-transaction-complete",
+      "story:ch7:boarded",
+      "story:ch8:launched",
+      "story:ch8:crossed",
+      "story:ch8:landfall",
+      "story:ch9:settled",
+      "story:ch9:hearth",
+      "story:complete",
+      "story:tidegarden:relationship-attended",
+      "story:tidegarden:habitat-core-online",
+      "story:tidegarden:shelter-certified",
+      "story:tidegarden:safe-rest-completed",
+      "story:tidegarden:two-world-handoff",
+      "story:ch10-cold-noticed",
+      "story:ch10-fault-read",
+      "story:ch10-fabrication-refused",
+      "story:ch10-relay-asked",
+      "story:ch10-relay-answered",
+      "story:ch10-bearing-claimed",
+      "story:ch10-transit-ignited",
+      "story:ch10-seam-passed",
+      "story:ch10-station-resolved",
+      "story:ch10-complete",
+      "story:station-docking-authorized"
+    ],
+    "prompt": "[F] request docking clearance"
+  },
+  "touch": {
+    "placement": {
+      "address": {
+        "system": {
+          "x": -1,
+          "y": -1
+        },
+        "index": 0
+      },
+      "local": [
+        -6410.549997487687,
+        -1375.3550342173862,
+        -614.1712333070856
+      ]
+    },
+    "clearance": {
+      "prompt": "LAND · request docking clearance",
+      "panel": {
+        "left": 77.140625,
+        "top": 529,
+        "right": 376,
+        "bottom": 654
+      },
+      "actions": {
+        "left": 224,
+        "top": 672,
+        "right": 376,
+        "bottom": 824
+      },
+      "overlaps": false
+    },
+    "airlockPrompt": "USE · return to ship"
+  },
+  "status": "passed"
+}

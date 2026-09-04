@@ -135,7 +135,7 @@ import {
 import { setPlayerPose } from '../game/systems/playerPoseSystem.ts';
 import { getStoryInputPolicy } from '../story/storyInputPolicy.ts';
 import { resolveStoryInteraction } from '../story/storyInteractions.ts';
-import { axisBandVelocityDelta, getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePoints, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
+import { axisBandVelocityDelta, getLensRig, getSideFacing, getSideLens, rigMoveBasis, setSideFacing, sideHarvestProbePointsOffRow } from '../story/sideLens.ts';
 import { BLOCKS, type BlockId } from '../game/data/blocks.ts';
 import { getAutopilotControls, isAutopilotDriving } from '../story/autopilot.ts';
 import { commitMawHarmlessTestFromAcceptedMine } from '../story/emergentMawRepair.ts';
@@ -372,10 +372,11 @@ export default function EfficientPlayer({
   const controlsActive = useRef(false);
   // Raster side-scroller: reusable probe points for the adjacency harvest scan.
   const sideProbePoints = useMemo(
-    () => Array.from({ length: 5 }, () => new THREE.Vector3()),
+    () => Array.from({ length: 6 }, () => new THREE.Vector3()),
     []
   );
-  // Movie extraction probes (off-row set: the screening never digs its path).
+  // The screening's own scratch buffer for the same off-row probe set (the
+  // two actors can tick in the same frame, so they never share one array).
   const sideMovieProbePoints = useMemo(
     () => Array.from({ length: 6 }, () => new THREE.Vector3()),
     []
@@ -810,13 +811,26 @@ export default function EfficientPlayer({
     const body = ref.current;
     if (!lens || !body) return null;
     const position = vectorFromRapier(body.translation());
-    // The MOVIE mines from the rows OFF the work line (never the walked row at
-    // ground level, never underfoot) — it cannot pothole its own path. Human
-    // play keeps the full Terraria probe set.
+    // BOTH ACTORS mine from the rows OFF the work line (never the walked row
+    // at ground level, never underfoot), so neither can pothole its own path.
+    // The player used to get the full Terraria set, whose underfoot candidate
+    // let a stationary HOLD [E] — the exact input ch1-fixed orders — bury the
+    // player in a self-dug shaft. See sideHarvestProbePointsOffRow.
     const screening = isAutopilotDriving();
-    const probes = screening
-      ? sideHarvestProbePointsOffRow(position, lens, getSideFacing(), sideMovieProbePoints)
-      : sideHarvestProbePoints(position, lens, getSideFacing(), sideProbePoints);
+    const probes = sideHarvestProbePointsOffRow(
+      position,
+      lens,
+      getSideFacing(),
+      screening ? sideMovieProbePoints : sideProbePoints
+    );
+    // Prefer a block that actually PAYS the quota, then fall back to any
+    // harvestable one. In the 1-bit era grass and dirt are the same grey slab
+    // and dirt drops nothing, so a probe order that happened to find dirt
+    // first made HOLD [E] look broken while the player stood beside grass.
+    // The screening keeps the hard filter (it must never spend its budget on
+    // a non-yielding block); the player keeps the fallback so the verb always
+    // does something and the world still deforms where they aimed it.
+    let fallback: HarvestTarget | null = null;
     for (let p = 0; p < probes.length; p++) {
       const point = probes[p];
       const vx = Math.round(point.x / VOXEL_SCALE);
@@ -828,13 +842,12 @@ export default function EfficientPlayer({
       // stone) — the next probe usually has grass/dirt, so extraction keeps
       // flowing instead of chirping "blocked" at a wall.
       if (!canHarvestVoxel({ blockId: voxel.blockId, deposit: voxel.deposit, toolTier: getEquippedToolTier() })) continue;
-      // Movie extraction only chews blocks that FEED the quota (grass/wood →
-      // biofiber). Dirt drops nothing — mining it just digs pits the pilot
-      // then falls into, which is exactly the trap this filter removes.
-      if (screening && !(BLOCKS[voxel.blockId]?.drops.includes('biofiber'))) continue;
-      return { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
+      const target: HarvestTarget = { kind: 'voxel', coord: { x: vx, y: vy, z: vz }, voxel };
+      if (BLOCKS[voxel.blockId]?.drops.includes('biofiber')) return target;
+      if (screening) continue;
+      if (!fallback) fallback = target;
     }
-    return null;
+    return fallback;
   }, []);
 
   const pickHarvestTarget = useCallback((camera: THREE.Camera | null): HarvestTarget | null => {

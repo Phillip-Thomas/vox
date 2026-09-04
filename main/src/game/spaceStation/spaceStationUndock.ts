@@ -41,6 +41,21 @@ export function requestedUndockAddress(search: string = typeof window === 'undef
 }
 
 /**
+ * The berth handoff is an event, not durable location state. Once App has used
+ * it to reconstruct the ship, remove both halves of the debug-style deep link;
+ * otherwise any later reload replays undocking and teleports a returning player
+ * away from Tidegarden back to the station.
+ */
+export function searchAfterUndockConsumed(search: string): string {
+  const params = new URLSearchParams(search);
+  if (!parseUndockFlag(params.get('undock'))) return search;
+  params.delete('undock');
+  if (params.get('fly') === '1') params.delete('fly');
+  const next = params.toString();
+  return next ? `?${next}` : '';
+}
+
+/**
  * Where the ship is, the instant after it lets go.
  *
  * Sitting at the berth, at rest, nose still pointed back down the corridor at the

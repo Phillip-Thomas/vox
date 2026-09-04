@@ -1831,14 +1831,29 @@ if (MODE === 'nightdwell' || MODE === 'st0still') {
         out.habitatCoreWorld = st.core.position.map(n => Number(n.toFixed(2)));
         out.habitatCoreDistanceEuclid = Number(cp.distanceTo(pp).toFixed(2));
         out.habitatCoreDistanceFromRenderCamera = Number(cp.distanceTo(camPos).toFixed(2));
-        // The autopilot's own gaitDistance (autopilot.ts:816): tangential
-        // distance plus max(0, vertical-1). This is the walker's distance to
-        // the handle and the convention the contract's <=25 term inherits.
+        // The autopilot's own surfaceGaitDistance (autopilot.ts): tangential
+        // range, plus any un-climbed rise, PLUS any drop the walker cannot step
+        // down. This is the walker's distance to the handle and the convention
+        // the contract's <=25 term inherits.
+        //
+        // The rise-only form this replaces is what let an owner-reported defect
+        // through: it discounted downward offset entirely, so a habitat core
+        // buried 45.8 units inside the planet reported 6.8 and cleared the
+        // staging ceiling. The euclidean reading beside it is the cross-check —
+        // a large gap between the two is the burial signature, and the report
+        // now carries both plus the vertical offset that separates them.
         const pu = pf.getPlayerUp();
         const toGoal = cp.clone().sub(pp);
         const vertical = toGoal.dot(pu);
         toGoal.addScaledVector(pu, -vertical);
-        out.habitatCoreDistance = Number((toGoal.length() + Math.max(0, vertical - 1)).toFixed(2));
+        const tangential = toGoal.length();
+        out.habitatCoreDistance = Number((
+          tangential + Math.max(0, vertical - 1) + Math.max(0, -vertical - 3.4)
+        ).toFixed(2));
+        out.habitatCoreRiseOnlyDistance = Number((
+          tangential + Math.max(0, vertical - 1)
+        ).toFixed(2));
+        out.habitatCoreTangentialDistance = Number(tangential.toFixed(2));
         out.habitatCoreVerticalOffset = Number(vertical.toFixed(2));
       }
     } catch (e) { out.habitatError = String(e).slice(0, 120); }

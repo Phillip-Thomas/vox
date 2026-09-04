@@ -1,4 +1,5 @@
 import type { AppPhase } from '../../state/appState.ts';
+import { surveyBracketMode } from '../feed/surveyBrackets.ts';
 import {
   storyHudTakeover,
   storyUsesEmbodiedGuidanceHud,
@@ -16,6 +17,13 @@ export interface StoryGuidancePresentationOwnership {
   regulationMarkerMounted: boolean;
   embodiedObjectiveMounted: boolean;
   embodiedMarkerMounted: boolean;
+  /**
+   * The survey brackets: the site designating quota targets the 1-bit render
+   * cannot distinguish. Only the two beats that order the player to take
+   * something the world gives no material cue for; every later rung has either
+   * a real directional marker or restored chroma.
+   */
+  surveyBracketsMounted: boolean;
 }
 
 export function getStoryGuidancePresentationOwnership(
@@ -31,6 +39,9 @@ export function getStoryGuidancePresentationOwnership(
     regulationObjectiveMounted: feedEffectsMounted && !embodiedGuidance,
     regulationMarkerMounted: feedEffectsMounted && !embodiedGuidance,
     embodiedObjectiveMounted: embodiedGuidance,
-    embodiedMarkerMounted: embodiedGuidance
+    embodiedMarkerMounted: embodiedGuidance,
+    surveyBracketsMounted: feedEffectsMounted
+      && !embodiedGuidance
+      && surveyBracketMode(story.beat) !== null
   };
 }

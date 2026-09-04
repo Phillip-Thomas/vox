@@ -316,6 +316,15 @@ export const CH8_EXIT_HOLD_SECONDS = 17;
  */
 export const CH10_FREEPLAY_GRACE_SECONDS = 180;
 /**
+ * The screening's grace. The 180s value above is a "do not rush" dial for a
+ * PLAYER settling into free play — it buys an ST-0 recurrence window in a sky
+ * the player is free to wander under. A movie run has no such freedom: the
+ * bridge walks the pilot straight home and runs the sky forward, so the same
+ * wall-clock wait would be three minutes of a stationary figure. Same gate,
+ * screening-appropriate dwell.
+ */
+export const CH10_MOVIE_FREEPLAY_GRACE_SECONDS = 14;
+/**
  * How near the second hearth's core the player must be for the fault to be
  * noticed. Sits between the shipped rest radius (4.2) and marker-approach
  * distances, so "at the hearth" means inside the shelter's own footprint rather
@@ -1510,6 +1519,8 @@ export interface Chapter10ColdEntryFacts {
   hearthDistance: number | null;
   /** Accumulated `done` free-play seconds. */
   freePlaySeconds: number;
+  /** Required dwell before the fault may be noticed (screening runs shorter). */
+  graceSeconds: number;
 }
 
 /**
@@ -1524,7 +1535,7 @@ export function chapter10ColdEntryReady(facts: Chapter10ColdEntryFacts): boolean
     && facts.night
     && facts.hearthDistance !== null
     && facts.hearthDistance <= CH10_HEARTH_NOTICE_RADIUS
-    && facts.freePlaySeconds >= CH10_FREEPLAY_GRACE_SECONDS;
+    && facts.freePlaySeconds >= facts.graceSeconds;
 }
 
 const chapter10FreePlayWatch = { seconds: 0 };
@@ -1539,7 +1550,8 @@ export function getChapter10FreePlaySeconds(): number {
 
 /** Live read of the entry facts. Never mutates; safe to sample from a probe. */
 export function readChapter10ColdEntryFacts(
-  actorId: string = getLocalActorId()
+  actorId: string = getLocalActorId(),
+  graceSeconds: number = CH10_FREEPLAY_GRACE_SECONDS
 ): Chapter10ColdEntryFacts {
   const habitat = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
   const corePosition = habitat
@@ -1556,7 +1568,8 @@ export function readChapter10ColdEntryFacts(
     hearthDistance: corePosition
       ? getPlayerWorldPosition().distanceTo(corePosition)
       : null,
-    freePlaySeconds: chapter10FreePlayWatch.seconds
+    freePlaySeconds: chapter10FreePlayWatch.seconds,
+    graceSeconds
   };
 }
 
@@ -1571,13 +1584,16 @@ export function readChapter10ColdEntryFacts(
  * the story is not. Chapter 10 is also reachable by its deep links, the resume
  * ladder and the movie lane, all of which bypass this watch entirely.
  */
-export function tickChapter10FreePlayEntry(dt: number): boolean {
+export function tickChapter10FreePlayEntry(
+  dt: number,
+  graceSeconds: number = CH10_FREEPLAY_GRACE_SECONDS
+): boolean {
   const story = getStoryStateSnapshot();
   if (story.active || story.beat !== 'done') return false;
   chapter10FreePlayWatch.seconds += Math.max(0, dt);
   const actorId = getLocalActorId();
   if (hasMilestone(STORY_MILESTONES.ch10ColdNoticed, actorId)) return false;
-  if (!chapter10ColdEntryReady(readChapter10ColdEntryFacts(actorId))) return false;
+  if (!chapter10ColdEntryReady(readChapter10ColdEntryFacts(actorId, graceSeconds))) return false;
   markMilestone(STORY_MILESTONES.ch10ColdNoticed, actorId);
   return reactivateStoryAtBeat('ch10-cold');
 }
@@ -2110,8 +2126,10 @@ function tickChapter10Transit(dt: number): void {
   if (runtime.ch10ResolvedAt < 0) return;
   if (runtime.elapsed < runtime.ch10ResolvedAt + HOLD_DURATION_MS / 1000) return;
   once('ch10-threshold-handback', () => {
-    // Mandatory, visible hand-back: thrust re-arms, guidance clears to nothing,
-    // and free play resumes in space with the bearing held and no way in.
+    // Mandatory, visible hand-back: thrust re-arms, chapter guidance clears,
+    // and free flight resumes with the bearing held. completeChapter10 also
+    // unlocks the existing approach instrument, so closing the remaining range
+    // now leads into the normal clearance and docking procedure.
     setStoryMoveScale(1);
     setWorkOrder([]);
     clearGuidedStoryObjective();

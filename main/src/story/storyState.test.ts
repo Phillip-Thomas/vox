@@ -2,10 +2,12 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import * as THREE from 'three';
 import {
   beginStory,
   canContinueStory,
   chapterForBeat,
+  completeChapter10,
   completeStory,
   debugBeatNeedsCampfire,
   getStoryStateSnapshot,
@@ -16,6 +18,7 @@ import {
   STORY_CHAPTER_ORDER,
   STORY_MILESTONES,
   storyChapterAtLeast,
+  storyAnchoredSpawn,
   storyFirstDayOrLater,
   storyEntryPoint,
   type StoryBeat
@@ -67,6 +70,13 @@ import {
   PHYSICAL_BOARDING_SEALED_MILESTONE
 } from './physicalBoardingReceipts.ts';
 import { STORY_COORDINATE } from './world/storyWorld.ts';
+import { getWorldGen } from '../utils/worldGenCache.ts';
+import { createWorldArrivalPose } from '../utils/worldArrival.ts';
+import { VOXEL_SCALE } from '../utils/cubeGravityConstants.ts';
+import {
+  isStorySpaceStationContext,
+  spaceStationDockingAuthorized
+} from '../game/spaceStation/spaceStationDevFlag.ts';
 
 const SRC_ROOT = fileURLToPath(new URL('..', import.meta.url));
 
@@ -395,6 +405,59 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     }
   });
 
+  it('stands the rehearsal hearth on Tidegarden\'s real surface, not inside it', () => {
+    // Owner-reported defect: "the read the fault interactable thing is in the
+    // middle of the planet when I start the chapter." The rehearsal hearth was
+    // committed at a literal cell `[0, 5, 0]` and stored cell arithmetic as a
+    // world position, so chapter 10's first interactable sat at world y = 5
+    // while Tidegarden's surface in that column is y = 50 — forty-five units of
+    // rock between the player and the objective her HUD was pointing at.
+    //
+    // The cell is not the fixed point. The ARRIVAL PAD is: a pure function of
+    // the world's size, seed and id, and the same one the scene mounts the
+    // player's own spawn from. This asserts the hearth against that authority.
+    for (const beat of ['ch10-cold', 'ch10-ask', 'ch10-transit'] as const) {
+      resetHabitats();
+      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
+      initStoryFromSave();
+
+      const { world } = createTidegardenLandfallBootstrap();
+      const planetSize = world.nominalFaceRadius;
+      const generator = getWorldGen(planetSize, world.seed, world.worldId).generator;
+      const state = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
+      expect(state, beat).not.toBeNull();
+      const core = state!.core;
+
+      // 1. The core's own column, marched against the shipped generator: its
+      //    support voxel is solid and the cell it occupies is the open one
+      //    directly above. A buried cell fails both halves.
+      expect(generator.shouldVoxelExist(...core.supportCell), beat).toBe(true);
+      expect(generator.shouldVoxelExist(...core.cell), beat).toBe(false);
+      expect(core.cell[1] - core.supportCell[1], beat).toBe(1);
+      // 2. World position, not cell arithmetic. VOXEL_SCALE is 2, so a cell
+      //    index used as a world coordinate reads as half its own depth.
+      expect(core.position[1], beat)
+        .toBeGreaterThanOrEqual(core.cell[1] * VOXEL_SCALE);
+      // 3. The rehearsal is still a rehearsal: same answer every time.
+      expect(core.cell, beat).toEqual([8, 25, -4]);
+
+      // 4. Reachable from where the player actually wakes — outside the
+      //    interaction reach so the chapter still opens on a walk, inside the
+      //    notice radius so it opens on its own opening condition.
+      const spawn = createWorldArrivalPose(planetSize, world.seed, world.worldId)
+        .playerSurfacePosition;
+      const range = spawn.distanceTo(new THREE.Vector3(...core.position));
+      expect(range, beat).toBeGreaterThan(4.2);
+      expect(range, beat).toBeLessThan(12);
+
+      // 5. And the enclosure the chapter opens inside actually certified. The
+      //    old bootstrap passed cell arithmetic as the player position too, so
+      //    the flood fill placed her three cells underground and the shelter
+      //    never certified at all — the milestone said it had.
+      expect(state!.shelterCertification, beat).not.toBeNull();
+    }
+  });
+
   it('keeps every ch1 through ch9 boot-world decision byte-identical, and gives ch10 to Tidegarden', () => {
     // The owner-reported ch10 defects (a full-size sibling shell drawn at the
     // camera, the ground itself becoming a lockable system body, and both
@@ -504,11 +567,24 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     expect(storyEntryPoint()).toEqual({ chapter: 'complete', beat: 'done' });
   });
 
-  it('defines the docking authorization milestone and grants it nowhere', () => {
-    // Run one DEFINES the predicate and sets it for no one: run two's owner
-    // docking packet owns when it becomes true. Proven by scanning the shipped
-    // client for any producer that would mark it.
+  it('grants docking exactly at the chapter 10 threshold hand-back', () => {
+    // The station introduction resolves before the berth becomes actionable:
+    // no early prompt can interrupt the reveal, while the same durable hand-back
+    // that returns flight control also unlocks the shipped docking procedure.
     expect(STORY_MILESTONES.stationDockingAuthorized).toBe('story:station-docking-authorized');
+    expect(hasMilestone(STORY_MILESTONES.stationDockingAuthorized)).toBe(false);
+    beginStory();
+    expect(isStorySpaceStationContext()).toBe(true);
+    expect(spaceStationDockingAuthorized()).toBe(false);
+
+    completeChapter10();
+
+    expect(hasMilestone(STORY_MILESTONES.ch10Complete)).toBe(true);
+    expect(hasMilestone(STORY_MILESTONES.stationDockingAuthorized)).toBe(true);
+    expect(spaceStationDockingAuthorized()).toBe(true);
+
+    // Keep the grant single-authority. A second producer could expose docking
+    // before the reveal or make replay/resume behavior depend on entry path.
     const offenders: string[] = [];
     for (const path of walkClientSources(SRC_ROOT)) {
       const source = readFileSync(path, 'utf8');
@@ -517,7 +593,19 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
         || /markMilestone\(\s*'story:station-docking-authorized'/.test(source)
       ) offenders.push(path);
     }
-    expect(offenders).toEqual([]);
+    expect(offenders).toEqual([fileURLToPath(new URL('./storyState.ts', import.meta.url))]);
+  });
+
+  it('migrates a completed Chapter 10 save into the docking route', () => {
+    // Saves made before the owner joined docking to Chapter 10 have the chapter
+    // completion but not the newer authorization receipt. A plain boot (and a
+    // snapshot `keep=1` boot) must repair that durable implication.
+    markMilestone(STORY_MILESTONES.ch10Complete);
+    vi.stubGlobal('window', { location: { search: '' } });
+
+    initStoryFromSave();
+
+    expect(hasMilestone(STORY_MILESTONES.stationDockingAuthorized)).toBe(true);
   });
 
   it('reconstructs the Keel and flight-ready prerequisites for late debug rehearsals', () => {
@@ -723,5 +811,20 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
     });
     expect(getSpaceFlightSnapshot()).toMatchObject({ phase: 'descent', controlMode: 'flight' });
     expect(hasMilestone(STORY_MILESTONES.ch8Landfall)).toBe(false);
+  });
+});
+
+describe('anchored spawn scope', () => {
+  it('anchors the bolted-camera eras and releases the embodied crossing', () => {
+    const at = (beat: StoryBeat) => storyAnchoredSpawn({ active: true, chapter: 'ch1', beat, runId: 1 });
+    // The external-camera strip is anchored to the crash site.
+    for (const beat of ['descent', 'ch1-fixed', 'ch1-raster', 'ch1-depth', 'ch1-nav', 'ch1-iso', 'ch1-lift'] as const) {
+      expect(at(beat)).toBe(true);
+    }
+    // ch1-anomaly crosses a gravity edge to another cube face; re-anchoring it
+    // would throw a reloading player back across that crossing.
+    expect(at('ch1-anomaly')).toBe(false);
+    expect(at('a1-ramp')).toBe(false);
+    expect(storyAnchoredSpawn({ active: false, chapter: 'ch1', beat: 'ch1-fixed', runId: 1 })).toBe(false);
   });
 });

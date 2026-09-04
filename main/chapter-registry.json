@@ -26,11 +26,11 @@
       ]
     },
     {
-      "id": "ch10-station-introduction@draft-v7",
+      "id": "ch10-station-introduction@draft-v9",
       "sceneId": "ch10-station-introduction",
-      "contractVersion": "draft-v7",
+      "contractVersion": "draft-v9",
       "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json",
-      "sha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
+      "sha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
       "coversBeats": [
         "ch10-cold",
         "ch10-ask",
@@ -1959,12 +1959,14 @@
         "beat": "ch10-transit",
         "guarantees": [
           "milestone:story:ch10-complete",
+          "milestone:story:station-docking-authorized",
           "milestone:story:ch10-bearing-claimed",
           "milestone:story:ch10-seam-passed",
           "milestone:story:complete",
           "state:story/complete",
           "state:free-play/two-world-handoff",
           "state:space-station/targeted",
+          "state:station/docking-authorized",
           "state:reality/alive"
         ],
         "stateRefs": [
@@ -1972,6 +1974,7 @@
           "state:free-play/two-world-handoff",
           "state:reality/alive",
           "state:space-station/targeted",
+          "state:station/docking-authorized",
           "state:control/flight"
         ]
       },
@@ -2006,7 +2009,9 @@
           "evidenceRefs": [
             "milestone:story:ch10-transit-ignited",
             "state:story/ch10-seam-passed",
-            "milestone:story:ch10-station-resolved"
+            "milestone:story:ch10-station-resolved",
+            "milestone:story:station-docking-authorized",
+            "state:station/docking-authorized"
           ]
         }
       ],
@@ -2015,51 +2020,51 @@
         "runtime:src/story/emergentStoryDirector.ts#chapter-10-guidance"
       ],
       "revealRefs": [
-        "scene:ch10-station-introduction@draft-v7#reveal:r1",
-        "scene:ch10-station-introduction@draft-v7#reveal:r2",
-        "scene:ch10-station-introduction@draft-v7#reveal:r3",
-        "scene:ch10-station-introduction@draft-v7#reveal:r4",
-        "scene:ch10-station-introduction@draft-v7#reveal:r5-non-spends"
+        "scene:ch10-station-introduction@draft-v9#reveal:r1",
+        "scene:ch10-station-introduction@draft-v9#reveal:r2",
+        "scene:ch10-station-introduction@draft-v9#reveal:r3",
+        "scene:ch10-station-introduction@draft-v9#reveal:r4",
+        "scene:ch10-station-introduction@draft-v9#reveal:r5-non-spends"
       ],
       "avBoundary": {
         "sceneContractRefs": [
-          "ch10-station-introduction@draft-v7"
+          "ch10-station-introduction@draft-v9"
         ],
         "entry": {
           "anchorRefs": [
-            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.cold-noticed"
+            "scene:ch10-station-introduction@draft-v9#anchor:anc.ch10.cold-noticed"
           ],
           "scoreRefs": [
-            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.cold-step"
+            "scene:ch10-station-introduction@draft-v9#score:sc.ch10.cold-step"
           ],
           "cameraRefs": [
-            "scene:ch10-station-introduction@draft-v7#camera:cin.cold.01-hum-drop"
+            "scene:ch10-station-introduction@draft-v9#camera:cin.cold.01-hum-drop"
           ],
           "paletteRefs": [
-            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
+            "scene:ch10-station-introduction@draft-v9#palette:pal.ch10.fire-night-and-station-amber"
           ]
         },
         "exit": {
           "anchorRefs": [
-            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.station-resolved",
-            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.threshold-handback"
+            "scene:ch10-station-introduction@draft-v9#anchor:anc.ch10.station-resolved",
+            "scene:ch10-station-introduction@draft-v9#anchor:anc.ch10.threshold-handback"
           ],
           "scoreRefs": [
-            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.station-resolved",
-            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.threshold-release"
+            "scene:ch10-station-introduction@draft-v9#score:sc.ch10.station-resolved",
+            "scene:ch10-station-introduction@draft-v9#score:sc.ch10.threshold-release"
           ],
           "cameraRefs": [
-            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.04-resolve",
-            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.05-threshold-handback"
+            "scene:ch10-station-introduction@draft-v9#camera:cin.transit.04-resolve",
+            "scene:ch10-station-introduction@draft-v9#camera:cin.transit.05-threshold-handback"
           ],
           "paletteRefs": [
-            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
+            "scene:ch10-station-introduction@draft-v9#palette:pal.ch10.fire-night-and-station-amber"
           ]
         }
       },
       "acceptance": {
         "evidenceRefs": [
-          "scene:ch10-station-introduction@draft-v7#evidence",
+          "scene:ch10-station-introduction@draft-v9#evidence",
           "runtime:src/story/emergentStoryDirector.test.ts#chapter-10-guidance",
           "runtime:src/story/storyBoundaryTelemetry.test.ts#chapter-10-station-claims"
         ],

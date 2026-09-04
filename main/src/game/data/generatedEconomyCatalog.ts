@@ -53,7 +53,8 @@ export const ECONOMY_CATALOG = {
     "survey_lens_4",
     "lift_cell",
     "range_coil",
-    "habitat_core"
+    "habitat_core",
+    "bonded_cell"
   ],
   "stationIds": [
     "hand",

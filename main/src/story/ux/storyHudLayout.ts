@@ -1,3 +1,4 @@
+import { TOUCH_DPAD_TOP_EDGE_PX } from '../../components/hud/hudChrome.ts';
 // Shared screen-space policy for the free-era story HUD. The R3F marker keeps
 // publishing its untouched projection into feedRuntime; these helpers only
 // solve how the DOM overlays fit around mobile controls and one another.
@@ -5,6 +6,8 @@
 export const STORY_HUD_NARROW_WIDTH_PX = 820;
 export const STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX = 174;
 export const STORY_HUD_OBJECTIVE_FALLBACK_HEIGHT_PX = 150;
+/** Breathing room between a bottom-anchored control cluster and the lane above it. */
+export const STORY_HUD_CONTROL_GAP_PX = 14;
 
 const STORY_HUD_TOUCH_SIDE_PX = 18;
 const STORY_HUD_DESKTOP_SIDE_PX = 22;
@@ -24,6 +27,46 @@ export interface StoryHudSafeAreaInsets {
   right: number;
   bottom: number;
   left: number;
+}
+
+/**
+ * Placement for the chapter-1 feed ledgers (CALIBRATION / QUOTA / RECOVERY /
+ * FIXES) — the only honest progress readouts the chapter has.
+ *
+ * They were hard-coded to `bottom: 30, left: 56`, which on touch sits directly
+ * under the virtual D-pad: the pad occupies roughly 150x150px from the
+ * bottom-left safe corner, and the feed chrome paints above it. So on every
+ * phone, for every beat from ch1-fixed to ch1-iso, the numbers telling the
+ * player whether they were making progress were behind the buttons they had to
+ * press to make it.
+ */
+export interface StoryFeedLedgerPlacement {
+  bottom: number;
+  left: number;
+}
+
+/**
+ * Feed-era clearance is measured against the CROSS D-PAD, which is what these
+ * beats mount (`storyUsesEarlyTouchDpad`) — not the analog joystick that
+ * `STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX` was sized for. Derived from the pad's
+ * own constants so the two can never drift apart again.
+ */
+export const STORY_FEED_LEDGER_TOUCH_CLEARANCE_PX = TOUCH_DPAD_TOP_EDGE_PX + 12;
+
+export function solveStoryFeedLedgerPlacement(
+  touch: boolean,
+  safeAreaInsets: Partial<StoryHudSafeAreaInsets> = {}
+): StoryFeedLedgerPlacement {
+  const bottomInset = finiteInset(safeAreaInsets.bottom);
+  const leftInset = finiteInset(safeAreaInsets.left);
+  return touch
+    // Clear the whole control cluster, then hug the safe edge.
+    ? { bottom: STORY_FEED_LEDGER_TOUCH_CLEARANCE_PX + bottomInset, left: STORY_HUD_TOUCH_SIDE_PX + leftInset }
+    : { bottom: 30 + bottomInset, left: 56 + leftInset };
+}
+
+function finiteInset(value: number | undefined): number {
+  return typeof value === 'number' && Number.isFinite(value) && value > 0 ? value : 0;
 }
 
 export interface StoryHudTopLeftOcclusion {
@@ -75,6 +118,18 @@ export interface StoryHudLayoutInput {
   safeAreaInsets?: Partial<StoryHudSafeAreaInsets>;
   /** Optional top-left HUD chrome the stable reduced-motion marker must avoid. */
   topLeftOcclusion?: Partial<StoryHudTopLeftOcclusion>;
+  /**
+   * Distance from the viewport BOTTOM to the top edge of the tallest mounted
+   * bottom-anchored touch control, in px (safe-area insets already included,
+   * because it is measured).
+   *
+   * Measured, never copied. `STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX` is only a
+   * floor for callers that genuinely cannot know: it was sized against a 152px
+   * four-button cluster, and when the sprint button added a third row every
+   * sprint-enabled beat — most of the game — drew captions straight across the
+   * controls. See `readTouchControlClearance`.
+   */
+  touchControlTopFromBottom?: number;
 }
 
 export interface StoryHudLayout {
@@ -146,8 +201,13 @@ export function solveStoryHudLayout(input: StoryHudLayoutInput): StoryHudLayout 
   const narrowTouch = input.touch && viewportWidth <= STORY_HUD_NARROW_WIDTH_PX;
   const safeAreaInsets = normalizeSafeAreaInsets(input.safeAreaInsets);
   const side = input.touch ? STORY_HUD_TOUCH_SIDE_PX : STORY_HUD_DESKTOP_SIDE_PX;
+  // Clear whatever is ACTUALLY mounted, never a remembered number.
+  const measuredControlTop = Math.max(0, finiteOr(input.touchControlTopFromBottom, 0));
+  const measuredControlClearance = measuredControlTop > 0
+    ? measuredControlTop + STORY_HUD_CONTROL_GAP_PX
+    : 0;
   const objectiveBottomBase = input.touch
-    ? STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX
+    ? Math.max(STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX, measuredControlClearance)
     : STORY_HUD_DESKTOP_BOTTOM_PX;
   const objectiveBottom = objectiveBottomBase + safeAreaInsets.bottom;
   const measuredHeight = Math.max(0, finiteOr(input.objectiveHeight, 0));
@@ -549,6 +609,66 @@ export function solveStoryEdgeLabelPresentation(
  * Resolve CSS env() safe-area values once per viewport shape. Kept separate
  * from the pure solver so layout policy remains deterministic and testable.
  */
+/**
+ * Selector for every bottom-anchored touch control the caption/objective lane
+ * must sit above. Adding a new control means adding it HERE — the lane is
+ * measured, so a control that is not listed is a control captions will be
+ * drawn across.
+ */
+/**
+ * Top-left chrome that centred banner surfaces must not be drawn across. Same
+ * membership FreeMarker's marker avoidance uses — kept here so every consumer
+ * shares one definition of "the top-left corner is occupied".
+ */
+export const TOP_LEFT_HUD_SELECTOR =
+  '[data-testid="vitals-meter"], [data-testid="inventory-panel"], [data-story-journal-trigger="true"]';
+
+/** Measured top-left occupied corner, or undefined when the corner is clear. */
+export function readTopLeftHudOcclusion(): StoryHudTopLeftOcclusion | undefined {
+  if (typeof document === 'undefined' || typeof window === 'undefined') return undefined;
+  const rects: StoryHudObservedRect[] = [];
+  for (const node of document.querySelectorAll(TOP_LEFT_HUD_SELECTOR)) {
+    if (!(node instanceof HTMLElement)) continue;
+    const style = window.getComputedStyle(node);
+    if (style.display === 'none' || style.visibility === 'hidden') continue;
+    if (Number.parseFloat(style.opacity || '1') <= 0.01) continue;
+    if (node.getClientRects().length === 0) continue;
+    const rect = node.getBoundingClientRect();
+    rects.push({
+      left: rect.left, top: rect.top, right: rect.right,
+      bottom: rect.bottom, width: rect.width, height: rect.height
+    });
+  }
+  return deriveStoryHudTopLeftOcclusion(rects, window.innerWidth, window.innerHeight);
+}
+
+export const BOTTOM_TOUCH_CONTROL_SELECTOR = [
+  '[data-testid="touch-action-cluster"]',
+  '[data-testid="touch-joystick"]',
+  '[data-testid="touch-dpad"]',
+  '[data-testid="touch-dpad-actions"]'
+].join(', ');
+
+/**
+ * Distance from the viewport bottom to the highest mounted touch control, or 0
+ * when none is mounted. Only counts genuinely rendered elements, so a veiled
+ * cinematic (opacity 0 + inert) correctly frees the lane back up.
+ */
+export function readTouchControlClearance(): number {
+  if (typeof document === 'undefined' || typeof window === 'undefined') return 0;
+  let clearance = 0;
+  for (const node of document.querySelectorAll(BOTTOM_TOUCH_CONTROL_SELECTOR)) {
+    if (!(node instanceof HTMLElement)) continue;
+    const style = window.getComputedStyle(node);
+    if (style.display === 'none' || style.visibility === 'hidden') continue;
+    if (Number.parseFloat(style.opacity || '1') <= 0.01) continue;
+    const rect = node.getBoundingClientRect();
+    if (rect.width <= 0 || rect.height <= 0) continue;
+    clearance = Math.max(clearance, window.innerHeight - rect.top);
+  }
+  return Number.isFinite(clearance) ? clearance : 0;
+}
+
 export function readStoryHudSafeAreaInsets(): StoryHudSafeAreaInsets {
   if (typeof document === 'undefined') return normalizeSafeAreaInsets(undefined);
   const host = document.body ?? document.documentElement;

@@ -53,7 +53,24 @@ Durable contracts live in:
 - `docs/architecture/workflow-orchestration/examples/paravoxia-creative-triad.workflow.json`
 - `.codex/production-runs/_template/`
 
-The current authority in `PARAVOXIA_DEMO_FOUNDATION_PLAN.md` remains binding:
-the team may prepare workflow, review, and cinematography documentation now,
-but it must not add post-arrival story or change protected audio/runtime paths
-until the recorded release gates permit that work.
+## Story scope
+
+Post-arrival story work is **authorized**. The owner lifted the post-arrival
+gate on 2026-07-28 (recorded at the top of `PARAVOXIA_DEMO_FOUNDATION_PLAN.md`):
+story beyond `ch9-hearth` may be designed, built, and registered, including the
+space-station chapter. Do not refuse or defer this work on the basis of an
+older freeze — earlier revisions of this file carried one, and it expired.
+
+What still applies:
+
+- **Creative-Triad and registry gates are the remaining barrier** between a new
+  chapter and the runtime. Route the work through them; do not route around.
+- **Sequencing is owner-directed: do not rush to the station.** Making the
+  existing story enjoyable comes first, and the need to leave must emerge from
+  play rather than from a new content hook.
+- **The demo's release surface is unchanged** — it still stops at
+  `ch4-arrival`, and publishing remains a separate decision. Building past it
+  is allowed; shipping it in the demo is not implied.
+- **Shipped copy and audio remain protected baselines.** Changing a protected
+  audio/runtime path is still a contracted change, not an incidental one.
+- **"Anchorage" is retired as a name.** The location is the **space station**.

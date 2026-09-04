@@ -2,9 +2,11 @@
 
 Contract: `scene-contract.json` **draft-v9**, sha256
 `0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1`,
-tri-signed approve-with-notes. Production lock revisions R1–R9.
-Mode: chapter. Disposition at time of writing: **awaiting cohesion judgement**;
-publishing already occurred out-of-band (see §6).
+tri-signed approve-with-notes. Production lock revisions R1–R12.
+Mode: chapter. The 2026-08-12 cohesion judgement issued **repair** (see §11);
+publishing had already occurred out-of-band (see §6). The R12 continuation is
+implemented and verified locally; it is not deployed and does not change the
+machine lock's `releaseCandidate:false` / `publishAllowed:false` state.
 
 ## 1. What was built
 
@@ -27,7 +29,23 @@ prelude:
   a place. Thrust cuts, the ship coasts, the work order clears, and the run
   ends on a frame with no annotation on it.
 
-The player never docks. That is the authored cut line, not an unfinished edge.
+The draft-v9 reveal still ends at that unannotated standoff. Under the owner's
+2026-08-13 R10 decision, the threshold hand-back now authorizes the shipped
+approach route: the player can close the remaining corridor, request clearance,
+dock into the station apron, and return to the ship. R11 closes the same round
+trip for touch controls. This post-closeout extension uses the existing
+page-transition architecture; it does not alter the signed reveal rail.
+
+R12 continues after the apron as a separate post-Chapter-10 movement. The
+player follows a station-local marker to REGULATION, presents the W-7743 suit
+record, declares an issued habitat component, and proceeds to certified trader
+B-7073 “Bell”. Bell issues exactly one real, noncraftable `bonded_cell`; other
+vendors remain available for bounded optional conversation, while ordinary
+trade waits until the story cargo is secured. The mission and item survive a
+station reload. Undocking publishes a return-to-Tidegarden work order; at the
+existing second hearth, `[F] Install the Sealed Bonded Cell` consumes that one
+item and durably records the hearth restored. A bare `?spacestation=1` remains
+story-free and ephemeral.
 
 ## 2. Where it lives
 
@@ -38,10 +56,22 @@ SpaceStationApproachDriver, station exterior), registry and authority JSON, and
 four tool repairs. Commits: `9a20dde` (chapter), `ea35f0d` (review repairs),
 `93a702b` and `e105660` (run record).
 
+The R12 continuation lives in
+`main/src/game/spaceStation/spaceStationStory.ts`,
+`main/src/components/spaceStation/StationStoryPanel.tsx`, the station sandbox
+and vendor panel, `main/src/story/stationReturnStory.ts`,
+`StoryDirectorDriver.tsx`, `StoryOverlays.tsx`, and the Tidegarden settlement
+world. `station-continuation-contract.md` is its bounded story authority.
+
 ## 3. State at close
 
-- 2,270 tests; `npm --prefix main run verify` 9/9; contract gate 1663 passed;
-  implementation gate 1787 passed.
+- 2,285 tests; `npm --prefix main run verify` passed all catalog, signed-AV,
+  creative-workflow, chapter-registry, chapter-journey, type, story-authority,
+  unit, and production-build gates. Server catalog parity (6 tests) and server
+  typecheck also pass.
+- The R12 browser proof passes 15/15 checks with zero runtime problems across
+  desktop issuance/reload/undock/install/reload, touch issuance, optional vendor
+  isolation, and the story-free standalone sandbox.
 - Whole-game movie-lane traversal: 427s, 30/30 legs, zero timeout rescues.
 - Marker invariant: 42,886 mutation-resolution records, zero mandatory
   objectives ever observable at `missing-marker`.
@@ -85,24 +115,23 @@ deploy. Recorded in full as lock revision R8. The tree was committed
 afterwards as `9a20dde`; **the live site still serves that commit and predates
 every review-wave repair.**
 
-## 7. Resume point
+## 7. Remaining work
 
-1. The final capture pass stamps `verification-report.json` against draft-v9
-   (three hero stills, ST-0 night-dwell visibility, gaze telemetry, occupancy
-   evaluated as `K/Z` rather than a band).
-2. The cohesion judge rules on the complete record and produces
-   `final-scorecard.json` — the last ~20 final-gate failures are its to close.
-3. `critic-report.md` was never commissioned; three defects cite it as a
+1. The final capture/hash stamping pass completed after the cohesion judge had
+   begun; §11 records that race and the repair judgement now in
+   `final-scorecard.json`.
+2. `critic-report.md` was never commissioned; three defects cite it as a
    lossless source and it remains a template. Either run the moderation pass or
    record the omission.
-4. Owner decisions: seven, in `human-decision.json` — docking architecture,
-   corridor-silence legibility, the voice lane, reveal scale, the predeploy
-   gate, the release surface, and whether to redeploy onto the repaired build.
-5. Deferred with reasons: the second-run chapters (apron/counter/concourse) and
-   the ten canon debts this chapter's shipped lines create for them, in
-   `story-audit.md`; the score's continuous-pedal packet; multi-production
-   registration in the authority gate; `main/STORY.md` still ends at
-   ch4-arrival.
+3. Owner decisions remain in `human-decision.json`; docking architecture and
+   corridor legibility are resolved by the shipped clearance prompt and R12
+   station continuation. The voice lane, reveal scale, predeploy gate, release
+   surface, and redeploy remain owner calls.
+4. Deferred with reasons: deeper station economy persistence and multiplayer
+   authority; answers to the protected station unknowns; the score's
+   continuous-pedal packet; multi-production registration in the authority
+   gate; formal registration of the R12 sidecar as ch11/ch12 StoryState beats;
+   `main/STORY.md` still ends at ch4-arrival.
 
 ## 8. What changed
 
@@ -120,6 +149,13 @@ tools that had rotted (a JSON validator comparing a type against an array, a
 placeholder scan applied to TypeScript, a generator pinned to one signed
 contract, and a probe guard that never fired).
 
+Post-closeout R12 adds the deterministic counter/Bell dialogue ladder, a real
+catalogued bonded-cell item, idempotent station receipts, station-safe save
+restoration, optional vendor topics, return guidance, and the physical
+second-hearth installation transaction. The one-shot `undock`/`fly` handoff is
+consumed after berth reconstruction so a later reload cannot teleport the
+player back to the station.
+
 ## 9. Evidence
 
 `evidence-registry.json` is the index; every media row is ffprobe-matched
@@ -130,10 +166,21 @@ Score evidence is deterministic OfflineAudioContext renders plus combined-bus
 excerpts. State traces cover all four variant profiles. The blind viewer
 received `raw-audiovisual-evidence.json` and nothing else.
 
+The post-closeout station proof is
+`evidence/verification/ch11-station-story.json`; it is a 15-check real-browser
+journey rather than new rendered media, so it stays inside the lean evidence
+rule.
+
+`check-results.json` and `verification-report.json` remain the historical
+draft-v9 measurement record for the signed Chapter 10 cut line. Their
+cut-line-era `dockingAuthorized:false` / no-interior observations are not
+rewritten; R10 and R12 truth lives in the later browser evidence named above.
+
 ## 10. Quality
 
-Final scoring belongs to the cohesion judge and is not yet recorded. What the
-independent reviewers found on their own terms: canon clean and pillar-safe;
+The cohesion judge recorded a **repair** disposition: weighted 4.404 against a
+4.75 bar, with a 4.00 category floor against 4.30. What the independent
+reviewers found on their own terms: canon clean and pillar-safe;
 the score lane independently lockable after its blocking defects were repaired
 and re-measured; guidance never lying, with one missing rung since authored and
 wired; the blind viewer reading the spine as "a clean, moving spine" while

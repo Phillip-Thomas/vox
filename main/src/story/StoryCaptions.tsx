@@ -8,8 +8,13 @@ import { presentInputGlyphs } from './ux/inputGlyphs.ts';
 import {
   getMeasuredStoryObjectiveCardHeight,
   readStoryHudSafeAreaInsets,
+  readTouchControlClearance,
   solveStoryHudLayout
 } from './ux/storyHudLayout.ts';
+import { hudSurface } from '../ui/hudSurfaces.ts';
+
+/** How often the mounted-control clearance is re-measured (ms). */
+const TOUCH_CONTROL_SAMPLE_MS = 200;
 
 // --- The awakening voice -----------------------------------------------------------
 //
@@ -32,6 +37,10 @@ const StoryCaptions: React.FC = () => {
     let viewportWidth = window.innerWidth;
     let viewportHeight = window.innerHeight;
     let safeAreaInsets = readStoryHudSafeAreaInsets();
+    // Sampled, not read per frame: getBoundingClientRect + getComputedStyle
+    // force layout, and the controls only change on beat/mode changes.
+    let controlClearance = readTouchControlClearance();
+    let controlSampledAt = 0;
     const el = captionRef.current;
     // Awakened captions carry key hints ([SHIFT] run, [M] chart, hold [E] …).
     // On touch they must name the mounted controls, so present the line once and
@@ -44,6 +53,11 @@ const StoryCaptions: React.FC = () => {
     };
     const tick = () => {
       raf = requestAnimationFrame(tick);
+      const now = typeof performance === 'undefined' ? Date.now() : performance.now();
+      if (now - controlSampledAt >= TOUCH_CONTROL_SAMPLE_MS) {
+        controlSampledAt = now;
+        controlClearance = readTouchControlClearance();
+      }
       const root = rootRef.current;
       if (!el || !root) return;
       const layout = solveStoryHudLayout({
@@ -52,6 +66,7 @@ const StoryCaptions: React.FC = () => {
         touch: isTouchDevice(),
         objectivePresent: getActiveGuidedStoryObjective() !== null,
         objectiveHeight: getMeasuredStoryObjectiveCardHeight(),
+        touchControlTopFromBottom: controlClearance,
         safeAreaInsets
       });
       root.style.left = `${layout.caption.left}px`;
@@ -96,6 +111,7 @@ const StoryCaptions: React.FC = () => {
       ref={rootRef}
       aria-live="polite"
       data-story-caption="true"
+      {...hudSurface('story-caption', 'caption')}
       data-caption-placement={initialLayout.caption.placement}
       style={{
         position: 'fixed',

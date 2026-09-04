@@ -22,21 +22,35 @@ import {
   getHabitatWorldState,
   type HabitatCell
 } from '../game/systems/habitatSystem.ts';
-import { placePiece } from '../game/systems/structureSystem.ts';
-import { certifyTidegardenShelter } from './tidegardenSettlement.ts';
+import {
+  faceIndexForNormal,
+  oppositeFace,
+  placePiece
+} from '../game/systems/structureSystem.ts';
+import {
+  certifyTidegardenShelter,
+  findTidegardenRecommendedHabitatSite,
+  type HabitatSiteProof
+} from './tidegardenSettlement.ts';
+import { addItem, getItemCount } from '../game/systems/inventorySystem.ts';
+import { getWorldGen } from '../utils/worldGenCache.ts';
+import { createWorldArrivalPose } from '../utils/worldArrival.ts';
+import { VOXEL_SCALE, voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 
 /**
- * The rehearsal hearth's cell. Deliberately a fixed, flat, inland cell rather
- * than a search: a deep link is a reproducible rehearsal, and a rehearsal that
- * lands somewhere new each time is not one.
+ * Tangential offset, in terrain cells, between the arrival pad and the
+ * rehearsal hearth.
+ *
+ * Zero would stand the hearth inside the parked Kestrel, and inside
+ * `CH10_CORE_INTERACT_DISTANCE` (4.2) of the spawn, so the chapter's first act
+ * would already be under her hand before she had looked at it. More than
+ * `CH10_HEARTH_NOTICE_RADIUS` (12 world units, both in emergentStoryDirector)
+ * would open chapter 10 outside its own opening condition. Four cells is eight
+ * world units, and the survey may slide a cell either way to reach dry level
+ * ground: the hearth is the first thing in front of her, comfortably inside the
+ * notice radius, and she still has to walk to it.
  */
-const CH10_DEBUG_HABITAT_CELL: HabitatCell = [0, 5, 0];
-const CH10_DEBUG_HABITAT_EYE_HEIGHT = 1.2;
-const CH10_DEBUG_SHELTER_ID = 'ch10-debug-second-hearth';
-/** +Y up, its opposite as the floor, and the four lateral faces as walls. */
-const CH10_DEBUG_UP_FACE = 2;
-const CH10_DEBUG_FLOOR_FACE = 3;
-const CH10_DEBUG_WALL_FACES = [0, 1, 4, 5] as const;
+const CH10_DEBUG_HEARTH_OFFSET_CELLS = 4;
 
 /**
  * The debug landfall starts inside the atmosphere, but outside the complete
@@ -130,16 +144,63 @@ export function bootstrapTidegardenSurfaceDebug(): TidegardenLandfallBootstrap {
 }
 
 /**
+ * Where the rehearsal hearth stands, resolved against the REAL terrain.
+ *
+ * The cell used to be a literal `[0, 5, 0]`, on the theory that a fixed cell is
+ * more reproducible than a search. It is not: cell 5 is a depth, not a place,
+ * and Tidegarden's surface in that column is cell 25. The hearth was therefore
+ * committed forty world units inside the planet, which is where the owner found
+ * chapter 10's first interactable.
+ *
+ * The correct fixed point is not a cell, it is the arrival pad — a pure
+ * function of the world's size, seed and id, and the same one `EfficientScene`
+ * mounts the player's own spawn from. Anchoring there and letting the shipped
+ * habitat survey resolve the site keeps the rehearsal exactly as reproducible
+ * as before while making the answer terrain-true: a hearth on the ground the
+ * player wakes on, a few paces from her ship, the way chapter 9 leaves it.
+ */
+function tidegardenRehearsalHabitatSite(
+  actorId: ActorId
+): HabitatSiteProof | null {
+  const { world } = createTidegardenLandfallBootstrap();
+  const planetSize = world.nominalFaceRadius;
+  // The generator IS the shipped SpawnTerrainQuery; `worldArrival` resolves the
+  // canonical pad through this same handle. A `?story=` jump has just cleared
+  // every voxel edit for this world, so pristine generation and the terrain the
+  // player is about to stand on are the same terrain.
+  const terrain = getWorldGen(planetSize, world.seed, world.worldId).generator;
+  const arrival = createWorldArrivalPose(planetSize, world.seed, world.worldId);
+  const anchor = arrival.playerSurfacePosition
+    .clone()
+    .setX(arrival.playerSurfacePosition.x + CH10_DEBUG_HEARTH_OFFSET_CELLS * VOXEL_SCALE);
+  const site = findTidegardenRecommendedHabitatSite({
+    worldId: TIDEGARDEN_WORLD_ID,
+    planetSize,
+    playerPosition: anchor,
+    terrain,
+    actorId
+  });
+  return site.ok ? site.proof : null;
+}
+
+/**
+ * Panels the enclosure needs: a floor, a ceiling, and four walls on each of the
+ * two interior cells. Topped up rather than minted outright, exactly as the
+ * movie runtime provisions its own shelter build.
+ */
+const CH10_DEBUG_SHELTER_WOOD = 24;
+
+/**
  * Chapter 10's rehearsal prerequisite: a certified second hearth.
  *
  * A `?story=` beat jump starts from pristine terrain and a pristine spawn, which
  * is exactly right for every beat that builds its own world and exactly wrong
  * for chapter 10 — it opens INSIDE finished free play, at a hearth the player
  * spent chapter 9 earning. This reconstructs that hearth through the same three
- * shipped authorities the player's own run commits it through: the core
- * placement, the physical enclosure, and the flood-fill certification. Nothing
- * is faked past them; if any one refuses, the rehearsal is honestly without a
- * hearth rather than quietly pretending to have one.
+ * shipped authorities the player's own run commits it through: the site survey
+ * and core placement, the physical enclosure, and the flood-fill certification.
+ * Nothing is faked past them; if any one refuses, the rehearsal is honestly
+ * without a hearth rather than quietly pretending to have one.
  *
  * Debug/rehearsal only. Returns true when a certified shelter exists afterwards.
  */
@@ -149,36 +210,53 @@ export function bootstrapTidegardenHabitatDebug(
   const existing = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
   if (existing?.shelterCertification) return true;
 
-  const lowerCell: HabitatCell = [...CH10_DEBUG_HABITAT_CELL];
-  const upperCell: HabitatCell = [lowerCell[0], lowerCell[1] + 1, lowerCell[2]];
-  const supportCell: HabitatCell = [lowerCell[0], lowerCell[1] - 1, lowerCell[2]];
-  const playerPosition = new THREE.Vector3(
-    lowerCell[0] + 0.5,
-    lowerCell[1] + CH10_DEBUG_HABITAT_EYE_HEIGHT,
-    lowerCell[2] + 0.5
-  );
+  const core = existing?.core ?? null;
+  const site = core ? null : tidegardenRehearsalHabitatSite(actorId);
+  const lowerCell: HabitatCell = core ? [...core.cell] : site ? [...site.cell] : [0, 0, 0];
+  const up = core
+    ? new THREE.Vector3(core.up[0], core.up[1], core.up[2])
+    : site?.up.clone() ?? null;
+  if (!up) return false;
+  const upperCell: HabitatCell = [
+    lowerCell[0] + up.x,
+    lowerCell[1] + up.y,
+    lowerCell[2] + up.z
+  ];
+  const upFace = faceIndexForNormal(up.x, up.y, up.z);
+  const floorFace = oppositeFace(upFace);
+  const wallFaces = [0, 1, 2, 3, 4, 5].filter(face => face !== upFace && face !== floorFace);
+  // WORLD units, not cell indices: the certification's flood fill divides this
+  // by VOXEL_SCALE to find the cell the player is standing in. Cell arithmetic
+  // passed here read as a point three cells underground and the shelter never
+  // certified at all.
+  const playerPosition = voxelCoordToWorld(lowerCell[0], lowerCell[1], lowerCell[2]);
 
-  if (!existing) {
+  if (site) {
     const placed = commitHabitatCorePlacement({
       actorId,
       worldId: TIDEGARDEN_WORLD_ID,
-      shelterId: CH10_DEBUG_SHELTER_ID,
+      shelterId: site.shelterId,
       cell: lowerCell,
-      supportCell,
-      position: [playerPosition.x, lowerCell[1], playerPosition.z],
-      up: [0, 1, 0],
+      supportCell: [...site.supportCell],
+      position: site.position.toArray(),
+      up: up.toArray(),
       eventId: `story:debug:${actorId}:ch10-habitat-core`
     });
     if (!placed) return false;
   }
 
   // The enclosure the certification will read: floor and ceiling on the up axis,
-  // walls on the four lateral faces of both cells.
-  placePiece(upperCell, CH10_DEBUG_UP_FACE, 'ceiling', 'wood', CH10_DEBUG_UP_FACE, actorId);
-  placePiece(lowerCell, CH10_DEBUG_FLOOR_FACE, 'foundation', 'wood', CH10_DEBUG_UP_FACE, actorId);
+  // walls on the four lateral faces of both cells. `placePiece` charges the
+  // build, so the rehearsal must be able to afford its own hearth.
+  const wood = getItemCount('wood', actorId);
+  if (wood < CH10_DEBUG_SHELTER_WOOD) {
+    addItem('wood', CH10_DEBUG_SHELTER_WOOD - wood, actorId);
+  }
+  placePiece(upperCell, upFace, 'ceiling', 'wood', upFace, actorId);
+  placePiece(lowerCell, floorFace, 'foundation', 'wood', upFace, actorId);
   for (const cell of [lowerCell, upperCell]) {
-    for (const face of CH10_DEBUG_WALL_FACES) {
-      placePiece(cell, face, 'wall', 'wood', CH10_DEBUG_UP_FACE, actorId);
+    for (const face of wallFaces) {
+      placePiece(cell, face, 'wall', 'wood', upFace, actorId);
     }
   }
 

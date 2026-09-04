@@ -93,10 +93,10 @@ export default function SystemSpaceStations({
           descriptor={descriptor}
           body={body}
           renderOrigin={systemFlight.renderOrigin}
-          // D-A5. The berth ring is the station offering a berth, and in a story
-          // world where docking is unauthorized the station addresses the player
-          // in nothing — not in the advisory register, not on [F], and not in
-          // geometry either. Same predicate as both of those, evaluated here at
+          // The berth ring is the station offering a berth. Before Chapter 10's
+          // hand-back, story flight withholds that offer in the advisory, on [F],
+          // and in geometry. Once docking is earned, the same predicate reveals
+          // all three together. It is evaluated here at
           // the shipped game's mount: the sandbox reaches the exterior through
           // SpaceStationApproach and never renders this component at all, so it
           // cannot be reached by this flag.

@@ -12,6 +12,7 @@ import {
   STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX
 } from './storyHudLayout.ts';
 import { presentStoryGuidanceLine } from './inputGlyphs.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 // Re-exported so the awakened HUD's existing importers keep their call site.
 export { presentStoryGuidanceLine };
@@ -142,6 +143,7 @@ const StoryGuidanceHud: React.FC<StoryGuidanceHudProps> = ({
   const [objectiveHeadline, ...objectiveDetailParts] = objective.markerLabel.split(' · ');
   const objectiveDetail = objectiveDetailParts.join(' · ');
   const objectiveData = {
+    ...hudSurface('story-guidance-card', 'informational'),
     'data-story-guidance-hud': 'true',
     'data-objective-id': objective.id,
     'data-objective-marker-label': objective.markerLabel,
@@ -163,6 +165,7 @@ const StoryGuidanceHud: React.FC<StoryGuidanceHudProps> = ({
           onClick={() => onOpenChange?.(!open)}
           {...objectiveData}
           data-story-journal-trigger="true"
+      {...hudSurface('story-journal-trigger', 'control')}
           style={{
             position: 'fixed',
             ...getStoryJournalTriggerPlacement(),

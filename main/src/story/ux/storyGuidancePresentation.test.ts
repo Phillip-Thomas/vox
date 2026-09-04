@@ -39,7 +39,8 @@ describe('story guidance presentation hand-off', () => {
       regulationObjectiveMounted: true,
       regulationMarkerMounted: true,
       embodiedObjectiveMounted: false,
-      embodiedMarkerMounted: false
+      embodiedMarkerMounted: false,
+      surveyBracketsMounted: false // ch1-lift is a wait rung; nothing to designate
     });
 
     const embodiedFeed = getStoryGuidancePresentationOwnership(
@@ -51,7 +52,8 @@ describe('story guidance presentation hand-off', () => {
       regulationObjectiveMounted: false,
       regulationMarkerMounted: false,
       embodiedObjectiveMounted: true,
-      embodiedMarkerMounted: true
+      embodiedMarkerMounted: true,
+      surveyBracketsMounted: false
     });
     expect(Number(embodiedFeed.regulationObjectiveMounted)
       + Number(embodiedFeed.embodiedObjectiveMounted)).toBe(1);
@@ -68,7 +70,8 @@ describe('story guidance presentation hand-off', () => {
       regulationObjectiveMounted: false,
       regulationMarkerMounted: false,
       embodiedObjectiveMounted: true,
-      embodiedMarkerMounted: true
+      embodiedMarkerMounted: true,
+      surveyBracketsMounted: false
     });
   });
 
@@ -81,7 +84,28 @@ describe('story guidance presentation hand-off', () => {
       regulationObjectiveMounted: false,
       regulationMarkerMounted: false,
       embodiedObjectiveMounted: false,
-      embodiedMarkerMounted: false
+      embodiedMarkerMounted: false,
+      surveyBracketsMounted: false
     });
+  });
+
+  it('designates quota targets only on the two beats the 1-bit render blinds', () => {
+    // These are the beats whose work order names a thing to take while `bare`
+    // reality gives grass, dirt and hull debris the same grey slab, and no
+    // directional marker is published.
+    for (const beat of ['ch1-fixed', 'ch1-raster'] as const) {
+      expect(getStoryGuidancePresentationOwnership(story('ch1', beat), 'playing')
+        .surveyBracketsMounted).toBe(true);
+    }
+    // ch1-depth onward carry a real marker; ch2 has chroma back.
+    for (const beat of ['descent', 'ch1-track', 'ch1-depth', 'ch1-nav', 'ch1-iso', 'ch1-lift', 'ch2-color'] as const) {
+      expect(getStoryGuidancePresentationOwnership(story('ch1', beat), 'playing')
+        .surveyBracketsMounted).toBe(false);
+    }
+    // Never outside play.
+    expect(getStoryGuidancePresentationOwnership(story('ch1', 'ch1-fixed'), 'menu')
+      .surveyBracketsMounted).toBe(false);
+    expect(getStoryGuidancePresentationOwnership(story('ch1', 'ch1-fixed', false), 'playing')
+      .surveyBracketsMounted).toBe(false);
   });
 });

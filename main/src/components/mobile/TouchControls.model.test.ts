@@ -3,7 +3,8 @@ import { KEY_CODES } from '../../utils/mobileInput.ts';
 import {
   createTouchActionGrid,
   createTouchActionSpecs,
-  staleHeldTouchActionCodes
+  staleHeldTouchActionCodes,
+  touchActionClusterMetrics
 } from './TouchControls.model.ts';
 
 describe('touch action layout model', () => {
@@ -39,11 +40,29 @@ describe('touch action layout model', () => {
     expect(withSprint.map(action => action.id)).toEqual(['eat', 'use', 'mine', 'sprint', 'jump']);
   });
 
-  it('only grows the on-foot grid to three rows when sprint is present', () => {
+  it('spends the sprint cluster on the wide axis, keeping its height compact', () => {
     expect(createTouchActionGrid('fps', false, false).templateAreas).toBe('"eat use" "mine primary"');
-    const withSprint = createTouchActionGrid('fps', false, true);
-    expect(withSprint.templateAreas).toBe('"eat use" "mine sprint" ". primary"');
-    expect(withSprint.templateRows).toBe('66px 66px 78px');
+    const withSprint = createTouchActionGrid('fps', false, true, 390);
+    expect(withSprint.templateAreas).toBe('"eat use sprint" ". mine primary"');
+    // Same height as the four-button cluster: CONSUME and USE stay in reach and
+    // the caption band below them is not eaten by a third row.
+    expect(touchActionClusterMetrics('fps', false, true, 390).height)
+      .toBe(touchActionClusterMetrics('fps', false, false, 390).height);
+  });
+
+  it('keeps the tall stack on a narrow phone rather than reaching the joystick', () => {
+    const narrow = createTouchActionGrid('fps', false, true, 320);
+    expect(narrow.templateAreas).toBe('"eat use" "mine sprint" ". primary"');
+    expect(narrow.templateRows).toBe('66px 66px 78px');
+  });
+
+  it('derives cluster metrics from the rendered template, never a copied number', () => {
+    // 66 + 78 + one 8px gutter.
+    expect(touchActionClusterMetrics('fps', false, false)).toEqual({ width: 152, height: 152 });
+    // The tall narrow-phone stack: 66 + 66 + 78 + two gutters.
+    expect(touchActionClusterMetrics('fps', false, true, 320).height).toBe(226);
+    // The flat cluster trades that height for width.
+    expect(touchActionClusterMetrics('fps', false, true, 390)).toEqual({ width: 226, height: 152 });
   });
 
   it('never surfaces sprint in build or flight modes', () => {

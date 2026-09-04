@@ -180,3 +180,32 @@ run, and it should be read before that run is scoped.
 Contract revision: `draft-v9`
 
 First report completed before reading peer conclusions: `yes`
+
+---
+
+## Post-review disposition — orchestrator, 2026-08-14
+
+This section is an R10/R12 disposition, not a rewrite of the independent
+auditor's historical report. The original ten run-two debts above are now paid
+as operational obligations by the owner-authorized post-closeout work:
+
+1. the exact issuing station actually issues the habitat-grade bonded cell;
+2. approach and docking remain advisory, manual, and `[F]`-committed;
+3. REGULATION plus the staffed vendor row pays the inhabited-keeper reading;
+4. W-7743 is recorded for an issued component without inventing currency;
+5. the real cell is carried home, consumed, and restores the second hearth;
+6. flight, clearance, station walking, conversations, departure, return, and
+   installation remain player-performed;
+7. docking authorization is granted only after the signed threshold hand-back;
+8. eligibility requires the exact station address claimed by the bearing;
+9. the station-to-home leg is a physical return flight, not a new message
+   channel; and
+10. REGULATION is the first institutional counter voice. The later required
+    issuer is B-7073 “Bell” under R12's explicit post-terminal vendor override.
+
+The protected unknowns are not debts to fill: station proper name, sandbox
+credit origin, W-7743's wider legal status, W-7744's location, Makers, the
+sealed volume, and the nature of the bond beyond an issuance record the core
+accepts remain deliberately unauthored. Machine chapter authority still ends
+at signed Chapter 10; `station-continuation-contract.md` governs this R12
+post-terminal sidecar until a future run registers formal ch11/ch12 beats.

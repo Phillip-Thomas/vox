@@ -2327,7 +2327,7 @@ index 5c8fac5..a260d30 100644
      }
    ]
 diff --git a/main/chapter-registry.json b/main/chapter-registry.json
-index 1680efa..bdd74f3 100644
+index 1680efa..4b5fea6 100644
 --- a/main/chapter-registry.json
 +++ b/main/chapter-registry.json
 @@ -24,19 +24,44 @@
@@ -2336,11 +2336,11 @@ index 1680efa..bdd74f3 100644
        ]
 +    },
 +    {
-+      "id": "ch10-station-introduction@draft-v7",
++      "id": "ch10-station-introduction@draft-v9",
 +      "sceneId": "ch10-station-introduction",
-+      "contractVersion": "draft-v7",
++      "contractVersion": "draft-v9",
 +      "path": ".codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json",
-+      "sha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
++      "sha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
 +      "coversBeats": [
 +        "ch10-cold",
 +        "ch10-ask",
@@ -3927,51 +3927,51 @@ index 1680efa..bdd74f3 100644
 +        "runtime:src/story/emergentStoryDirector.ts#chapter-10-guidance"
 +      ],
 +      "revealRefs": [
-+        "scene:ch10-station-introduction@draft-v7#reveal:r1",
-+        "scene:ch10-station-introduction@draft-v7#reveal:r2",
-+        "scene:ch10-station-introduction@draft-v7#reveal:r3",
-+        "scene:ch10-station-introduction@draft-v7#reveal:r4",
-+        "scene:ch10-station-introduction@draft-v7#reveal:r5-non-spends"
++        "scene:ch10-station-introduction@draft-v9#reveal:r1",
++        "scene:ch10-station-introduction@draft-v9#reveal:r2",
++        "scene:ch10-station-introduction@draft-v9#reveal:r3",
++        "scene:ch10-station-introduction@draft-v9#reveal:r4",
++        "scene:ch10-station-introduction@draft-v9#reveal:r5-non-spends"
 +      ],
 +      "avBoundary": {
 +        "sceneContractRefs": [
-+          "ch10-station-introduction@draft-v7"
++          "ch10-station-introduction@draft-v9"
 +        ],
 +        "entry": {
 +          "anchorRefs": [
-+            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.cold-noticed"
++            "scene:ch10-station-introduction@draft-v9#anchor:anc.ch10.cold-noticed"
 +          ],
 +          "scoreRefs": [
-+            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.cold-step"
++            "scene:ch10-station-introduction@draft-v9#score:sc.ch10.cold-step"
 +          ],
 +          "cameraRefs": [
-+            "scene:ch10-station-introduction@draft-v7#camera:cin.cold.01-hum-drop"
++            "scene:ch10-station-introduction@draft-v9#camera:cin.cold.01-hum-drop"
 +          ],
 +          "paletteRefs": [
-+            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
++            "scene:ch10-station-introduction@draft-v9#palette:pal.ch10.fire-night-and-station-amber"
 +          ]
 +        },
 +        "exit": {
 +          "anchorRefs": [
-+            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.station-resolved",
-+            "scene:ch10-station-introduction@draft-v7#anchor:anc.ch10.threshold-handback"
++            "scene:ch10-station-introduction@draft-v9#anchor:anc.ch10.station-resolved",
++            "scene:ch10-station-introduction@draft-v9#anchor:anc.ch10.threshold-handback"
 +          ],
 +          "scoreRefs": [
-+            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.station-resolved",
-+            "scene:ch10-station-introduction@draft-v7#score:sc.ch10.threshold-release"
++            "scene:ch10-station-introduction@draft-v9#score:sc.ch10.station-resolved",
++            "scene:ch10-station-introduction@draft-v9#score:sc.ch10.threshold-release"
 +          ],
 +          "cameraRefs": [
-+            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.04-resolve",
-+            "scene:ch10-station-introduction@draft-v7#camera:cin.transit.05-threshold-handback"
++            "scene:ch10-station-introduction@draft-v9#camera:cin.transit.04-resolve",
++            "scene:ch10-station-introduction@draft-v9#camera:cin.transit.05-threshold-handback"
 +          ],
 +          "paletteRefs": [
-+            "scene:ch10-station-introduction@draft-v7#palette:pal.ch10.fire-night-and-station-amber"
++            "scene:ch10-station-introduction@draft-v9#palette:pal.ch10.fire-night-and-station-amber"
 +          ]
 +        }
 +      },
 +      "acceptance": {
 +        "evidenceRefs": [
-+          "scene:ch10-station-introduction@draft-v7#evidence",
++          "scene:ch10-station-introduction@draft-v9#evidence",
 +          "runtime:src/story/emergentStoryDirector.test.ts#chapter-10-guidance",
 +          "runtime:src/story/storyBoundaryTelemetry.test.ts#chapter-10-station-claims"
 +        ],
@@ -5144,7 +5144,7 @@ index 3b8c7e3..750a7bf 100644
        return;
      }
 diff --git a/main/src/story/autopilot.ts b/main/src/story/autopilot.ts
-index fc59576..c320f56 100644
+index fc59576..7b5dd08 100644
 --- a/main/src/story/autopilot.ts
 +++ b/main/src/story/autopilot.ts
 @@ -15,10 +15,13 @@ import { anomalyStoneHandle } from './world/AnomalyStone.tsx';
@@ -5625,7 +5625,66 @@ index fc59576..c320f56 100644
  function noteGoal(target: THREE.Vector3): void {
    if (_goalRef.distanceTo(target) > 2.5) {
      _goalRef.copy(target);
-@@ -1097,6 +1489,10 @@ function grantMissingCampfireMaterials(): void {
+@@ -415,21 +807,49 @@ function clearControls(): void {
+ 
+ const _toGoal = new THREE.Vector3();
+ 
++/** A rise this walker climbs with ordinary step assist, so it is already "here". */
++export const GAIT_STEP_UP = 1.0;
+ /**
+- * Gait distance to a goal: HORIZONTAL range plus any un-climbed height beyond
+- * a step. Pure 3D distance strands the pilot "close" to elevated goals (it
+- * stops walking while still at the foot of the rise); pure horizontal releases
+- * it directly UNDER them. This keeps the intent alive until both close.
++ * A drop this walker simply steps down. Deliberately the SAME bound the
++ * waypoint consumer below uses for "an extreme perch is off-route, not
++ * arrived" — the two measures must agree about what counts as underfoot.
+  */
++export const GAIT_STEP_DOWN = 3.4;
++
++/**
++ * Gait distance to a goal, measured in the walker's own gravity frame:
++ * TANGENTIAL range, plus any rise it has not yet climbed, plus any drop it
++ * cannot simply step down.
++ *
++ * Pure 3D distance strands the pilot "close" to elevated goals (it stops
++ * walking at the foot of the rise); pure tangential range releases it directly
++ * under — or, worse, directly OVER — them. Both vertical terms are load-bearing.
++ *
++ * The rise term alone is what shipped, and it hid an owner-reported defect: a
++ * habitat core buried 45.8 units straight down measured 6.8 and satisfied every
++ * arrival gate in chapter 10, while the player-facing interaction prompt —
++ * euclidean, and correct — refused to appear at all. A goal below the floor is
++ * as unreached as a goal above the ceiling, and this now says so.
++ */
++export function surfaceGaitDistance(
++  target: THREE.Vector3,
++  player: THREE.Vector3,
++  up: THREE.Vector3,
++  scratch: THREE.Vector3 = new THREE.Vector3()
++): number {
++  scratch.copy(target).sub(player);
++  const vertical = scratch.dot(up);
++  scratch.addScaledVector(up, -vertical);
++  return scratch.length()
++    + Math.max(0, vertical - GAIT_STEP_UP)
++    + Math.max(0, -vertical - GAIT_STEP_DOWN);
++}
++
+ function gaitDistance(target: THREE.Vector3, player: THREE.Vector3): number {
+   if (surfaceFaceFromUp(getPlayerUp()) !== dominantFaceForPosition(target)) {
+     return player.distanceTo(target);
+   }
+-  _toGoal.copy(target).sub(player);
+-  const up = getPlayerUp();
+-  const vertical = _toGoal.dot(up);
+-  _toGoal.addScaledVector(up, -vertical);
+-  return _toGoal.length() + Math.max(0, vertical - 1.0);
++  return surfaceGaitDistance(target, player, getPlayerUp(), _toGoal);
+ }
+ 
+ /** Base gaze lift over a goal: the camera aims at the SUBJECT, not its base. */
+@@ -1097,6 +1517,10 @@ function grantMissingCampfireMaterials(): void {
  /** Ticked by StoryDirectorDriver every frame while in movie mode. */
  export function autopilotTick(dt: number): void {
    if (!MOVIE) return;
@@ -5636,7 +5695,7 @@ index fc59576..c320f56 100644
    const story = getStoryStateSnapshot();
    if (story.runId !== teleportNudgeRunId) {
      teleportNudgeRunId = story.runId;
-@@ -1759,6 +2155,171 @@ export function autopilotTick(dt: number): void {
+@@ -1759,6 +2183,171 @@ export function autopilotTick(dt: number): void {
        }
        break;
      }
@@ -6197,7 +6256,7 @@ index 45db513..4d3e787 100644
    reconstructionFacts = { ...DEFAULT_RECONSTRUCTION_FACTS };
    reconstructionVariant = null;
 diff --git a/main/src/story/emergentStoryDirector.test.ts b/main/src/story/emergentStoryDirector.test.ts
-index 38b473f..c358531 100644
+index 38b473f..6ade754 100644
 --- a/main/src/story/emergentStoryDirector.test.ts
 +++ b/main/src/story/emergentStoryDirector.test.ts
 @@ -1,4 +1,29 @@
@@ -6284,12 +6343,18 @@ index 38b473f..c358531 100644
  import {
    advanceToBeat,
    beginStory,
-@@ -108,9 +158,12 @@ import {
+@@ -108,9 +158,18 @@ import {
    validateTidegardenHabitatSite,
    type TidegardenRelationshipProof
  } from './tidegardenSettlement.ts';
 -import { STORY_SEED, storyAnchors } from './world/storyWorld.ts';
-+import { chapter10AskDescentSystemTarget } from './autopilot.ts';
++import {
++  chapter10AskDescentSystemTarget,
++  GAIT_STEP_DOWN,
++  GAIT_STEP_UP,
++  surfaceGaitDistance
++} from './autopilot.ts';
++import { resolveStoryInteraction } from './storyInteractions.ts';
 +import { buildStarSystemManifest } from '../game/starSystem.ts';
 +import { STORY_COORDINATE, STORY_SEED, storyAnchors } from './world/storyWorld.ts';
  import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
@@ -6298,7 +6363,7 @@ index 38b473f..c358531 100644
    debugStartInSpace,
    enterAtmosphere,
    enterShip,
-@@ -122,6 +175,7 @@ import {
+@@ -122,6 +181,7 @@ import {
  import {
    commitSystemBodyTarget,
    commitSystemPlanetHandoff,
@@ -6306,7 +6371,7 @@ index 38b473f..c358531 100644
    resetSystemFlightForInterstellarArrival,
    resetSystemFlightStoreForTests,
    setActiveSystemPlanet
-@@ -1345,3 +1399,942 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
+@@ -1345,3 +1405,1027 @@ describe('emergent story director — evidence-gated post-arrival continuity', (
      });
    });
  });
@@ -6499,6 +6564,91 @@ index 38b473f..c358531 100644
 +    expect(marker?.position).toBeDefined();
 +    observeGuidedStoryMarker(marker?.label ?? null);
 +    expect(getGuidedStoryObjectiveHealth()).toBe('ready');
++  });
++
++  it('never lets a handle buried below the player measure as arrived', () => {
++    // Owner-reported defect. The rehearsal hearth was committed at cell depth
++    // instead of surface depth, so chapter 10's first interactable sat 45.8
++    // world units INSIDE the planet. It survived every proximity check in the
++    // run because the walker's gait measure was tangential range plus only the
++    // un-climbed RISE: downward offset was discounted entirely, and a core
++    // buried straight down read as 13.1 away — inside the beat's own arrival
++    // gates and inside the run's 25-unit staging ceiling.
++    //
++    // The two positions below are the literal before and after, measured live
++    // at `?story=ch10-cold` (ch10-core-burial-{pre,post}-repair.json).
++    const player = new THREE.Vector3(10.5, 50.789, -8);
++    const up = new THREE.Vector3(0, 1, 0);
++    const buried = new THREE.Vector3(0.5, 5, 0.5);
++    const onSurface = new THREE.Vector3(16, 50.24, -8);
++
++    // The measure that hid it, reproduced exactly: rise-only gait.
++    const riseOnlyGait = (target: THREE.Vector3): number => {
++      const delta = target.clone().sub(player);
++      const vertical = delta.dot(up);
++      return delta.addScaledVector(up, -vertical).length() + Math.max(0, vertical - 1);
++    };
++    expect(riseOnlyGait(buried)).toBeLessThan(25);
++    expect(player.distanceTo(buried)).toBeGreaterThan(45);
++
++    // The repair. Every gate chapter 10 measures against — the autopilot's core
++    // commit (2), the interaction reach (4.2), the fabricator reach (6), the
++    // hearth notice radius (12) and the staging ceiling (25) — must refuse it.
++    const buriedGait = surfaceGaitDistance(buried, player, up);
++    for (const gate of [2, 4.2, 6, CH10_HEARTH_NOTICE_RADIUS, 25]) {
++      expect(buriedGait).toBeGreaterThan(gate);
++    }
++
++    // …without making ordinary ground unreachable. A drop the walker simply
++    // steps down is still underfoot, a rise is still un-climbed, and the
++    // repaired hearth is still the short honest walk the chapter opens on.
++    expect(surfaceGaitDistance(
++      player.clone().addScaledVector(up, -GAIT_STEP_DOWN),
++      player,
++      up
++    )).toBe(0);
++    expect(surfaceGaitDistance(
++      player.clone().addScaledVector(up, 6),
++      player,
++      up
++    )).toBeCloseTo(6 - GAIT_STEP_UP, 5);
++    const surfaceGait = surfaceGaitDistance(onSurface, player, up);
++    expect(surfaceGait).toBeGreaterThan(4.2);
++    expect(surfaceGait).toBeLessThan(CH10_HEARTH_NOTICE_RADIUS);
++  });
++
++  it('refuses the fault-read prompt for a buried hearth and offers it for a surfaced one', () => {
++    // The other half of the same law: the player-facing prompt is euclidean and
++    // was always correct, so the defect reached the owner as a marker pointing
++    // into the ground with no verb under it. Both readings are pinned here so
++    // the metric and the prompt cannot disagree about one handle again.
++    const player = new THREE.Vector3(10.5, 50.789, -8);
++    expect(commitHabitatCorePlacement({
++      actorId: ACTOR_ID,
++      worldId: TIDEGARDEN_WORLD_ID,
++      shelterId: 'ch10-test-buried-hearth',
++      cell: [0, 5, 0],
++      supportCell: [0, 4, 0],
++      position: [0.5, 5, 0.5],
++      up: [0, 1, 0],
++      eventId: 'story:test:ch10-buried-hearth'
++    })).toBe(true);
++    advanceToBeat('ch10-cold');
++    enterEmergentStoryBeat('ch10-cold');
++    expect(resolveStoryInteraction(null, player)?.id).not.toBe('story-ch10-fault-read');
++
++    resetHabitats();
++    expect(commitHabitatCorePlacement({
++      actorId: ACTOR_ID,
++      worldId: TIDEGARDEN_WORLD_ID,
++      shelterId: 'ch10-test-surfaced-hearth',
++      cell: [5, 25, -4],
++      supportCell: [5, 24, -4],
++      position: [player.x + 3, player.y, player.z],
++      up: [0, 1, 0],
++      eventId: 'story:test:ch10-surfaced-hearth'
++    })).toBe(true);
++    expect(resolveStoryInteraction(null, player)?.id).toBe('story-ch10-fault-read');
 +  });
 +
 +  it('resolves a marker for every marker-bearing rung at its owning beat', () => {
@@ -8379,7 +8529,7 @@ index 1da0219..6b32f2b 100644
   * Building remains owned by the normal command lane. This adapter translates
   * only its accepted Tidegarden foundation receipt into Story vocabulary; it
 diff --git a/main/src/story/generatedSceneAvRuntime.json b/main/src/story/generatedSceneAvRuntime.json
-index 99456a7..b59ca2a 100644
+index 99456a7..e582c7b 100644
 --- a/main/src/story/generatedSceneAvRuntime.json
 +++ b/main/src/story/generatedSceneAvRuntime.json
 @@ -6,6 +6,20 @@
@@ -8395,8 +8545,8 @@ index 99456a7..b59ca2a 100644
 +    },
 +    {
 +      "sceneId": "ch10-station-introduction",
-+      "contractVersion": "draft-v7",
-+      "sha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
++      "contractVersion": "draft-v9",
++      "sha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
 +      "status": "frozen"
 +    }
 +  ],
@@ -9492,7 +9642,7 @@ index 85996ff..3e5f875 100644
 +  });
 +});
 diff --git a/main/src/story/signedSceneAvRuntime.ts b/main/src/story/signedSceneAvRuntime.ts
-index fb0b75f..4e23b73 100644
+index fb0b75f..91b5571 100644
 --- a/main/src/story/signedSceneAvRuntime.ts
 +++ b/main/src/story/signedSceneAvRuntime.ts
 @@ -21,11 +21,41 @@ import {
@@ -9515,8 +9665,8 @@ index fb0b75f..4e23b73 100644
 + * exact bytes or the runtime refuses to load.
 + */
 +export const CH10_SCENE_AV_SHA256 =
-+  '32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860';
-+export const CH10_SCENE_AV_REVISION = 'draft-v7';
++  '0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1';
++export const CH10_SCENE_AV_REVISION = 'draft-v9';
 +export const SIGNED_SCENE_AV_SOURCES: readonly {
 +  readonly sceneId: string;
 +  readonly contractVersion: string;
@@ -10256,17 +10406,19 @@ index 1eaa8f0..2a0e67c 100644
   * Composite steady states: every later reconstruction variant retains the
   * previously earned pad/sub/ostinato relationship. Changing variant starts a
 diff --git a/main/src/story/storyState.test.ts b/main/src/story/storyState.test.ts
-index 117dbad..57f6208 100644
+index 117dbad..9f09a59 100644
 --- a/main/src/story/storyState.test.ts
 +++ b/main/src/story/storyState.test.ts
-@@ -1,3 +1,6 @@
+@@ -1,4 +1,8 @@
 +import { readdirSync, readFileSync } from 'node:fs';
 +import { join } from 'node:path';
 +import { fileURLToPath } from 'node:url';
  import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
++import * as THREE from 'three';
  import {
    beginStory,
-@@ -10,7 +13,10 @@ import {
+   canContinueStory,
+@@ -10,7 +14,10 @@ import {
    initStoryFromSave,
    restartStory,
    STORY_BEAT_ORDER,
@@ -10277,7 +10429,7 @@ index 117dbad..57f6208 100644
    storyEntryPoint,
    type StoryBeat
  } from './storyState.ts';
-@@ -51,6 +57,7 @@ import {
+@@ -51,6 +58,7 @@ import {
    isTidegardenRouteOnline,
    resolveStoryBootWorldId,
    resolveStoryResumeWorldId,
@@ -10285,10 +10437,14 @@ index 117dbad..57f6208 100644
    STORY_PRIMARY_WORLD_ID,
    TIDEGARDEN_ROUTE_MILESTONE,
    TIDEGARDEN_WORLD_ID
-@@ -61,6 +68,20 @@ import {
+@@ -60,6 +68,23 @@ import {
+   PHYSICAL_BOARDING_SEALED_MILESTONE
  } from './physicalBoardingReceipts.ts';
  import { STORY_COORDINATE } from './world/storyWorld.ts';
- 
++import { getWorldGen } from '../utils/worldGenCache.ts';
++import { createWorldArrivalPose } from '../utils/worldArrival.ts';
++import { VOXEL_SCALE } from '../utils/cubeGravityConstants.ts';
++
 +const SRC_ROOT = fileURLToPath(new URL('..', import.meta.url));
 +
 +function walkClientSources(directory: string, found: string[] = []): string[] {
@@ -10302,11 +10458,10 @@ index 117dbad..57f6208 100644
 +  }
 +  return found;
 +}
-+
+ 
  describe('storyState — beat order (drives debug jumps + seeding)', () => {
    beforeEach(() => {
-     resetProgression();
-@@ -106,7 +127,8 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
+@@ -106,7 +131,8 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
        ch7: 7,
        ch8: 8,
        ch9: 9,
@@ -10316,7 +10471,7 @@ index 117dbad..57f6208 100644
        none: -1
      } as const;
      let last = -1;
-@@ -115,7 +137,25 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
+@@ -115,7 +141,25 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
        expect(rank).toBeGreaterThanOrEqual(last);
        last = rank;
      }
@@ -10343,7 +10498,7 @@ index 117dbad..57f6208 100644
    });
  
    it('the monochrome ladder climbs the history of perspectives in order', () => {
-@@ -292,6 +332,194 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
+@@ -292,6 +336,247 @@ describe('storyState — beat order (drives debug jumps + seeding)', () => {
      expect(canContinueStory()).toBe(false);
    });
  
@@ -10407,6 +10562,59 @@ index 117dbad..57f6208 100644
 +      expect(storyFirstDayOrLater({
 +        active: true, chapter: chapterForBeat(beat), beat, runId: 0
 +      }), beat).toBe(true);
++    }
++  });
++
++  it('stands the rehearsal hearth on Tidegarden\'s real surface, not inside it', () => {
++    // Owner-reported defect: "the read the fault interactable thing is in the
++    // middle of the planet when I start the chapter." The rehearsal hearth was
++    // committed at a literal cell `[0, 5, 0]` and stored cell arithmetic as a
++    // world position, so chapter 10's first interactable sat at world y = 5
++    // while Tidegarden's surface in that column is y = 50 — forty-five units of
++    // rock between the player and the objective her HUD was pointing at.
++    //
++    // The cell is not the fixed point. The ARRIVAL PAD is: a pure function of
++    // the world's size, seed and id, and the same one the scene mounts the
++    // player's own spawn from. This asserts the hearth against that authority.
++    for (const beat of ['ch10-cold', 'ch10-ask', 'ch10-transit'] as const) {
++      resetHabitats();
++      vi.stubGlobal('window', { location: { search: `?story=${beat}` } });
++      initStoryFromSave();
++
++      const { world } = createTidegardenLandfallBootstrap();
++      const planetSize = world.nominalFaceRadius;
++      const generator = getWorldGen(planetSize, world.seed, world.worldId).generator;
++      const state = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
++      expect(state, beat).not.toBeNull();
++      const core = state!.core;
++
++      // 1. The core's own column, marched against the shipped generator: its
++      //    support voxel is solid and the cell it occupies is the open one
++      //    directly above. A buried cell fails both halves.
++      expect(generator.shouldVoxelExist(...core.supportCell), beat).toBe(true);
++      expect(generator.shouldVoxelExist(...core.cell), beat).toBe(false);
++      expect(core.cell[1] - core.supportCell[1], beat).toBe(1);
++      // 2. World position, not cell arithmetic. VOXEL_SCALE is 2, so a cell
++      //    index used as a world coordinate reads as half its own depth.
++      expect(core.position[1], beat)
++        .toBeGreaterThanOrEqual(core.cell[1] * VOXEL_SCALE);
++      // 3. The rehearsal is still a rehearsal: same answer every time.
++      expect(core.cell, beat).toEqual([8, 25, -4]);
++
++      // 4. Reachable from where the player actually wakes — outside the
++      //    interaction reach so the chapter still opens on a walk, inside the
++      //    notice radius so it opens on its own opening condition.
++      const spawn = createWorldArrivalPose(planetSize, world.seed, world.worldId)
++        .playerSurfacePosition;
++      const range = spawn.distanceTo(new THREE.Vector3(...core.position));
++      expect(range, beat).toBeGreaterThan(4.2);
++      expect(range, beat).toBeLessThan(12);
++
++      // 5. And the enclosure the chapter opens inside actually certified. The
++      //    old bootstrap passed cell arithmetic as the player position too, so
++      //    the flood fill placed her three cells underground and the shelter
++      //    never certified at all — the milestone said it had.
++      expect(state!.shelterCertification, beat).not.toBeNull();
 +    }
 +  });
 +
@@ -10895,10 +11103,10 @@ index 2516abc..16d78f3 100644
      // The cadence in the story director IS the scheduler; these bands have no
      // queue, so a later line always replaces the one before it.
 diff --git a/main/src/story/tidegardenLandfallBootstrap.ts b/main/src/story/tidegardenLandfallBootstrap.ts
-index 627d37f..2b2d340 100644
+index 627d37f..ae36ec8 100644
 --- a/main/src/story/tidegardenLandfallBootstrap.ts
 +++ b/main/src/story/tidegardenLandfallBootstrap.ts
-@@ -13,8 +13,30 @@ import {
+@@ -13,8 +13,44 @@ import {
    persistShipFlightLocation,
    restoreShipFlightForWorld
  } from '../state/shipFlightContinuity.ts';
@@ -10911,28 +11119,89 @@ index 627d37f..2b2d340 100644
 +  getHabitatWorldState,
 +  type HabitatCell
 +} from '../game/systems/habitatSystem.ts';
-+import { placePiece } from '../game/systems/structureSystem.ts';
-+import { certifyTidegardenShelter } from './tidegardenSettlement.ts';
++import {
++  faceIndexForNormal,
++  oppositeFace,
++  placePiece
++} from '../game/systems/structureSystem.ts';
++import {
++  certifyTidegardenShelter,
++  findTidegardenRecommendedHabitatSite,
++  type HabitatSiteProof
++} from './tidegardenSettlement.ts';
++import { addItem, getItemCount } from '../game/systems/inventorySystem.ts';
++import { getWorldGen } from '../utils/worldGenCache.ts';
++import { createWorldArrivalPose } from '../utils/worldArrival.ts';
++import { VOXEL_SCALE, voxelCoordToWorld } from '../utils/cubeGravityConstants.ts';
 +
 +/**
-+ * The rehearsal hearth's cell. Deliberately a fixed, flat, inland cell rather
-+ * than a search: a deep link is a reproducible rehearsal, and a rehearsal that
-+ * lands somewhere new each time is not one.
++ * Tangential offset, in terrain cells, between the arrival pad and the
++ * rehearsal hearth.
++ *
++ * Zero would stand the hearth inside the parked Kestrel, and inside
++ * `CH10_CORE_INTERACT_DISTANCE` (4.2) of the spawn, so the chapter's first act
++ * would already be under her hand before she had looked at it. More than
++ * `CH10_HEARTH_NOTICE_RADIUS` (12 world units, both in emergentStoryDirector)
++ * would open chapter 10 outside its own opening condition. Four cells is eight
++ * world units, and the survey may slide a cell either way to reach dry level
++ * ground: the hearth is the first thing in front of her, comfortably inside the
++ * notice radius, and she still has to walk to it.
 + */
-+const CH10_DEBUG_HABITAT_CELL: HabitatCell = [0, 5, 0];
-+const CH10_DEBUG_HABITAT_EYE_HEIGHT = 1.2;
-+const CH10_DEBUG_SHELTER_ID = 'ch10-debug-second-hearth';
-+/** +Y up, its opposite as the floor, and the four lateral faces as walls. */
-+const CH10_DEBUG_UP_FACE = 2;
-+const CH10_DEBUG_FLOOR_FACE = 3;
-+const CH10_DEBUG_WALL_FACES = [0, 1, 4, 5] as const;
++const CH10_DEBUG_HEARTH_OFFSET_CELLS = 4;
  
  /**
   * The debug landfall starts inside the atmosphere, but outside the complete
-@@ -107,6 +129,68 @@ export function bootstrapTidegardenSurfaceDebug(): TidegardenLandfallBootstrap {
+@@ -107,6 +143,132 @@ export function bootstrapTidegardenSurfaceDebug(): TidegardenLandfallBootstrap {
    return bootstrap;
  }
  
++/**
++ * Where the rehearsal hearth stands, resolved against the REAL terrain.
++ *
++ * The cell used to be a literal `[0, 5, 0]`, on the theory that a fixed cell is
++ * more reproducible than a search. It is not: cell 5 is a depth, not a place,
++ * and Tidegarden's surface in that column is cell 25. The hearth was therefore
++ * committed forty world units inside the planet, which is where the owner found
++ * chapter 10's first interactable.
++ *
++ * The correct fixed point is not a cell, it is the arrival pad — a pure
++ * function of the world's size, seed and id, and the same one `EfficientScene`
++ * mounts the player's own spawn from. Anchoring there and letting the shipped
++ * habitat survey resolve the site keeps the rehearsal exactly as reproducible
++ * as before while making the answer terrain-true: a hearth on the ground the
++ * player wakes on, a few paces from her ship, the way chapter 9 leaves it.
++ */
++function tidegardenRehearsalHabitatSite(
++  actorId: ActorId
++): HabitatSiteProof | null {
++  const { world } = createTidegardenLandfallBootstrap();
++  const planetSize = world.nominalFaceRadius;
++  // The generator IS the shipped SpawnTerrainQuery; `worldArrival` resolves the
++  // canonical pad through this same handle. A `?story=` jump has just cleared
++  // every voxel edit for this world, so pristine generation and the terrain the
++  // player is about to stand on are the same terrain.
++  const terrain = getWorldGen(planetSize, world.seed, world.worldId).generator;
++  const arrival = createWorldArrivalPose(planetSize, world.seed, world.worldId);
++  const anchor = arrival.playerSurfacePosition
++    .clone()
++    .setX(arrival.playerSurfacePosition.x + CH10_DEBUG_HEARTH_OFFSET_CELLS * VOXEL_SCALE);
++  const site = findTidegardenRecommendedHabitatSite({
++    worldId: TIDEGARDEN_WORLD_ID,
++    planetSize,
++    playerPosition: anchor,
++    terrain,
++    actorId
++  });
++  return site.ok ? site.proof : null;
++}
++
++/**
++ * Panels the enclosure needs: a floor, a ceiling, and four walls on each of the
++ * two interior cells. Topped up rather than minted outright, exactly as the
++ * movie runtime provisions its own shelter build.
++ */
++const CH10_DEBUG_SHELTER_WOOD = 24;
++
 +/**
 + * Chapter 10's rehearsal prerequisite: a certified second hearth.
 + *
@@ -10940,10 +11209,10 @@ index 627d37f..2b2d340 100644
 + * is exactly right for every beat that builds its own world and exactly wrong
 + * for chapter 10 — it opens INSIDE finished free play, at a hearth the player
 + * spent chapter 9 earning. This reconstructs that hearth through the same three
-+ * shipped authorities the player's own run commits it through: the core
-+ * placement, the physical enclosure, and the flood-fill certification. Nothing
-+ * is faked past them; if any one refuses, the rehearsal is honestly without a
-+ * hearth rather than quietly pretending to have one.
++ * shipped authorities the player's own run commits it through: the site survey
++ * and core placement, the physical enclosure, and the flood-fill certification.
++ * Nothing is faked past them; if any one refuses, the rehearsal is honestly
++ * without a hearth rather than quietly pretending to have one.
 + *
 + * Debug/rehearsal only. Returns true when a certified shelter exists afterwards.
 + */
@@ -10953,36 +11222,53 @@ index 627d37f..2b2d340 100644
 +  const existing = getHabitatWorldState(TIDEGARDEN_WORLD_ID);
 +  if (existing?.shelterCertification) return true;
 +
-+  const lowerCell: HabitatCell = [...CH10_DEBUG_HABITAT_CELL];
-+  const upperCell: HabitatCell = [lowerCell[0], lowerCell[1] + 1, lowerCell[2]];
-+  const supportCell: HabitatCell = [lowerCell[0], lowerCell[1] - 1, lowerCell[2]];
-+  const playerPosition = new THREE.Vector3(
-+    lowerCell[0] + 0.5,
-+    lowerCell[1] + CH10_DEBUG_HABITAT_EYE_HEIGHT,
-+    lowerCell[2] + 0.5
-+  );
++  const core = existing?.core ?? null;
++  const site = core ? null : tidegardenRehearsalHabitatSite(actorId);
++  const lowerCell: HabitatCell = core ? [...core.cell] : site ? [...site.cell] : [0, 0, 0];
++  const up = core
++    ? new THREE.Vector3(core.up[0], core.up[1], core.up[2])
++    : site?.up.clone() ?? null;
++  if (!up) return false;
++  const upperCell: HabitatCell = [
++    lowerCell[0] + up.x,
++    lowerCell[1] + up.y,
++    lowerCell[2] + up.z
++  ];
++  const upFace = faceIndexForNormal(up.x, up.y, up.z);
++  const floorFace = oppositeFace(upFace);
++  const wallFaces = [0, 1, 2, 3, 4, 5].filter(face => face !== upFace && face !== floorFace);
++  // WORLD units, not cell indices: the certification's flood fill divides this
++  // by VOXEL_SCALE to find the cell the player is standing in. Cell arithmetic
++  // passed here read as a point three cells underground and the shelter never
++  // certified at all.
++  const playerPosition = voxelCoordToWorld(lowerCell[0], lowerCell[1], lowerCell[2]);
 +
-+  if (!existing) {
++  if (site) {
 +    const placed = commitHabitatCorePlacement({
 +      actorId,
 +      worldId: TIDEGARDEN_WORLD_ID,
-+      shelterId: CH10_DEBUG_SHELTER_ID,
++      shelterId: site.shelterId,
 +      cell: lowerCell,
-+      supportCell,
-+      position: [playerPosition.x, lowerCell[1], playerPosition.z],
-+      up: [0, 1, 0],
++      supportCell: [...site.supportCell],
++      position: site.position.toArray(),
++      up: up.toArray(),
 +      eventId: `story:debug:${actorId}:ch10-habitat-core`
 +    });
 +    if (!placed) return false;
 +  }
 +
 +  // The enclosure the certification will read: floor and ceiling on the up axis,
-+  // walls on the four lateral faces of both cells.
-+  placePiece(upperCell, CH10_DEBUG_UP_FACE, 'ceiling', 'wood', CH10_DEBUG_UP_FACE, actorId);
-+  placePiece(lowerCell, CH10_DEBUG_FLOOR_FACE, 'foundation', 'wood', CH10_DEBUG_UP_FACE, actorId);
++  // walls on the four lateral faces of both cells. `placePiece` charges the
++  // build, so the rehearsal must be able to afford its own hearth.
++  const wood = getItemCount('wood', actorId);
++  if (wood < CH10_DEBUG_SHELTER_WOOD) {
++    addItem('wood', CH10_DEBUG_SHELTER_WOOD - wood, actorId);
++  }
++  placePiece(upperCell, upFace, 'ceiling', 'wood', upFace, actorId);
++  placePiece(lowerCell, floorFace, 'foundation', 'wood', upFace, actorId);
 +  for (const cell of [lowerCell, upperCell]) {
-+    for (const face of CH10_DEBUG_WALL_FACES) {
-+      placePiece(cell, face, 'wall', 'wood', CH10_DEBUG_UP_FACE, actorId);
++    for (const face of wallFaces) {
++      placePiece(cell, face, 'wall', 'wood', upFace, actorId);
 +    }
 +  }
 +
@@ -11254,7 +11540,7 @@ index 89101b2..b35d313 100644
    collector.assert(changedPaths.every((file) => (lock?.allowedPaths || []).some((allowed) => pathMatchesBoundary(file, allowed))), 'implementation.allowed-paths', 'Every changed file must fit the locked allowed paths', changedPaths.filter((file) => !(lock?.allowedPaths || []).some((allowed) => pathMatchesBoundary(file, allowed))))
    collector.assert(changedPaths.every((file) => !(lock?.protectedPaths || []).some((protectedPath) => pathMatchesBoundary(file, protectedPath))), 'implementation.protected-paths', 'Implementation diff cannot touch protected paths', changedPaths.filter((file) => (lock?.protectedPaths || []).some((protectedPath) => pathMatchesBoundary(file, protectedPath))))
 diff --git a/main/tools/generate-scene-av-runtime.mjs b/main/tools/generate-scene-av-runtime.mjs
-index 0fa1675..43227b9 100644
+index 0fa1675..49acd32 100644
 --- a/main/tools/generate-scene-av-runtime.mjs
 +++ b/main/tools/generate-scene-av-runtime.mjs
 @@ -5,16 +5,28 @@ import { readFile, writeFile } from 'node:fs/promises';
@@ -11277,8 +11563,8 @@ index 0fa1675..43227b9 100644
 +  },
 +  {
 +    contractPath: '../.codex/production-runs/2026-08-11-ch10-station-introduction/scene-contract.json',
-+    sha256: '32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860',
-+    contractVersion: 'draft-v7',
++    sha256: '0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1',
++    contractVersion: 'draft-v9',
 +    anchorCount: 10
 +  }
 +];

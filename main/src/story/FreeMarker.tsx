@@ -7,12 +7,17 @@ import {
   deriveStoryHudTopLeftOcclusion,
   getMeasuredStoryObjectiveCardHeight,
   readStoryHudSafeAreaInsets,
+  readTouchControlClearance,
   solveStoryHudLayout,
   solveStoryMarkerMotion,
   solveStoryMarkerPresentation,
   type StoryHudObservedRect,
   type StoryHudTopLeftOcclusion
 } from './ux/storyHudLayout.ts';
+import { hudSurface } from '../ui/hudSurfaces.ts';
+
+/** How often the mounted-control clearance is re-measured (ms). */
+const TOUCH_CONTROL_SAMPLE_MS = 200;
 
 // --- The free-era survey marker -------------------------------------------------------
 //
@@ -56,6 +61,10 @@ const FreeMarker: React.FC = () => {
     let viewportWidth = -1;
     let viewportHeight = -1;
     let safeAreaInsets = readStoryHudSafeAreaInsets();
+    // Sampled, not read per frame: getBoundingClientRect + getComputedStyle
+    // force layout, and the controls only change on beat/mode changes.
+    let controlClearance = readTouchControlClearance();
+    let controlSampledAt = 0;
     let topLeftOcclusion: StoryHudTopLeftOcclusion | undefined;
     let lastOcclusionSampleAt = Number.NEGATIVE_INFINITY;
     const motionQuery = typeof window.matchMedia === 'function'
@@ -71,6 +80,11 @@ const FreeMarker: React.FC = () => {
 
     const tick = (frameTime: number) => {
       raf = requestAnimationFrame(tick);
+      const now = typeof performance === 'undefined' ? Date.now() : performance.now();
+      if (now - controlSampledAt >= TOUCH_CONTROL_SAMPLE_MS) {
+        controlSampledAt = now;
+        controlClearance = readTouchControlClearance();
+      }
       const root = rootRef.current;
       const diamond = diamondRef.current;
       const chevron = chevronRef.current;
@@ -112,6 +126,7 @@ const FreeMarker: React.FC = () => {
         touch,
         objectivePresent: getActiveGuidedStoryObjective() !== null,
         objectiveHeight: getMeasuredStoryObjectiveCardHeight(),
+        touchControlTopFromBottom: controlClearance,
         safeAreaInsets,
         topLeftOcclusion
       });
@@ -186,6 +201,7 @@ const FreeMarker: React.FC = () => {
       ref={rootRef}
       aria-hidden="true"
       data-story-free-marker="true"
+      {...hudSurface('free-marker', 'marker')}
       data-marker-layout="pending"
       style={{
         position: 'fixed',

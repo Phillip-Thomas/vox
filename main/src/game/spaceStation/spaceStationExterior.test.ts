@@ -313,3 +313,30 @@ describe('D-A5: the station never offers a berth it has not authorized', () => {
     expect(spaceStationDockingAuthorized()).toBe(true);
   });
 });
+
+describe('programmatic docking shares the keystroke path\'s fences', () => {
+  const driverSource = readFileSync(
+    new URL('../../components/SpaceStationApproachDriver.tsx', import.meta.url),
+    'utf8'
+  );
+
+  it('routes the [F] handler through the same commit the screening uses', () => {
+    // The screening has no keyboard. Docking used to be a window KeyF listener
+    // and nothing else, so a movie run could fly the whole claimed bearing and
+    // then sit outside the berth forever. Both callers must share one commit,
+    // or the fences drift apart.
+    expect(driverSource).toContain('export function commitSpaceStationDock');
+    expect(driverSource).toContain('commitSpaceStationDock();');
+  });
+
+  it('keeps every gate inside the shared commit, not the key handler', () => {
+    const commit = driverSource.slice(
+      driverSource.indexOf('export function commitSpaceStationDock'),
+      driverSource.indexOf('export function commitSpaceStationDock') + 700
+    );
+    expect(commit).toContain('canDock');
+    expect(commit).toContain('spaceStationDockingAuthorized()');
+    expect(commit).toContain('commitSpaceStationTarget');
+  });
+});
+

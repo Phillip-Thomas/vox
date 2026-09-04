@@ -7,6 +7,7 @@ import {
   type ActiveInteraction
 } from '../../game/systems/interactionSystem';
 import { isTouchDevice } from '../../utils/mobileInput';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 // Systemic context-interaction prompt: a single "[F] <verb>" pill under the crosshair
 // that shows the CURRENT meaning of the primary interact key (open door, drink, board…),
@@ -27,6 +28,7 @@ const InteractionPrompt: React.FC = () => {
       data-interaction-prompt="primary"
       data-interaction-id={it.id}
       data-interaction-owner="embodied-hud"
+      {...hudSurface('interaction-prompt', 'informational')}
       data-interaction-scope={getInteractionScope(it.id)}
       aria-label={`Interaction: ${it.verb}`}
       style={{

@@ -100,7 +100,8 @@ export type StoryBeat =
   // chapter 10 — the station introduction. Re-activated from INSIDE `done` free
   // play: the second hearth's core runs on an issued component, the world
   // cannot answer it, and the one channel that never closed answers instead.
-  // The run ends at the threshold — a bearing held, the station never entered.
+  // The signed chapter ends at the threshold — a bearing held. After that
+  // hand-back, ordinary free flight may continue into the station approach.
   | 'ch10-cold' | 'ch10-ask' | 'ch10-transit'
   | 'done';
 
@@ -174,10 +175,11 @@ export const STORY_MILESTONES = {
   ch10StationResolved: 'story:ch10-station-resolved',
   ch10Complete: 'story:ch10-complete',
   /**
-   * DEFINED THIS RUN AND SET BY NOTHING. Docking, the dock offer, the canDock
-   * grant, the KeyF commit-and-navigate path and the approach advisory are all
-   * inert in story worlds until this milestone exists; run two's owner docking
-   * packet owns when it becomes true.
+   * Earned at Chapter 10's threshold hand-back. Until then, the dock offer,
+   * approach advisory, canDock grant and KeyF commit-and-navigate path stay
+   * inert in story worlds. Once the introduction has resolved the station as a
+   * place, the existing flight-to-berth procedure becomes the player's next
+   * action rather than a separate debug-only route.
    */
   stationDockingAuthorized: 'story:station-docking-authorized',
   /**
@@ -651,6 +653,21 @@ function reconcileCompletedBoardingReceipts(entry: StoryEntryPoint): void {
   markMilestone(PHYSICAL_BOARDING_MILESTONE);
 }
 
+/**
+ * Save migration for Chapter 10 completions recorded before docking was joined
+ * to the story route. Those saves already earned the threshold hand-back; do
+ * not make their players replay the chapter just to expose the same berth that
+ * a new completion exposes.
+ */
+function grantChapter10DockingAuthorization(): void {
+  markMilestone(STORY_MILESTONES.stationDockingAuthorized);
+}
+
+function reconcileCompletedChapter10DockingAuthorization(): void {
+  if (!hasMilestone(STORY_MILESTONES.ch10Complete)) return;
+  grantChapter10DockingAuthorization();
+}
+
 // --- lifecycle ----------------------------------------------------------------
 
 /**
@@ -672,6 +689,10 @@ function keepExistingStateRequested(): boolean {
 }
 
 export function initStoryFromSave(): void {
+  // Runs after restoreGlobal, including on a plain no-query boot and `?keep=1`.
+  // A debug beat jump may clear it again immediately; that is correct because a
+  // fresh ch10-transit rehearsal has not reached its threshold hand-back yet.
+  reconcileCompletedChapter10DockingAuthorization();
   const param = parseStoryParam();
   // A restored snapshot already IS the state to boot into — terrain, poses,
   // milestones and all. Leave every one of them alone.
@@ -840,6 +861,12 @@ export function completeStory(): void {
  */
 export function completeChapter10(): void {
   markMilestone(STORY_MILESTONES.ch10Complete);
+  // Owner direction 2026-08-13: the working station approach must continue
+  // from the story flight. Grant at the hand-back rather than at bearing claim
+  // so Chapter 10 still owns its 1,500-unit reveal and cold hold; the normal
+  // approach driver then publishes the corridor inside 1,400 and offers [F]
+  // only when its existing alignment, range and closing-speed gates all pass.
+  grantChapter10DockingAuthorization();
   completeStory();
 }
 
@@ -982,9 +1009,24 @@ export function storyFirstDayOrLater(s: StorySnapshot = snapshot): boolean {
   return s.beat === 'ch3-thirst' || s.beat === 'ch3-forage' || s.beat === 'ch3-signal';
 }
 
+/**
+ * Whether a load should place the player back at the authored arrival anchor
+ * rather than their saved position.
+ *
+ * The external-camera eras want this: they are bolted to a lens whose origin IS
+ * the crash site, and their whole play space is the strip around it. `ch1-anomaly`
+ * is not one of them. It is the first embodied beat, and its subject sits on a
+ * DIFFERENT CUBE FACE — crossing the gravity edge to reach it is the beat's
+ * entire action. Anchoring that beat's spawn threw a player who reloaded
+ * mid-crossing back to the arrival on the top face, losing the climb, the
+ * crossing, and the eight-sector sweep (which `onBeatEntered` clears). So the
+ * anchor ends where the external cameras do, at the lift.
+ */
 export function storyAnchoredSpawn(s: StorySnapshot = snapshot): boolean {
   if (!s.active) return false;
-  return s.chapter === 'prologue' || s.chapter === 'ch1';
+  if (s.chapter === 'prologue') return true;
+  if (s.chapter !== 'ch1' || !s.beat) return false;
+  return beatIndex(s.beat) <= beatIndex('ch1-lift');
 }
 
 // Survival chrome is INTRODUCED, not assumed: each sense appears when the story

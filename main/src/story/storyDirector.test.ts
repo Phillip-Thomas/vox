@@ -48,11 +48,12 @@ import {
 import { addItem, removeItem, getItemCount } from '../game/systems/inventorySystem.ts';
 import { cameraFeedVisualState, getFeedRuntime } from './feedRuntime.ts';
 import { getStoryText } from './storyText.ts';
+import { markSpawnSettled, resetSpawnSettle } from '../game/spawnSettle.ts';
 import { getActiveGuidedStoryObjective } from './ux/objectiveDirector.ts';
 import { subscribeStoryUxFeedback } from './ux/feedbackCues.ts';
 import { createSystemCompanionBodyTargetHandle } from '../state/systemCompanionBodyTargets.ts';
 import { TIDEGARDEN_WORLD_ID } from './tidegardenRoute.ts';
-import { ANOMALY_SURVEY, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
+import { ANOMALY_SURVEY, CH1_FIXED_TUTORIAL, CH1_QUOTA, A1_RAMP_SECONDS } from './storyScript.ts';
 import { CH1_2D_TRAVEL_BAND } from './storyDirector.ts';
 import { resetStoryClock, setStoryPaused } from './storyClock.ts';
 import { getLensRig } from './sideLens.ts';
@@ -275,7 +276,8 @@ describe('storyDirector — chapter 1 and A1', () => {
     addItem('biofiber', CH1_QUOTA.biofiber);
     addItem('stone', CH1_QUOTA.stone);
     storyDirectorTick(CH1_COLLECTION_TIMING.rasterMinimumSeconds, null);
-    const previousId = 'ch1:raster:recover-quota';
+    // Debris is already recovered here, so the live rung is the fiber one.
+    const previousId = 'ch1:raster:extract-fiber-quota';
     expect(getActiveGuidedStoryObjective()?.id).toBe(previousId);
     const entered: string[] = [];
     const unsubscribe = subscribeStoryUxFeedback(cue => entered.push(cue.objectiveId));
@@ -536,6 +538,66 @@ describe('storyDirector — chapter 1 and A1', () => {
     expect(getAuditWorkerPose().visible).toBe(false);
     expect(getStoryBeatClock()).toBeLessThan(ARRIVAL.someoneAt);
     expect(getStoryInputPolicy().moveSpeedScale).toBe(1);
+  });
+
+  it('the descent white-out gives up waiting for the world and plays anyway', () => {
+    // Without a bound, a collider stream that never completes leaves the very
+    // first screen of the story a featureless white frame, forever.
+    resetSpawnSettle();
+    advanceToBeat('descent');
+    tickSeconds(4);
+    expect(getFeedRuntime().descent).toBe(0); // still braced, world not ready
+    expect(getFeedRuntime().flash).toBe(1);
+    tickSeconds(10); // past the grace
+    expect(getFeedRuntime().descent).toBeGreaterThan(0); // the crash plays
+    markSpawnSettled(); // leave the module singleton as the other tests expect
+  });
+
+  it('ch1-raster names the fiber gate once the debris is clear', () => {
+    // The reproduced stall: the first three debris pieces carry the ENTIRE
+    // stone quota, so a player who follows the debris brackets finishes stone
+    // and debris together and is left with only fiber. The beat used to keep
+    // telling them to recover hull debris they had already recovered, with no
+    // marker and — worse — with every bracket switched off.
+    advanceToBeat('ch1-raster');
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:raster:recover-quota');
+
+    setDebrisScattered(3);
+    seedDebrisCollected();
+    tickSeconds(0.1);
+    expect(getItemCount('stone')).toBeGreaterThanOrEqual(CH1_QUOTA.stone);
+    expect(getItemCount('biofiber')).toBeLessThan(CH1_QUOTA.biofiber);
+
+    // The rung, and the feed, now name what is actually outstanding — including
+    // the movement the quota cannot be met without.
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:raster:extract-fiber-quota');
+    const order = getStoryText().workorder.join('\n');
+    expect(order).toContain('OUTSTANDING: BIOFIBER');
+    expect(order).toContain('HOLD [E] AND WALK [A]/[D] AS YOU EXTRACT.');
+    expect(getStoryStateSnapshot().beat).toBe('ch1-raster');
+  });
+
+  it('ch1-fixed switches rung the moment the fiber quota is met', () => {
+    // The beat advances on a CONJUNCTION (fiber quota AND screen crossings).
+    // Filling only the first half used to leave the player reading a completed
+    // instruction against a `SCREENS 1/2` ledger, with no marker and no
+    // fallback — a permanent stall on the first playable beat of the game.
+    advanceToBeat('ch1-fixed');
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:calibrate-extractor');
+    expect(getStoryText().workorder.join('\n')).toContain('HARVEST BIOFIBER');
+
+    addItem('biofiber', CH1_FIXED_TUTORIAL.biofiber);
+    tickSeconds(0.1);
+
+    // The remaining condition is now the only one, and it is stated outright.
+    expect(getActiveGuidedStoryObjective()?.id).toBe('ch1:fixed:cross-camera-cell');
+    const order = getStoryText().workorder.join('\n');
+    expect(order).toContain('WALK [A]/[D] UNTIL THE FRAME HANDS YOU TO THE NEXT CAMERA.');
+    // The prologue echoes are the record answering back, not work-order copy:
+    // they must survive the directive swap.
+    expect(order).toContain('TRANSIT RECORD INCOMPLETE');
+    // Still on the beat — the rung changed, progression did not.
+    expect(getStoryStateSnapshot().beat).toBe('ch1-fixed');
   });
 
   it('a genuinely choice-less record (skipped prologue) still assumes compliance', () => {

@@ -419,11 +419,23 @@ export function applyLiftCameraTransform(
 }
 
 /**
- * Movie extraction probes: the screening never digs the row it WALKS. All
+ * Side-lens extraction probes: extraction never digs the row it WALKS. All
  * ground-level candidates sit in the rows ±1 off the work line (one voxel
  * along the depth axis), so the walked plane stays pristine; same-row probes
  * are above ground only (waist/head — breaking those leaves no holes).
  * `out` must hold ≥ 6 vectors.
+ *
+ * THIS SET IS SHARED BY THE SCREENING AND THE PLAYER, and that is the whole
+ * point. It began as a movie-only guard, but the hazard it removes was never
+ * specific to the movie: the human probe set below carries an UNDERFOOT
+ * candidate, so a player who does exactly what the ch1-fixed work order tells
+ * them ("EXTRACT: HOLD [E]") while standing still mines the block they are
+ * standing on, drops one voxel, and repeats — burying themselves in a shaft
+ * under a fixed camera that looks at them side-on, where the pit barely
+ * reads. `storyInputPolicy` already names this hazard for ch1-depth ("a
+ * held/latched harvest key must not dig up the row") but only ch1-depth was
+ * given the guard. Routing both actors through the off-row set makes the
+ * pothole structurally impossible instead of policy-dependent.
  */
 export function sideHarvestProbePointsOffRow(
   position: THREE.Vector3,
@@ -451,27 +463,3 @@ export function sideHarvestProbePointsOffRow(
   return out;
 }
 
-/**
- * Candidate cell offsets (world units, in the lens frame) for adjacent-block
- * harvesting — Terraria-style: ahead of the facing side first, then below the
- * feet, then ahead-above. `facing` is ±1 along travelAxis.
- */
-export function sideHarvestProbePoints(
-  position: THREE.Vector3,
-  lens: SideLens,
-  facing: 1 | -1,
-  out: THREE.Vector3[]
-): THREE.Vector3[] {
-  const t = lens.travelAxis;
-  const u = lens.up;
-  let i = 0;
-  const push = (alongTravel: number, alongUp: number) => {
-    out[i++].copy(position).addScaledVector(t, alongTravel * facing).addScaledVector(u, alongUp);
-  };
-  push(1.6, -0.4); // ahead, waist height
-  push(1.6, -1.8); // ahead, ground level
-  push(0, -2.0);   // under the feet
-  push(2.8, -0.4); // one further ahead
-  push(1.6, 1.4);  // ahead, head height
-  return out;
-}

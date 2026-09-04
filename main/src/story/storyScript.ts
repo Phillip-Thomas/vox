@@ -460,6 +460,37 @@ export const CH1_FIXED_CAPTIONS: readonly { atSeconds: number; text: string }[] 
   { atSeconds: 42, text: '(no directive requires watching this one so closely. the watching continues anyway.)' }
 ];
 
+/**
+ * ch1-fixed, SECOND RUNG. The extractor quota is met and the only outstanding
+ * condition is the coverage hand-off — the one the beat used to leave unstated
+ * while the ledger counted `SCREENS n/2` at a player who had never been told
+ * what a screen was. The camera fiction supplies the instruction for free:
+ * coverage is cellular, so the worker walks until a different camera picks
+ * them up. Same voice, now actionable.
+ */
+export const CH1_FIXED_TRAVERSE_ORDER: readonly string[] = [
+  'DIRECTIVE 2: EXTRACTOR CALIBRATED. QUOTA LOGGED.',
+  'OUTSTANDING: COVERAGE CHECK. THIS CAMERA CANNOT COMPLETE IT.',
+  'WALK [A]/[D] UNTIL THE FRAME HANDS YOU TO THE NEXT CAMERA.',
+  'COVERAGE IS CELLULAR. CAMERAS DO NOT MOVE. WORKERS DO.'
+];
+
+/**
+ * ch1-raster, SECOND RUNG. Debris and stone are done (the first three pieces
+ * carry the whole stone quota) and only biofiber remains.
+ *
+ * The last line is the one the chapter never said. A manual-input probe held
+ * the extract key from a standstill and watched the count stall at 4/6
+ * permanently: a cell yields once, the reachable ground runs out, and the feed
+ * reports nothing. Only extracting WHILE WALKING finishes the quota.
+ */
+export const CH1_RASTER_QUOTA_ORDER: readonly string[] = [
+  'DEBRIS RECOVERED. HULL PROPERTY RESTORED TO INVENTORY.',
+  'OUTSTANDING: BIOFIBER. THE STRIP IS LONG AND THE GROUND IS NOT.',
+  'A CELL YIELDS ONCE. HOLD [E] AND WALK [A]/[D] AS YOU EXTRACT.',
+  'DEBRIS IS AUTHORITY PROPERTY. YOU ARE AUTHORITY PROPERTY.'
+];
+
 /** Fired on the first screen flip (the first camera cut). */
 export const CH1_FIXED_CUT_CAPTION =
   '(lost it. found it. the site has plenty of cameras and exactly one thing worth watching.)';

@@ -261,4 +261,16 @@ export function vendorStock(vendor: Vendor): CommodityId[] {
   return vendor.market.lines.map(line => line.commodity);
 }
 
+/**
+ * The story-critical issuer is a deterministic certified-components counter.
+ * The frozen Chapter 11 station resolves to B-7073 “Bell”; the specialty
+ * fallback keeps a migrated layout playable without making an arbitrary bulk
+ * stall issue a sealed habitat component.
+ */
+export function certifiedComponentIssuer(vendors: readonly Vendor[]): Vendor | null {
+  return vendors.find(vendor => vendor.designation === 'B-7073' && vendor.specialty === 'certified')
+    ?? vendors.find(vendor => vendor.specialty === 'certified')
+    ?? null;
+}
+
 export { COMMODITY_IDS };

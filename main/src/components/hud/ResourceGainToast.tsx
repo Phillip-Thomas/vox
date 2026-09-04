@@ -13,6 +13,7 @@ import {
   pruneResourceGainRows,
   type ResourceGainToastState
 } from './resourceGainToast.model.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 /**
  * Subtle "+4 STONE" collection feedback. Subscribes to the single finalized-
@@ -111,6 +112,7 @@ const ResourceGainToast: React.FC = () => {
   return (
     <div
       data-testid="resource-gain-toast"
+      {...hudSurface('resource-gain-toast', 'informational')}
       aria-hidden
       style={{
         position: 'absolute',

@@ -154,6 +154,8 @@ import {
   CH1_ECHO_LINES,
   CH1_FIXED_CAPTIONS,
   CH1_FIXED_CUT_CAPTION,
+  CH1_FIXED_TRAVERSE_ORDER,
+  CH1_RASTER_QUOTA_ORDER,
   CH1_FLASH_SCHEDULE,
   CH1_FIXED_TUTORIAL,
   CH1_QUOTA,
@@ -187,6 +189,8 @@ import {
 import {
   resolveStoryObjectiveGuidance,
   type GatherObjectiveStage,
+  type Ch1FixedObjectiveState,
+  type Ch1RasterObjectiveState,
   type RestObjectivePhase,
   type VigilObjectivePhase
 } from './storyObjectiveGuidance.ts';
@@ -296,12 +300,15 @@ interface DirectorRuntime {
   bareFramesLeft: number;
   /** Scratch for the auditor's walk. */
   workerScratch: THREE.Vector3;
+  /** Seconds the descent has held the BRACE white-out waiting for the world. */
+  descentSettleWait: number;
 }
 
 function createDirectorRuntime(): DirectorRuntime {
   return {
     beat: null,
     beatClock: 0,
+    descentSettleWait: 0,
     ch1Clock: 0,
     flashesFired: CH1_FLASH_SCHEDULE.map(() => false),
     flashFramesLeft: 0,
@@ -596,6 +603,27 @@ function currentGatherMarkerResource(): GatherMarkerResource {
   return firstMissingGatherInput(campfire.inputs) ?? 'wood';
 }
 
+/**
+ * The ch1-fixed rung. The beat's advance condition is a conjunction (fiber
+ * quota AND screen crossings), so the objective must switch the moment the
+ * first half is satisfied — otherwise the player is left staring at a
+ * completed instruction. Derived from live progression, never latched, so a
+ * deep link or reload reconstructs the same rung (ux README guardrail 5).
+ */
+function currentCh1FixedObjectiveState(): Ch1FixedObjectiveState {
+  return getItemCount('biofiber') >= CH1_FIXED_TUTORIAL.biofiber ? 'traverse' : 'harvest';
+}
+
+/**
+ * The ch1-raster rung. Debris is the gate the player is steered to first (the
+ * brackets point at it), and the first three pieces carry the entire stone
+ * quota — so "debris done, fiber outstanding" is the common state, not an edge
+ * case, and it needs its own rung and its own instruction.
+ */
+function currentCh1RasterObjectiveState(): Ch1RasterObjectiveState {
+  return debrisSalvageComplete() ? 'quota' : 'salvage';
+}
+
 function currentRestObjectivePhase(): RestObjectivePhase {
   return isNightPhase(d.dayPhase)
     ? 'rest-at-fire'
@@ -619,8 +647,10 @@ function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
   const guidance = (() => {
     switch (beat) {
       case 'ch1-fixed':
+        return resolveStoryObjectiveGuidance(beat, {
+          ch1FixedState: currentCh1FixedObjectiveState()
+        });
       case 'ch1-track':
-      case 'ch1-raster':
       case 'ch1-depth':
       case 'ch1-iso':
       case 'ch1-lift':
@@ -629,6 +659,10 @@ function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
       case 'ch3-thirst':
       case 'ch3-signal':
         return resolveStoryObjectiveGuidance(beat);
+      case 'ch1-raster':
+        return resolveStoryObjectiveGuidance(beat, {
+          ch1RasterState: currentCh1RasterObjectiveState()
+        });
       case 'ch1-nav':
         return resolveStoryObjectiveGuidance(beat, {
           navWaypointIndex: currentNavWaypointIndex(),
@@ -664,12 +698,38 @@ function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
   // Before embodiment, the Regulation Feed's bureaucratic voice is part of the
   // scene (including voyage echoes). Keep that authored copy while the shared
   // store supplies its semantic id, action, marker label, and health.
+  // ch1-fixed owns two feed orders, one per rung, so it derives its directive
+  // block from progression rather than replaying whatever the beat entered
+  // with. The voyage echoes trailing the directive are prologue-owned and must
+  // survive the swap — they are the record answering back, not work-order copy.
+  if (activated && beat === 'ch1-fixed') {
+    const directive = currentCh1FixedObjectiveState() === 'traverse'
+      ? CH1_FIXED_TRAVERSE_ORDER
+      : CH1_WORK_ORDERS.fixed;
+    const echoes = legacyFeedCopy.filter(
+      line => !CH1_WORK_ORDERS.fixed.includes(line) && !CH1_FIXED_TRAVERSE_ORDER.includes(line)
+    );
+    setWorkOrder([...directive, ...echoes]);
+    return;
+  }
+  // ch1-raster stages the same way, and for the same reason: its rung changes
+  // while the beat does not. Its repaired copy previously went to the objective
+  // store, which the FEED does not render — so the fix reached nobody.
+  if (activated && beat === 'ch1-raster') {
+    const directive = currentCh1RasterObjectiveState() === 'quota'
+      ? CH1_RASTER_QUOTA_ORDER
+      : CH1_WORK_ORDERS.raster;
+    const echoes = legacyFeedCopy.filter(
+      line => !CH1_WORK_ORDERS.raster.includes(line) && !CH1_RASTER_QUOTA_ORDER.includes(line)
+    );
+    setWorkOrder([...directive, ...echoes]);
+    return;
+  }
   if (
     activated
     && legacyFeedCopy.length > 0
     && (
-      beat === 'ch1-fixed'
-      || beat === 'ch1-track'
+      beat === 'ch1-track'
       || beat === 'ch1-raster'
       || beat === 'ch1-depth'
       || beat === 'ch1-nav'
@@ -682,6 +742,7 @@ function syncFoundationalStoryObjective(beat: StoryBeat | null): void {
 function onBeatEntered(beat: StoryBeat | null): void {
   d.beat = beat;
   d.beatClock = 0;
+  d.descentSettleWait = 0;
   const era = beat ? ERA_RIGS[beat] : null;
   if (era) setLensRig(era.rig, era.seconds);
   // Cutscene-scoped world state never survives a beat change.
@@ -1226,6 +1287,15 @@ function tickA2(): void {
 // becomes the first landmark of the strip the player is about to work.
 const DESCENT_SECONDS = 8.5;
 const DESCENT_IMPACT_AT = 4.5;
+/**
+ * How long the BRACE white-out may wait for the world before the crash plays
+ * anyway. `isSpawnSettled()` had no time bound at all, so a collider stream
+ * that never completed left the player on a full-white frame with no text, no
+ * progress and no error — the story's first screen, hung forever. Playing the
+ * descent a beat early on a still-assembling world is a far smaller defect
+ * than never playing it, and the flash covers the assembly either way.
+ */
+const DESCENT_SETTLE_GRACE_SECONDS = 12;
 
 function tickDescent(dt: number): void {
   // The crash WAITS for the world: colliders/chunks stream in after mount, and
@@ -1234,11 +1304,15 @@ function tickDescent(dt: number): void {
   // The BRACE white-out holds the frame while it loads — the fall then emerges
   // from its own flash, and nobody watches the world assemble.
   if (!isSpawnSettled()) {
-    d.beatClock = 0;
-    const held = getFeedRuntime();
-    held.descent = 0;
-    held.flash = 1;
-    return;
+    d.descentSettleWait += dt;
+    if (d.descentSettleWait < DESCENT_SETTLE_GRACE_SECONDS) {
+      d.beatClock = 0;
+      const held = getFeedRuntime();
+      held.descent = 0;
+      held.flash = 1;
+      return;
+    }
+    // Grace spent: fall through and play the crash regardless.
   }
   const t = d.beatClock;
   const r = getFeedRuntime();

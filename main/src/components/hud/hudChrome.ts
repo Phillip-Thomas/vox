@@ -4,6 +4,18 @@ import { glassPanel, theme } from '../../ui/theme.ts';
 export const HUD_EDGE = 14;
 export const HUD_TOUCH_EDGE = 20;
 
+// The story-era cross D-pad's geometry, shared so HUD surfaces can clear it by
+// derivation rather than by a hand-copied pixel value. (The feed-era ledgers
+// were sized against the ANALOG JOYSTICK's height and ended up two pixels
+// inside the D-pad's up arm — the pad, not the joystick, is what these beats
+// actually mount.)
+export const TOUCH_DPAD_ARM_PX = 50;
+export const TOUCH_DPAD_GAP_PX = 3;
+/** Full cross height: three arm cells plus the two gaps between them. */
+export const TOUCH_DPAD_HEIGHT_PX = TOUCH_DPAD_ARM_PX * 3 + TOUCH_DPAD_GAP_PX * 2;
+/** Viewport-bottom offset of the pad's top edge, before safe-area insets. */
+export const TOUCH_DPAD_TOP_EDGE_PX = HUD_TOUCH_EDGE + TOUCH_DPAD_HEIGHT_PX;
+
 export const hudNoSelect: CSSProperties = {
   userSelect: 'none',
   WebkitUserSelect: 'none',

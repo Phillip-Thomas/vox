@@ -1,6 +1,7 @@
 import { useFrame, useThree } from '@react-three/fiber';
 import { useCallback, useEffect, useMemo, useRef } from 'react';
 import * as THREE from 'three';
+import { isTouchActive } from '../../utils/mobileInput.ts';
 import { seededUnit } from '../../utils/worldCoordinates.ts';
 import {
   NOMINAL_PLANET_FACE_RADIUS,
@@ -290,7 +291,7 @@ function ShipController({
     const onKeyUp = (event: KeyboardEvent) => keys.current.delete(event.code);
     const onClick = () => void canvas.requestPointerLock?.();
     const onMouseMove = (event: MouseEvent) => {
-      if (document.pointerLockElement !== canvas) return;
+      if (document.pointerLockElement !== canvas && !isTouchActive()) return;
       euler.current.y -= event.movementX * LOOK_SENSITIVITY;
       euler.current.x -= event.movementY * LOOK_SENSITIVITY;
       euler.current.x = Math.max(-Math.PI / 2 + 0.02, Math.min(Math.PI / 2 - 0.02, euler.current.x));

@@ -1,9 +1,12 @@
 import { afterEach, describe, expect, it } from 'vitest';
+import { TOUCH_DPAD_TOP_EDGE_PX } from '../../components/hud/hudChrome.ts';
 import {
   deriveStoryHudTopLeftOcclusion,
   getMeasuredStoryObjectiveCardHeight,
   setMeasuredStoryObjectiveCardHeight,
   solveStoryEdgeLabelPresentation,
+  solveStoryFeedLedgerPlacement,
+  STORY_FEED_LEDGER_TOUCH_CLEARANCE_PX,
   solveStoryHudLayout,
   solveStoryMarkerMotion,
   solveStoryMarkerPresentation,
@@ -381,5 +384,61 @@ describe('free-era narrow-screen HUD layout', () => {
   it('shares measured objective height without coupling it to React state', () => {
     setMeasuredStoryObjectiveCardHeight(163.5);
     expect(getMeasuredStoryObjectiveCardHeight()).toBe(163.5);
+  });
+});
+
+describe('feed ledger placement', () => {
+  it('lifts the ch1 ledgers clear of the cross D-pad these beats actually mount', () => {
+    // Derived from the pad's own geometry, not a copied pixel value: the first
+    // attempt cleared the ANALOG JOYSTICK and landed two pixels inside the
+    // D-pad's up arm.
+    const touch = solveStoryFeedLedgerPlacement(true);
+    expect(touch.bottom).toBeGreaterThan(TOUCH_DPAD_TOP_EDGE_PX);
+    expect(solveStoryFeedLedgerPlacement(false).bottom).toBeLessThan(touch.bottom);
+  });
+
+  it('adds the safe-area insets on top of the clearance', () => {
+    const inset = solveStoryFeedLedgerPlacement(true, { bottom: 34, left: 20 });
+    expect(inset.bottom).toBe(STORY_FEED_LEDGER_TOUCH_CLEARANCE_PX + 34);
+    expect(inset.left).toBeGreaterThan(solveStoryFeedLedgerPlacement(true).left);
+  });
+
+  it('ignores absent or nonsense insets', () => {
+    const bare = solveStoryFeedLedgerPlacement(false);
+    expect(solveStoryFeedLedgerPlacement(false, { bottom: NaN, left: -10 })).toEqual(bare);
+  });
+});
+
+describe('measured touch-control clearance', () => {
+  const base = { viewportWidth: 390, viewportHeight: 844, touch: true, objectivePresent: false };
+
+  it('lifts the caption above a taller cluster than the legacy constant assumed', () => {
+    // The regression: STORY_HUD_TOUCH_CONTROL_CLEARANCE_PX was sized against a
+    // 152px four-button cluster. Sprint added a third row (226px, top edge 246
+    // from the bottom) on chapters 3-10 and free play, and captions were drawn
+    // straight across the SPRINT and JUMP buttons.
+    const legacy = solveStoryHudLayout(base);
+    const measured = solveStoryHudLayout({ ...base, touchControlTopFromBottom: 246 });
+    expect(legacy.caption.bottom).toBeLessThan(measured.caption.bottom);
+    expect(measured.caption.bottom).toBeGreaterThan(246);
+  });
+
+  it('never drops below the legacy floor when nothing is measured', () => {
+    expect(solveStoryHudLayout({ ...base, touchControlTopFromBottom: 0 }).caption.bottom)
+      .toBe(solveStoryHudLayout(base).caption.bottom);
+    expect(solveStoryHudLayout({ ...base, touchControlTopFromBottom: 40 }).caption.bottom)
+      .toBe(solveStoryHudLayout(base).caption.bottom);
+  });
+
+  it('ignores the measurement on desktop, where there are no touch controls', () => {
+    const desktop = { ...base, touch: false, viewportWidth: 1440, viewportHeight: 900 };
+    expect(solveStoryHudLayout({ ...desktop, touchControlTopFromBottom: 246 }).caption.bottom)
+      .toBe(solveStoryHudLayout(desktop).caption.bottom);
+  });
+
+  it('survives a non-finite measurement', () => {
+    expect(Number.isFinite(
+      solveStoryHudLayout({ ...base, touchControlTopFromBottom: Number.NaN }).caption.bottom
+    )).toBe(true);
   });
 });

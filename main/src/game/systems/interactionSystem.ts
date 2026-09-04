@@ -20,7 +20,9 @@ export type InteractionId =
   | 'story-habitat-core' | 'story-habitat-certify' | 'story-habitat-rest'
   // chapter 10: diagnose, attempt, ask, claim
   | 'story-ch10-fault-read' | 'story-ch10-fabrication-attempt'
-  | 'story-ch10-relay-query' | 'story-ch10-bearing-claim';
+  | 'story-ch10-relay-query' | 'story-ch10-bearing-claim'
+  // post-station return: deliver the issued component to the second hearth
+  | 'story-ch12-install-bonded-cell';
 
 export interface ActiveInteraction {
   id: InteractionId;

@@ -16,6 +16,7 @@ import { getItem } from '../../game/data/items.ts';
 import { getItemCount, subscribeInventory } from '../../game/systems/inventorySystem.ts';
 import { getBuildGhost, subscribeBuildGhost, type BuildBlockReason } from '../../game/systems/buildGhost.ts';
 import { isTouchDevice, KEY_CODES, pressKey, releaseKey } from '../../utils/mobileInput.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 /**
  * Build-mode HUD. Desktop keeps the pointer-transparent keyboard legend. Touch
@@ -43,7 +44,7 @@ const BuildIndicator: React.FC = () => {
   const placementStatus = buildPlacementStatus(getBuildGhost().reason, getBuildGhost().active, affordable);
 
   return (
-    <div style={{
+    <div {...hudSurface('build-hotbar', 'informational')} style={{
       position: 'absolute', bottom: 18, left: '50%', transform: 'translateX(-50%)',
       display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
       fontFamily: 'monospace', color: '#dfe7ee', pointerEvents: 'none', zIndex: 25,

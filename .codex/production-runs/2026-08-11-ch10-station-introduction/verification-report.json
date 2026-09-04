@@ -678,7 +678,7 @@
         "staging": {
           "habitatCoreGaitDistance": 6.8,
           "ceiling": 25,
-          "convention": "autopilot.ts:816 gaitDistance -- tangential distance plus max(0, vertical-1) -- the same measure the autopilot's own walk to the core uses",
+          "convention": "autopilot.ts surfaceGaitDistance -- tangential range, plus any un-climbed rise, PLUS any drop the walker cannot step down (GAIT_STEP_DOWN 3.4). The measure the autopilot's own walk to the core uses.",
           "euclideanDistance": 46.29,
           "verticalOffset": -45.79,
           "notAtTheKestrel": "proven, not asserted: the Kestrel's own 'Enter Ship' interaction prompt is absent at the shutter, and the walk that removed it is traced. The two prior attempts shot with that prompt live.",
@@ -747,7 +747,39 @@
               ]
             }
           ],
-          "walkDriver": "the shipped touch-input synthesis path, utils/mobileInput.ts setTouchActive() + pressKey('KeyW'). Raw Playwright key events do nothing here because movement is gated on pointer lock, which headless Chromium never grants."
+          "walkDriver": "the shipped touch-input synthesis path, utils/mobileInput.ts setTouchActive() + pressKey('KeyW'). Raw Playwright key events do nothing here because movement is gated on pointer lock, which headless Chromium never grants.",
+          "retractedConvention": "autopilot.ts:816 gaitDistance -- tangential distance plus max(0, vertical-1). RETRACTED: it discounted downward offset entirely.",
+          "ownerReportedDefect": {
+            "id": "OD-habitat-core-burial",
+            "lockRevision": "existing-allowed-scope",
+            "report": "the read the fault interactable thing is in the middle of the planet when I start the chapter",
+            "reading": "This staging block is the instrument that hid it. habitatCoreGaitDistance 6.8 against a ceiling of 25 was measured with the rise-only gait, while euclideanDistance 46.29 and verticalOffset -45.79 -- both recorded here, both ignored -- said the habitat core was buried 45.79 units inside Tidegarden. The staging clause of AC-hero-still-st0-sighting is therefore VOID as measured; it certified a distance to a handle that was not on the surface.",
+            "rootCause": "bootstrapTidegardenHabitatDebug committed the rehearsal hearth at a literal cell [0,5,0] and stored cell arithmetic as a world position. VOXEL_SCALE is 2 and Tidegarden's surface in that column is cell 25, so the core landed at world y=5 under a surface at y=50. The same cell-as-world error also failed the shelter certification silently.",
+            "repair": "the bootstrap now resolves its site through the shipped habitat survey against the real generator, anchored on the world's own arrival pad; and surfaceGaitDistance now counts the drop, so no gate can read a buried handle as adjacent.",
+            "postRepairMeasurement": {
+              "coreWorld": [
+                16,
+                50.24,
+                -8
+              ],
+              "playerWorld": [
+                10.5,
+                50.789,
+                -8
+              ],
+              "verticalOffset": -0.549,
+              "euclideanDistance": 5.53,
+              "gaitDistance": 5.5,
+              "terrainSurfaceWorldY": 50,
+              "coreCellsBelowSurface": 0,
+              "shelterCertified": true
+            },
+            "evidence": [
+              "evidence/verification/ch10-core-burial-pre-repair.json",
+              "evidence/verification/ch10-core-burial-post-repair.json"
+            ],
+            "restagingRequired": "the hero still and its ST-0 sighting were shot with the hearth buried, so the warm cluster in the bottom band and the 6.88-unit staging reading both describe a frame that can no longer occur. AC-hero-still-st0-sighting must be re-shot before it is read again."
+          }
         },
         "dayPhase": 0.6218,
         "daylight": 0,
@@ -1039,7 +1071,7 @@
           ]
         }
       },
-      "deviation": "POINT-SOURCE LAW FAILS, and it is a finding about the work rather than an impossible target. Classified by extent first: ST-0 measures 2 px at 1280x720 and peaks at 148.4. The brightest other point source in the sky -- 4 px extent, a star at (884.6,185.9) -- peaks at 231.8, so ST-0 is not the maximum among point sources and does not read above the brightest star. The gap is 83.4 luminance, not marginal, and 2,402 point sources were classified. The v9 reachability note, 'ST-0 is authored above the starfield peak; only the disc ever beat it', is contradicted by measurement. The disc half of the law holds: the brightest disc, 93 px extent and cool magenta at hue 286.8, peaks at 225.3, above ST-0, so ST-0 reads sub-moon.\nEvery other clause passes: 6.88 units from the core by the autopilot's own gait measure, no interaction prompt, deep night at dayPhase 0.6208 with daylight 0, yaw error 0.000 deg, FOV 75, elevation 20.298 deg, the dot at 28.84% of frame height inside the 28.33-38.33% upper-third band, and the bottom 20% carrying 72.05% lit terrain with the hearth's warm cluster at 1.6% of the band and a 189.5 peak."
+      "deviation": "SUPERSEDED BY OWNER-REPORTED DEFECT OD-habitat-core-burial (lock revision R10): the staging clause of this criterion was measured with a metric that could not see a target buried below the player, against a habitat core that was buried 45.79 units below the player. The criterion must be re-shot against the repaired placement before any of its readings are relied on.\n\nPOINT-SOURCE LAW FAILS, and it is a finding about the work rather than an impossible target. Classified by extent first: ST-0 measures 2 px at 1280x720 and peaks at 148.4. The brightest other point source in the sky -- 4 px extent, a star at (884.6,185.9) -- peaks at 231.8, so ST-0 is not the maximum among point sources and does not read above the brightest star. The gap is 83.4 luminance, not marginal, and 2,402 point sources were classified. The v9 reachability note, 'ST-0 is authored above the starfield peak; only the disc ever beat it', is contradicted by measurement. The disc half of the law holds: the brightest disc, 93 px extent and cool magenta at hue 286.8, peaks at 225.3, above ST-0, so ST-0 reads sub-moon.\nEvery other clause passes: 6.88 units from the core by the autopilot's own gait measure, no interaction prompt, deep night at dayPhase 0.6208 with daylight 0, yaw error 0.000 deg, FOV 75, elevation 20.298 deg, the dot at 28.84% of frame height inside the 28.33-38.33% upper-third band, and the bottom 20% carrying 72.05% lit terrain with the hearth's warm cluster at 1.6% of the band and a 189.5 peak."
     },
     {
       "id": "AC-composition-lens-identity",
@@ -1332,5 +1364,30 @@
     "The LOW frame budget is 72 rather than the 64 the budget line enumerates; the extra 8 are the night-dwell strip AC-9 itself commissions."
   ],
   "overallStatus": "fail",
-  "overallReading": "The spine is measured and holds. The seam is genuinely the seam now and at FOV 70, the ST-0 still is finally staged at the hearth rather than the Kestrel, the gaze bias is proven on both walks in a lane asserted from location.href, ST-0 is proven to cross the sky on 7 of 8 night-dwell frames, the transit lens is flat at 70.0 with the shell at unit scale, and the end-to-end run reaches the hand-back with no timeout rescue. The predecessor's hull/light guard was dead and is fixed; every spine number in this report comes from the hull, cross-checked against the component's own diagnostics. Four criteria fail on measurement, not on impossibility: the cut-line shutter range is unreachable because a later fix shortened the coast, the seam's thickness and spine angle miss under the tangent-correct convention the contract now mandates, ST-0 is outshone by a star, and three cockpit-rigid warm clusters share the aperture with the subject. All four are findings about the work."
+  "overallReading": "The spine is measured and holds. The seam is genuinely the seam now and at FOV 70, the ST-0 still is finally staged at the hearth rather than the Kestrel, the gaze bias is proven on both walks in a lane asserted from location.href, ST-0 is proven to cross the sky on 7 of 8 night-dwell frames, the transit lens is flat at 70.0 with the shell at unit scale, and the end-to-end run reaches the hand-back with no timeout rescue. The predecessor's hull/light guard was dead and is fixed; every spine number in this report comes from the hull, cross-checked against the component's own diagnostics. Four criteria fail on measurement, not on impossibility: the cut-line shutter range is unreachable because a later fix shortened the coast, the seam's thickness and spine angle miss under the tangent-correct convention the contract now mandates, ST-0 is outshone by a star, and three cockpit-rigid warm clusters share the aperture with the subject. All four are findings about the work.",
+  "ownerReportedDefects": [
+    {
+      "id": "OD-habitat-core-burial",
+      "lockRevision": "existing-allowed-scope",
+      "reportedAt": "2026-08-12",
+      "affects": [
+        "AC-hero-still-st0-sighting"
+      ],
+      "paths": [
+        "?story=ch10-cold",
+        "?story=ch10-ask",
+        "?story=ch10-transit"
+      ],
+      "notAffected": [
+        "the movie flow (?story=base|full), which builds the hearth through activateTidegardenHabitatCore against live terrain",
+        "the wreck relay (findTopFaceSurfaceVoxel)",
+        "the Kestrel fabricator/hatch (the ship pose)",
+        "ch9, which has no bootstrap-built hearth at all"
+      ],
+      "evidence": [
+        "evidence/verification/ch10-core-burial-pre-repair.json",
+        "evidence/verification/ch10-core-burial-post-repair.json"
+      ]
+    }
+  ]
 }

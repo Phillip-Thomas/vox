@@ -270,7 +270,9 @@
       "evidence": [
         "milestone:story:ch10-transit-ignited",
         "state:story/ch10-seam-passed",
-        "milestone:story:ch10-station-resolved"
+        "milestone:story:ch10-station-resolved",
+        "milestone:story:station-docking-authorized",
+        "state:station/docking-authorized"
       ]
     }
   ],

@@ -11,7 +11,6 @@ import {
   fixedScreenCellIndex,
   rigMoveBasis,
   setLensRig,
-  sideHarvestProbePoints,
   sideHarvestProbePointsOffRow,
   type LensRig,
   type SideLens
@@ -233,7 +232,7 @@ describe('sideLens', () => {
     setLensRig({ ...SIDE_RIG }, 0); // leave global state clean for other tests
   });
 
-  it('movie probes never touch the walked row at or below ground level', () => {
+  it('side-lens probes never touch the walked row at or below ground level', () => {
     const lens = makeLens();
     const position = new THREE.Vector3(10, 52, 0);
     const out = Array.from({ length: 6 }, () => new THREE.Vector3());
@@ -243,22 +242,16 @@ describe('sideLens', () => {
       const depthOff = Math.abs(rel.dot(lens.depthAxis));
       const upOff = rel.dot(lens.up);
       // Same-row candidates must be above ground; ground candidates must be
-      // a full row off the walked plane — the movie cannot pothole its path.
+      // a full row off the walked plane. This is the ONLY probe set either
+      // actor uses, so neither the screening nor a player holding [E] while
+      // standing still can mine the block under their own feet.
       if (depthOff < 0.5) expect(upOff).toBeGreaterThan(-1);
       else expect(depthOff).toBeGreaterThanOrEqual(1.5);
+      // Nothing may sit underfoot in the walked plane at any depth offset.
+      expect(depthOff > 0.5 || upOff > -1).toBe(true);
     }
   });
 
-  it('harvest probes lead with the facing side and include underfoot', () => {
-    const lens = makeLens();
-    const position = new THREE.Vector3(10, 52, 0);
-    const out = Array.from({ length: 5 }, () => new THREE.Vector3());
-    sideHarvestProbePoints(position, lens, 1, out);
-    expect(out[0].x).toBeGreaterThan(position.x); // ahead of +facing
-    sideHarvestProbePoints(position, lens, -1, out);
-    expect(out[0].x).toBeLessThan(position.x); // flips with facing
-    expect(out[2].y).toBeLessThan(position.y); // underfoot probe
-  });
 
   // --- Travel-band edge clamp (the cube-face wall for the pure-2D eras) --------
   //

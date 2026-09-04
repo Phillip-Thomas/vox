@@ -12,7 +12,8 @@ import { getStoryInputPolicy } from '../../story/storyInputPolicy.ts';
 import { subscribeStory } from '../../story/storyState.ts';
 import { theme } from '../../ui/theme.ts';
 import { touchActionButtonStyle, HUD_TOUCH_EDGE, hudNoSelect } from '../hud/hudChrome.ts';
-import { createTouchActionGrid, createTouchActionSpecs, staleHeldTouchActionCodes } from './TouchControls.model.ts';
+import { createTouchActionGrid, createTouchActionSpecs, staleHeldTouchActionCodes, TOUCH_ACTION_GRID_GAP_PX } from './TouchControls.model.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 // On-screen virtual controls for touch devices. Feeds the EXISTING input paths
 // by synthesizing keyboard + mousemove events (see mobileInput.ts), so neither
@@ -127,7 +128,14 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
   // label text or popping the copy/paste callout mid-play.
   // Sprint only joins the on-foot grid (fps, not building) where policy allows it.
   const sprintEnabled = controlMode === 'fps' && !buildActive && allowSprint;
-  const actionGrid = createTouchActionGrid(controlMode, buildActive, sprintEnabled);
+  // Viewport width decides which axis the sprint cluster spends; see
+  // touchActionClusterMetrics, which the caption lane derives its clearance from.
+  const actionGrid = createTouchActionGrid(
+    controlMode,
+    buildActive,
+    sprintEnabled,
+    typeof window === 'undefined' ? Number.POSITIVE_INFINITY : window.innerWidth
+  );
   const actionSpecs = createTouchActionSpecs(controlMode, buildActive, sprintEnabled);
 
   // Grid-reshape release seam. A finger can still be down on an action button when
@@ -160,6 +168,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
       {/* left movement joystick */}
       <div
         data-testid="touch-joystick"
+          {...hudSurface('touch-joystick', 'control')}
         onPointerDown={onJoyDown}
         onPointerMove={onJoyMove}
         onPointerUp={onJoyUp}
@@ -190,6 +199,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
           their four required commands in one compact 2x2 grid. */}
       <div
         data-testid="touch-action-cluster"
+        {...hudSurface('touch-action-cluster', 'control')}
         style={{
           position: 'absolute',
           right: 'calc(14px + env(safe-area-inset-right, 0px))',
@@ -199,7 +209,7 @@ export default function TouchControls({ controlMode }: TouchControlsProps) {
           gridTemplateColumns: actionGrid.templateColumns,
           gridTemplateRows: actionGrid.templateRows,
           gridTemplateAreas: actionGrid.templateAreas,
-          gap: 8,
+          gap: TOUCH_ACTION_GRID_GAP_PX,
           justifyItems: 'center', alignItems: 'center', pointerEvents: 'auto'
         }}
       >

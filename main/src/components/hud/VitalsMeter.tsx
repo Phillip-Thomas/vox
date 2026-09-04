@@ -21,6 +21,7 @@ import {
   subscribeMobileHudDisclosure,
   toggleMobileHudDisclosure
 } from '../mobile/mobileHudDisclosure.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 const VitalsMeter: React.FC = () => {
   const fills = useRef<Array<HTMLDivElement | null>>([]);
@@ -124,6 +125,7 @@ const VitalsMeter: React.FC = () => {
     <section
       aria-label="Survival vitals"
       data-testid="vitals-meter"
+      {...hudSurface('vitals-meter', 'informational')}
       data-mobile-expanded={touch ? String(expanded) : undefined}
       style={hudGlassPanelStyle({
         position: 'absolute',

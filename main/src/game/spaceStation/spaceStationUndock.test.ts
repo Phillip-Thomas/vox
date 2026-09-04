@@ -1,6 +1,11 @@
 import { describe, expect, it } from 'vitest';
 import { spaceStationBody, systemToStationLocal } from './spaceStationBody.ts';
-import { parseUndockFlag, requestedUndockAddress, undockedShipPose } from './spaceStationUndock.ts';
+import {
+  parseUndockFlag,
+  requestedUndockAddress,
+  searchAfterUndockConsumed,
+  undockedShipPose
+} from './spaceStationUndock.ts';
 
 const ADDRESS = { system: { x: -19, y: -17 }, index: 0 };
 
@@ -27,6 +32,14 @@ describe('the undock flag', () => {
   it('reads the flag out of a query string', () => {
     expect(requestedUndockAddress('?fly=1&undock=-19,-17,0')).toEqual(ADDRESS);
     expect(requestedUndockAddress('?fly=1')).toBeNull();
+  });
+
+  it('consumes the one-shot berth handoff and its flight bootstrap', () => {
+    expect(searchAfterUndockConsumed('?profile=LOW&undock=-19%2C-17%2C0&fly=1'))
+      .toBe('?profile=LOW');
+    expect(searchAfterUndockConsumed('?undock=-19,-17,0&fly=1')).toBe('');
+    expect(searchAfterUndockConsumed('?profile=LOW&undock=bad&fly=1'))
+      .toBe('?profile=LOW&undock=bad&fly=1');
   });
 });
 

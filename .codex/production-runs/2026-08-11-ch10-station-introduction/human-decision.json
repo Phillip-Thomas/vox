@@ -9,7 +9,7 @@
   "headedRealGpuEvidence": true,
   "headedRealGpuEvidenceNote": "Partial and owner-supplied rather than commissioned: the owner played the live build headed and reported two defects (a full-size companion-planet shell drawn centred on the camera, and a FLIGHT CORRIDOR lock with no way in). Both traced to one cause \u2014 resolveStoryBootWorldId stopped at ch9, so ch10 booted on the origin world \u2014 and both are fixed and regression-tested. No systematic headed screening of the ch10 shot ladder has been performed; the two hero stills and every strip are headless SwiftShader captures.",
   "scopeMatchesProductionLock": true,
-  "scopeNote": "Lock revisions R1-R8 record every path added beyond the original boundary, each with the defect or contract term that forced it. R8 records the owner-directed hosting deploy, which spent the publish decision the lock had reserved.",
+  "scopeNote": "Lock revisions R1-R12 record every path added beyond the original boundary, each with the defect, owner direction, or contract term that forced it. R8 records the owner-directed hosting deploy; R10-R12 record docking, touch continuity, and the station-story continuation without changing the signed Chapter 10 reveal.",
   "evidenceRefs": [
     "verification-report.json",
     "story-audit.md",
@@ -22,10 +22,12 @@
     "evidence/capture/still-station-resolved.png",
     "evidence/score/relay_ask-through-answer_combined.wav",
     "evidence/score/station-resolved_combined.wav",
-    "evidence/verification/ch10-final-full.json"
+    "evidence/verification/ch10-final-full.json",
+    "station-continuation-contract.md",
+    "evidence/verification/ch11-station-story.json"
   ],
   "tasteRationale": "PENDING OWNER SESSION. The machine record is substantially complete: the story spine traverses end to end (449s, 30/30 legs, zero rescues), canon passes with the hidden-pillar spend now audibly earned, the score lane is independently lockable, and every owner-reported defect is closed. What remains is constitutionally the owner's, and one item is newly urgent because the build is live.",
-  "dissentDisposition": "pending \u2014 dissent-register.md preserves six declined alternatives plus the blind viewer's report verbatim; the cohesion judge has not yet ruled, so judge-derived exceptions are not yet enumerated here",
+  "dissentDisposition": "pending owner disposition \u2014 dissent-register.md preserves six declined alternatives plus the blind viewer's report verbatim; the cohesion judge issued a repair ruling on 2026-08-12, recorded in cohesion-judge.md and final-scorecard.json",
   "acceptedExceptions": [
     "UX-2",
     "D-12",
@@ -92,14 +94,16 @@
       "question": "Docking: page reload (as the sandbox does today) or an in-place scene swap?",
       "why": "Gates the entire second run. The interior wants an 8cm near plane and system space a 100km far plane, which is why the shipped path navigates rather than swaps. A reload kills StoryDirectorDriver, the signed AV rail and score continuity across the seam, forcing resume-through-milestones; an in-place swap preserves them but is a large renderer change.",
       "recommendation": "in-place scene swap, and budget it as its own run \u2014 the reload forecloses both the score's continuous-pedal thesis and an unbroken arrival grammar, which are the two things that would make docking feel authored rather than loaded",
-      "status": "pending"
+      "status": "resolved",
+      "resolution": "The owner directed Chapter 10 to expose the already-working sandbox docking path on 2026-08-13. Use the proven page-transition handoff now; an in-place renderer swap remains optional later polish."
     },
     {
       "id": "owner-decision-corridor-silence-legibility",
       "question": "Flying to the station and receiving complete silence inside the corridor is contract-correct. You read it as unfinished rather than as a closed door. Authorize one beat that makes the withholding legible as a choice?",
       "why": "The chapter intends 'an address without an invitation', but intent only lands if the closed door reads as deliberate. This is the only owner-reported experience defect still open, and the build is live.",
       "recommendation": "yes \u2014 cheap, inside this run's lane, in the chapter's own voice rather than a fourth advisory line",
-      "status": "pending"
+      "status": "resolved",
+      "resolution": "The owner explicitly requested the same working [F] landing affordance in story mode on 2026-08-13. The threshold hand-back now opens the normal procedural approach, clearance prompt, and docking path; R12 continues through the station transaction. No extra Chapter 10 voice line was added. Desktop and touch round trips are browser-proven."
     },
     {
       "id": "owner-taste-voice-lane",
@@ -116,7 +120,7 @@
     {
       "id": "owner-taste-reveal-scale",
       "question": "The station reveal's musical restraint: authored discipline, or too small?",
-      "why": "Three independent reviewers flagged the same perception from different directions \u2014 the blind viewer ('too small for the biggest image; nothing you'd remember'), the canon auditor (the answer's continuation reads as thinning), and the score auditor (the answer enters ~6dB under the ask's own mean). The score lane's position is that withholding the station's key, theme, mediant and lead is the point, and that it is banked for the docking run.",
+      "why": "Three independent reviewers flagged the same perception from different directions \u2014 the blind viewer ('too small for the biggest image; nothing you'd remember'), the canon auditor (the answer's continuation reads as thinning), and the score auditor (the answer enters ~6dB under the ask's own mean). The score lane's position is that withholding the station's key, theme, mediant and lead is the point. R12 implements the station transaction without spending the still-deferred station-audio continuation.",
       "recommendation": "listen to evidence/score/station-resolved_combined.wav against evidence/score/relay_ask-through-answer_combined.wav before deciding; the restraint is defensible but it is now three-for-three against it",
       "status": "pending"
     },
@@ -131,14 +135,14 @@
       "id": "owner-decision-release-surface",
       "question": "The build is live at https://paravox-game.web.app with ch10 behind ?story= dev entry. Confirm the player-facing ceiling stays at ch4-arrival, or promote?",
       "why": "The deploy spent the publish gate the lock reserved; the surface question was never separately decided.",
-      "recommendation": "keep the ceiling at ch4-arrival until the cohesion judge rules and a headed screening exists \u2014 ch10's shot ladder has never been seen on a real GPU by anyone but you, informally",
+      "recommendation": "keep the ceiling at ch4-arrival while the judge's repair disposition and the missing systematic headed screening remain open \u2014 ch10's shot ladder has never been commissioned on a real GPU, beyond the owner's informal play",
       "status": "pending"
     },
     {
       "id": "owner-decision-redeploy",
       "question": "The live site serves 9a20dde, which predates every review-wave repair. Redeploy, or leave production on the shipped-chapter build until the run is judged?",
       "why": "Two commits of fixes have landed since the deploy: the reboard rung the manual player needs, the gaze solver, ST-0 occlusion, berth-ring suppression, and the boost suppression that keeps transit at its authored FOV. None are live.",
-      "recommendation": "redeploy after the judge rules, so the release corresponds to a judged state rather than an arbitrary mid-run snapshot; and add verify to the predeploy hook first",
+      "recommendation": "redeploy only after the judge's repair items and remaining owner gates close, so release corresponds to an accepted state rather than an arbitrary checkpoint; add verify to the predeploy hook first",
       "status": "pending"
     }
   ],
@@ -148,8 +152,6 @@
     "verifier-hero-still-reshoots-seam-and-st0",
     "cinematography-composition-verdict-suspension-lift",
     "scene-cohesion-judge-final-ruling",
-    "owner-decision-docking-architecture",
-    "owner-decision-corridor-silence-legibility",
     "owner-taste-voice-lane",
     "owner-taste-reveal-scale",
     "owner-decision-firebase-predeploy-gate",

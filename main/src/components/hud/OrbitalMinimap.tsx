@@ -20,6 +20,7 @@ import {
   type OrbitalMinimapModel,
   type Vec3Tuple
 } from './orbitalMinimapModel.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 interface OrbitalMinimapProps {
   coordinateLabel: string;
@@ -93,6 +94,7 @@ const OrbitalMinimap: React.FC<OrbitalMinimapProps> = ({ coordinateLabel, worldI
     <section
       aria-label="Orbital minimap"
       data-testid="orbital-minimap"
+      {...hudSurface('orbital-minimap', 'informational')}
       data-minimap-ready="true"
       style={{
         position: 'absolute',

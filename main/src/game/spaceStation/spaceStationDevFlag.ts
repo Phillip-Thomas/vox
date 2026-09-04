@@ -149,10 +149,10 @@ export function isStorySpaceStationContext(): boolean {
  * Whether the approach driver may publish its advisory register, grant
  * `canDock`, or let [F] commit-and-enter the station.
  *
- * In story worlds this run answers NO, always: `story:station-docking-authorized`
- * is defined and set by nothing. A player who noses inside CORRIDOR_RANGE gets
- * exactly nothing — no advisory, no dock offer, no refusal line. The station
- * does not answer this run: it is never the actor, and a refusal is an act.
+ * In story worlds this answers NO until Chapter 10's threshold hand-back earns
+ * `story:station-docking-authorized`. That keeps the station silent throughout
+ * its introduction, then hands the player into the same approach, clearance and
+ * KeyF docking procedure already used by the standalone station environment.
  */
 export function spaceStationDockingAuthorized(): boolean {
   if (!isStorySpaceStationContext()) return true;

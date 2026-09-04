@@ -73,6 +73,38 @@ export type GatherObjectiveStage =
   | 'biofuel'
   | 'campfire';
 
+/**
+ * `ch1-fixed` advances on TWO conditions (storyDirector: biofiber quota AND
+ * `fixedCells.size >= CH1_FIXED_TUTORIAL.screens`), but for a long time it
+ * published a single immutable objective that only ever named the harvest.
+ * A player who filled the fiber quota was then left reading `HARVEST BIOFIBER`
+ * against a ledger reading `SCREENS 1/2` — a term defined nowhere in the
+ * chapter — with no marker, no nudge and no director-side fallback. That state
+ * was permanent, and it is the first playable beat in the game.
+ *
+ * Splitting the rung is what guardrail 1 in `ux/README.md` already required:
+ * the id changes when the required player ACTION changes.
+ */
+export type Ch1FixedObjectiveState = 'harvest' | 'traverse';
+
+/**
+ * `ch1-raster` advances on a THREE-way conjunction (`quotaCollected().met`:
+ * biofiber quota AND stone quota AND every scattered debris piece), and it too
+ * published a single immutable rung naming only the debris.
+ *
+ * The trap is measurable and reproducible. The first three debris pieces carry
+ * 2+1+1 stone — exactly the stone quota — so a player who follows the debris
+ * brackets completes stone and debris together and is left with only fiber
+ * outstanding, while the standing order still tells them to recover hull
+ * debris they have already recovered.
+ *
+ * A headless manual-input probe then found the second half: extraction held
+ * from a STANDING position exhausts the biofiber within reach and stalls at
+ * 4/6 permanently. Only holding the extract key WHILE WALKING finishes the
+ * quota, and no copy in the chapter said so.
+ */
+export type Ch1RasterObjectiveState = 'salvage' | 'quota';
+
 export type RestObjectivePhase = 'wait-for-night' | 'rest-at-fire';
 export type VigilObjectivePhase = 'remain-at-wreck' | 'observe-sky' | 'rest-at-fire';
 export type AuditObjectiveStage = 'fire' | 'life' | 'tree' | 'complete';
@@ -107,6 +139,8 @@ export type Ch10TransitObjectiveState = 'reboard' | 'ignite' | 'hold' | 'resolve
  * completed; the owning story/economy/flight authorities remain authoritative.
  */
 export interface StoryObjectiveGuidanceFacts {
+  ch1FixedState: Ch1FixedObjectiveState;
+  ch1RasterState: Ch1RasterObjectiveState;
   anomalyDesignated: boolean;
   navWaypointIndex: number;
   navWaypointCount: number;
@@ -128,6 +162,8 @@ export interface StoryObjectiveGuidanceFacts {
 
 export const DEFAULT_STORY_OBJECTIVE_GUIDANCE_FACTS: Readonly<StoryObjectiveGuidanceFacts> =
   Object.freeze({
+    ch1FixedState: 'harvest',
+    ch1RasterState: 'salvage',
     anomalyDesignated: false,
     navWaypointIndex: 0,
     navWaypointCount: 3,
@@ -154,13 +190,24 @@ type ObjectiveResolver = (
 ) => GuidedStoryObjective;
 
 const OBJECTIVE_RESOLVERS = {
-  'ch1-fixed': () => objective(
-    'ch1:fixed:calibrate-extractor',
-    'interact',
-    'BIOFIBER · CALIBRATE EXTRACTOR',
-    ['HARVEST BIOFIBER.', 'HOLD [E] TO EXTRACT.'],
-    false
-  ),
+  'ch1-fixed': facts => facts.ch1FixedState === 'traverse'
+    ? objective(
+        // The quota is filled; the only remaining condition is the one the
+        // beat never used to name. The camera does not follow — walking out of
+        // frame is the ACTION, so the order says so in the era's own voice.
+        'ch1:fixed:cross-camera-cell',
+        'travel',
+        'CAMERA HAND-OFF · LEAVE THIS FRAME',
+        ['EXTRACTOR CALIBRATED. COVERAGE CHECK OUTSTANDING.', 'WALK [A]/[D] UNTIL THE CAMERA CUTS.'],
+        false
+      )
+    : objective(
+        'ch1:fixed:calibrate-extractor',
+        'interact',
+        'BIOFIBER · CALIBRATE EXTRACTOR',
+        ['HARVEST BIOFIBER FROM THE BRACKETED GROUND.', 'HOLD [E] TO EXTRACT.'],
+        false
+      ),
   'ch1-track': () => objective(
     'ch1:track:tracking-transfer',
     'wait',
@@ -168,13 +215,32 @@ const OBJECTIVE_RESOLVERS = {
     ['TRACKING VIEW IS REASSIGNING.', 'HOLD POSITION.'],
     false
   ),
-  'ch1-raster': () => objective(
-    'ch1:raster:recover-quota',
-    'interact',
-    'SITE QUOTA · RECOVER MATERIALS',
-    ['RECOVER HULL DEBRIS AND COMPLETE THE SITE QUOTA.', 'HOLD [E] TO EXTRACT.'],
-    false
-  ),
+  'ch1-raster': facts => facts.ch1RasterState === 'quota'
+    ? objective(
+        'ch1:raster:extract-fiber-quota',
+        'interact',
+        'SITE QUOTA · BIOFIBER OUTSTANDING',
+        [
+          'HULL DEBRIS RECOVERED. BIOFIBER QUOTA OUTSTANDING.',
+          // The line the chapter was missing. A standing extract exhausts the
+          // ground within reach and then reports nothing at all.
+          'A CELL YIELDS ONCE. HOLD [E] AND WALK [A]/[D] ALONG THE STRIP.'
+        ],
+        false
+      )
+    : objective(
+        'ch1:raster:recover-quota',
+        'interact',
+        'SITE QUOTA · RECOVER MATERIALS',
+        [
+          // The beat will not advance until EVERY scattered piece is recovered,
+          // so the copy has to say the bracketed debris is the gate, not scenery.
+          'RECOVER EVERY BRACKETED PIECE OF HULL DEBRIS.',
+          // Debris is walk-over collection, NOT an extract verb.
+          'WALK OVER EACH PIECE TO RECOVER IT.'
+        ],
+        false
+      ),
   'ch1-depth': () => objective(
     'ch1:depth:recover-supply-pods',
     'interact',
@@ -208,7 +274,17 @@ const OBJECTIVE_RESOLVERS = {
         'ch1:anomaly:classify-mass',
         'interact',
         'UNCHARTED MASS',
-        ['FOLLOW THE UNCHARTED MASS MARKER.', '[F] TOUCH THE MASS.']
+        [
+          // The one line that tells the player the marker points over a gravity
+          // edge used to live in CH1_ANOMALY_MASS_ORDER, which this beat writes
+          // to the feed's work-order channel — a channel the embodied HUD has
+          // already taken over by ch1-anomaly, and which the next tick
+          // overwrites anyway. It reached no surface at all. It belongs here,
+          // on the store the embodied HUD actually reads.
+          'THE MASS IS NOT ON THIS FACE. THE SITE HAS OTHERS.',
+          'FOLLOW THE UNCHARTED MASS MARKER.',
+          '[F] TOUCH THE MASS.'
+        ]
       )
     : objective(
         'ch1:anomaly:calibrate-pan-tilt',

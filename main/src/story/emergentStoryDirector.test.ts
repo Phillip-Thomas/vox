@@ -95,6 +95,7 @@ import {
   CH8_STACK_THREE_SECONDS,
   CH8_STACK_TWO_SECONDS,
   CH10_FREEPLAY_GRACE_SECONDS,
+  CH10_MOVIE_FREEPLAY_GRACE_SECONDS,
   CH10_HEARTH_NOTICE_RADIUS,
   CHAPTER_10_COPY,
   chapter10ColdEntryReady,
@@ -158,7 +159,13 @@ import {
   validateTidegardenHabitatSite,
   type TidegardenRelationshipProof
 } from './tidegardenSettlement.ts';
-import { chapter10AskDescentSystemTarget } from './autopilot.ts';
+import {
+  chapter10AskDescentSystemTarget,
+  GAIT_STEP_DOWN,
+  GAIT_STEP_UP,
+  surfaceGaitDistance
+} from './autopilot.ts';
+import { resolveStoryInteraction } from './storyInteractions.ts';
 import { buildStarSystemManifest } from '../game/starSystem.ts';
 import { STORY_COORDINATE, STORY_SEED, storyAnchors } from './world/storyWorld.ts';
 import { getAuditWorkerPose, hideAuditWorker } from './world/AuditWorker.tsx';
@@ -1485,6 +1492,35 @@ describe('chapter 10 — the station introduction', () => {
     resetChapter10FreePlayWatch();
   });
 
+  it('honours a shorter screening grace without loosening any other gate', () => {
+    // The movie lane walks the pilot home and runs the sky forward, so the
+    // player-facing 180s dwell would be three minutes of a stationary figure.
+    // Only the dwell changes: presence, night and the hearth radius are the
+    // same facts for both lanes.
+    const screening = {
+      storyComplete: true,
+      twoWorldHandoff: true,
+      onTidegarden: true,
+      night: true,
+      hearthDistance: 3,
+      freePlaySeconds: CH10_MOVIE_FREEPLAY_GRACE_SECONDS,
+      graceSeconds: CH10_MOVIE_FREEPLAY_GRACE_SECONDS
+    };
+    expect(CH10_MOVIE_FREEPLAY_GRACE_SECONDS).toBeLessThan(CH10_FREEPLAY_GRACE_SECONDS);
+    expect(chapter10ColdEntryReady(screening)).toBe(true);
+    expect(chapter10ColdEntryReady({ ...screening, freePlaySeconds: CH10_MOVIE_FREEPLAY_GRACE_SECONDS - 0.01 })).toBe(false);
+    // Same screening dwell, every other gate still binding.
+    expect(chapter10ColdEntryReady({ ...screening, night: false })).toBe(false);
+    expect(chapter10ColdEntryReady({ ...screening, onTidegarden: false })).toBe(false);
+    expect(chapter10ColdEntryReady({ ...screening, hearthDistance: CH10_HEARTH_NOTICE_RADIUS + 0.01 })).toBe(false);
+    expect(chapter10ColdEntryReady({ ...screening, storyComplete: false })).toBe(false);
+    // A player lane still owes the full dwell.
+    expect(chapter10ColdEntryReady({
+      ...screening,
+      graceSeconds: CH10_FREEPLAY_GRACE_SECONDS
+    })).toBe(false);
+  });
+
   it('waits for presence, night and the grace before the fault is noticed', () => {
     const base = {
       storyComplete: true,
@@ -1492,7 +1528,8 @@ describe('chapter 10 — the station introduction', () => {
       onTidegarden: true,
       night: true,
       hearthDistance: 3,
-      freePlaySeconds: CH10_FREEPLAY_GRACE_SECONDS
+      freePlaySeconds: CH10_FREEPLAY_GRACE_SECONDS,
+      graceSeconds: CH10_FREEPLAY_GRACE_SECONDS
     };
     expect(chapter10ColdEntryReady(base)).toBe(true);
     // Nothing fires anywhere the player is not.
@@ -1588,6 +1625,91 @@ describe('chapter 10 — the station introduction', () => {
     expect(marker?.position).toBeDefined();
     observeGuidedStoryMarker(marker?.label ?? null);
     expect(getGuidedStoryObjectiveHealth()).toBe('ready');
+  });
+
+  it('never lets a handle buried below the player measure as arrived', () => {
+    // Owner-reported defect. The rehearsal hearth was committed at cell depth
+    // instead of surface depth, so chapter 10's first interactable sat 45.8
+    // world units INSIDE the planet. It survived every proximity check in the
+    // run because the walker's gait measure was tangential range plus only the
+    // un-climbed RISE: downward offset was discounted entirely, and a core
+    // buried straight down read as 13.1 away — inside the beat's own arrival
+    // gates and inside the run's 25-unit staging ceiling.
+    //
+    // The two positions below are the literal before and after, measured live
+    // at `?story=ch10-cold` (ch10-core-burial-{pre,post}-repair.json).
+    const player = new THREE.Vector3(10.5, 50.789, -8);
+    const up = new THREE.Vector3(0, 1, 0);
+    const buried = new THREE.Vector3(0.5, 5, 0.5);
+    const onSurface = new THREE.Vector3(16, 50.24, -8);
+
+    // The measure that hid it, reproduced exactly: rise-only gait.
+    const riseOnlyGait = (target: THREE.Vector3): number => {
+      const delta = target.clone().sub(player);
+      const vertical = delta.dot(up);
+      return delta.addScaledVector(up, -vertical).length() + Math.max(0, vertical - 1);
+    };
+    expect(riseOnlyGait(buried)).toBeLessThan(25);
+    expect(player.distanceTo(buried)).toBeGreaterThan(45);
+
+    // The repair. Every gate chapter 10 measures against — the autopilot's core
+    // commit (2), the interaction reach (4.2), the fabricator reach (6), the
+    // hearth notice radius (12) and the staging ceiling (25) — must refuse it.
+    const buriedGait = surfaceGaitDistance(buried, player, up);
+    for (const gate of [2, 4.2, 6, CH10_HEARTH_NOTICE_RADIUS, 25]) {
+      expect(buriedGait).toBeGreaterThan(gate);
+    }
+
+    // …without making ordinary ground unreachable. A drop the walker simply
+    // steps down is still underfoot, a rise is still un-climbed, and the
+    // repaired hearth is still the short honest walk the chapter opens on.
+    expect(surfaceGaitDistance(
+      player.clone().addScaledVector(up, -GAIT_STEP_DOWN),
+      player,
+      up
+    )).toBe(0);
+    expect(surfaceGaitDistance(
+      player.clone().addScaledVector(up, 6),
+      player,
+      up
+    )).toBeCloseTo(6 - GAIT_STEP_UP, 5);
+    const surfaceGait = surfaceGaitDistance(onSurface, player, up);
+    expect(surfaceGait).toBeGreaterThan(4.2);
+    expect(surfaceGait).toBeLessThan(CH10_HEARTH_NOTICE_RADIUS);
+  });
+
+  it('refuses the fault-read prompt for a buried hearth and offers it for a surfaced one', () => {
+    // The other half of the same law: the player-facing prompt is euclidean and
+    // was always correct, so the defect reached the owner as a marker pointing
+    // into the ground with no verb under it. Both readings are pinned here so
+    // the metric and the prompt cannot disagree about one handle again.
+    const player = new THREE.Vector3(10.5, 50.789, -8);
+    expect(commitHabitatCorePlacement({
+      actorId: ACTOR_ID,
+      worldId: TIDEGARDEN_WORLD_ID,
+      shelterId: 'ch10-test-buried-hearth',
+      cell: [0, 5, 0],
+      supportCell: [0, 4, 0],
+      position: [0.5, 5, 0.5],
+      up: [0, 1, 0],
+      eventId: 'story:test:ch10-buried-hearth'
+    })).toBe(true);
+    advanceToBeat('ch10-cold');
+    enterEmergentStoryBeat('ch10-cold');
+    expect(resolveStoryInteraction(null, player)?.id).not.toBe('story-ch10-fault-read');
+
+    resetHabitats();
+    expect(commitHabitatCorePlacement({
+      actorId: ACTOR_ID,
+      worldId: TIDEGARDEN_WORLD_ID,
+      shelterId: 'ch10-test-surfaced-hearth',
+      cell: [5, 25, -4],
+      supportCell: [5, 24, -4],
+      position: [player.x + 3, player.y, player.z],
+      up: [0, 1, 0],
+      eventId: 'story:test:ch10-surfaced-hearth'
+    })).toBe(true);
+    expect(resolveStoryInteraction(null, player)?.id).toBe('story-ch10-fault-read');
   });
 
   it('resolves a marker for every marker-bearing rung at its owning beat', () => {

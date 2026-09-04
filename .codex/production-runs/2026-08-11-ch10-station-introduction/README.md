@@ -9,14 +9,18 @@ directory and anyone's recollection disagree, this directory wins.
 
 1. **`run-summary.md`** — what was built, where it lives, state at close, and
    the resume point. Start here every time.
-2. **`production-lock.md`** — the authority this run acted under, and its nine
+2. **`production-lock.md`** — the authority this run acted under, and its twelve
    revisions. Each revision names the defect or contract term that forced the
    boundary to move, so the scope creep is auditable rather than implicit.
    R8 records an out-of-band publish; read it before trusting any claim about
    what is live.
 3. **`scene-contract.json`** — draft-v9, tri-signed. The sole creative
-   authority for the implementation. Prior revisions are in `snapshots/`.
-4. **`human-decision.json`** — seven decisions that are the owner's, unanswered.
+   authority for signed Chapter 10. Prior revisions are in `snapshots/`.
+   **`station-continuation-contract.md`** is the R12 authority for the separate
+   post-terminal station visit and return; it does not rewrite or extend the
+   signed Chapter 10 rail.
+4. **`human-decision.json`** — eight owner decisions: two resolved and six
+   still pending.
 5. **`lessons-learned.md`** — the transferable part. If you read only one file
    after the summary, read this one.
 
@@ -49,9 +53,20 @@ regenerates the first, and the gate rejects any rewriting of a statement.
 
 ## Things a future reader will want to know
 
-- **The player never docks.** That is the authored cut line, not an unfinished
-  edge. Docking is a second run, blocked on an owner decision recorded in
-  `human-decision.json`.
+- **R10 extends the authored cut line into the existing docking route.** The
+  draft-v9 chapter still resolves and hands back at the same 1,500-unit frame;
+  after that hand-back, the player may close the normal corridor, request
+  clearance, enter the shipped station interior, and return to the same berth.
+  The owner selected the proven page-transition architecture on 2026-08-13;
+  `human-decision.json` records that decision as resolved.
+- **R12 carries the story through the station and home again.** The station
+  restores the incoming save, gives the player an authored registry exchange,
+  optional bounded vendor conversations, and the required B-7073 “Bell”
+  issuance. The real `bonded_cell` survives reload and undock; the return work
+  order then points to Tidegarden's existing second hearth, where installing
+  the sealed cell consumes it and durably restores the hearth. The signed
+  Chapter 10 reveal remains unchanged. See `station-continuation-contract.md`
+  and `evidence/verification/ch11-station-story.json`.
 - **Four contract terms in this run were unsatisfiable by construction**, and
   each read as bad craft for one or more rounds. All four are superseded with
   their cause recorded inline in the contract. Every measurement term in
@@ -62,9 +77,12 @@ regenerates the first, and the gate rejects any rewriting of a statement.
   strips, three HIGH hero stills, and zero movie renders. Movie-lane traversal
   is proven by state traces. Do not add video to this run's evidence without
   changing the lock first.
-- **Ten canon debts** are created by this chapter's shipped lines and bind the
-  docking run. They are listed at the foot of `story-audit.md`. Read them before
-  scoping run two — several constrain what the station is allowed to be.
+- **The ten Chapter 10 operational canon debts are discharged by R10/R12.**
+  Docking stays advisory and player-flown; the station is inhabited; REGULATION
+  and the registry establish the issuance grammar without currency; the exact
+  station issues the cure; the player physically carries it home and installs
+  it. The protected unknowns remain guardrails: station name, credit origin,
+  W-7743's wider legal status, Makers, W-7744, and the sealed volume.
 - **Six pre-existing defects outside ch10 were fixed here**, because ch10 was
   the first thing to walk into them. Chapter predicates that never anticipated a
   two-digit chapter, a boot-world resolver that stopped at ch9, and four

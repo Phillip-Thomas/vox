@@ -1,270 +1,288 @@
 {
- "schema": "paravoxia.checkResults.v1",
- "runId": "2026-08-11-ch10-station-introduction",
- "contractVersion": "draft-v7",
- "contractSha256": "32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860",
- "supersedesContractVersion": "draft-v6",
- "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
- "phase": "implementation",
- "iteration": 46,
- "route": "g1-gaze-engagement-measured-s1-undeclared-lens-move",
- "recordedBy": "integration-engineer",
- "recordedAt": "2026-08-12T14:35:00-04:00",
- "productionScope": {
-  "status": "pass",
-  "summary": "42 changed files against sourceRevision 929e3d0a, every one inside allowedPaths at lock R9; zero protected-path bytes (main/public/audio/, main/src/audio/, main/src/components/audio/, firebase.json, .firebaserc all untouched). R9 granted the four paths this round needed for D-A5 and nothing else. The signed-rail refs are pinned to draft-v7 (32122245) against all three lane signatures. One item remains routed rather than repaired: the story/ShipController FOV contention (see storyFovSecondWriter); the coordinator has ruled it not worth widening the lock for.",
-  "evidenceRefs": [
-   "production-lock.json",
-   "production-lock.md",
-   "implementation.diff",
-   "director-signoffs.json"
-  ]
- },
- "creativeContract": {
-  "status": "pass",
-  "summary": "Draft-v7 is implemented at the sites this round owns, byte-exactly. UX-1: the contract's new guidance rung station:transit:reboard ships with marker label \"KESTREL HATCH · REBOARD\" and work order \"RETURN TO THE KESTREL.\" / \"FOLLOW THE HATCH MARKER AND [F] BOARD.\" — character-identical to the ch8 and ch10-ask reboard rungs, as the contract requires the grammar be reused verbatim. It enters at anc.ch10.bearing-claimed whenever the player is on foot, resolves its marker from the Kestrel's live pose through chapter10FabricatorPosition() (which reads getShipPosition(), verified), and is replaced in place by station:transit:ignite only once aboard, so \"HOLD [SPACE] TO IGNITE AND LIFT.\" can no longer be shown to a player standing on the ground where that glyph is the jetpack. Disembarking before ignition returns to the boarding rung with a fresh one-shot enter cue. Both entry paths (continuous play and the ?story=ch10-transit deep link) are regression-asserted, as are the on-foot and aboard publications and the receipt-outranks-pose ordering. Registry/rail identity: chapter-registry.json carries the scene as ch10-station-introduction@draft-v7 with its exact bytes (3817 checks); the signed AV rail compiles from it (76 anchors from two signed contracts, 3367b94f9f0f and 32122245bf6b, byte-stable regeneration). The earlier prose in this file that still credited \"Draft-v4's ten replacement sites\" and the \"@draft-v6\" registry identity was stale bookkeeping and is corrected here.",
-  "evidenceRefs": [
-   "scene-contract.json",
-   "snapshots/scene-contract.draft-v7.json",
-   "ux-audit.md",
-   "director-signoffs.json",
-   "evidence/implementation/chapter-registry-check.log",
-   "evidence/implementation/scene-av-check.log"
-  ]
- },
- "ownerReportedDefect": {
-  "status": "pass",
-  "summary": "Chapter 10 booted on the ORIGIN world because resolveStoryBootWorldId computed ownership from an enumeration that stopped at ch9. The predicate is now chapter-ORDER aware via storyChapterAtLeast(chapter, 'ch9'), with one physical exception recorded in the source: ch10-transit stays origin-owned, because chapter 10 crosses back to the first world during the ask (the relay is there and nowhere else) and the transit lifts off from the wreck — a ship already in flight belongs to the world it left, exactly as ch8-launch and ch8-crossing do. Verified live at ?story=ch10-cold, ch10-ask and ch10-transit plus ch9-hearth and ch8-crossing regressions: the two surface beats now boot and mount Tidegarden (-1,-1:p1) on terrain seed 1600321158 with renderOrigin at Tidegarden's system position, the origin world appears only as a distant sky surrogate at scale 2.51 (identical to ch9-hearth's 2.5148), no companion body renders within a metre of the camera, and no LOCAL LOCK or FLIGHT CORRIDOR chip appears anywhere on foot. ch8-crossing is byte-identical to before (origin, seed 3215739679). A table-driven test walks every beat in STORY_BEAT_ORDER against the retired enumeration's exact truth. SystemCompanionBodies.tsx gained a one-metre collapse guard so a future ownership mismatch degrades to nothing rather than to a ghost planet at the eye; the threshold is metres and not radii, because arriving at a body in physical space legitimately puts the camera inside its bound sphere.",
-  "evidenceRefs": [
-   "evidence/verification/ch10-boot-world-trace.json",
-   "ch10-boot-world-probe.mjs",
-   "production-lock.md",
-   "evidence/implementation/tests.log"
-  ]
- },
- "typecheck": {
-  "status": "pass",
-  "summary": "tsc --noEmit over tsconfig.json and tsconfig.node.json. Zero diagnostics.",
-  "evidenceRefs": [
-   "evidence/implementation/typecheck.log"
-  ]
- },
- "tests": {
-  "status": "pass",
-  "summary": "277 test files, 2270 tests, all passing. Two runs of npm run verify failed first on load flakes — agentSurfaceNavigationRuntime \"publishes stable occupancy...\" and emergentStoryDirector \"waits at the rite forever\", both pre-existing tests that already ran at 2.2s and 3.9-4.2s against vitest's 5s default. Both pass in isolation and both passed on the clean re-run recorded here; neither file's behaviour is touched by this round. Machine load average was 8.5-11 from the operator's own browser, not from this run.",
-  "evidenceRefs": [
-   "evidence/implementation/tests.log",
-   "evidence/implementation/verify.log"
-  ]
- },
- "build": {
-  "status": "pass",
-  "summary": "vite build succeeds; built in 5.65s. 1065 modules transformed.",
-  "evidenceRefs": [
-   "evidence/implementation/verify.log"
-  ]
- },
- "routedNotTaken": {
-  "status": "routed",
-  "summary": "Story-audit F8's second half — repointing main/story-authority.json activeProduction and dynamicSources.ownerApprovedSceneContract.activePath at this run — is STOPPED and routed to the orchestrator. The manifest is not the blocker; the gate is. main/tools/story-authority-gate.mjs pins the active production identity as frozen literals in five coupled places (the activePath string in manifest.dynamic-scene-contract, the expectedActiveProduction object, EXPECTED_PRODUCTION_BEATS used by production.contract-beats AND production.locked-beats AND the per-anchor coverage loops, the copyChangeDecisionRefs assertion requiring 'owner-instruction-2026-07-13-implement-all' which this run's lock does not and should not carry, and EXPECTED_OPEN_RELEASE_GATES which production.release-gates mirrors against the ACTIVE lock's openGateRefs). Retargeting would (a) drop the signed A4-to-ch9 contract out of gate coverage entirely, since its 66 anchors and 13 beats are exactly what those loops walk, (b) require rewriting a self-test-protected release-gate literal, (c) require weakening the owner copy-change-decision assertion, and (d) change the gate's check count from 1088 to roughly 966, so the stated acceptance ('1088/1088 still') cannot hold under any retarget. R2 authorized this gate for one thing — teaching the ceiling check its new value — and this is not that. The coherent fix is a SECOND registered production rather than a swapped one, which needs a schema shape, a gate design and a lock revision the orchestrator owns. Meanwhile the ch10 contract IS registered and gated: chapter-registry.json carries it as ch10-station-introduction@draft-v6 with its exact bytes (3817 checks), and the signed AV rail compiles from it (76 anchors from two signed contracts, byte-stable).",
-  "evidenceRefs": [
-   "story-audit.md",
-   "chapter-repair-direction.json",
-   "evidence/implementation/story-authority.log",
-   "evidence/implementation/chapter-registry-check.log"
-  ]
- },
- "commands": [
-  {
-   "command": "npm --prefix main run typecheck",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/typecheck.log",
-   "summary": "tsc over both projects, zero diagnostics."
+  "schema": "paravoxia.checkResults.v1",
+  "runId": "2026-08-11-ch10-station-introduction",
+  "contractVersion": "draft-v9",
+  "contractSha256": "0336a4f28bfaa874fffc300f02999e329dbed86d3cdcd53cf7ce3261c48639b1",
+  "supersedesContractVersion": "draft-v8",
+  "sourceRevision": "929e3d0a650fedccd2d04e68db792e09634d416e",
+  "phase": "implementation",
+  "iteration": 47,
+  "route": "owner-reported-habitat-core-burial",
+  "recordedBy": "integration-engineer",
+  "recordedAt": "2026-08-12T17:40:00-04:00",
+  "productionScope": {
+    "status": "pass",
+    "summary": "42 changed files against sourceRevision 929e3d0a \u2014 the same file list as iteration 46, no path added or removed \u2014 every one inside allowedPaths at lock R9/R10; zero protected-path bytes. This round touched main/src/story/tidegardenLandfallBootstrap.ts (the rehearsal hearth's placement), main/src/story/autopilot.ts (the gait measure), their two allowed test files, and the two signed-rail catalogs. The signed-rail refs are re-pinned from draft-v7 (32122245) to the run's actual current contract draft-v9 (0336a4f2) in main/tools/generate-scene-av-runtime.mjs, main/chapter-registry.json and main/src/story/signedSceneAvRuntime.ts: the contract closed at draft-v9 at commit e105660 but the three catalogs were never re-pinned, so BOTH scene:av:check and chapter:registry:check were failing on the committed tree before this round began. The compiled scene-AV runtime is byte-identical across the re-pin apart from the version and sha metadata, so nothing about the rail's behaviour moved.",
+    "evidenceRefs": [
+      "production-lock.json",
+      "production-lock.md",
+      "implementation.diff",
+      "director-signoffs.json"
+    ]
   },
-  {
-   "command": "npx vitest run",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/tests.log",
-   "summary": "277 files, 2270 tests, all passing."
+  "creativeContract": {
+    "status": "pass",
+    "summary": "Draft-v7 is implemented at the sites this round owns, byte-exactly. UX-1: the contract's new guidance rung station:transit:reboard ships with marker label \"KESTREL HATCH \u00b7 REBOARD\" and work order \"RETURN TO THE KESTREL.\" / \"FOLLOW THE HATCH MARKER AND [F] BOARD.\" \u2014 character-identical to the ch8 and ch10-ask reboard rungs, as the contract requires the grammar be reused verbatim. It enters at anc.ch10.bearing-claimed whenever the player is on foot, resolves its marker from the Kestrel's live pose through chapter10FabricatorPosition() (which reads getShipPosition(), verified), and is replaced in place by station:transit:ignite only once aboard, so \"HOLD [SPACE] TO IGNITE AND LIFT.\" can no longer be shown to a player standing on the ground where that glyph is the jetpack. Disembarking before ignition returns to the boarding rung with a fresh one-shot enter cue. Both entry paths (continuous play and the ?story=ch10-transit deep link) are regression-asserted, as are the on-foot and aboard publications and the receipt-outranks-pose ordering. Registry/rail identity: chapter-registry.json carries the scene as ch10-station-introduction@draft-v7 with its exact bytes (3817 checks); the signed AV rail compiles from it (76 anchors from two signed contracts, 3367b94f9f0f and 32122245bf6b, byte-stable regeneration). The earlier prose in this file that still credited \"Draft-v4's ten replacement sites\" and the \"@draft-v6\" registry identity was stale bookkeeping and is corrected here.",
+    "evidenceRefs": [
+      "scene-contract.json",
+      "snapshots/scene-contract.draft-v7.json",
+      "ux-audit.md",
+      "director-signoffs.json",
+      "evidence/implementation/chapter-registry-check.log",
+      "evidence/implementation/scene-av-check.log"
+    ]
   },
-  {
-   "command": "npm --prefix main run story:authority",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/story-authority.log",
-   "summary": "Story authority gate passed: 1088 checks."
+  "ownerReportedDefect": {
+    "status": "pass",
+    "summary": "Chapter 10 booted on the ORIGIN world because resolveStoryBootWorldId computed ownership from an enumeration that stopped at ch9. The predicate is now chapter-ORDER aware via storyChapterAtLeast(chapter, 'ch9'), with one physical exception recorded in the source: ch10-transit stays origin-owned, because chapter 10 crosses back to the first world during the ask (the relay is there and nowhere else) and the transit lifts off from the wreck \u2014 a ship already in flight belongs to the world it left, exactly as ch8-launch and ch8-crossing do. Verified live at ?story=ch10-cold, ch10-ask and ch10-transit plus ch9-hearth and ch8-crossing regressions: the two surface beats now boot and mount Tidegarden (-1,-1:p1) on terrain seed 1600321158 with renderOrigin at Tidegarden's system position, the origin world appears only as a distant sky surrogate at scale 2.51 (identical to ch9-hearth's 2.5148), no companion body renders within a metre of the camera, and no LOCAL LOCK or FLIGHT CORRIDOR chip appears anywhere on foot. ch8-crossing is byte-identical to before (origin, seed 3215739679). A table-driven test walks every beat in STORY_BEAT_ORDER against the retired enumeration's exact truth. SystemCompanionBodies.tsx gained a one-metre collapse guard so a future ownership mismatch degrades to nothing rather than to a ghost planet at the eye; the threshold is metres and not radii, because arriving at a body in physical space legitimately puts the camera inside its bound sphere.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-boot-world-trace.json",
+      "ch10-boot-world-probe.mjs",
+      "production-lock.md",
+      "evidence/implementation/tests.log"
+    ]
   },
-  {
-   "command": "npm --prefix main run chapter:registry:check",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/chapter-registry-check.log",
-   "summary": "3817 checks passed with the ch10 chapter registered at draft-v7 and its contract hash bound."
+  "typecheck": {
+    "status": "pass",
+    "summary": "tsc --noEmit over tsconfig.json and tsconfig.node.json. Zero diagnostics.",
+    "evidenceRefs": [
+      "evidence/implementation/typecheck.log"
+    ]
   },
-  {
-   "command": "npm --prefix main run chapter:journey:check",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/chapter-journey-check.log",
-   "summary": "Journey contract gate passed with zero issues across 6 lanes."
+  "tests": {
+    "status": "pass",
+    "summary": "277 test files, 2270 tests, all passing. Two runs of npm run verify failed first on load flakes \u2014 agentSurfaceNavigationRuntime \"publishes stable occupancy...\" and emergentStoryDirector \"waits at the rite forever\", both pre-existing tests that already ran at 2.2s and 3.9-4.2s against vitest's 5s default. Both pass in isolation and both passed on the clean re-run recorded here; neither file's behaviour is touched by this round. Machine load average was 8.5-11 from the operator's own browser, not from this run.",
+    "evidenceRefs": [
+      "evidence/implementation/tests.log",
+      "evidence/implementation/verify.log"
+    ]
   },
-  {
-   "command": "npm --prefix main run story:ux:check",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/story-ux-check.log",
-   "summary": "6 files, 54 UX tests passing."
+  "build": {
+    "status": "pass",
+    "summary": "vite build succeeds; built in 5.65s. 1065 modules transformed.",
+    "evidenceRefs": [
+      "evidence/implementation/verify.log"
+    ]
   },
-  {
-   "command": "npm --prefix main run catalog:check",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/catalog-check.log",
-   "summary": "Economy catalog is current."
+  "routedNotTaken": {
+    "status": "routed",
+    "summary": "Story-audit F8's second half \u2014 repointing main/story-authority.json activeProduction and dynamicSources.ownerApprovedSceneContract.activePath at this run \u2014 is STOPPED and routed to the orchestrator. The manifest is not the blocker; the gate is. main/tools/story-authority-gate.mjs pins the active production identity as frozen literals in five coupled places (the activePath string in manifest.dynamic-scene-contract, the expectedActiveProduction object, EXPECTED_PRODUCTION_BEATS used by production.contract-beats AND production.locked-beats AND the per-anchor coverage loops, the copyChangeDecisionRefs assertion requiring 'owner-instruction-2026-07-13-implement-all' which this run's lock does not and should not carry, and EXPECTED_OPEN_RELEASE_GATES which production.release-gates mirrors against the ACTIVE lock's openGateRefs). Retargeting would (a) drop the signed A4-to-ch9 contract out of gate coverage entirely, since its 66 anchors and 13 beats are exactly what those loops walk, (b) require rewriting a self-test-protected release-gate literal, (c) require weakening the owner copy-change-decision assertion, and (d) change the gate's check count from 1088 to roughly 966, so the stated acceptance ('1088/1088 still') cannot hold under any retarget. R2 authorized this gate for one thing \u2014 teaching the ceiling check its new value \u2014 and this is not that. The coherent fix is a SECOND registered production rather than a swapped one, which needs a schema shape, a gate design and a lock revision the orchestrator owns. Meanwhile the ch10 contract IS registered and gated: chapter-registry.json carries it as ch10-station-introduction@draft-v6 with its exact bytes (3817 checks), and the signed AV rail compiles from it (76 anchors from two signed contracts, byte-stable).",
+    "evidenceRefs": [
+      "story-audit.md",
+      "chapter-repair-direction.json",
+      "evidence/implementation/story-authority.log",
+      "evidence/implementation/chapter-registry-check.log"
+    ]
   },
-  {
-   "command": "npm --prefix main run scene:av:check",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/scene-av-check.log",
-   "summary": "76 anchors from 2 signed contracts (3367b94f9f0f, 32122245bf6b), current — regeneration is byte-identical to the checked-in runtime at draft-v7."
+  "commands": [
+    {
+      "command": "npm --prefix main run verify",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/verify.log",
+      "summary": "catalog, scene-av (76 anchors from 2 signed contracts, 3367b94f9f0f + 0336a4f28bfa), creative workflow (185), chapter registry (3817), chapter journey, typecheck, story authority, 2273 tests across 277 files, and the production build \u2014 all green. The two gates that were failing on the committed tree before this round (scene-av SHA drift and the registry catalog link, both from the un-re-pinned draft-v7) now pass against draft-v9."
+    },
+    {
+      "command": "npm --prefix main run typecheck",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/typecheck.log",
+      "summary": "tsc over both projects, zero diagnostics."
+    },
+    {
+      "command": "npx vitest run",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/tests.log",
+      "summary": "277 files, 2273 tests, all passing \u2014 3 more than iteration 46, the burial regressions."
+    },
+    {
+      "command": "node .codex/production-runs/2026-08-11-ch10-station-introduction/ch10-core-burial-probe.mjs",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/verification/ch10-core-burial-post-repair.json",
+      "summary": "ch10-cold/ch10-ask/ch10-transit + a ch9-hearth control, before and after. Before: core [0.5,5,0.5], 20 cells under the surface, vertical -45.79, euclid 47.63, rise-only gait 13.12, shelterCertified false. After: core [16,50.24,-8], 0 cells under the surface, vertical -0.55, euclid 5.53, shelterCertified true. ch9-hearth carries no bootstrap hearth in either phase."
+    },
+    {
+      "command": "npm --prefix main run story:authority",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/story-authority.log",
+      "summary": "Story authority gate passed: 1088 checks."
+    },
+    {
+      "command": "npm --prefix main run chapter:registry:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/chapter-registry-check.log",
+      "summary": "3817 checks passed with the ch10 chapter registered at draft-v7 and its contract hash bound."
+    },
+    {
+      "command": "npm --prefix main run chapter:journey:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/chapter-journey-check.log",
+      "summary": "Journey contract gate passed with zero issues across 6 lanes."
+    },
+    {
+      "command": "npm --prefix main run story:ux:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/story-ux-check.log",
+      "summary": "6 files, 54 UX tests passing."
+    },
+    {
+      "command": "npm --prefix main run catalog:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/catalog-check.log",
+      "summary": "Economy catalog is current."
+    },
+    {
+      "command": "npm --prefix main run scene:av:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/scene-av-check.log",
+      "summary": "76 anchors from 2 signed contracts (3367b94f9f0f, 32122245bf6b), current \u2014 regeneration is byte-identical to the checked-in runtime at draft-v7."
+    },
+    {
+      "command": "npm --prefix main run creative:workflow:check",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/implementation/creative-workflow-check.log",
+      "summary": "Creative workflow UX configuration gate passed: 185 checks."
+    },
+    {
+      "command": "npx vite-node ../.codex/production-runs/2026-08-11-ch10-station-introduction/ch10-st0-gaze-solver-probe.ts",
+      "status": "pass",
+      "exitCode": 0,
+      "evidenceRef": "evidence/ch10-st0-gaze-solver.json",
+      "summary": "D-A3 root cause and repair, measured on the shipped solveSurfaceGaze: at the shipped 240 m reach in travel mode the solved gaze pitch is 0.00\u00b0 at every ST-0 elevation (worst error 25.00\u00b0) because `direct` is false and travel clamps to +15\u00b0; at the repaired 10 m proxy in inspect mode the solved pitch equals the capped aim exactly (worst error 0.00\u00b0), direct on every row, and never above the +25\u00b0 cap."
+    }
+  ],
+  "verifierDefectRepair": {
+    "status": "pass",
+    "summary": "D-13 CLOSED AND PROVEN. autopilot.ts case 'ch10-transit' gated everything on controlMode === 'flight' and had no boarding step, but the FLOW enters the beat on foot at the relay \u2014 she has just claimed the bearing standing beside it \u2014 while the deep link seeds the pilot already in flight, which is exactly why the deep-link tail passed 12/12 and the flow stood 2,577s against a 260s backstop. Added the on-foot leg using the ask beat's own boarding grammar (walk to the Kestrel's derivable pose, board), after which the existing flight legs take over. Proven live in one flow run: enteredTransitOnFoot true, boardedInTransit true, ignited true, seamPassed true, and the ladder walked the full arc \u2014 crossing, landfall, relay-query, bearing-claim, transit:ignite, transit:hold, transit:resolve. D-6 REMNANT CLOSED. Same-frame resolution only covered publication where the handle already existed; on the deep link station:return:reboard published while the ship was still mounting. The ladder now DEFERS publication until a marker-requiring ch10 rung's target resolves, so an unfindable rung is never published at all \u2014 health reads idle, which is true, instead of missing-marker, which is a lie. Same mechanism kills the 270ms landfall hold. Three existing tests encoded the superseded behaviour and were updated; the deadlock detector's own coverage is preserved by asserting missing-marker still reports when an objective is forced active without a target. FOV PARITY CLOSED. The reduced-motion lens rail parked at SANDBOX_FOV 75 rather than the shot's end value. Correct for a dramatic push \u2014 the move IS the effect \u2014 but ch10's transit FOV is the vehicle's own state, and every ch10 lens is durationMs 0 with no authored motion, so there was no ease to skip. Reduced motion now holds the shot's end value for ch10 shots (from equals to, so nothing animates); shipped ch1-ch9 keep parking at 75 byte-for-byte.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-ask-leg-trace.json",
+      "evidence/implementation/tests.log",
+      "implementation.diff"
+    ]
   },
-  {
-   "command": "npm --prefix main run creative:workflow:check",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/creative-workflow-check.log",
-   "summary": "Creative workflow UX configuration gate passed: 185 checks."
+  "shipControllerHeadingGap": {
+    "status": "implemented-proven",
+    "summary": "R7's bounded shape is in and now demonstrated. autopilot.ts publishes targetSystemPosition resolved from the DURABLE claim; ShipController consumes it in one else-if beside targetWorldId, sharing the same slerp, reference-up choice and atmosphere pitch clamp. Null for every shipped beat and every ch1-ch9 movie path. The live attitude probe shows it non-null throughout the transit and the beat reaching its resolve.",
+    "evidenceRefs": [
+      "evidence/implementation/tests.log",
+      "evidence/implementation/typecheck.log",
+      "production-lock.md"
+    ]
   },
-  {
-   "command": "npm --prefix main run verify",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/implementation/verify.log",
-   "summary": "All nine stages pass end to end after the D-A5 repair (catalog, scene:av, creative:workflow, chapter:registry, chapter:journey, typecheck, story:authority, test, build)."
+  "d12Characterization": {
+    "status": "repaired-post-fix-4-of-4",
+    "summary": "REPRODUCED, then repaired, then measured \u2014 with one correction to my own record. PRE-FIX: a four-run batch reproduced the hang exactly as the verifier described it \u2014 run 1 held station:return:landfall from 7.0s to 89.4s and never completed, runs 2 and 3 landed in 11.1s and 9.1s, run 4 landed without reaching the relay. 3 of 4 landfalls completed, one hung indefinitely. CORRECTION: I intended to preserve that batch as ch10-ask-leg-prefix-baseline.json and failed \u2014 the trace file had already been overwritten by a later run when I copied it, so the file I wrote held post-fix data under a pre-fix name. I have DELETED it rather than leave a mislabelled artifact in the run. The pre-fix numbers above are from the probe's own recorded output during that batch, and the independent pre-fix rate is the verifier's own (2 of 4 crossing attempts hanging, one standing 1,717s) in verification-report.json. REPAIR (authorized, in-lock, autopilot.ts): the origin-side descent aims at the WRECK SITE \u2014 derivable from the world's size and seed, the same purity rule as the station bearing \u2014 instead of holding the planet-centre crossing heading. requestLanding() refuses silently unless the ship is essentially directly over a valid egress site (findValidSpawnSite, maxSearchRadius 0, requirePlayerEgress true), so completion was a function of arrival position; aiming at the site the beat lands at removes the lottery. Null until the origin encloses the ship and null once down or on foot, so the crossing keeps the heading it needs and nothing steers a grounded ship. Movie-lane only; manual descent and ch8-landfall untouched. POST-FIX, FOUR RUNS, PRESERVED IN evidence/verification/ch10-ask-leg-trace.json: 4 of 4 reached the origin world, landed and got out on foot \u2014 the landfall leg completed in EVERY run, in 5.1s, 5.2s, 6.1s and 7.1s. Both more reliable and faster than the pre-fix completions (11.1s, 9.1s), which is what aiming at the site rather than drifting onto it should produce. Run 2 reached station:relay-query and its 70s watch expired before the relay walk finished; that is watch budget, not a landfall hang. No run hung.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-ask-leg-trace.json",
+      "verification-report.json",
+      "ch10-ask-leg-probe.mjs"
+    ]
   },
-  {
-   "command": "npx vite-node ../.codex/production-runs/2026-08-11-ch10-station-introduction/ch10-st0-gaze-solver-probe.ts",
-   "status": "pass",
-   "exitCode": 0,
-   "evidenceRef": "evidence/ch10-st0-gaze-solver.json",
-   "summary": "D-A3 root cause and repair, measured on the shipped solveSurfaceGaze: at the shipped 240 m reach in travel mode the solved gaze pitch is 0.00° at every ST-0 elevation (worst error 25.00°) because `direct` is false and travel clamps to +15°; at the repaired 10 m proxy in inspect mode the solved pitch equals the capped aim exactly (worst error 0.00°), direct on every row, and never above the +25° cap."
+  "reviewWaveRepairs": {
+    "status": "pass",
+    "summary": "THIS ROUND. UX-1 (high, player-facing): wired draft-v7's station:transit:reboard rung. Ch10TransitObjectiveState gains a leading `reboard` member; chapter10TransitState() derives the rung receipts-first (seam passed -> resolve, ignited -> hold) and only then from pose (aboard -> ignite, on foot -> reboard), so a durable receipt can never be walked backwards by stepping out of the ship, while a player who has not ignited yet always gets the locator. getChapter10MarkerTarget() answers station:transit:reboard from the same chapter10FabricatorPosition() handle the ch10-ask reboard rung uses, so the marker is live at the frame of publication and the deferred-publication invariant holds. The default guidance fact for the beat moved from `ignite` to `reboard`, which is the honest entry state: the beat is entered on foot at the wreck relay. D-A3 (high, movie lane only): the gaze-bias state machine was present and correct but photographed nothing \u2014 it handed solveSurfaceGaze a goal 240 m along the ST-0 ray in `travel` mode, which puts ~217 m of tangential range against an inspectRange of 14, so `direct` was false, pitch collapsed to the seeded \u00b11\u00b0 scan, and travel mode then clamped to +15\u00b0 regardless. The glance yawed toward ST-0's azimuth and never pitched up at all, which is exactly the shape of the audit's 7/432 samples. Repaired by aiming at a 10 m proxy ON the same ray in `inspect` mode (whose \u00b130\u00b0 band contains the ruling's +25\u00b0 cap instead of overruling it), and by rebuilding the capped ray from its own tangent at exactly the cap \u2014 the previous spelling clipped the up-component and re-normalized, which lands at +25.4\u00b0. Heading, velocity and route are untouched; the bias still runs only under isAutopilotDriving() in the movie lane, at weight 0.35, with the 1.5 s floor, 0.5 s release and 10 s cooldown unchanged. ST0_GAZE_MAX_SECONDS moved 3 -> 4.5 s with its reason recorded inline: at weight 0.35 the shipped look-rate clamp is an exponential approach with a ~0.95 s time constant, so a 3 s window spent a third of itself in transit and could not meet the ruling's own crossing-frame acceptance. The in-frustum acceptance (>=4/8 crossing-strip frames, >=60/432 samples) is probe-shaped and remains the verifier's stage. D-A8 (medium): the occlusion half was already closed in the committed tree \u2014 the ST-0 quad draws with depthTest on, so the terrain that has already written depth occludes it and ridges and the shelter can no longer be drawn through, at zero extra draw calls. This round closes the remainder: st0ClampedPixels() and its ST0_MAX_PIXELS ceiling were dead \u2014 the only runtime argument was ST0_MIN_PIXELS itself, making the clamp a tautology that asserted a guarantee it never made. Wiring the station's true apparent size in was rejected because it would move the rendered size off 2.4 px, which Cinematography froze. The clamp is therefore deleted and replaced by st0DeviceProjectedPixels(), the inverse of st0QuadScale(), which MEASURES what the quad occupies; the model test holds that measurement to 2.4 px and to the 3 px ceiling across 144 tier/DPR/viewport/distance combinations. ST0_MIN_PIXELS is unmoved and ST0_MAX_PIXELS is now live as the value the measurement is held against. UX-3/UX-4 enablement: chapter10GuidanceTrace() is a new read-only, lane-agnostic sample of the live rung \u2014 objective id, marker label, work order, requiresMarker, health, resolved marker target and position, plus the pose and durable-receipt facts that SELECTED the rung. It mutates nothing and drives nothing; probes step the ladder with the shipped commit seams and enterShip/exitShip, and read the result here instead of scraping HUD DOM attributes under movie=1. With UX-1 in place the first transit rung is now an on-foot rung, so the transit ladder has a manual-lane entry point it did not have before.",
+    "evidenceRefs": [
+      "ux-audit.md",
+      "cinematography-audit.md",
+      "scene-contract.json",
+      "evidence/ch10-st0-gaze-solver.json",
+      "evidence/implementation/tests.log",
+      "implementation.diff"
+    ]
+  },
+  "berthRingEnumeration": {
+    "status": "pass",
+    "summary": "D-A5 CLOSED under lock revision R9, which granted the four paths enumerated last round. The cyan ring was never a ring primitive: it is berthStructure()'s four splayed guide arms, the twenty-eight sequenced nav lamps that chase inward along them, and the thirty-six threshold strips outlining the mouth. Those are the equipment that OFFERS a berth \u2014 an act of address \u2014 and in a story world where docking is unauthorized the station addresses the player in nothing. The dock itself (jamb frame, lit mouth, recessed inner glow) is architecture and is untouched: the contract asked for no dock OFFER geometry, not for no dock, and a station that loses its door in story mode is a different station. Implementation: an optional dockOffer tag on ExteriorBox/ExteriorLight, applied at the builder because downstream the exterior is two flat arrays in which a guide arm is indistinguishable from a radiator fin; a default-off suppressDockOffer prop on SpaceStationExterior.tsx skipping tagged entries at both instancing loops; and the shipped game's mount (SystemSpaceStations.tsx) raising it as !spaceStationDockingAuthorized() \u2014 the same predicate that already fences the advisory register and the KeyF commit, and which short-circuits to authorized outside story context. Sandbox byte-identity is PROVEN, not argued, because the sandbox is a shipped surface: the test asserts that SpaceStationApproach.tsx mounts the exterior element with descriptor and body only, and no suppression prop, does not reference the predicate, and never mounts SystemSpaceStations at all; that the prop defaults to false so an unpassed prop draws everything; and that isStorySpaceStationContext() is false and spaceStationDockingAuthorized() true wherever the story is not the context. Extent is asserted by exact count (4 boxes, 64 lights) rather than by bound, so a tag that silently grew to cover hull would fail; the survivors are compared element-for-element against a fresh build to prove suppression cannot renumber, reorder or re-tone what it keeps. No other station-exterior behaviour changed.",
+    "evidenceRefs": [
+      "production-lock.md",
+      "production-lock.json",
+      "cinematography-audit.md",
+      "scene-contract.json",
+      "evidence/implementation/tests.log",
+      "implementation.diff"
+    ]
+  },
+  "lensDivergenceD_A1": {
+    "status": "measured-no-fix-warranted-stale-evidence",
+    "summary": "D-A1 AS FILED DOES NOT EXIST. Instrumented all four quality profiles at matched story moments and every sampled quantity is bit-identical across LOW, MEDIUM with reduced motion, HIGH and POTATO: camera.fov, aspect, near/far, gl.getSize [1280,720], gl.getPixelRatio 1, devicePixelRatio 1, canvas attribute size equal to client size, one PerspectiveCamera and one cockpit rig parented to it. getShipFlightFeedback().fov tracked camera.fov exactly at every sample. The visible canopy aperture measured ~690px in all four freshly captured profile PNGs. There is no lens to reconcile between LOW and HIGH, so the instructed fix \u2014 'fix so LOW and HIGH share one lens' \u2014 has nothing to act on. I already ruled out the capture-resolution explanation separately: every PNG is 1280x720. WHAT IS REAL: 12 of 24 flight frames in the SHIPPED ch10 transit LOW strips render the cockpit as a shrunken island with open space around it, worst case ~310px aperture against ~690px nominal \u2014 factor 2.2, matching the auditor's 705/300 within read error. The shrink is uniform and centred and preserves relative proportions, which is a whole-rig apparent-scale change rather than a crop. Every failing frame is stamped beat=ch10-transit; every frame stamped done fills the frame. IT DOES NOT REPRODUCE ON THE CURRENT TREE: a probe replaying the exact strip-transit-a and strip-transit-b plans returned one camera, one cockpit, one pressure shell and canopy 1094.8-1102.4px on 16 of 16 frames. MOST LIKELY EXPLANATION, and it is the one the coordinator already anticipated: the strips are STALE. capture-manifest.json records capturedAt 2026-08-12T01:20:06Z, while ShipController.tsx and autopilot.ts were both edited hours later for the D-10 bearing and D-13 boarding repairs. The pre-D-10 transit leg flew with no committed bearing at all and therefore flew far longer \u2014 the fresh runs reach `done` in ~17s where the defect window spans 19-44s of flight \u2014 so the strips were shot against materially different code on a materially different flight path. The verifier's already-planned strip purge and regeneration is the resolution; re-measure after it. UNDETERMINED AND NOT GUESSED AT: the failing frames' geometry is consistent with an effective FOV around 114-123 degrees while the cockpit rig's fovScale compensation was computed for 70-79 (SHIP_BOOST_FOV caps at 79). No constant in main/src writes an FOV that wide and there is no setViewOffset or camera.zoom writer, so the source of the widening is not identified. No fix is warranted against evidence that does not reproduce. CH8 IS CLEAN \u2014 this is NOT a shipped defect: 14 of 14 applicable ch8 flight frames across the 2026-08-10 run's LOW and hi-res sets render the cockpit filling the frame edge to edge, identical to the ch10 HIGH stills and to every fresh capture. The single non-filling ch8 frame is fully black with no cockpit rendered at all \u2014 an unrelated blank-frame defect in that run's evidence. MEASUREMENT CAVEAT, recorded honestly: main/src was being edited by me while the sweep ran, and two samples lost their injected hook to a page reload. Any re-measurement should be taken against a quiesced tree. LATENT FINDING worth a look: getStoryInputPolicy().targetFov reads 75 at every sample \u2014 a second independent writer of camera.fov contending with ShipController, which won every sample, so contention never exceeded 7%.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-lens-divergence.json",
+      "evidence/capture/lens-divergence/",
+      "ch10-lens-divergence-probe.mjs",
+      "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png"
+    ]
+  },
+  "storyFovSecondWriter": {
+    "status": "assessed-not-repaired-out-of-lock",
+    "summary": "A predecessor flagged getStoryInputPolicy().targetFov = 75 as a second writer of camera.fov contending with ShipController. Confirmed and characterised. Writer one: main/src/story/storyDirector.ts:2092-2096 lerps camera.fov toward policy.targetFov at rate 6/s on every frame the story is active, then calls updateProjectionMatrix(). Writer two: main/src/components/ShipController.tsx:700-703 snaps cam.fov to the ship flight-feedback fov whenever the divergence exceeds 0.001 and calls updateProjectionMatrix(). The frame order is stable (useFrame mount order), ShipController wins the rendered value, and the divergence stays inside the measured 7% \u2014 the observable cost is a redundant projection-matrix rebuild, not a wrong lens. NOT REPAIRED, deliberately. The clean fix is to make the story ramp stand down while the ship owns the camera, and both sites that could express that are outside allowedPaths: main/src/story/storyDirector.ts (the lerp) and main/src/story/storyInputPolicy.ts (the policy). The two in-lock alternatives were rejected on evidence rather than on convenience: (a) calling setStoryTargetFov(shipFov) from ShipController.tsx would strand a flight FOV on the policy when the player leaves the ship mid-beat \u2014 and ch10-transit now boards and disembarks inside one beat by design \u2014 because the policy object is only rebuilt at beat change; (b) driving the same call from emergentStoryDirector.ts would change policy.targetFov during the SHIPPED ch7 and ch8 flight beats, moving evidence bound to those chapters for no rendered gain. Routed to the orchestrator as a candidate lock revision. It is latent, not player-facing, and the tree is deployed.",
+    "evidenceRefs": [
+      "production-lock.json",
+      "implementation.diff"
+    ]
+  },
+  "signatureState": {
+    "status": "pass",
+    "summary": "All three lanes have signed draft-v7 at sha 32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860: chapter (approve-with-notes), score (approve-with-notes, opus-tier substitution recorded in production-lock.md), and cinematography (approve-with-notes, verification instance). director-signoffs.json reads draft-v7 with sameRevision true. The runtime version pins were re-bound to draft-v7 only after that third signature landed \u2014 signedSceneAvRuntime.ts, generatedSceneAvRuntime.json, chapter-registry.json and generate-scene-av-runtime.mjs \u2014 and regeneration is byte-stable.",
+    "evidenceRefs": [
+      "director-signoffs.json",
+      "chapter-contract-signoff.json",
+      "score-contract-signoff.json",
+      "cinematography-contract-signoff.json",
+      "evidence/implementation/scene-av-check.log"
+    ]
+  },
+  "g1GazeEngagement": {
+    "status": "measured-acceptance-moves-to-sampling",
+    "summary": "G-1. The solver repair is correct and IS reached; the bias still never engages, and the reason is measured per frame rather than reasoned about. The engage predicate now publishes every conjunct separately on window.__st0Gaze, written from inside the tick so a probe cannot mistake a second module instance for silence, and published once at the top of autopilotTick so \"never ticked\" is distinguishable from \"ticked, never reached a walk\". MEASURED (ch10-st0-gaze-engage.json, both lanes, same ch10-cold entry): MANUAL LANE \u2014 autopilot ticking 0 of 1,218 samples, __st0Gaze absent, ST-0 in frustum on 76 samples. The bias is structurally incapable of running there, and THAT IS THE LANE THE CROSSING STRIP IS SHOT IN: ch10-gap-strip-probe.mjs opens ?story=ch10-cold&profile=LOW with no movie=1 while recording the url as ?story=ch10-cold&movie=1&profile=LOW. The acceptance was measuring a lane in which the ruling that created the bias forbids it to run, so no code change could ever have moved it. MOVIE LANE \u2014 419 walked frames, movie true on 419, autopilot driving on 419, so the branch is reached; but ST-0 above the analytic horizon with a direction on 0 of 419, and engagements 0. The movie ch10-cold walk is a few seconds long (the Kestrel is parked at the hearth) against ST-0's 90s ellipse at roughly 40% duty, so that window can contain a crossing only by luck and can never contain eight crossing frames. The two halves of the acceptance are therefore mutually exclusive as written: an 8-frame full-arc strip needs >=90s (manual, bias forbidden), and the glance can only exist inside a short movie walk. THE ACCEPTANCE MOVES TO THE SAMPLING: measure in-frustum over the movie-lane ch10-cold walk frames with the ellipse phased so ST-0 is up during the walk, not over a full ellipse in a held manual beat. TWO CODE DEFECTS WERE FOUND BY THE INSTRUMENTATION AND FIXED. (1) The bias ran only on the second ch10-cold walk, so a crossing during the walk to the hearth core was structurally unwatchable; the ruling says \"walk phases\", plural, and it now runs on both. (2) The goal-critical demand was a flat 10m on both walks, and the Kestrel is parked AT the hearth, so the contract's nominated walk never leaves that radius: 346 of 419 walked frames (83%) were goal-critical, which would have kept the bias suppressed even on a night when ST-0 is up. The demand is now the distance at which each act actually commits (2m core, 6m fabricator), which is what \"the eyes come down for the act\" means. Re-measured after the change: 118 of 418 (28%). The strip probe's recorded url is corrected, and its report now carries the lane, gazeBiasPermittedInLane, and the live gaze diagnostic, so the evidence states for itself whether the mechanism under test was permitted to run.",
+    "evidenceRefs": [
+      "evidence/ch10-st0-gaze-engage.json",
+      "evidence/ch10-st0-gaze-solver.json",
+      "cinematography-audit.md"
+    ]
+  },
+  "s1UndeclaredLensMove": {
+    "status": "pass",
+    "summary": "S-1 and the seam still's renderCameraFov 79 are ONE defect, and it is a real unauthored lens move, not shipped feel the contract forgot to declare. Evidence: fov is not speed-coupled at all. shipFlightFeedback.ts computes fovTarget = SHIP_BASE_FOV + (SHIP_BOOST_FOV - SHIP_BASE_FOV) x boost, i.e. 70 + 9 x boost, where boost is a damped key state; resolveShipBoost() is forwardHeld && sprintHeld. The 190 u/s threshold is not a constant anywhere \u2014 it is a proxy for \"boost held\", because unboosted terminal speed is 60/-ln(0.6) = 117.5 u/s so any higher speed implies boost. And the sprint was not the player's: THIS RUN'S OWN ch10-transit rail asserted controls.sprint = controls.forward, copied from the ch8 legs. So the rail cruised at FOV 79 and fell back to 70 only when atStandoff dropped forward, which is exactly the 79-at-the-seam / 70.0002-at-the-cut-line split, against a contract that declares FOV 70 throughout the transit. Suppressed in ch10-transit. MEASURED AFTER, per beat: ch10-transit over 621 samples holds feedbackFov 70.0 to 70.0, boost max 0, shell scale max 1.00000, zero frames above the 73.72 threshold, and the leg still completes to done. ch10-ask over 231 samples still reaches 79 with shell scale 1.17727 on 90 frames \u2014 LEFT AS IS AND FLAGGED: the ask beat's return crossing is contracted as ch8 grammar reused verbatim \"by shipped vehicle state and no authored move\", so its boost is the shipped crossing behaviour rather than a ch10 invention. Cinematography should rule whether that leg wants the same treatment. THE COCKPIT COMPENSATION IS NOT BROKEN. tan(fov/2)/tan(35 deg) is applied every frame to shell and instruments with no clamp, threshold or early return, and it reproduces the measured 1.17727 at 79, 1.03761 at 72 and 1.00000 at 70 exactly, so the silhouette is FOV-invariant by construction. The sky-past-the-shell artifact is a LIGHTING threshold: the cabin pointLight (position [0,0.35,-1.5], distance 6.5, decay 2) sits outside the scaled shell group, and the outer shell walls at |x| = 5.925 are 6.091 units from it at scale 1.0 but 7.117 at scale 1.17727. Solving for the 6.5 cutoff gives scale 1.0708, i.e. FOV 73.72 \u2014 squarely inside the 72-79 boost band and reachable only under boost. Above it the walls fall to their emissive floor and, against black space, read as the seat having pulled back. Pinning ch10-transit at FOV 70 removes it from this run's frames entirely; the underlying shipped defect is enumerated below.",
+    "evidenceRefs": [
+      "evidence/ch10-st0-gaze-engage.json",
+      "cinematography-audit.md",
+      "implementation.diff"
+    ]
+  },
+  "cockpitCabinLightEnumeration": {
+    "status": "enumerated-and-stopped",
+    "summary": "The residual shipped defect behind S-1, unreachable in ch10 after the lens fix but still live in free flight whenever the player holds boost. The cabin pointLight is declared at ShipCockpit.tsx:196-203 INSIDE the vibration root and OUTSIDE shellRef, so the FOV compensation applied at ShipCockpit.tsx:115 scales the shell away from a lamp that does not move with it. Above shell scale 1.0708 (FOV 73.72) the outer walls leave the 6.5-unit reach and go dark. Minimal honest fix: scale the lamp's distance by the same fovScale already computed at ShipCockpit.tsx:111-112, so cabin lighting is FOV-invariant like the geometry. A second, smaller mechanism sits alongside it: ShipCockpit's useFrame is subscribed before ShipController's at equal priority, so the shell scales with the previous frame's fov and under-scales by up to ~1.8% during the boost ramp; reading the camera's own fov instead of the feedback singleton removes it by construction. main/src/components/ShipCockpit.tsx is NOT in allowedPaths and no bytes were changed in it. Routed to the orchestrator.",
+    "evidenceRefs": [
+      "production-lock.json",
+      "implementation.diff"
+    ]
+  },
+  "seamSpineArithmetic": {
+    "status": "routed-to-verifier",
+    "summary": "The seam still's spine was measured at 7.010 degrees against a 7.5-8.2 term while the render camera was at FOV 79, not the 70 the measurement assumed. Both corrections, explicitly, so the verifier re-measures rather than inherits either: LINEAR rescale 7.010 x 79/70 = 7.911 degrees, INSIDE the band. TANGENT-CORRECT reprojection \u2014 recover the pixel fraction p/H = tan(7.010/2)/tan(35) = 0.087474, then reproject at the true lens, 2 x atan(0.087474 x tan(39.5)) = 8.249 degrees, marginally OUTSIDE the 8.2 ceiling. The two differ by 0.34 degrees and they straddle the boundary, so the criterion cannot be called either way from the existing capture: which is right depends on whether the original measurement converted pixels to angle linearly or through the tangent. THE HONEST ANSWER IS TO RE-SHOOT, not to re-derive \u2014 and after the lens fix the seam frame is at FOV 70 by construction, so the re-shot still needs no correction at all and the ambiguity disappears. Recorded here because the criterion may never have been violated and the verifier must not carry forward a 7.010 that was measured through the wrong lens.",
+    "evidenceRefs": [
+      "cinematography-audit.md",
+      "evidence/ch10-st0-gaze-engage.json"
+    ]
+  },
+  "ownerReportedDefectBurial": {
+    "status": "pass",
+    "summary": "OWNER: \"the read the fault interactable thing is in the middle of the planet when I start the chapter.\" Reproduced and repaired.\n\nPATHS AFFECTED: the deep-link path only \u2014 ?story=ch10-cold, ch10-ask and ch10-transit, which are the only three call sites of bootstrapTidegardenHabitatDebug. The movie flow is NOT affected: ?story=base aliases to ch9-settle and reaches only bootstrapTidegardenSurfaceDebug, and ?story=full returns before the beat branches; both build the hearth through activateTidegardenHabitatCore against live terrain. ch9 is not affected: it has no bootstrap-built hearth at all (measured: core null at ?story=ch9-hearth). The other ch10 marker targets are not affected: the wreck relay resolves through findTopFaceSurfaceVoxel, the Kestrel hatch and fabricator through the ship's own pose.\n\nROOT CAUSE: the bootstrap committed the hearth at a literal cell [0,5,0] and stored cell arithmetic as a world position ([0.5, 5, 0.5]). VOXEL_SCALE is 2 and Tidegarden's surface in that column is cell 24/25, so the core sat at world y=5 under a surface at y=50 \u2014 measured live: player [10.5, 50.789, -8], core [0.5, 5, 0.5], vertical offset -45.79, euclidean 47.63, 20 cells below the surface. The same cell-as-world error passed a player position of [0.5, 6.2, 0.5] to the certification, whose flood fill divides by VOXEL_SCALE and so placed her in cell [0,3,0], three cells outside the shelter: shelterCertification was NULL on every ch10 deep link while the seeded milestone claimed it was certified.\n\nWHY IT SURVIVED THE RUN: gaitDistance was tangential range plus max(0, vertical-1), which discounts downward offset entirely. The buried core measured 13.12 \u2014 inside the beat's own arrival gates and inside this run's 25-unit staging ceiling, which is exactly the 6.8 recorded in AC-hero-still-st0-sighting. The player-facing prompt is euclidean and refused correctly, so the defect reached the owner as a marker pointing into the ground with no verb under it.\n\nREPAIR, PLACEMENT: the fixed point is no longer a cell, it is the arrival pad \u2014 a pure function of the world's size, seed and id, and the same one EfficientScene mounts the player's own spawn from. The bootstrap now anchors four cells off that pad and resolves its site through the shipped findTidegardenRecommendedHabitatSite against the real generator, taking the survey's own cell, supportCell, world position, up and shelterId. It provisions the wood the enclosure costs (placePiece charges the build; the seeded inventory carried 1 wood, so only 1 of 10 panels was ever placed) and certifies with a world-unit player position. Measured after: core [16, 50.24, -8] on cell [8,25,-4], zero cells below a surface at y=50, 5.53 from the spawn \u2014 outside the 4.2 interaction reach so the chapter still opens on a walk, inside the 12-unit hearth notice radius so it opens on its own opening condition \u2014 and shelterCertification is now non-null on all three beats.\n\nREPAIR, METRIC: gaitDistance is now surfaceGaitDistance \u2014 tangential range, plus any un-climbed rise, plus any drop beyond GAIT_STEP_DOWN (3.4, deliberately the same bound the waypoint consumer already used for 'an extreme perch is off-route'). The buried core now measures 55.51 and fails every ch10 gate: the autopilot's core commit (2), the interaction reach (4.2), the fabricator reach (6), the notice radius (12) and the staging ceiling (25). Ordinary ground is unchanged: a 3.4 step down is still 0, a 6-unit rise is still 5. The run's own staging probe (ch10-v9-final-probe.mjs) now reports the repaired gait, the rise-only reading it replaces, the tangential term and the vertical offset side by side, so the burial signature can never again be read as proximity.\n\nREGRESSION: storyState.test.ts asserts the hearth against the shipped generator for all three ch10 deep links \u2014 support voxel solid, core cell open, exactly one cell above support, world position not below its own cell depth, deterministic cell [8,25,-4], range from the real spawn inside (4.2, 12), and certification non-null. emergentStoryDirector.test.ts pins the metric (the retired rise-only form reproduced inline, shown under 25; the repaired form shown above every gate) and pins both readings of one handle: the shipped interaction resolver refuses story-ch10-fault-read for a buried hearth and offers it for a surfaced one.",
+    "evidenceRefs": [
+      "evidence/verification/ch10-core-burial-pre-repair.json",
+      "evidence/verification/ch10-core-burial-post-repair.json",
+      "ch10-core-burial-probe.mjs",
+      "implementation.diff",
+      "verification-report.json"
+    ]
   }
- ],
- "verifierDefectRepair": {
-  "status": "pass",
-  "summary": "D-13 CLOSED AND PROVEN. autopilot.ts case 'ch10-transit' gated everything on controlMode === 'flight' and had no boarding step, but the FLOW enters the beat on foot at the relay — she has just claimed the bearing standing beside it — while the deep link seeds the pilot already in flight, which is exactly why the deep-link tail passed 12/12 and the flow stood 2,577s against a 260s backstop. Added the on-foot leg using the ask beat's own boarding grammar (walk to the Kestrel's derivable pose, board), after which the existing flight legs take over. Proven live in one flow run: enteredTransitOnFoot true, boardedInTransit true, ignited true, seamPassed true, and the ladder walked the full arc — crossing, landfall, relay-query, bearing-claim, transit:ignite, transit:hold, transit:resolve. D-6 REMNANT CLOSED. Same-frame resolution only covered publication where the handle already existed; on the deep link station:return:reboard published while the ship was still mounting. The ladder now DEFERS publication until a marker-requiring ch10 rung's target resolves, so an unfindable rung is never published at all — health reads idle, which is true, instead of missing-marker, which is a lie. Same mechanism kills the 270ms landfall hold. Three existing tests encoded the superseded behaviour and were updated; the deadlock detector's own coverage is preserved by asserting missing-marker still reports when an objective is forced active without a target. FOV PARITY CLOSED. The reduced-motion lens rail parked at SANDBOX_FOV 75 rather than the shot's end value. Correct for a dramatic push — the move IS the effect — but ch10's transit FOV is the vehicle's own state, and every ch10 lens is durationMs 0 with no authored motion, so there was no ease to skip. Reduced motion now holds the shot's end value for ch10 shots (from equals to, so nothing animates); shipped ch1-ch9 keep parking at 75 byte-for-byte.",
-  "evidenceRefs": [
-   "evidence/verification/ch10-ask-leg-trace.json",
-   "evidence/implementation/tests.log",
-   "implementation.diff"
-  ]
- },
- "shipControllerHeadingGap": {
-  "status": "implemented-proven",
-  "summary": "R7's bounded shape is in and now demonstrated. autopilot.ts publishes targetSystemPosition resolved from the DURABLE claim; ShipController consumes it in one else-if beside targetWorldId, sharing the same slerp, reference-up choice and atmosphere pitch clamp. Null for every shipped beat and every ch1-ch9 movie path. The live attitude probe shows it non-null throughout the transit and the beat reaching its resolve.",
-  "evidenceRefs": [
-   "evidence/implementation/tests.log",
-   "evidence/implementation/typecheck.log",
-   "production-lock.md"
-  ]
- },
- "d12Characterization": {
-  "status": "repaired-post-fix-4-of-4",
-  "summary": "REPRODUCED, then repaired, then measured — with one correction to my own record. PRE-FIX: a four-run batch reproduced the hang exactly as the verifier described it — run 1 held station:return:landfall from 7.0s to 89.4s and never completed, runs 2 and 3 landed in 11.1s and 9.1s, run 4 landed without reaching the relay. 3 of 4 landfalls completed, one hung indefinitely. CORRECTION: I intended to preserve that batch as ch10-ask-leg-prefix-baseline.json and failed — the trace file had already been overwritten by a later run when I copied it, so the file I wrote held post-fix data under a pre-fix name. I have DELETED it rather than leave a mislabelled artifact in the run. The pre-fix numbers above are from the probe's own recorded output during that batch, and the independent pre-fix rate is the verifier's own (2 of 4 crossing attempts hanging, one standing 1,717s) in verification-report.json. REPAIR (authorized, in-lock, autopilot.ts): the origin-side descent aims at the WRECK SITE — derivable from the world's size and seed, the same purity rule as the station bearing — instead of holding the planet-centre crossing heading. requestLanding() refuses silently unless the ship is essentially directly over a valid egress site (findValidSpawnSite, maxSearchRadius 0, requirePlayerEgress true), so completion was a function of arrival position; aiming at the site the beat lands at removes the lottery. Null until the origin encloses the ship and null once down or on foot, so the crossing keeps the heading it needs and nothing steers a grounded ship. Movie-lane only; manual descent and ch8-landfall untouched. POST-FIX, FOUR RUNS, PRESERVED IN evidence/verification/ch10-ask-leg-trace.json: 4 of 4 reached the origin world, landed and got out on foot — the landfall leg completed in EVERY run, in 5.1s, 5.2s, 6.1s and 7.1s. Both more reliable and faster than the pre-fix completions (11.1s, 9.1s), which is what aiming at the site rather than drifting onto it should produce. Run 2 reached station:relay-query and its 70s watch expired before the relay walk finished; that is watch budget, not a landfall hang. No run hung.",
-  "evidenceRefs": [
-   "evidence/verification/ch10-ask-leg-trace.json",
-   "verification-report.json",
-   "ch10-ask-leg-probe.mjs"
-  ]
- },
- "reviewWaveRepairs": {
-  "status": "pass",
-  "summary": "THIS ROUND. UX-1 (high, player-facing): wired draft-v7's station:transit:reboard rung. Ch10TransitObjectiveState gains a leading `reboard` member; chapter10TransitState() derives the rung receipts-first (seam passed -> resolve, ignited -> hold) and only then from pose (aboard -> ignite, on foot -> reboard), so a durable receipt can never be walked backwards by stepping out of the ship, while a player who has not ignited yet always gets the locator. getChapter10MarkerTarget() answers station:transit:reboard from the same chapter10FabricatorPosition() handle the ch10-ask reboard rung uses, so the marker is live at the frame of publication and the deferred-publication invariant holds. The default guidance fact for the beat moved from `ignite` to `reboard`, which is the honest entry state: the beat is entered on foot at the wreck relay. D-A3 (high, movie lane only): the gaze-bias state machine was present and correct but photographed nothing — it handed solveSurfaceGaze a goal 240 m along the ST-0 ray in `travel` mode, which puts ~217 m of tangential range against an inspectRange of 14, so `direct` was false, pitch collapsed to the seeded ±1° scan, and travel mode then clamped to +15° regardless. The glance yawed toward ST-0's azimuth and never pitched up at all, which is exactly the shape of the audit's 7/432 samples. Repaired by aiming at a 10 m proxy ON the same ray in `inspect` mode (whose ±30° band contains the ruling's +25° cap instead of overruling it), and by rebuilding the capped ray from its own tangent at exactly the cap — the previous spelling clipped the up-component and re-normalized, which lands at +25.4°. Heading, velocity and route are untouched; the bias still runs only under isAutopilotDriving() in the movie lane, at weight 0.35, with the 1.5 s floor, 0.5 s release and 10 s cooldown unchanged. ST0_GAZE_MAX_SECONDS moved 3 -> 4.5 s with its reason recorded inline: at weight 0.35 the shipped look-rate clamp is an exponential approach with a ~0.95 s time constant, so a 3 s window spent a third of itself in transit and could not meet the ruling's own crossing-frame acceptance. The in-frustum acceptance (>=4/8 crossing-strip frames, >=60/432 samples) is probe-shaped and remains the verifier's stage. D-A8 (medium): the occlusion half was already closed in the committed tree — the ST-0 quad draws with depthTest on, so the terrain that has already written depth occludes it and ridges and the shelter can no longer be drawn through, at zero extra draw calls. This round closes the remainder: st0ClampedPixels() and its ST0_MAX_PIXELS ceiling were dead — the only runtime argument was ST0_MIN_PIXELS itself, making the clamp a tautology that asserted a guarantee it never made. Wiring the station's true apparent size in was rejected because it would move the rendered size off 2.4 px, which Cinematography froze. The clamp is therefore deleted and replaced by st0DeviceProjectedPixels(), the inverse of st0QuadScale(), which MEASURES what the quad occupies; the model test holds that measurement to 2.4 px and to the 3 px ceiling across 144 tier/DPR/viewport/distance combinations. ST0_MIN_PIXELS is unmoved and ST0_MAX_PIXELS is now live as the value the measurement is held against. UX-3/UX-4 enablement: chapter10GuidanceTrace() is a new read-only, lane-agnostic sample of the live rung — objective id, marker label, work order, requiresMarker, health, resolved marker target and position, plus the pose and durable-receipt facts that SELECTED the rung. It mutates nothing and drives nothing; probes step the ladder with the shipped commit seams and enterShip/exitShip, and read the result here instead of scraping HUD DOM attributes under movie=1. With UX-1 in place the first transit rung is now an on-foot rung, so the transit ladder has a manual-lane entry point it did not have before.",
-  "evidenceRefs": [
-   "ux-audit.md",
-   "cinematography-audit.md",
-   "scene-contract.json",
-   "evidence/ch10-st0-gaze-solver.json",
-   "evidence/implementation/tests.log",
-   "implementation.diff"
-  ]
- },
- "berthRingEnumeration": {
-  "status": "pass",
-  "summary": "D-A5 CLOSED under lock revision R9, which granted the four paths enumerated last round. The cyan ring was never a ring primitive: it is berthStructure()'s four splayed guide arms, the twenty-eight sequenced nav lamps that chase inward along them, and the thirty-six threshold strips outlining the mouth. Those are the equipment that OFFERS a berth — an act of address — and in a story world where docking is unauthorized the station addresses the player in nothing. The dock itself (jamb frame, lit mouth, recessed inner glow) is architecture and is untouched: the contract asked for no dock OFFER geometry, not for no dock, and a station that loses its door in story mode is a different station. Implementation: an optional dockOffer tag on ExteriorBox/ExteriorLight, applied at the builder because downstream the exterior is two flat arrays in which a guide arm is indistinguishable from a radiator fin; a default-off suppressDockOffer prop on SpaceStationExterior.tsx skipping tagged entries at both instancing loops; and the shipped game's mount (SystemSpaceStations.tsx) raising it as !spaceStationDockingAuthorized() — the same predicate that already fences the advisory register and the KeyF commit, and which short-circuits to authorized outside story context. Sandbox byte-identity is PROVEN, not argued, because the sandbox is a shipped surface: the test asserts that SpaceStationApproach.tsx mounts the exterior element with descriptor and body only, and no suppression prop, does not reference the predicate, and never mounts SystemSpaceStations at all; that the prop defaults to false so an unpassed prop draws everything; and that isStorySpaceStationContext() is false and spaceStationDockingAuthorized() true wherever the story is not the context. Extent is asserted by exact count (4 boxes, 64 lights) rather than by bound, so a tag that silently grew to cover hull would fail; the survivors are compared element-for-element against a fresh build to prove suppression cannot renumber, reorder or re-tone what it keeps. No other station-exterior behaviour changed.",
-  "evidenceRefs": [
-   "production-lock.md",
-   "production-lock.json",
-   "cinematography-audit.md",
-   "scene-contract.json",
-   "evidence/implementation/tests.log",
-   "implementation.diff"
-  ]
- },
- "lensDivergenceD_A1": {
-  "status": "measured-no-fix-warranted-stale-evidence",
-  "summary": "D-A1 AS FILED DOES NOT EXIST. Instrumented all four quality profiles at matched story moments and every sampled quantity is bit-identical across LOW, MEDIUM with reduced motion, HIGH and POTATO: camera.fov, aspect, near/far, gl.getSize [1280,720], gl.getPixelRatio 1, devicePixelRatio 1, canvas attribute size equal to client size, one PerspectiveCamera and one cockpit rig parented to it. getShipFlightFeedback().fov tracked camera.fov exactly at every sample. The visible canopy aperture measured ~690px in all four freshly captured profile PNGs. There is no lens to reconcile between LOW and HIGH, so the instructed fix — 'fix so LOW and HIGH share one lens' — has nothing to act on. I already ruled out the capture-resolution explanation separately: every PNG is 1280x720. WHAT IS REAL: 12 of 24 flight frames in the SHIPPED ch10 transit LOW strips render the cockpit as a shrunken island with open space around it, worst case ~310px aperture against ~690px nominal — factor 2.2, matching the auditor's 705/300 within read error. The shrink is uniform and centred and preserves relative proportions, which is a whole-rig apparent-scale change rather than a crop. Every failing frame is stamped beat=ch10-transit; every frame stamped done fills the frame. IT DOES NOT REPRODUCE ON THE CURRENT TREE: a probe replaying the exact strip-transit-a and strip-transit-b plans returned one camera, one cockpit, one pressure shell and canopy 1094.8-1102.4px on 16 of 16 frames. MOST LIKELY EXPLANATION, and it is the one the coordinator already anticipated: the strips are STALE. capture-manifest.json records capturedAt 2026-08-12T01:20:06Z, while ShipController.tsx and autopilot.ts were both edited hours later for the D-10 bearing and D-13 boarding repairs. The pre-D-10 transit leg flew with no committed bearing at all and therefore flew far longer — the fresh runs reach `done` in ~17s where the defect window spans 19-44s of flight — so the strips were shot against materially different code on a materially different flight path. The verifier's already-planned strip purge and regeneration is the resolution; re-measure after it. UNDETERMINED AND NOT GUESSED AT: the failing frames' geometry is consistent with an effective FOV around 114-123 degrees while the cockpit rig's fovScale compensation was computed for 70-79 (SHIP_BOOST_FOV caps at 79). No constant in main/src writes an FOV that wide and there is no setViewOffset or camera.zoom writer, so the source of the widening is not identified. No fix is warranted against evidence that does not reproduce. CH8 IS CLEAN — this is NOT a shipped defect: 14 of 14 applicable ch8 flight frames across the 2026-08-10 run's LOW and hi-res sets render the cockpit filling the frame edge to edge, identical to the ch10 HIGH stills and to every fresh capture. The single non-filling ch8 frame is fully black with no cockpit rendered at all — an unrelated blank-frame defect in that run's evidence. MEASUREMENT CAVEAT, recorded honestly: main/src was being edited by me while the sweep ran, and two samples lost their injected hook to a page reload. Any re-measurement should be taken against a quiesced tree. LATENT FINDING worth a look: getStoryInputPolicy().targetFov reads 75 at every sample — a second independent writer of camera.fov contending with ShipController, which won every sample, so contention never exceeded 7%.",
-  "evidenceRefs": [
-   "evidence/verification/ch10-lens-divergence.json",
-   "evidence/capture/lens-divergence/",
-   "ch10-lens-divergence-probe.mjs",
-   "evidence/capture/strip-transit-b/01_station-resolved-at_ch10-transit.png"
-  ]
- },
- "storyFovSecondWriter": {
-  "status": "assessed-not-repaired-out-of-lock",
-  "summary": "A predecessor flagged getStoryInputPolicy().targetFov = 75 as a second writer of camera.fov contending with ShipController. Confirmed and characterised. Writer one: main/src/story/storyDirector.ts:2092-2096 lerps camera.fov toward policy.targetFov at rate 6/s on every frame the story is active, then calls updateProjectionMatrix(). Writer two: main/src/components/ShipController.tsx:700-703 snaps cam.fov to the ship flight-feedback fov whenever the divergence exceeds 0.001 and calls updateProjectionMatrix(). The frame order is stable (useFrame mount order), ShipController wins the rendered value, and the divergence stays inside the measured 7% — the observable cost is a redundant projection-matrix rebuild, not a wrong lens. NOT REPAIRED, deliberately. The clean fix is to make the story ramp stand down while the ship owns the camera, and both sites that could express that are outside allowedPaths: main/src/story/storyDirector.ts (the lerp) and main/src/story/storyInputPolicy.ts (the policy). The two in-lock alternatives were rejected on evidence rather than on convenience: (a) calling setStoryTargetFov(shipFov) from ShipController.tsx would strand a flight FOV on the policy when the player leaves the ship mid-beat — and ch10-transit now boards and disembarks inside one beat by design — because the policy object is only rebuilt at beat change; (b) driving the same call from emergentStoryDirector.ts would change policy.targetFov during the SHIPPED ch7 and ch8 flight beats, moving evidence bound to those chapters for no rendered gain. Routed to the orchestrator as a candidate lock revision. It is latent, not player-facing, and the tree is deployed.",
-  "evidenceRefs": [
-   "production-lock.json",
-   "implementation.diff"
-  ]
- },
- "signatureState": {
-  "status": "pass",
-  "summary": "All three lanes have signed draft-v7 at sha 32122245bf6b6630c4228da65204db2c6422e9ddb3a446c63ee6990986626860: chapter (approve-with-notes), score (approve-with-notes, opus-tier substitution recorded in production-lock.md), and cinematography (approve-with-notes, verification instance). director-signoffs.json reads draft-v7 with sameRevision true. The runtime version pins were re-bound to draft-v7 only after that third signature landed — signedSceneAvRuntime.ts, generatedSceneAvRuntime.json, chapter-registry.json and generate-scene-av-runtime.mjs — and regeneration is byte-stable.",
-  "evidenceRefs": [
-   "director-signoffs.json",
-   "chapter-contract-signoff.json",
-   "score-contract-signoff.json",
-   "cinematography-contract-signoff.json",
-   "evidence/implementation/scene-av-check.log"
-  ]
- },
- "g1GazeEngagement": {
-  "status": "measured-acceptance-moves-to-sampling",
-  "summary": "G-1. The solver repair is correct and IS reached; the bias still never engages, and the reason is measured per frame rather than reasoned about. The engage predicate now publishes every conjunct separately on window.__st0Gaze, written from inside the tick so a probe cannot mistake a second module instance for silence, and published once at the top of autopilotTick so \"never ticked\" is distinguishable from \"ticked, never reached a walk\". MEASURED (ch10-st0-gaze-engage.json, both lanes, same ch10-cold entry): MANUAL LANE — autopilot ticking 0 of 1,218 samples, __st0Gaze absent, ST-0 in frustum on 76 samples. The bias is structurally incapable of running there, and THAT IS THE LANE THE CROSSING STRIP IS SHOT IN: ch10-gap-strip-probe.mjs opens ?story=ch10-cold&profile=LOW with no movie=1 while recording the url as ?story=ch10-cold&movie=1&profile=LOW. The acceptance was measuring a lane in which the ruling that created the bias forbids it to run, so no code change could ever have moved it. MOVIE LANE — 419 walked frames, movie true on 419, autopilot driving on 419, so the branch is reached; but ST-0 above the analytic horizon with a direction on 0 of 419, and engagements 0. The movie ch10-cold walk is a few seconds long (the Kestrel is parked at the hearth) against ST-0's 90s ellipse at roughly 40% duty, so that window can contain a crossing only by luck and can never contain eight crossing frames. The two halves of the acceptance are therefore mutually exclusive as written: an 8-frame full-arc strip needs >=90s (manual, bias forbidden), and the glance can only exist inside a short movie walk. THE ACCEPTANCE MOVES TO THE SAMPLING: measure in-frustum over the movie-lane ch10-cold walk frames with the ellipse phased so ST-0 is up during the walk, not over a full ellipse in a held manual beat. TWO CODE DEFECTS WERE FOUND BY THE INSTRUMENTATION AND FIXED. (1) The bias ran only on the second ch10-cold walk, so a crossing during the walk to the hearth core was structurally unwatchable; the ruling says \"walk phases\", plural, and it now runs on both. (2) The goal-critical demand was a flat 10m on both walks, and the Kestrel is parked AT the hearth, so the contract's nominated walk never leaves that radius: 346 of 419 walked frames (83%) were goal-critical, which would have kept the bias suppressed even on a night when ST-0 is up. The demand is now the distance at which each act actually commits (2m core, 6m fabricator), which is what \"the eyes come down for the act\" means. Re-measured after the change: 118 of 418 (28%). The strip probe's recorded url is corrected, and its report now carries the lane, gazeBiasPermittedInLane, and the live gaze diagnostic, so the evidence states for itself whether the mechanism under test was permitted to run.",
-  "evidenceRefs": [
-   "evidence/ch10-st0-gaze-engage.json",
-   "evidence/ch10-st0-gaze-solver.json",
-   "cinematography-audit.md"
-  ]
- },
- "s1UndeclaredLensMove": {
-  "status": "pass",
-  "summary": "S-1 and the seam still's renderCameraFov 79 are ONE defect, and it is a real unauthored lens move, not shipped feel the contract forgot to declare. Evidence: fov is not speed-coupled at all. shipFlightFeedback.ts computes fovTarget = SHIP_BASE_FOV + (SHIP_BOOST_FOV - SHIP_BASE_FOV) x boost, i.e. 70 + 9 x boost, where boost is a damped key state; resolveShipBoost() is forwardHeld && sprintHeld. The 190 u/s threshold is not a constant anywhere — it is a proxy for \"boost held\", because unboosted terminal speed is 60/-ln(0.6) = 117.5 u/s so any higher speed implies boost. And the sprint was not the player's: THIS RUN'S OWN ch10-transit rail asserted controls.sprint = controls.forward, copied from the ch8 legs. So the rail cruised at FOV 79 and fell back to 70 only when atStandoff dropped forward, which is exactly the 79-at-the-seam / 70.0002-at-the-cut-line split, against a contract that declares FOV 70 throughout the transit. Suppressed in ch10-transit. MEASURED AFTER, per beat: ch10-transit over 621 samples holds feedbackFov 70.0 to 70.0, boost max 0, shell scale max 1.00000, zero frames above the 73.72 threshold, and the leg still completes to done. ch10-ask over 231 samples still reaches 79 with shell scale 1.17727 on 90 frames — LEFT AS IS AND FLAGGED: the ask beat's return crossing is contracted as ch8 grammar reused verbatim \"by shipped vehicle state and no authored move\", so its boost is the shipped crossing behaviour rather than a ch10 invention. Cinematography should rule whether that leg wants the same treatment. THE COCKPIT COMPENSATION IS NOT BROKEN. tan(fov/2)/tan(35 deg) is applied every frame to shell and instruments with no clamp, threshold or early return, and it reproduces the measured 1.17727 at 79, 1.03761 at 72 and 1.00000 at 70 exactly, so the silhouette is FOV-invariant by construction. The sky-past-the-shell artifact is a LIGHTING threshold: the cabin pointLight (position [0,0.35,-1.5], distance 6.5, decay 2) sits outside the scaled shell group, and the outer shell walls at |x| = 5.925 are 6.091 units from it at scale 1.0 but 7.117 at scale 1.17727. Solving for the 6.5 cutoff gives scale 1.0708, i.e. FOV 73.72 — squarely inside the 72-79 boost band and reachable only under boost. Above it the walls fall to their emissive floor and, against black space, read as the seat having pulled back. Pinning ch10-transit at FOV 70 removes it from this run's frames entirely; the underlying shipped defect is enumerated below.",
-  "evidenceRefs": [
-   "evidence/ch10-st0-gaze-engage.json",
-   "cinematography-audit.md",
-   "implementation.diff"
-  ]
- },
- "cockpitCabinLightEnumeration": {
-  "status": "enumerated-and-stopped",
-  "summary": "The residual shipped defect behind S-1, unreachable in ch10 after the lens fix but still live in free flight whenever the player holds boost. The cabin pointLight is declared at ShipCockpit.tsx:196-203 INSIDE the vibration root and OUTSIDE shellRef, so the FOV compensation applied at ShipCockpit.tsx:115 scales the shell away from a lamp that does not move with it. Above shell scale 1.0708 (FOV 73.72) the outer walls leave the 6.5-unit reach and go dark. Minimal honest fix: scale the lamp's distance by the same fovScale already computed at ShipCockpit.tsx:111-112, so cabin lighting is FOV-invariant like the geometry. A second, smaller mechanism sits alongside it: ShipCockpit's useFrame is subscribed before ShipController's at equal priority, so the shell scales with the previous frame's fov and under-scales by up to ~1.8% during the boost ramp; reading the camera's own fov instead of the feedback singleton removes it by construction. main/src/components/ShipCockpit.tsx is NOT in allowedPaths and no bytes were changed in it. Routed to the orchestrator.",
-  "evidenceRefs": [
-   "production-lock.json",
-   "implementation.diff"
-  ]
- },
- "seamSpineArithmetic": {
-  "status": "routed-to-verifier",
-  "summary": "The seam still's spine was measured at 7.010 degrees against a 7.5-8.2 term while the render camera was at FOV 79, not the 70 the measurement assumed. Both corrections, explicitly, so the verifier re-measures rather than inherits either: LINEAR rescale 7.010 x 79/70 = 7.911 degrees, INSIDE the band. TANGENT-CORRECT reprojection — recover the pixel fraction p/H = tan(7.010/2)/tan(35) = 0.087474, then reproject at the true lens, 2 x atan(0.087474 x tan(39.5)) = 8.249 degrees, marginally OUTSIDE the 8.2 ceiling. The two differ by 0.34 degrees and they straddle the boundary, so the criterion cannot be called either way from the existing capture: which is right depends on whether the original measurement converted pixels to angle linearly or through the tangent. THE HONEST ANSWER IS TO RE-SHOOT, not to re-derive — and after the lens fix the seam frame is at FOV 70 by construction, so the re-shot still needs no correction at all and the ambiguity disappears. Recorded here because the criterion may never have been violated and the verifier must not carry forward a 7.010 that was measured through the wrong lens.",
-  "evidenceRefs": [
-   "cinematography-audit.md",
-   "evidence/ch10-st0-gaze-engage.json"
-  ]
- }
 }

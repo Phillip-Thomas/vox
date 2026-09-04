@@ -28,9 +28,11 @@ import {
 import {
   readStoryHudSafeAreaInsets,
   solveStoryEdgeLabelPresentation,
+  solveStoryFeedLedgerPlacement,
   solveStoryHudLayout
 } from '../ux/storyHudLayout.ts';
 import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 // --- Regulation Feed HUD ----------------------------------------------------------
 //
@@ -38,6 +40,21 @@ import { presentInputGlyphs } from '../ux/inputGlyphs.ts';
 // proud of itself, the standing work order, the quota ledger, and (Ch2) the
 // redaction box. Structure renders via small store subscriptions; the per-frame
 // bits (counter, garble, redaction transform) are rAF ref-mutations.
+
+/**
+ * The top-right REC / FRM / SITE CAM block's own width cap, and the total
+ * horizontal band the standing work order must leave for it: the block's right
+ * offset (56) plus its width plus a gutter. Reserving only the WIDTH is the
+ * mistake that left 29px of overlap after the first repair — the block is
+ * right-anchored, so its left edge sits `56 + width` in from the right.
+ */
+const FEED_STATUS_WIDTH_PX = 146;
+/**
+ * Vertical allowance for the tallest ch1 ledger (a label plus two data rows at
+ * 10/12/11px on 1.9 line-height, measured at 80px on ch1-iso).
+ */
+const FEED_LEDGER_HEIGHT_ALLOWANCE_PX = 96;
+const FEED_STATUS_LANE_PX = 56 + FEED_STATUS_WIDTH_PX + 12;
 
 const FEED_INK = 'rgba(228,236,231,0.92)';
 const FEED_INK_DIM = 'rgba(228,236,231,0.55)';
@@ -256,6 +273,9 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
   const touch = isTouchDevice();
   const feedLine = (line: string): string =>
     presentInputGlyphs(line, touch, 'feed', { chartActionable: false });
+  // The ch1 ledgers are the chapter's only honest progress readout, so they
+  // must never hide behind the touch controls the player is pressing.
+  const ledgerPlacement = solveStoryFeedLedgerPlacement(touch, readStoryHudSafeAreaInsets());
 
   return (
     <>
@@ -265,6 +285,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
           aria-atomic="true"
           aria-label="Current story objective"
           data-objective-id={objective?.id}
+      {...hudSurface('feed-work-order', 'informational')}
           data-objective-marker-label={objective?.markerLabel}
           data-objective-health={objective ? objectiveHealth : 'idle'}
           data-objective-requires-marker={objective
@@ -272,8 +293,10 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
             : undefined}
           style={{
             position: 'fixed',
-            top: 26,
-            left: 56,
+            // Landscape notches clip a literal inset; every other story HUD
+            // surface already respects the safe area.
+            top: 'calc(26px + env(safe-area-inset-top, 0px))',
+            left: 'calc(56px + env(safe-area-inset-left, 0px))',
             zIndex: theme.z.hud + 2,
             pointerEvents: 'none',
             fontFamily: theme.font.mono,
@@ -281,7 +304,22 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
             letterSpacing: '0.1em',
             fontSize: 11,
             lineHeight: 1.75,
-            maxWidth: 460
+            // Reserve the right-hand lane the REC / FRM / SITE CAM block owns.
+            // A flat `maxWidth: 460` is inert on a 390px phone, so the order
+            // simply wrapped under the status block and the two drew over each
+            // other (the HUD overlap sweep measured 131x79px on ch1-fixed).
+            maxWidth: `min(460px, calc(100vw - 56px - ${FEED_STATUS_LANE_PX}px`
+              + ' - env(safe-area-inset-left, 0px) - env(safe-area-inset-right, 0px)))',
+            // A narrower column is a TALLER column: on a 320px phone the order
+            // wrapped far enough down to reach first the D-pad and then the
+            // ledger above it. Bound it by whatever is actually stacked in the
+            // bottom-left lane — the ledger placement already clears the pad —
+            // and let the tail clip rather than let the directive sit under
+            // either. (Both regressions were found by the HUD overlap sweep,
+            // the second one caused by fixing the first.)
+            maxHeight: `calc(100vh - 26px - ${ledgerPlacement.bottom + FEED_LEDGER_HEIGHT_ALLOWANCE_PX}px`
+              + ' - env(safe-area-inset-top, 0px) - env(safe-area-inset-bottom, 0px))',
+            overflow: 'hidden'
           }}
         >
           <div style={{ color: FEED_INK_DIM, marginBottom: 6 }}>
@@ -317,7 +355,14 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
       {/* REC + frame counter */}
       <div
         ref={cameraStatusRef}
-        style={{ position: 'fixed', top: 26, right: 56, textAlign: 'right', fontSize: 11, lineHeight: 1.8, display: 'none', opacity: 0 }}
+        {...hudSurface('feed-camera-status', 'informational')}
+        style={{
+          position: 'fixed',
+          top: 'calc(26px + env(safe-area-inset-top, 0px))',
+          right: 'calc(56px + env(safe-area-inset-right, 0px))',
+          textAlign: 'right', fontSize: 11, lineHeight: 1.8, display: 'none', opacity: 0,
+          maxWidth: FEED_STATUS_WIDTH_PX
+        }}
       >
         <div>
           <span style={{
@@ -351,7 +396,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
 
       {/* fixed-screen calibration ledger */}
       {fixedProgress && (
-        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+        <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>CALIBRATION</div>
           <div>
             FIBER {fixedProgress.fiber}/{CH1_FIXED_TUTORIAL.biofiber} · SCREENS {fixedProgress.screens}/{CH1_FIXED_TUTORIAL.screens}
@@ -364,7 +409,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
 
       {/* supply-pod recovery ledger */}
       {podsVisible && (
-        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+        <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>RECOVERY</div>
           <div>SUPPLY PODS {collectedPodCount()}/{SUPPLY_POD_COUNT}</div>
           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>
@@ -394,7 +439,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
 
       {/* triangulation ledger */}
       {navVisible && (
-        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+        <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>TRIANGULATION</div>
           <div>FIXES {reachedNavWaypointCount()}/{NAV_WAYPOINT_COUNT}</div>
           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>NAV VIEW · FOLLOW THE MARKER</div>
@@ -403,7 +448,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
 
       {/* elevation ledger */}
       {isoVisible && (
-        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+        <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>ELEVATION</div>
           <div>REACH THE SIGNAL SOURCE</div>
           <div style={{ color: FEED_INK_DIM, fontSize: 11 }}>{feedLine('ASCEND [SPACE] · THE STAIRS FACE THE STRIP')}</div>
@@ -412,7 +457,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
 
       {/* quota ledger */}
       {quotaVisible && (
-        <div style={{ position: 'fixed', bottom: 30, left: 56, fontSize: 12, lineHeight: 1.9 }}>
+        <div {...hudSurface('feed-ledger', 'informational')} style={{ position: 'fixed', ...ledgerPlacement, fontSize: 12, lineHeight: 1.9 }}>
           <div style={{ color: FEED_INK_DIM, fontSize: 10 }}>QUOTA</div>
           <div>
             FIBER {fiber}/{CH1_QUOTA.biofiber} · STONE {stone}/{CH1_QUOTA.stone} · DEBRIS {collectedDebrisCount()}/{getDebrisScattered()}
@@ -450,6 +495,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
         <div
           id={PRIMARY_INTERACTION_PROMPT_DOM_ID}
           data-interaction-prompt="primary"
+      {...hudSurface('feed-interaction-prompt', 'informational')}
           data-interaction-id={interaction.id}
           data-interaction-owner="regulation-feed"
           data-interaction-scope={getInteractionScope(interaction.id)}
@@ -472,6 +518,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
           ref={markerRef}
           className="pv-regulation-objective-marker"
           data-regulation-objective-marker="true"
+      {...hudSurface('feed-objective-marker', 'marker')}
           style={{
             position: 'fixed',
             left: 0,
@@ -500,6 +547,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
       <div
         ref={redactionRef}
         data-redaction-box="true"
+      {...hudSurface('feed-redaction-box', 'marker')}
         style={{
           position: 'fixed',
           left: 0,
@@ -522,6 +570,7 @@ const RegulationFeedHud: React.FC<RegulationFeedHudProps> = ({
       <div
         ref={redactionIndicatorRef}
         data-redaction-indicator="true"
+      {...hudSurface('feed-redaction-indicator', 'marker')}
         style={{
           position: 'fixed',
           left: 0,

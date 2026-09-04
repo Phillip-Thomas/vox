@@ -198,8 +198,8 @@ describe('space station boundary claims', () => {
     expect(refs).toContain(`state:system-flight/active-planet=${STORY_PRIMARY_WORLD_ID}`);
   });
 
-  it('publishes the chapter 10 bearing and seam claims from durable facts only', () => {
-    const claimed = deriveStoryBoundaryState(runtime({
+  it('publishes chapter 10 docking only after its durable hand-back fact', () => {
+    const beforeHandback = deriveStoryBoundaryState(runtime({
       durable: {
         storyComplete: true,
         keelMemoryBanked: true,
@@ -209,11 +209,21 @@ describe('space station boundary claims', () => {
         stationDockingAuthorized: false
       }
     })).stateRefs;
-    expect(claimed).toContain('state:story/ch10-bearing-claimed');
-    expect(claimed).toContain('state:story/ch10-seam-passed');
-    // Defined this run, granted by nothing: the fence must read as absent even
-    // with every other chapter 10 fact true.
-    expect(claimed).not.toContain('state:station/docking-authorized');
+    expect(beforeHandback).toContain('state:story/ch10-bearing-claimed');
+    expect(beforeHandback).toContain('state:story/ch10-seam-passed');
+    expect(beforeHandback).not.toContain('state:station/docking-authorized');
+
+    const afterHandback = deriveStoryBoundaryState(runtime({
+      durable: {
+        storyComplete: true,
+        keelMemoryBanked: true,
+        twoWorldHandoff: true,
+        ch10BearingClaimed: true,
+        ch10SeamPassed: true,
+        stationDockingAuthorized: true
+      }
+    })).stateRefs;
+    expect(afterHandback).toContain('state:station/docking-authorized');
   });
 
   it('says nothing about chapter 10 before its facts are earned', () => {

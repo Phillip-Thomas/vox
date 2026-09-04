@@ -19,7 +19,7 @@ import {
   getStructureVersion,
   subscribeStructures
 } from '../../game/systems/structureSystem.ts';
-import { restoreHabitatForWorld } from '../../game/systems/persistence.ts';
+import { restoreHabitatForWorld, saveGlobal } from '../../game/systems/persistence.ts';
 import { getCurrentDayPhase } from '../../game/worldClock.ts';
 import { getPlayerWorldPosition } from '../../state/playerFrame.ts';
 import { getSpaceFlightSnapshot } from '../../state/spaceFlight.ts';
@@ -60,6 +60,12 @@ import {
   claimKestrelFoundingReserve,
   KESTREL_FOUNDING_RESERVE_MILESTONE
 } from '../kestrelFoundingReserve.ts';
+import {
+  STATION_RETURN_INSTALL_REACH,
+  installTidegardenBondedCell,
+  stationReturnPending,
+  subscribeStationReturn
+} from '../stationReturnStory.ts';
 
 const RELATIONSHIP_DISTANCE = 5.2;
 const RECOMMENDED_SITE_DISTANCE = 3.2;
@@ -136,6 +142,11 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
   const coreCarried = useSyncExternalStore(
     subscribeInventory,
     () => getItemCount('habitat_core', commandContext.actorId) > 0,
+    () => false
+  );
+  const bondedCellReturnPending = useSyncExternalStore(
+    subscribeStationReturn,
+    () => stationReturnPending(commandContext.actorId),
     () => false
   );
   const relationshipRecorded = useSyncExternalStore(
@@ -298,6 +309,24 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
     return registerStoryInteraction((_camera, playerPosition) => {
       const actorId = commandContext.actorId;
       const worldId = commandContext.world.worldId;
+      const live = getHabitatWorldState(worldId);
+      if (live && bondedCellReturnPending) {
+        const core = new THREE.Vector3(...live.core.position);
+        if (playerPosition.distanceTo(core) <= STATION_RETURN_INSTALL_REACH) {
+          return {
+            id: 'story-ch12-install-bonded-cell',
+            verb: 'Install the Sealed Bonded Cell',
+            perform: () => {
+              const result = installTidegardenBondedCell({
+                actorId,
+                worldId,
+                playerPosition
+              });
+              if (result.changed) saveGlobal(commandContext.world, getCurrentDayPhase());
+            }
+          };
+        }
+      }
       if (relationship && playerPosition.distanceTo(relationship.position) <= RELATIONSHIP_DISTANCE) {
         if (!relationshipAttended) {
           return {
@@ -348,7 +377,6 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
         }
       }
 
-      const live = getHabitatWorldState(worldId);
       if (!live && coreCarried) {
         const site = validateTidegardenHabitatSite({
           worldId,
@@ -434,6 +462,7 @@ const TidegardenSettlementWorld: React.FC<TidegardenSettlementWorldProps> = ({
     });
   }, [
     commandContext,
+    bondedCellReturnPending,
     coreCarried,
     chosenSite,
     liveTerrain,

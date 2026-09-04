@@ -1,0 +1,600 @@
+{
+  "schema": "paravoxia.ch11StationStoryProbe.v1",
+  "capturedAt": "2026-08-14T17:24:34.865Z",
+  "base": "http://127.0.0.1:5176",
+  "checks": [
+    {
+      "name": "story docking enters a durable registry objective",
+      "pass": true,
+      "detail": "{\"mission\":{\"step\":\"registry\",\"itemCount\":0,\"receipts\":{\"docked\":true,\"designationPresented\":false,\"registryRecorded\":false,\"concourseEntered\":false,\"habitatFaultPresented\":false,\"bondedCellAcquired\":false,\"tradeUnlocked\":false,\"bondedCellStowed\":false,\"stationDeparted\":false}},\"objective\":\"STATION VISIT · ISSUED COMPONENTCOUNTER · PRESENT DESIGNATION · 139mFOLLOW THE REGISTRY CORRIDOR.[F] PRESENT THE SUIT RECORD.(your body takes its place before the marker does.)\",\"raw\":{\"inventory\":{},\"mawCharge\":0,\"era\":\"paravox_machina\",\"milestones\":[\"story:started\",\"story:complete\",\"story:ch9:hearth\",\"story:ch10-bearing-claimed\",\"story:ch10-station-resolved\",\"story:ch10-complete\",\"story:station-docking-authorized\",\"story:ch11-docked\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1:p1\",\"dayPhase\":0.73,\"vitals\":{\"health\":100,\"hunger\":100,\"thirst\":100,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":null,\"currentWorldId\":null,\"parkedPose\":null,\"systemPose\":null,\"locationMode\":\"surface\",\"repairHistory\":[]}}}"
+    },
+    {
+      "name": "the counter records W-7743 and an issued habitat component without defining wider status",
+      "pass": true,
+      "detail": "REGULATIONPRESENT DESIGNATION.REGULATIONDESIGNATION: W-7743 · RECORD ACCEPTED.REGULATIONDECLARE PURPOSE OF ENTRY.REGULATIONNEED RECORDED · BONDED CELL / HABITAT GRADE.REGULATIONCONCOURSE ACCESS ISSUED.(the suit is accepted before you are.)[ CONTINUE TO CONCOURSE ]"
+    },
+    {
+      "name": "optional vendors can be spoken to while ordinary trading waits for the issued cell",
+      "pass": true,
+      "detail": "{\"index\":1,\"id\":\"vendor-1\",\"vendor\":{\"id\":\"vendor-1\",\"designation\":\"T-8968\",\"name\":\"Third\",\"specialty\":\"bulk\"}}"
+    },
+    {
+      "name": "an optional vendor leaves required progress unchanged",
+      "pass": true,
+      "detail": null
+    },
+    {
+      "name": "Bell issues exactly one real bonded cell and saves it before navigation",
+      "pass": true,
+      "detail": "{\"mission\":{\"step\":\"depart\",\"itemCount\":1,\"receipts\":{\"docked\":true,\"designationPresented\":true,\"registryRecorded\":true,\"concourseEntered\":true,\"habitatFaultPresented\":true,\"bondedCellAcquired\":true,\"tradeUnlocked\":true,\"bondedCellStowed\":false,\"stationDeparted\":false}},\"raw\":{\"inventory\":{\"bonded_cell\":1},\"mawCharge\":0,\"era\":\"paravox_machina\",\"milestones\":[\"story:started\",\"story:complete\",\"story:ch9:hearth\",\"story:ch10-bearing-claimed\",\"story:ch10-station-resolved\",\"story:ch10-complete\",\"story:station-docking-authorized\",\"story:ch11-docked\",\"story:ch11-designation-presented\",\"story:ch11-registry-recorded\",\"story:ch11-concourse-entered\",\"story:ch11-habitat-fault-presented\",\"story:ch11-bonded-cell-acquired\",\"story:station-trade-unlocked\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1:p1\",\"dayPhase\":0.73,\"vitals\":{\"health\":100,\"hunger\":100,\"thirst\":100,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":null,\"currentWorldId\":null,\"parkedPose\":null,\"systemPose\":null,\"locationMode\":\"surface\",\"repairHistory\":[]}},\"receipt\":\"CARGO RECEIPTBONDED CELL (HABITAT) · SEAL INTACT\"}"
+    },
+    {
+      "name": "station saves preserve exact Tidegarden identity and clock",
+      "pass": true,
+      "detail": "{\"lastPlanetWorldId\":\"-1,-1:p1\",\"lastWorld\":{\"x\":-1,\"y\":-1},\"dayPhase\":0.73}"
+    },
+    {
+      "name": "reload resumes at departure without duplicating the cell",
+      "pass": true,
+      "detail": "{\"mission\":{\"step\":\"depart\",\"itemCount\":1,\"receipts\":{\"docked\":true,\"designationPresented\":true,\"registryRecorded\":true,\"concourseEntered\":true,\"habitatFaultPresented\":true,\"bondedCellAcquired\":true,\"tradeUnlocked\":true,\"bondedCellStowed\":false,\"stationDeparted\":false}},\"objective\":\"STATION VISIT · ISSUED COMPONENTKESTREL AIRLOCK · STOW THE CELL · 5mRETURN TO THE KESTREL.[F] STOW THE BONDED CELL AND DEPART.(one fire waiting. carry back what the world could not give.)\"}"
+    },
+    {
+      "name": "stowing and undocking return to the game with cell and departure receipts intact",
+      "pass": true,
+      "detail": "http://127.0.0.1:5176/?profile=POTATO&ai=off"
+    },
+    {
+      "name": "undocking publishes an explicit return-to-Tidegarden work order",
+      "pass": true,
+      "detail": "CURRENT OBJECTIVETIDEGARDEN · SECOND HEARTHRETURN TO TIDEGARDEN.DELIVER THE BONDED CELL TO THE SECOND HEARTH.ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE"
+    },
+    {
+      "name": "the landed return points at the real second hearth and offers installation",
+      "pass": true,
+      "detail": "{\"objective\":\"CURRENT OBJECTIVESECOND HEARTH · INSTALL BONDED CELLDELIVER THE BONDED CELL TO THE SECOND HEARTH.[F] INSTALL THE SEALED CELL.\",\"prompt\":\"FInstall the Sealed Bonded Cell\"}"
+    },
+    {
+      "name": "installing consumes exactly one cell and durably restores the second hearth",
+      "pass": true,
+      "detail": "{\"raw\":{\"inventory\":{\"faulty_maw\":1},\"mawCharge\":0,\"era\":\"paravox_machina\",\"milestones\":[\"story:started\",\"story:complete\",\"story:ch9:hearth\",\"story:ch10-bearing-claimed\",\"story:ch10-station-resolved\",\"story:ch10-complete\",\"story:station-docking-authorized\",\"story:ch11-docked\",\"story:ch11-designation-presented\",\"story:ch11-registry-recorded\",\"story:ch11-concourse-entered\",\"story:ch11-habitat-fault-presented\",\"story:ch11-bonded-cell-acquired\",\"story:station-trade-unlocked\",\"story:ch11-bonded-cell-stowed\",\"story:ch11-station-departed\",\"story:tidegarden:scanner-overload\",\"story:tidegarden:relationship-attended\",\"story:tidegarden:site-chosen:v1:8,25,-4|8,24,-4|0,1,0\",\"story:item:habitat-core:crafted\",\"story:tidegarden:habitat-core-online\",\"story:tidegarden:shelter-certified\",\"story:ch12-bonded-cell-installed\",\"story:ch12-hearth-restored\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1:p1\",\"dayPhase\":0.8295941666672628,\"vitals\":{\"health\":100,\"hunger\":99.97555555555554,\"thirst\":99.96333333333331,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1:p1\",\"parkedPose\":{\"position\":[8,51.5,-8],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[8,51.5,-8],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}},\"objective\":null,\"prompt\":null}"
+    },
+    {
+      "name": "reload keeps the hearth restored without reissuing or reinstalling the cell",
+      "pass": true,
+      "detail": "{\"raw\":{\"inventory\":{\"faulty_maw\":1,\"stone\":2},\"mawCharge\":0,\"era\":\"paravox_machina\",\"milestones\":[\"story:started\",\"story:complete\",\"story:ch9:hearth\",\"story:ch10-bearing-claimed\",\"story:ch10-station-resolved\",\"story:ch10-complete\",\"story:station-docking-authorized\",\"story:ch11-docked\",\"story:ch11-designation-presented\",\"story:ch11-registry-recorded\",\"story:ch11-concourse-entered\",\"story:ch11-habitat-fault-presented\",\"story:ch11-bonded-cell-acquired\",\"story:station-trade-unlocked\",\"story:ch11-bonded-cell-stowed\",\"story:ch11-station-departed\",\"story:tidegarden:scanner-overload\",\"story:tidegarden:relationship-attended\",\"story:tidegarden:site-chosen:v1:8,25,-4|8,24,-4|0,1,0\",\"story:item:habitat-core:crafted\",\"story:tidegarden:habitat-core-online\",\"story:tidegarden:shelter-certified\",\"story:ch12-bonded-cell-installed\",\"story:ch12-hearth-restored\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1:p1\",\"dayPhase\":0.9277025000005961,\"vitals\":{\"health\":100,\"hunger\":99.94777777777774,\"thirst\":99.92166666666661,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":\"-1,-1\",\"currentWorldId\":\"-1,-1:p1\",\"parkedPose\":{\"position\":[8,51.5,-8],\"quaternion\":[0,1,0,2.220446049250313e-16]},\"systemPose\":{\"position\":[8,51.5,-8],\"quaternion\":[0,1,0,2.220446049250313e-16],\"velocity\":[0,0,0]},\"locationMode\":\"surface\",\"repairHistory\":[]}},\"objective\":null,\"prompt\":null}"
+    },
+    {
+      "name": "touch USE opens a registry panel contained by the mobile viewport",
+      "pass": true,
+      "detail": "{\"top\":313.53125,\"bottom\":530.46875,\"left\":16,\"right\":374}"
+    },
+    {
+      "name": "touch completes the same durable issuance path",
+      "pass": true,
+      "detail": "{\"mission\":{\"step\":\"depart\",\"itemCount\":1,\"receipts\":{\"docked\":true,\"designationPresented\":true,\"registryRecorded\":true,\"concourseEntered\":true,\"habitatFaultPresented\":true,\"bondedCellAcquired\":true,\"tradeUnlocked\":true,\"bondedCellStowed\":false,\"stationDeparted\":false}},\"raw\":{\"inventory\":{\"bonded_cell\":1},\"mawCharge\":0,\"era\":\"paravox_machina\",\"milestones\":[\"story:started\",\"story:complete\",\"story:ch9:hearth\",\"story:ch10-bearing-claimed\",\"story:ch10-station-resolved\",\"story:ch10-complete\",\"story:station-docking-authorized\",\"story:ch11-docked\",\"story:ch11-designation-presented\",\"story:ch11-registry-recorded\",\"story:ch11-concourse-entered\",\"story:ch11-habitat-fault-presented\",\"story:ch11-bonded-cell-acquired\",\"story:station-trade-unlocked\"],\"lastWorld\":{\"x\":-1,\"y\":-1},\"lastPlanetWorldId\":\"-1,-1:p1\",\"dayPhase\":0.73,\"vitals\":{\"health\":100,\"hunger\":100,\"thirst\":100,\"warmth\":100,\"stamina\":100,\"oxygen\":100},\"waterskin\":0,\"accomplishments\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"observations\":{\"schemaVersion\":1,\"nextSequence\":1,\"records\":[]},\"shipRestoration\":{\"version\":1,\"repairStage\":\"wrecked\",\"currentSystemId\":null,\"currentWorldId\":null,\"parkedPose\":null,\"systemPose\":null,\"locationMode\":\"surface\",\"repairHistory\":[]}}}"
+    },
+    {
+      "name": "bare station sandbox remains story-free and its ordinary vendor still opens",
+      "pass": true,
+      "detail": "{\"storyHook\":\"undefined\",\"objective\":false,\"save\":null,\"vendor\":\"vendor-0\"}"
+    }
+  ],
+  "runtimeProblems": [],
+  "entry": {
+    "mission": {
+      "step": "registry",
+      "itemCount": 0,
+      "receipts": {
+        "docked": true,
+        "designationPresented": false,
+        "registryRecorded": false,
+        "concourseEntered": false,
+        "habitatFaultPresented": false,
+        "bondedCellAcquired": false,
+        "tradeUnlocked": false,
+        "bondedCellStowed": false,
+        "stationDeparted": false
+      }
+    },
+    "objective": "STATION VISIT · ISSUED COMPONENTCOUNTER · PRESENT DESIGNATION · 139mFOLLOW THE REGISTRY CORRIDOR.[F] PRESENT THE SUIT RECORD.(your body takes its place before the marker does.)",
+    "raw": {
+      "inventory": {},
+      "mawCharge": 0,
+      "era": "paravox_machina",
+      "milestones": [
+        "story:started",
+        "story:complete",
+        "story:ch9:hearth",
+        "story:ch10-bearing-claimed",
+        "story:ch10-station-resolved",
+        "story:ch10-complete",
+        "story:station-docking-authorized",
+        "story:ch11-docked"
+      ],
+      "lastWorld": {
+        "x": -1,
+        "y": -1
+      },
+      "lastPlanetWorldId": "-1,-1:p1",
+      "dayPhase": 0.73,
+      "vitals": {
+        "health": 100,
+        "hunger": 100,
+        "thirst": 100,
+        "warmth": 100,
+        "stamina": 100,
+        "oxygen": 100
+      },
+      "waterskin": 0,
+      "accomplishments": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "observations": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "shipRestoration": {
+        "version": 1,
+        "repairStage": "wrecked",
+        "currentSystemId": null,
+        "currentWorldId": null,
+        "parkedPose": null,
+        "systemPose": null,
+        "locationMode": "surface",
+        "repairHistory": []
+      }
+    }
+  },
+  "issued": {
+    "mission": {
+      "step": "depart",
+      "itemCount": 1,
+      "receipts": {
+        "docked": true,
+        "designationPresented": true,
+        "registryRecorded": true,
+        "concourseEntered": true,
+        "habitatFaultPresented": true,
+        "bondedCellAcquired": true,
+        "tradeUnlocked": true,
+        "bondedCellStowed": false,
+        "stationDeparted": false
+      }
+    },
+    "raw": {
+      "inventory": {
+        "bonded_cell": 1
+      },
+      "mawCharge": 0,
+      "era": "paravox_machina",
+      "milestones": [
+        "story:started",
+        "story:complete",
+        "story:ch9:hearth",
+        "story:ch10-bearing-claimed",
+        "story:ch10-station-resolved",
+        "story:ch10-complete",
+        "story:station-docking-authorized",
+        "story:ch11-docked",
+        "story:ch11-designation-presented",
+        "story:ch11-registry-recorded",
+        "story:ch11-concourse-entered",
+        "story:ch11-habitat-fault-presented",
+        "story:ch11-bonded-cell-acquired",
+        "story:station-trade-unlocked"
+      ],
+      "lastWorld": {
+        "x": -1,
+        "y": -1
+      },
+      "lastPlanetWorldId": "-1,-1:p1",
+      "dayPhase": 0.73,
+      "vitals": {
+        "health": 100,
+        "hunger": 100,
+        "thirst": 100,
+        "warmth": 100,
+        "stamina": 100,
+        "oxygen": 100
+      },
+      "waterskin": 0,
+      "accomplishments": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "observations": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "shipRestoration": {
+        "version": 1,
+        "repairStage": "wrecked",
+        "currentSystemId": null,
+        "currentWorldId": null,
+        "parkedPose": null,
+        "systemPose": null,
+        "locationMode": "surface",
+        "repairHistory": []
+      }
+    },
+    "receipt": "CARGO RECEIPTBONDED CELL (HABITAT) · SEAL INTACT"
+  },
+  "reloaded": {
+    "mission": {
+      "step": "depart",
+      "itemCount": 1,
+      "receipts": {
+        "docked": true,
+        "designationPresented": true,
+        "registryRecorded": true,
+        "concourseEntered": true,
+        "habitatFaultPresented": true,
+        "bondedCellAcquired": true,
+        "tradeUnlocked": true,
+        "bondedCellStowed": false,
+        "stationDeparted": false
+      }
+    },
+    "objective": "STATION VISIT · ISSUED COMPONENTKESTREL AIRLOCK · STOW THE CELL · 5mRETURN TO THE KESTREL.[F] STOW THE BONDED CELL AND DEPART.(one fire waiting. carry back what the world could not give.)"
+  },
+  "returned": {
+    "url": "http://127.0.0.1:5176/?profile=POTATO&ai=off",
+    "raw": {
+      "inventory": {
+        "bonded_cell": 1
+      },
+      "mawCharge": 0,
+      "era": "paravox_machina",
+      "milestones": [
+        "story:started",
+        "story:complete",
+        "story:ch9:hearth",
+        "story:ch10-bearing-claimed",
+        "story:ch10-station-resolved",
+        "story:ch10-complete",
+        "story:station-docking-authorized",
+        "story:ch11-docked",
+        "story:ch11-designation-presented",
+        "story:ch11-registry-recorded",
+        "story:ch11-concourse-entered",
+        "story:ch11-habitat-fault-presented",
+        "story:ch11-bonded-cell-acquired",
+        "story:station-trade-unlocked",
+        "story:ch11-bonded-cell-stowed",
+        "story:ch11-station-departed"
+      ],
+      "lastWorld": {
+        "x": -1,
+        "y": -1
+      },
+      "lastPlanetWorldId": "-1,-1:p1",
+      "dayPhase": 0.25,
+      "vitals": {
+        "health": 100,
+        "hunger": 100,
+        "thirst": 100,
+        "warmth": 100,
+        "stamina": 100,
+        "oxygen": 100
+      },
+      "waterskin": 0,
+      "accomplishments": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "observations": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "shipRestoration": {
+        "version": 1,
+        "repairStage": "wrecked",
+        "currentSystemId": null,
+        "currentWorldId": null,
+        "parkedPose": null,
+        "systemPose": null,
+        "locationMode": "surface",
+        "repairHistory": []
+      }
+    },
+    "app": {
+      "phase": "playing",
+      "sceneReady": false
+    }
+  },
+  "returnObjective": "CURRENT OBJECTIVETIDEGARDEN · SECOND HEARTHRETURN TO TIDEGARDEN.DELIVER THE BONDED CELL TO THE SECOND HEARTH.ROUTE RECALIBRATING · OBJECTIVE REMAINS ACTIVE",
+  "installed": {
+    "raw": {
+      "inventory": {
+        "faulty_maw": 1
+      },
+      "mawCharge": 0,
+      "era": "paravox_machina",
+      "milestones": [
+        "story:started",
+        "story:complete",
+        "story:ch9:hearth",
+        "story:ch10-bearing-claimed",
+        "story:ch10-station-resolved",
+        "story:ch10-complete",
+        "story:station-docking-authorized",
+        "story:ch11-docked",
+        "story:ch11-designation-presented",
+        "story:ch11-registry-recorded",
+        "story:ch11-concourse-entered",
+        "story:ch11-habitat-fault-presented",
+        "story:ch11-bonded-cell-acquired",
+        "story:station-trade-unlocked",
+        "story:ch11-bonded-cell-stowed",
+        "story:ch11-station-departed",
+        "story:tidegarden:scanner-overload",
+        "story:tidegarden:relationship-attended",
+        "story:tidegarden:site-chosen:v1:8,25,-4|8,24,-4|0,1,0",
+        "story:item:habitat-core:crafted",
+        "story:tidegarden:habitat-core-online",
+        "story:tidegarden:shelter-certified",
+        "story:ch12-bonded-cell-installed",
+        "story:ch12-hearth-restored"
+      ],
+      "lastWorld": {
+        "x": -1,
+        "y": -1
+      },
+      "lastPlanetWorldId": "-1,-1:p1",
+      "dayPhase": 0.8295941666672628,
+      "vitals": {
+        "health": 100,
+        "hunger": 99.97555555555554,
+        "thirst": 99.96333333333331,
+        "warmth": 100,
+        "stamina": 100,
+        "oxygen": 100
+      },
+      "waterskin": 0,
+      "accomplishments": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "observations": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "shipRestoration": {
+        "version": 1,
+        "repairStage": "wrecked",
+        "currentSystemId": "-1,-1",
+        "currentWorldId": "-1,-1:p1",
+        "parkedPose": {
+          "position": [
+            8,
+            51.5,
+            -8
+          ],
+          "quaternion": [
+            0,
+            1,
+            0,
+            2.220446049250313e-16
+          ]
+        },
+        "systemPose": {
+          "position": [
+            8,
+            51.5,
+            -8
+          ],
+          "quaternion": [
+            0,
+            1,
+            0,
+            2.220446049250313e-16
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        },
+        "locationMode": "surface",
+        "repairHistory": []
+      }
+    },
+    "objective": null,
+    "prompt": null
+  },
+  "installedReload": {
+    "raw": {
+      "inventory": {
+        "faulty_maw": 1,
+        "stone": 2
+      },
+      "mawCharge": 0,
+      "era": "paravox_machina",
+      "milestones": [
+        "story:started",
+        "story:complete",
+        "story:ch9:hearth",
+        "story:ch10-bearing-claimed",
+        "story:ch10-station-resolved",
+        "story:ch10-complete",
+        "story:station-docking-authorized",
+        "story:ch11-docked",
+        "story:ch11-designation-presented",
+        "story:ch11-registry-recorded",
+        "story:ch11-concourse-entered",
+        "story:ch11-habitat-fault-presented",
+        "story:ch11-bonded-cell-acquired",
+        "story:station-trade-unlocked",
+        "story:ch11-bonded-cell-stowed",
+        "story:ch11-station-departed",
+        "story:tidegarden:scanner-overload",
+        "story:tidegarden:relationship-attended",
+        "story:tidegarden:site-chosen:v1:8,25,-4|8,24,-4|0,1,0",
+        "story:item:habitat-core:crafted",
+        "story:tidegarden:habitat-core-online",
+        "story:tidegarden:shelter-certified",
+        "story:ch12-bonded-cell-installed",
+        "story:ch12-hearth-restored"
+      ],
+      "lastWorld": {
+        "x": -1,
+        "y": -1
+      },
+      "lastPlanetWorldId": "-1,-1:p1",
+      "dayPhase": 0.9277025000005961,
+      "vitals": {
+        "health": 100,
+        "hunger": 99.94777777777774,
+        "thirst": 99.92166666666661,
+        "warmth": 100,
+        "stamina": 100,
+        "oxygen": 100
+      },
+      "waterskin": 0,
+      "accomplishments": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "observations": {
+        "schemaVersion": 1,
+        "nextSequence": 1,
+        "records": []
+      },
+      "shipRestoration": {
+        "version": 1,
+        "repairStage": "wrecked",
+        "currentSystemId": "-1,-1",
+        "currentWorldId": "-1,-1:p1",
+        "parkedPose": {
+          "position": [
+            8,
+            51.5,
+            -8
+          ],
+          "quaternion": [
+            0,
+            1,
+            0,
+            2.220446049250313e-16
+          ]
+        },
+        "systemPose": {
+          "position": [
+            8,
+            51.5,
+            -8
+          ],
+          "quaternion": [
+            0,
+            1,
+            0,
+            2.220446049250313e-16
+          ],
+          "velocity": [
+            0,
+            0,
+            0
+          ]
+        },
+        "locationMode": "surface",
+        "repairHistory": []
+      }
+    },
+    "objective": null,
+    "prompt": null
+  },
+  "touch": {
+    "mobileRect": {
+      "top": 313.53125,
+      "bottom": 530.46875,
+      "left": 16,
+      "right": 374
+    },
+    "issued": {
+      "mission": {
+        "step": "depart",
+        "itemCount": 1,
+        "receipts": {
+          "docked": true,
+          "designationPresented": true,
+          "registryRecorded": true,
+          "concourseEntered": true,
+          "habitatFaultPresented": true,
+          "bondedCellAcquired": true,
+          "tradeUnlocked": true,
+          "bondedCellStowed": false,
+          "stationDeparted": false
+        }
+      },
+      "raw": {
+        "inventory": {
+          "bonded_cell": 1
+        },
+        "mawCharge": 0,
+        "era": "paravox_machina",
+        "milestones": [
+          "story:started",
+          "story:complete",
+          "story:ch9:hearth",
+          "story:ch10-bearing-claimed",
+          "story:ch10-station-resolved",
+          "story:ch10-complete",
+          "story:station-docking-authorized",
+          "story:ch11-docked",
+          "story:ch11-designation-presented",
+          "story:ch11-registry-recorded",
+          "story:ch11-concourse-entered",
+          "story:ch11-habitat-fault-presented",
+          "story:ch11-bonded-cell-acquired",
+          "story:station-trade-unlocked"
+        ],
+        "lastWorld": {
+          "x": -1,
+          "y": -1
+        },
+        "lastPlanetWorldId": "-1,-1:p1",
+        "dayPhase": 0.73,
+        "vitals": {
+          "health": 100,
+          "hunger": 100,
+          "thirst": 100,
+          "warmth": 100,
+          "stamina": 100,
+          "oxygen": 100
+        },
+        "waterskin": 0,
+        "accomplishments": {
+          "schemaVersion": 1,
+          "nextSequence": 1,
+          "records": []
+        },
+        "observations": {
+          "schemaVersion": 1,
+          "nextSequence": 1,
+          "records": []
+        },
+        "shipRestoration": {
+          "version": 1,
+          "repairStage": "wrecked",
+          "currentSystemId": null,
+          "currentWorldId": null,
+          "parkedPose": null,
+          "systemPose": null,
+          "locationMode": "surface",
+          "repairHistory": []
+        }
+      }
+    }
+  },
+  "status": "passed"
+}

@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { DOCK_SPEED_LIMIT, SCAN_RANGE } from '../../game/spaceStation/spaceStationApproach.ts';
+import { isTouchDevice } from '../../utils/mobileInput.ts';
 import { spaceStationContact, type SpaceStationContact } from '../SpaceStationApproachDriver.tsx';
 
 /**
@@ -22,6 +23,7 @@ const WARN = '#ff5a3c';
 
 export default function SpaceStationApproachHud() {
   const [contact, setContact] = useState<SpaceStationContact | null>(null);
+  const touch = isTouchDevice();
 
   useEffect(() => {
     let raf = 0;
@@ -38,7 +40,10 @@ export default function SpaceStationApproachHud() {
 
   return (
     <>
-      <div style={panel} data-testid="spaceStation-approach-hud">
+      <div
+        style={touch ? touchPanel : panel}
+        data-testid="spaceStation-approach-hud"
+      >
         <div style={{ color: readout.canDock ? GO : WARM, letterSpacing: '0.1em' }}>
           {readout.advisory.toUpperCase()}
         </div>
@@ -65,8 +70,13 @@ export default function SpaceStationApproachHud() {
         />
       </div>
       {readout.canDock && (
-        <div style={prompt} data-testid="spaceStation-dock-prompt">
-          [F] request docking clearance
+        <div
+          style={prompt}
+          data-testid="spaceStation-dock-prompt"
+          role="status"
+          aria-live="polite"
+        >
+          {touch ? 'LAND · request docking clearance' : '[F] request docking clearance'}
         </div>
       )}
     </>
@@ -114,6 +124,14 @@ const panel: React.CSSProperties = {
   pointerEvents: 'none',
   whiteSpace: 'nowrap',
   zIndex: 12
+};
+
+// The touch action cluster owns the lower-right corner. Lift the instrument
+// above it while preserving the desktop placement and the centre-line prompt.
+const touchPanel: React.CSSProperties = {
+  ...panel,
+  right: 'calc(14px + env(safe-area-inset-right, 0px))',
+  bottom: 'calc(190px + env(safe-area-inset-bottom, 0px))'
 };
 
 const prompt: React.CSSProperties = {

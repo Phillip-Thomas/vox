@@ -29,6 +29,25 @@ export interface FeedRedaction {
   stress: number;
 }
 
+/**
+ * One survey bracket: the site's own designator drawn around a quota target the
+ * 1-bit render cannot otherwise distinguish. Slots are pre-allocated and reused
+ * (never resized per frame) so the overlay can hold stable DOM nodes.
+ */
+export interface FeedBracket {
+  visible: boolean;
+  /** Screen-space centre (px), already clamped to the viewport. */
+  x: number;
+  y: number;
+  /** Full box edge in px. */
+  size: number;
+  /** Label sits left of the box when it would otherwise leave the frame. */
+  labelFlipped: boolean;
+  label: string;
+}
+
+export const FEED_BRACKET_SLOTS = 4;
+
 export interface FeedRuntime {
   /**
    * 0 = the live view is embodied, 1 = it belongs to an external/site camera.
@@ -66,6 +85,13 @@ export interface FeedRuntime {
   redactionIndicator: FeedMarker;
   /** Survey marker — the feed's target designator (the ch1 anomaly objective). */
   marker: FeedMarker;
+  /**
+   * Survey brackets — the site designating the quota targets it is ordering the
+   * worker to take. Distinct from `marker`: the marker points at ONE objective
+   * subject and may go off-screen as a chevron, while brackets only ever ring
+   * things already in frame and never leave the viewport.
+   */
+  brackets: FeedBracket[];
 }
 
 const runtime: FeedRuntime = {
@@ -83,7 +109,15 @@ const runtime: FeedRuntime = {
   camCell: 0,
   redaction: { visible: false, x: 0, y: 0, w: 0, h: 0, label: '', stress: 0 },
   redactionIndicator: { visible: false, x: 0, y: 0, offscreen: true, angle: 0, label: '' },
-  marker: { visible: false, x: 0, y: 0, offscreen: false, angle: 0, label: '' }
+  marker: { visible: false, x: 0, y: 0, offscreen: false, angle: 0, label: '' },
+  brackets: Array.from({ length: FEED_BRACKET_SLOTS }, () => ({
+    visible: false,
+    x: 0,
+    y: 0,
+    size: 0,
+    labelFlipped: false,
+    label: ''
+  }))
 };
 
 export function getFeedRuntime(): FeedRuntime {

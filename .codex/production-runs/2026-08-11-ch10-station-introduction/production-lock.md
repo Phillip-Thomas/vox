@@ -150,8 +150,8 @@ Material values of `production-lock.json`, mirrored for the deterministic gate:
 - currentRestrictions: storyCeiling `ch4-arrival`; postArrivalStoryMutationAllowed `true`;
   copyChangeDecisionRefs (none); protectedAudioPaths `main/public/audio/`,
   `main/src/audio/`, `main/src/components/audio/`; openGateRefs
-  `ch10-docking-architecture-owner-packet`, `score-continuous-pedal-packet`,
-  `st3-fov-owner-taste`, `headed-taste-final`, `ch7-ch8-run-owner-residuals`
+  `score-continuous-pedal-packet`, `st3-fov-owner-taste`, `headed-taste-final`,
+  `ch7-ch8-run-owner-residuals`
 - authority paths: `PARAVOXIA_DEMO_FOUNDATION_PLAN.md`; `PARAVOXIA_CREATIVE_COUNCIL.md`;
   `PARAVOXIA_STATION_FEATURE_PLAN.md`;
   `.codex/design-runs/2026-07-27-station-in-the-plot/chapter-treatment.md`;
@@ -188,7 +188,11 @@ Material values of `production-lock.json`, mirrored for the deterministic gate:
   `main/src/game/spaceStation/spaceStationExterior.ts` (R9);
   `main/src/game/spaceStation/spaceStationExterior.test.ts` (R9);
   `main/src/components/spaceStation/SpaceStationExterior.tsx` (R9);
-  `main/src/components/SystemSpaceStations.tsx` (R9)
+  `main/src/components/SystemSpaceStations.tsx` (R9);
+  `main/src/App.tsx` (R10);
+  `main/src/components/spaceStation/SpaceStationSandbox.tsx` (R10);
+  `main/src/components/spaceStation/SpaceStationApproach.tsx` (R11);
+  `main/src/components/hud/SpaceStationApproachHud.tsx` (R11)
 
 **Lock revision R4 (2026-08-11, orchestrator, Stage 6 interim).**
 `main/tools/generate-scene-av-runtime.mjs` added: the generator pins the
@@ -295,3 +299,84 @@ behaviour may change, the dock itself (jamb frame, lit mouth, inner glow) is
 architecture and is not suppressed, and the `?spacestation=` sandbox must draw
 instance-for-instance what it draws today. The machine mirror's allowedPaths
 list is extended by the same four entries.
+
+**Lock revision R10 (2026-08-13, direct owner docking decision).** The owner
+played the working `?spacestation=1&approach=1` route, then explicitly directed
+that Chapter 10 expose the same `[F]` docking path in story mode: "I do not
+recieve the same 'press f to land' prompt in the story mode though... please fix
+this." This resolves `ch10-docking-architecture-owner-packet` in favor of the
+existing, proven page-transition handoff now; a seamless in-place renderer swap
+may still be a later polish project, but it no longer blocks functional docking.
+
+Runtime scope is bounded to granting `story:station-docking-authorized` at the
+existing threshold hand-back, after the 2.5-second station reveal hold. The
+shipped approach system retains sole authority over corridor alignment, berth
+range, closing-speed clearance, the `[F]` request, and station identity. Two
+paths are added to `allowedPaths`: `main/src/App.tsx`, solely to persist the
+earned receipt and scrub debug-story parameters before the hard navigation;
+and `main/src/components/spaceStation/SpaceStationSandbox.tsx`, solely to fix
+the lowercase `spacestation` parameter removal on undock and return the player
+to the game. The station renderer, approach math, docking choreography, and
+interior remain the existing implementation. `ch10-docking-architecture-owner-packet`
+is removed from the machine lock's open gates.
+
+**Lock revision R11 (2026-08-13, docking touch-continuity repair).** A fresh
+player-experience audit of R10 found that a touch player could use the shipped
+`LAND` action to enter the station but then had no touch controls in the
+page-transition interior and could not return to the ship. Two paths are added
+to `allowedPaths`: `main/src/components/spaceStation/SpaceStationApproach.tsx`
+and `main/src/components/hud/SpaceStationApproachHud.tsx`. Scope is bounded to
+mounting the existing touch controller in the station sandbox, allowing its
+synthetic look input through the two station controllers, moving the approach
+instrument clear of the touch action cluster, and presenting the real `LAND`
+and `USE` labels plus polite status semantics on touch. The docking overlay's
+existing skip affordance also accepts a tap instead of advertising a keyboard-
+only action to touch players. No station flight,
+locomotion, docking, story, or visual-world rule may change.
+
+**Lock revision R12 (2026-08-14, direct owner station-story continuation).**
+After playing the Chapter 10 approach and docking route, the owner directed:
+"lets continue implementing the story, ensuring we get the thing we need,
+whatever conversations occur there, other vendors we might interact with,
+etc." This authorizes the previously deferred station-interior continuation
+without rewriting the signed Chapter 10 reveal. The July counter/concourse
+treatment is adopted only where this revision states it: the player presents
+the W-7743 suit record, enters as an accepted designation, speaks to the
+certified-components trader, and receives exactly one habitat-grade bonded
+cell before general trading opens. Required dialogue and all progression acts
+are authored and deterministic; optional vendors may use their existing
+bounded conversation fixtures but cannot alter identity, inventory, or story.
+The owner's request for conversations and other vendors supersedes the earlier
+no-named-individual boundary for this post-terminal interior only: the required
+issuer is designation B-7073, vernacular “Bell”, and optional traders may expose
+their existing designation/vernacular pairs. REGULATION remains the first and
+only institutional register voice; no vendor may answer protected cosmology.
+
+The bonded cell is an issued, durable player item, not an ordinary sandbox
+commodity and not a craft recipe. Its issuance does not canonize the origin of
+the sandbox credit balance, W-7743's wider legal status, a station proper name,
+the nature of the bond, Makers, W-7744's location, or the sealed volume. The
+hard page-transition interior must restore the incoming global save once and
+save synchronously at every durable receipt and before departure; the exact
+planet world id and day phase must survive. Standalone `?spacestation=` remains
+an ephemeral mechanics sandbox and receives none of this story state.
+
+Allowed paths added for this bounded continuation: `shared/economyCatalog.json`;
+the generated client/server catalog bindings; `main/src/game/data/items.ts` and
+its catalog parity test; `main/src/game/spaceStation/spaceStationVendors.ts`;
+new `spaceStationStory.ts` plus its test; new `StationStoryPanel.tsx`;
+`VendorPanel.tsx`; and the already-allowed `SpaceStationSandbox.tsx`. Protected
+audio and deployment surfaces remain untouched. Multiplayer authority is not
+claimed by this offline page-transition slice.
+
+The same owner request also authorizes the minimum return continuity needed to
+make “get the thing” causal rather than terminal UI: new `stationReturnStory.ts`
+and its test; the existing `StoryDirectorDriver.tsx`, `storyInteractions.ts`,
+and `interactionSystem.ts`; `StoryOverlays.tsx`; `tidegardenSettlement.ts`; and
+`world/TidegardenSettlementWorld.tsx`. These paths are bounded to keeping a
+directional return objective alive after undock and consuming the one sealed
+cell through `[F] Install Bonded Cell` at the already-existing Tidegarden core.
+`main/src/game/spaceStation/spaceStationUndock.ts` and its test are also added,
+bounded to consuming the one-shot `undock` plus synthetic `fly=1` query after
+`App.tsx` reconstructs the berth; otherwise a later reload can replay the event
+and teleport a returning player away from Tidegarden.

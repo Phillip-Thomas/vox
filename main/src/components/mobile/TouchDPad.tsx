@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { pressKey, releaseAllKeys, releaseKey, setTouchActive } from '../../utils/mobileInput.ts';
 import { theme } from '../../ui/theme.ts';
-import { HUD_TOUCH_EDGE, hudNoSelect } from '../hud/hudChrome.ts';
+import { HUD_TOUCH_EDGE, TOUCH_DPAD_ARM_PX, TOUCH_DPAD_GAP_PX, hudNoSelect } from '../hud/hudChrome.ts';
 import { useStoryState } from '../../story/storyState.ts';
 import {
   dpadDirectionKey,
@@ -12,6 +12,7 @@ import {
   type DpadActionSpec,
   type DpadDirection
 } from './TouchDPad.model.ts';
+import { hudSurface } from '../../ui/hudSurfaces.ts';
 
 // Chapter-themed virtual D-PAD for the early fixed-camera / CCTV-era beats
 // (the monochrome ladder). TouchControls' analog joystick is authored for the
@@ -27,7 +28,7 @@ import {
 // to the desktop keys (jump→Space, extract→KeyE) through the same synthetic-key
 // bridge TouchControls uses.
 
-const PAD_ARM = 50; // one cross-arm cell (px)
+const PAD_ARM = TOUCH_DPAD_ARM_PX; // one cross-arm cell (px)
 const ACTION_SIZE = 72;
 const AXIS_FADE_MS = 340; // ▲/▼ entrance when the second axis opens.
 
@@ -225,6 +226,7 @@ export default function TouchDPad() {
       {/* Discrete cross D-PAD (bottom-left, where the joystick would sit). */}
       <div
         data-testid="touch-dpad"
+          {...hudSurface('touch-dpad', 'control')}
         style={{
           position: 'absolute',
           left: 'calc(16px + env(safe-area-inset-left, 0px))',
@@ -233,7 +235,7 @@ export default function TouchDPad() {
           gridTemplateColumns: `${PAD_ARM}px ${PAD_ARM}px ${PAD_ARM}px`,
           gridTemplateRows: `${PAD_ARM}px ${PAD_ARM}px ${PAD_ARM}px`,
           gridTemplateAreas: '". up ." "left hub right" ". down ."',
-          gap: 3,
+          gap: TOUCH_DPAD_GAP_PX,
           pointerEvents: 'none'
         }}
       >
@@ -285,6 +287,7 @@ export default function TouchDPad() {
       {actionButtons.length > 0 && (
         <div
           data-testid="touch-dpad-actions"
+          {...hudSurface('touch-dpad-actions', 'control')}
           style={{
             position: 'absolute',
             right: 'calc(18px + env(safe-area-inset-right, 0px))',

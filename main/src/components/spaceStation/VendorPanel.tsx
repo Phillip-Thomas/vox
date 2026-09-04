@@ -18,6 +18,7 @@ import {
   type TraderState
 } from '../../game/spaceStation/spaceStationTrade.ts';
 import type { Vendor } from '../../game/spaceStation/spaceStationVendors.ts';
+import type { StationVendorTopic } from '../../game/spaceStation/spaceStationStory.ts';
 
 /**
  * The counter: trade on the left, conversation on the right.
@@ -40,11 +41,21 @@ export interface VendorPanelProps {
   trader: TraderState;
   onTrade: (next: { trader: TraderState; vendor: Vendor }) => void;
   onClose: () => void;
+  /** Story visits talk first; the general market opens after the issued cell is safe. */
+  tradingEnabled?: boolean;
+  authoredTopics?: readonly StationVendorTopic[];
 }
 
 const TRADE_SIZES = [1, 10, 50];
 
-export function VendorPanel({ vendor, trader, onTrade, onClose }: VendorPanelProps) {
+export function VendorPanel({
+  vendor,
+  trader,
+  onTrade,
+  onClose,
+  tradingEnabled = true,
+  authoredTopics = []
+}: VendorPanelProps) {
   const [turns, setTurns] = useState<ConversationTurn[]>(() => [greetingTurn(vendor)]);
   const [draft, setDraft] = useState('');
   const [pending, setPending] = useState(false);
@@ -98,6 +109,10 @@ export function VendorPanel({ vendor, trader, onTrade, onClose }: VendorPanelPro
 
   const trade = useCallback(
     (id: CommodityId, units: number, direction: 'buy' | 'sell') => {
+      if (!tradingEnabled) {
+        setNotice('REGISTRY HOLD · COMPLETE THE ISSUED COMPONENT RECORD FIRST.');
+        return;
+      }
       const proposal =
         direction === 'buy'
           ? proposeBuy(trader, vendor.market, id, units)
@@ -121,8 +136,16 @@ export function VendorPanel({ vendor, trader, onTrade, onClose }: VendorPanelPro
       );
       onTrade({ trader: result.trader, vendor: { ...vendor, market: result.market } });
     },
-    [onTrade, trader, vendor]
+    [onTrade, trader, tradingEnabled, vendor]
   );
+
+  const askAuthoredTopic = useCallback((topic: StationVendorTopic) => {
+    setTurns(current => [
+      ...current,
+      { speaker: 'player', text: topic.playerLine },
+      { speaker: 'vendor', text: topic.reply, source: 'authored' }
+    ]);
+  }, []);
 
   return (
     <div style={backdrop} onClick={onClose} data-testid="spaceStation-vendor-panel">
@@ -132,14 +155,22 @@ export function VendorPanel({ vendor, trader, onTrade, onClose }: VendorPanelPro
             {vendor.designation} · <span style={{ color: WARM }}>{vendor.name}</span>
           </span>
           <span style={{ color: DIM }}>
-            {Math.round(trader.credits)} credits · hold {Math.round(freeVolume(trader))}m³ free · esc to leave
+            {tradingEnabled
+              ? `${Math.round(trader.credits)} credits · hold ${Math.round(freeVolume(trader))}m³ free`
+              : 'trade held until issued cargo is secured'}
           </span>
+          <button style={button} onClick={onClose} aria-label="Close vendor panel">close</button>
         </div>
 
         <div style={body}>
           {/* ---- shelf ---- */}
           <div style={column}>
             <div style={sectionLabel}>shelf</div>
+            {!tradingEnabled && (
+              <div style={{ color: WARM, marginBottom: 10, fontSize: 11 }}>
+                REGISTRY HOLD · CONVERSATION AVAILABLE
+              </div>
+            )}
             {vendor.market.lines.map(line => {
               const id = line.commodity;
               const info = commodity(id);
@@ -157,14 +188,20 @@ export function VendorPanel({ vendor, trader, onTrade, onClose }: VendorPanelPro
                   </div>
                   <div style={{ display: 'flex', gap: 4, marginTop: 4, flexWrap: 'wrap' }}>
                     {TRADE_SIZES.map(size => (
-                      <button key={`b${size}`} style={button} onClick={() => trade(id, size, 'buy')}>
+                      <button
+                        key={`b${size}`}
+                        style={{ ...button, opacity: tradingEnabled ? 1 : 0.35 }}
+                        disabled={!tradingEnabled}
+                        onClick={() => trade(id, size, 'buy')}
+                      >
                         buy {size}
                       </button>
                     ))}
                     {TRADE_SIZES.map(size => (
                       <button
                         key={`s${size}`}
-                        style={{ ...button, opacity: held > 0 ? 1 : 0.35 }}
+                        style={{ ...button, opacity: tradingEnabled && held > 0 ? 1 : 0.35 }}
+                        disabled={!tradingEnabled}
                         onClick={() => trade(id, size, 'sell')}
                       >
                         sell {size}
@@ -182,6 +219,20 @@ export function VendorPanel({ vendor, trader, onTrade, onClose }: VendorPanelPro
             <div style={sectionLabel}>
               talk <span style={{ color: DIM }}>· requested: {aiMode()}</span>
             </div>
+            {authoredTopics.length > 0 && (
+              <div style={{ display: 'grid', gap: 5, marginBottom: 10 }} data-testid="spaceStation-vendor-topics">
+                {authoredTopics.map(topic => (
+                  <button
+                    key={topic.id}
+                    style={{ ...button, minHeight: 38, textAlign: 'left' }}
+                    onClick={() => askAuthoredTopic(topic)}
+                    data-testid={`spaceStation-vendor-topic-${topic.id}`}
+                  >
+                    {topic.label}
+                  </button>
+                ))}
+              </div>
+            )}
             <div ref={logRef} style={log}>
               {turns.map((turn, index) => (
                 <div key={index} style={{ marginBottom: 8 }}>
@@ -266,7 +317,7 @@ const header: React.CSSProperties = {
 
 const body: React.CSSProperties = {
   display: 'grid',
-  gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
   gap: 1,
   background: FAINT,
   overflow: 'hidden',

@@ -68,6 +68,17 @@ describe('shared economy catalog client binding', () => {
     });
   });
 
+  it('keeps the issued bonded cell real, unique, and outside every craft recipe', () => {
+    expect(ITEMS.bonded_cell).toMatchObject({
+      id: 'bonded_cell',
+      kind: 'component',
+      stackable: false
+    });
+    expect(ALL_RECIPES.map(recipe => recipe.id)).not.toContain('bonded_cell');
+    expect(ALL_RECIPES.flatMap(recipe => recipe.outputs.map(output => output.id)))
+      .not.toContain('bonded_cell');
+  });
+
   it('keeps every recipe BOM closed over canonical item IDs', () => {
     const itemIds = new Set<string>(ECONOMY_CATALOG.itemIds);
     const recipeIds = new Set<string>();
